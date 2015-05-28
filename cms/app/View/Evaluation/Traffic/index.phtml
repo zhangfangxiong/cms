@@ -1,0 +1,184 @@
+<?php include APP_PATH.'/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform">
+    <input type="hidden" name="iAutoID" value="<?php echo empty($driving)?'':$driving['iAutoID'];?>" />
+    <input type="hidden" name="iEvaluationID" value="<?php echo empty($iEvaluationInfo)?'':$iEvaluationInfo['iEvaluationID']; ?>" />
+    <input type="hidden" name="iCreateTime" value="<?php echo empty($driving)?'':$driving['iCreateTime']; ?>" />
+
+    <div class="panel mt15">
+                    <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control input-validate" rows="3" placeholder="分析师点评" name="sComment"autocomplete="off" validate="!clength:1-255"><?php echo empty($driving)?'':$driving['sComment']; ?></textarea>
+                                <span class="validate_checktip"></span>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">优势：</label>
+                        <div class="col-sm-9">
+                            <?php
+                            if (isset($goodTags) && !empty($goodTags)) {
+                                foreach($goodTags as $k => $v) {
+                                    ?>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="sGoodTag[]" <?php echo !empty($driving['sGoodTag'])&&in_array($k,$driving['sGoodTag']) ? 'checked':'' ?> value="<?php echo $k ?>" autocomplete="off"> <?php echo $v ?>
+                                    </label>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">劣势：</label>
+                        <div class="col-sm-9">
+                            <?php
+                            if (isset($badTags) && !empty($badTags)) {
+                                foreach($badTags as $k => $v) {
+                                    ?>
+                                    <label class="checkbox-inline">
+                                        <input autocomplete="off" type="checkbox" name="sBadTag[]" <?php echo !empty($driving['sBadTag'])&&in_array($k,$driving['sBadTag']) ? 'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                                    </label>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">*自驾路线图：</label>
+                        <div class="col-sm-9 zjparentsflag">
+                            <input type="button" value="请选择自驾线路图" class="plupload fl hxupload" data-placeholder-name="目的地：如往市区方向、机场、火车站等" data-placeholder-dec="请针对此自驾路线图进行描述" data-error-msg="请上传自驾路线图" data-target="sDrivingImg" data-img="#sDrivingImgShow" data-type="batch" data-limit="10" data-dec="1" data-callback="showImg">
+                            <span style="float: left;" class="validate_checktip"></span>
+                            <div style="clear: both;"></div>
+                            <div class="eHxImgDiv" style="display: <?php echo isset($images)&&!empty($images)? '':'none'?>;">
+                                <div class="row" id="sDrivingImgShow" >
+                                    <?php
+                                    if (isset($images)&&!empty($images)) {
+                                        foreach($images as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sDrivingImgTitle[]" placeholder="目的地：如往市区方向、机场、火车站等……"  value="<?php echo $item['sTitle']; ?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sDrivingImgDesc[]" placeholder="请针对此自驾线路图进行描述"><?php echo $item['sDesc']; ?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="sDrivingUpImgId[]" value="<?php echo $item['iAutoID']?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="form-group">
+                          <label for="" class="col-sm-2 control-label">总结点评：</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="3" placeholder="总结点评" name="sOtherComment" autocomplete="off"><?php echo empty($driving)?'':$driving['sOtherComment']; ?></textarea>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+                        <div class="col-sm-10">
+                            <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                                <div class="row" id="sImageQt" >
+                                    <?php
+                                    if (isset($qtImage)&&!empty($qtImage)) {
+                                        foreach($qtImage as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <button id="save" class="btn btn-primary">发布</button>
+                                <button id="sync" class="btn btn-info"  >同步</button>
+                                <button id="cancel"class="btn" onclick="location.href='/evaluation/draft/';return false;">取消</button>
+                            </div>
+                    </div>
+       </div>
+</form>
+
+
+
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+        //编辑开关
+        var Switch = <?php echo $evaluationSwitch ?>;
+        evaluationSwitch(Switch);
+        // 同步数据
+        $("#sync").click({c: 'Traffic', a: 'drive', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+        // 提交自驾出行表单
+         index = 1;
+        $("#myform").validate({submitHandler: function(form) {
+            if (index==1) {
+
+                if (!imgErrorTip($("#sDrivingImgShow"),$(".zjparentsflag"))) {
+                    return false;
+                }
+            if (!imageNamenotBlank()) {
+                   return false;
+               }
+                $.post("/evaluation/Traffic/saveDriving", $(form).serialize(), function(ret){
+                    alert(ret.data);
+                   location.reload();
+                }, 'json');
+
+            }
+            index++;
+            return false;
+        }});
+    
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+     // 移除边框
+    $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+      //鼠标移上显示大图
+    $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+     $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    })
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>

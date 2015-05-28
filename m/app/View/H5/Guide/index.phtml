@@ -1,0 +1,123 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<!--导购列表开始-->
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l">
+                <a href="javascript:history.go(-1)"></a>
+            </div>
+            <div class="uc_return_c"><?php echo $sTitle ?></div>
+        </div>
+    </header>
+    <!--头部开始-->
+    <!--最新导购列表开始-->
+    <input type="hidden" value="1" id="overnotload" />
+    <section class="newHosue_list bgf border_bottom guide_list" id="mainsection">
+        <?php foreach ($aList as $item) { ?>
+            <a href="<?php echo $item['sJumpToUrl'] ?>" class="item pl12">
+                <div class="cnt p12 border_bottom">
+                    <div class="pic mr12">
+                        <img src="<?php echo $item['sImgUrl'] ?>" onerror="this.src='<?php echo $sStaticRoot ?>/touchweb/resource/images/guide_bg.png'">
+                    </div>
+                    <div class="wrap">
+                        <div class="house_name">
+                            <span class="name"><?php echo $item['sText'] ?></span>
+                        </div>
+                        <div class="house_txt house_txt1">
+                            <span class="mr5"><?php echo $item['sAuthor'] ?></span>
+                            <span><?php echo $item['sTime'] ?></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        <?php } ?>
+    </section>
+    <div class="loaddiv"></div>
+    <!--最新导购列表结束-->
+    <!--返回顶部开始-->
+    <div class="return_top" id="backtop">
+        <div class="return_top_bg"></div>
+        <div class="return_top_txt"></div>
+    </div>
+    <!--返回顶部结束-->
+</div>
+<!--导购列表结束-->
+<input type="hidden" id="txtUnitId" value="<?php echo $where["buildingID"] ?>">
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script type="text/javascript">
+    requirejs.config({
+        baseUrl: '<?php echo $sStaticRoot ?>/touchweb/lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'webtouchcommon': 'js/webtouchcommon'
+        }
+    })
+
+    require(["jquery", "webtouchcommon"],function () {
+        $('#backtop').on("click", webtouchObj.backtoTopdh);
+
+        pageIndex = 1;
+
+        //回退
+        $(".uc_return_l").bind("click", function () {
+            history.go(-1);
+        });
+
+        $(window).scroll(initScroll);
+
+        function initScroll() {
+            backTop()
+            var pageH = $(document).height()
+            var scrollT = $(window).scrollTop(); //滚动条top
+            var aa = pageH - $(window).height() - scrollT;
+            if (aa < 1) {
+                if ($("#overnotload").val() == 1) {
+                    pageIndex++;
+                    loadData()
+                } else {
+                    return
+                }
+            }
+        }
+
+        function backTop() {
+            //如果滚动坐标值大于window的高度的时候证明进入的第二屏就应该出现箭头。
+            var a = $(window).scrollTop();
+            var b = $(window).height();
+
+            if (a > 100) {
+                $('.return_top').stop().fadeTo(500, 1)
+            } else {
+                $('.return_top').stop().fadeTo(500, 0)
+            }
+        }
+
+        //加载下一页数据
+        function loadData() {
+            $(".loaddiv").show();
+            var iBuildingID = "<?php echo $iBuildingID?>";
+            $.post('/h5/guide/list',{iPage: pageIndex,iBuildingID: iBuildingID}, function (res) {
+                $(".loaddiv").hide();
+                res = eval("(" + res + ")");
+                if (res.data.length > 0) {
+                    var html = "";
+                    for (var i = 0; i < res.data.length; i++) {
+                        html += "<a href=\"" + res.data[i].sJumpToUrl + "\" class=\"item pl12\">" +
+                                "<div class=\"cnt p12 border_bottom\">" +
+                                "<div class=\"pic mr12\"><img src=\"" + res.data[i].sImgUrl + "\" onerror=\"this.src='<?php echo $sStaticRoot ?>/touchweb/resource/images/guide_bg.png'\"></img></div>" +
+                                "<div class=\"wrap\">" +
+                                "<div class=\"house_name\"><span class=\"name\">" + res.data[i].sText + "</span></div>" +
+                                "<div class=\"house_txt house_txt1\"><span class=\"mr5\">" + res.data[i].sAuthor + "</span><span>" + res.data[i].sTime + "</span></div>" +
+                                "</div>" +
+                                "</div>" +
+                                "</a>";
+                    }
+                    $("#mainsection").append(html);
+                } else {
+                    $("#overnotload").val("0");
+                }
+            });
+        }
+    });
+</script>

@@ -1,0 +1,152 @@
+
+        <!--装修分析开始-->
+        <section class="viewport">
+            <!--装修分析内容开始-->
+            <section class="plan_wrap zxfx">
+                <section class="analyze_wrap <?php if (empty($aHxfx['data']['sBadTag']) && empty($aHxfx['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+                    <div class="analyze_txt floor_plan">
+                    	<h3>
+                        	<span></span>
+                            分析师点评
+                        </h3>
+                        <p><?php echo $aHxfx['data']['sComment'] ?></p>
+                    </div>
+              	</section>
+                <section class="condition">
+                    <?php
+                    if ( isset($aHxfx['data']['sGoodTag'] ) && $aHxfx['data']['sGoodTag'] ) {
+                        ?>
+                        <section class="advantage">
+                            <h3>优势</h3>
+                            <div class="advantage_con">
+                                <?php
+                                foreach ($aHxfx['data']['sGoodTag'] as $key => $value) {
+                                    ?>
+                                    <span><?php echo $value; ?></span>
+                                <?php
+                                }
+                                ?>
+                            </div>
+                        </section>
+                    <?php
+                    }
+                    ?>
+                    <?php
+                    if ( isset($aHxfx['data']['sBadTag'] ) && $aHxfx['data']['sBadTag'] ) {
+                        ?>
+                        <section class="advantage disadvantaged">
+                            <h3>劣势</h3>
+                            <div class="advantage_con">
+                                <?php
+                                foreach ($aHxfx['data']['sBadTag'] as $key => $value) {
+                                    ?>
+                                    <span><?php echo $value; ?></span>
+                                <?php
+                                }
+                                ?>
+                            </div>
+                        </section>
+                    <?php
+                    }
+                    ?>
+                </section>
+                <section class=" floor_plan house_analysis">
+                    <h3>
+                        <span></span>
+                        装修报价评估
+                    </h3>
+                    <div class="floor_plan_pic service_detail zx_evaluate">
+						<div class="zx_evaluate_con">
+                            <?php
+                            if (isset($aHxfx['data']['iPrice']) && $aHxfx['data']['iPrice']) {
+                                ?>
+                            <dl>
+                                <dt>装修报价：<?php echo $aHxfx['data']['iPrice'] == '-'  ? '-' : $aHxfx['data']['iPrice'].'元/平米' ?></dt>
+                            </dl>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if (isset($aHxfx['data']['iPrice']) && $aHxfx['data']['iCostRate']) {
+                                ?>
+                            <dl>
+                                <dt>装修性价比：</dt>
+                                <dd><?php echo $aHxfx['data']['iCostRate'] == '-'  ? '-' : $aHxfx['data']['iCostRate']; ?></dd>
+                            </dl>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if (isset($aHxfx['data']['iPrice']) && $aHxfx['data']['iCostPercent']) {
+                                ?>
+                            <dl>
+                                <dt>装修费用占比：</dt>
+                                <dd><?php echo $aHxfx['data']['iCostPercent'] == '-'  ? '-' : $aHxfx['data']['iCostPercent']; ?></dd>
+                            </dl>
+                            <?php
+                            }
+                            ?>
+                        </div>
+
+                            <?php
+                            if (isset($aHxfx['data']['zxmsImage']) && !empty($aHxfx['data']['zxmsImage'])) {
+                                foreach ($aHxfx['data']['zxmsImage'] as $key => $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                        <div class="floor_plan_pic01">
+                            <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                            <span class="pic_tip"></span>
+                            <p class="pic_name"><?php echo $value['sTitle'] ?></p>
+                            <p class="pic_description"><?php echo $value['sDesc'] ?></p>
+                        </div>
+                            </a>
+                            <?php
+                            } }
+                            ?>
+                    </div>
+                </section>
+                <?php
+                if (isset($aHxfx['data']['zxqtImage']) && !empty($aHxfx['data']['zxqtImage'])) {
+                    ?>
+
+                    <section class=" floor_plan">
+                        <h3>
+                            <span></span>
+                            其他图片
+                        </h3>
+                        <div class="floor_plan_pic">
+                            <?php
+                            foreach ($aHxfx['data']['zxqtImage'] as $key => $value) {
+                                ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                            <div class="floor_plan_pic01 zxfx_pic">
+                                  <canvas data-src="<?php echo $value['sImage']; ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                    <p class="pic_name"><?php echo $value['sTitle']; ?></p>
+                                    <p class="pic_description"><?php echo $value['sDesc']; ?></p>
+                                </div>
+                                </a>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </section>
+                <?php
+                }
+                ?>
+                <?php
+                if (isset($aHxfx['data']['sOtherComment']) && $aHxfx['data']['sOtherComment']) {
+                        ?>
+                <section class="floor_plan plan_description evaluation_description">
+                    <h3>
+                        <span></span>
+                        点评
+                    </h3>
+                    <p><?php echo $aHxfx['data']['sOtherComment'] ?></p>
+                </section>
+                <?php
+                }
+                ?>
+            </section>
+        </section>
+

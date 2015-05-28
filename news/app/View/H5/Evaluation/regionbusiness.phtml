@@ -1,0 +1,155 @@
+<!--周边商圈内容开始-->
+<section class="plan_wrap">
+    <section class="analyze_wrap <?php if (empty($aBusiness['data']['sBadTag']) && empty($aBusiness['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+        <div class="analyze_txt floor_plan">
+        	<h3>
+            	<span></span>
+                分析师点评
+            </h3>
+            <p><?php echo isset($aBusiness['data']['sComment']) ? $aBusiness['data']['sComment'] : ''; ?></p>
+        </div>
+    </section>
+
+    <section class="condition">
+        <?php 
+            if(isset($aBusiness['data']['sGoodTag']) && !empty($aBusiness['data']['sGoodTag'])){
+                echo '<section class="advantage">
+                        <h3>优势</h3>
+                        <div class="advantage_con">';
+                foreach ($aBusiness['data']['sGoodTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section>';
+            }
+            if(isset($aBusiness['data']['sBadTag']) && !empty($aBusiness['data']['sBadTag'])){
+                echo '<section class="advantage disadvantaged">
+                    <h3>劣势</h3>
+                    <div class="advantage_con">';
+                foreach ($aBusiness['data']['sBadTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section>';
+            }
+        ?>
+    </section>
+
+<?php
+    if(!empty($aBusiness['data']['sStore'])){
+        echo '<section class=" floor_plan">
+            <h3>
+                <span></span>
+                周边卖场
+            </h3>
+            <div class="floor_plan_pic region_business">';
+        echo '<div class="floor_plan_pic01">';
+        echo '<h4>'.$aBusiness['data']['sStore'].'</h4>';
+        if(!empty($aBusiness['data']['zbmcImage'])){
+            foreach ($aBusiness['data']['zbmcImage'] as $key => $value) {
+                echo '<canvas data-src="'.$value['sImage'].'"></canvas>';
+            }
+        }
+        echo '</div>';
+        echo '</div></section>';
+    }
+
+    if(!empty($aBusiness['data']['sBank'])){
+        echo '<section class="floor_plan have_bottom_border">
+            <h3>
+                <span></span>
+                周边银行
+            </h3>';
+        echo '<p>'.$aBusiness['data']['sBank'].'</p>';
+        if(!empty($aBusiness['data']['zbyhImage'])){
+            foreach ($aBusiness['data']['zbyhImage'] as $key => $value) {
+                echo '<canvas data-src="'.$value.'"></canvas>';
+            }
+        }
+        echo '</section>';
+    }
+
+    if(!empty($aBusiness['data']['sRepast'])){
+        echo '<section class="floor_plan have_bottom_border">
+            <h3>
+                <span></span>
+                周边餐饮
+            </h3>';
+        echo '<p>'.$aBusiness['data']['sRepast'].'</p>';
+        if(!empty($aBusiness['data']['zbcyImage'])){
+            echo '<div class="floor_plan_pic region_business">';
+            foreach ($aBusiness['data']['zbcyImage'] as $key => $value) {
+                echo '<div class="floor_plan_pic01">';
+                echo '<canvas data-src="'.$value.'"></canvas>';
+                echo '</div>';
+            }
+            echo '</div>';
+        }
+        echo '</section>';
+    }
+
+    if(!empty($aBusiness['data']['sLivingService'])){
+        echo '<section class="floor_plan have_bottom_border">
+            <h3>
+                <span></span>
+                生活服务
+            </h3>';
+        echo '<p>'.$aBusiness['data']['sLivingService'].'</p>';
+        if(!empty($aBusiness['data']['zbfwImage'])){
+            echo '<div class="floor_plan_pic region_business">';
+            foreach ($aBusiness['data']['zbfwImage'] as $key => $value) {
+                echo '<div class="floor_plan_pic01">';
+                echo '<canvas data-src="'.$value.'"></canvas>';
+                echo '</div>';
+            }
+            echo '</div>';
+        }
+        echo '</section>';
+    }
+
+    if(!empty($aBusiness['data']['sMarket'])){
+       echo '<section class="floor_plan have_bottom_border">
+        <h3>
+            <span></span>
+            周边菜场
+        </h3>';
+        echo '<p>'.$aBusiness['data']['sMarket'].'</p>';
+        if(!empty($aBusiness['data']['zbccImage'])){
+            echo '<div class="floor_plan_pic region_business">';
+            foreach ($aBusiness['data']['zbccImage'] as $key => $value) {
+                echo '<div class="floor_plan_pic01">';
+                echo '<canvas data-src="'.$value.'"></canvas>';
+                echo '</div>';
+            }
+            echo '</div>';
+        }
+        echo '</section>';
+    }
+    
+    if(!empty($aEducate['data']['sqqtImage'])){
+        echo '<section class=" floor_plan have_bottom_border">';
+        echo '<h3><span></span>其他图片</h3>';
+        echo '<div class="kindergarten_wrap">';
+        foreach ($aEducate['data']['sqqtImage'] as $key => $val) {
+            echo '<div class="floor_plan_pic01">';
+            echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+            echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+            echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+            echo '</div>';  
+        }
+        echo '</div>';
+        echo '</section>';
+    }
+
+    if(isset($aBusiness['data']['sOtherComment']) && !empty($aBusiness['data']['sOtherComment'])){
+        echo '<section class="floor_plan plan_description evaluation_description">
+            <h3>
+                <span></span>
+                点评
+            </h3>';
+        echo '<p>'.$aBusiness['data']['sOtherComment'].'</p>';
+        echo '</section>';
+    }
+?>
+</section>
+<!--周边商圈内容结束-->
+
+

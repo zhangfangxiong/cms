@@ -1,0 +1,138 @@
+<style>
+    .em-zhedie {
+        height:34px;
+        overflow:hidden;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<!--搜索开始-->
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l">
+                <a href="javascript:history.go(-1)"></a>
+            </div>
+            <div class="seach_wrap">
+              <a class="search_txt">请输入楼盘名或地址 <s></s></a>
+            </div>
+        </div>
+    </header>
+    <!--头部开始-->
+    <!--搜索列表开始-->
+    <section class="bgf search_class">
+        <?php foreach($aFilter as $item) { ?>
+            <?php if(isset($item)&&isset($item["sName"])){?>
+                <div class="area_wrap">
+                    <dl class="area_dl clearfix">
+                        <dt class="pl12"><?php echo $item["sName"] ?></dt>
+                        <dd>
+                            <?php $index=0; foreach($item["list"] as $v) { $index++?>
+                                <em iCodeID="<?php echo $v["iCodeID"] ?>"><?php echo $v['sName'] ?></em>
+                            <?php } ?>
+                        </dd>
+                    </dl>
+                    <div class="zedie" style="display: none;"></div>
+                </div>
+            <?php } ?>
+        <?php } ?>
+        <div class="btn_wrap">
+            <div class="reset_btn">重置条件</div>
+            <div class="confirm_btn">确认搜索</div>
+        </div>
+    </section>
+    <!--搜索列表结束-->
+</div>
+<!--搜索结束-->
+<script type="text/javascript">
+    $(function(){
+        zhedie();
+    })
+
+
+    function zhedie(){
+        
+      $(".search_class .area_dl dd").each(function(){
+            if($(this).height()*1>34 && !$(this).parent().hasClass("on")){
+                $(this).addClass("em-zhedie");
+                $(this).parent().next().show();
+            }
+            else
+            {
+                $(this).removeClass("em-zhedie");
+                $(this).parent().next().hide();
+            }
+      })  
+      
+      $(".area_dl em").each(function(){
+          if($(this).hasClass("current")){
+              $(this).parent().removeClass("em-zhedie");
+              $(this).parents(".area_dl").next().hide();
+          }
+      })
+        
+        
+    }
+
+    //回退
+    $(".uc_return_l").on("click",function(){
+        history.go(-1);
+    });
+
+    //顶部搜索
+    $(".seach_wrap").on("click",function(){
+        window.location="/h5/search/unitsearch.html";
+    });
+
+    //折叠效果
+    $(".area_wrap").on("click",".zedie", function(){
+        $(this).prev().addClass("on");
+        if($(this).prev().children("dd").hasClass("em-zhedie")){
+            $(this).prev().children("dd").removeClass("em-zhedie");
+            $(this).hide();
+        }
+    });
+
+    //顶部搜索框效果
+    $(".search_txt").blur( function () {
+        if ($(this).attr("placeholder") == '') {
+            $(this).attr("placeholder","请输入楼盘名或地址");
+        }
+    });
+    $(".search_txt").focus(function(){
+        if ($(this).attr("placeholder") == '请输入楼盘名或地址') {
+            $(this).attr("placeholder","");
+        }
+    });
+
+    //选中样式
+    $(".area_wrap .area_dl dd em").bind("click", function(){
+        $.each($(this).parent().children(), function(i, n){
+            $(n).removeClass("current");
+        });
+        $(this).addClass("current")
+    });
+
+    //重置效果
+    $(".reset_btn").bind("click", function(){
+		$('.reset_btn').addClass('current1');
+        $.each($(".area_wrap .area_dl dd em"), function(i, n){
+            $(n).removeClass("current");
+        });
+    });
+
+    //提交
+    $(".confirm_btn").bind("click", function(){
+        var regionId=$(".area_wrap").first().children().children("dd").children(".current").attr("icodeid");
+        regionId=regionId==undefined?"": $.trim(regionId);
+
+        var priceId=$($(".area_wrap")[1]).children().children("dd").children(".current").attr("icodeid");
+        priceId=priceId==undefined?"":$.trim(priceId);
+
+        var layoutId=$($(".area_wrap")[2]).children().children("dd").children(".current").attr("icodeid");
+        layoutId=layoutId==undefined?"":$.trim(layoutId);
+
+        var keyword=$.trim($(".search_txt").html().replace("请输入楼盘名或地址 <s></s>",""));
+        location.href = "/h5/search/xfsearchindex.html?iRegionID=" + regionId+"&iPriceID="+priceId+"&iLayoutID="+layoutId+"&sKeyword="+keyword;
+    });
+</script>

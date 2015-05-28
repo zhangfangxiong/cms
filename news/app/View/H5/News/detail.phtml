@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <title><?php echo trim($detail['sTitle']); ?></title>
+        <script src="<?php echo $sStaticRoot ?>/touchweb/lib/jquery/jquery.min.js" ></script>
+        <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/new/css/style.css">
+    </head>
+
+    <body>
+        <section class="viewport">
+            <div class="con">
+                <div class="arc_title clearfix">
+                    <p class="rel_title"><?php echo trim($detail['sShortTitle']); ?></p>
+                    <div class="authinfo">
+                        <span><?php echo date('Y-m-d', $detail['iPublishTime']); ?></span>
+                        <span>房价点评网</span>
+                        <span>作者：<?php echo trim($detail['sAuthor']) ? trim($detail['sAuthor']) : '无'; ?></span>
+                        <span><?php echo isset($detail['sCityName']) ? trim($detail['sCityName']) : ''; ?></span>
+                    </div>
+                </div>
+
+                <section class="maintent">
+                    <div class="atricle_con_in">
+                        <?php echo $detail['sContent']; ?>
+                    </div>
+                </section>
+            </div>     
+        </section>
+
+    </body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".atricle_con_in p:last").height("auto");
+        if ($(".atricle_con_in p:last").html().indexOf("快扫我吧") != -1 || $(".atricle_con_in p:last").html().indexOf("扫一扫，知房价") != -1) {
+            if ($(".atricle_con_in p:last").html().indexOf("快扫我吧") != -1) {
+                $(".atricle_con_in p:last").html().find("快扫我吧").eq(0).prev("img").width("24");
+                $(".atricle_con_in p:last").html().find("快扫我吧").eq(0).prev("img").addClass("clearfix");
+                $(".atricle_con_in p:last").html().find("快扫我吧").eq(0).prev("img").css("margin", "0 auto");
+            }
+            if ($(".atricle_con_in p:last").html().indexOf("扫一扫，知房价") != -1) {
+                $(".atricle_con_in p:last").html().find("扫一扫，知房价").eq(0).prev("img").width("24");
+                $(".atricle_con_in p:last").html().find("扫一扫，知房价").eq(0).prev("img").addClass("clearfix");
+                $(".atricle_con_in p:last").html().find("扫一扫，知房价").eq(0).prev("img").css("margin", "0 auto");
+            }
+            if ($(".atricle_con_in p:last").html().indexOf("img") != -1) {
+                $(".atricle_con_in p:last").html().find("img").height("auto");
+            }
+
+        }
+    })
+
+</script>
+
+
+<!--
+zanURL:  /ajax/news/updGood
+shareURL:/ajax/news/updShare
+-->
+

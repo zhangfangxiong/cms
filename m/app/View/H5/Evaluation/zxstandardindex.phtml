@@ -1,0 +1,248 @@
+<!--品牌配置开始-->
+<?php
+if ($aHxfx['data']['iIsBlank']) {
+    ?>
+    <!--毛坯交付开始-->
+    <section class="viewport">>
+        <!--毛坯交付内容开始-->
+        <section class="plan_wrap">
+            <div class="no_config">
+                <div class="no_config_bg"></div>
+                <p>该楼盘毛坯交付</p>
+            </div>
+        </section>
+        <!--毛坯交付内容结束-->
+    </section>
+    <!--毛坯交付结束-->
+<?php
+} else {
+    ?>
+<section class="viewport">
+    <!--品牌配置内容开始-->
+    <section class="plan_wrap pppz">
+        <section class="analyze_wrap <?php if (empty($aHxfx['data']['sBadTag']) && empty($aHxfx['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+            <div class="floor_plan analyze_txt">
+            	<h3>
+                	<span></span>
+                    分析师点评
+                </h3>
+                <p><?php echo $aHxfx['data']['sComment'] ?></p>
+            </div>
+        </section>
+
+        <section class="condition">
+        <?php 
+            if(isset($aHxfx['data']['sGoodTag']) && !empty($aHxfx['data']['sGoodTag'])){
+                echo '<section class="advantage">
+                        <h3>优势</h3>
+                        <div class="advantage_con">';
+                foreach ($aHxfx['data']['sGoodTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section>';
+            }
+        ?>
+        </section>
+        
+        <?php
+            if($aPppz['cf']['iShow']){
+                echo '<section class=" floor_plan brand_configuration">
+                        <h3>
+                            <span></span>
+                            '.$aPppz['cf']['text'].'
+                        </h3>
+                        <div class="Kitchen_system kitchen">';
+                foreach ($aPppz['cf']['subcat'] as $key => $value) {
+                    if($value['iShow']){
+                        echo '<div><ul ';
+                        if (!empty($value['img'])) {
+                            echo 'class="bord_ty"';
+                        }
+                        echo
+                        '>
+                                    <li>'.$value['text'].'</li>
+                                    <li>'.$value['pp'].'</li>
+                                    <li>'.$value['cz'].'</li>
+                                </ul>';
+                        if(!empty($value['img'])){
+                            foreach ($value['img'] as $k => $v) {
+                                echo '<div class="house_pic">
+                                        <a href="'.$aEntrenceInfo['bigPic']['url'].'?eID='.$eID.'&iImageId='.$v['iAutoID'].'">
+                                        <canvas data-src="'.$v['sImage'].'"></canvas> 
+										<span class="pic_tip"></span>
+                                        </a>
+                                    </div>';
+                            }
+                        }
+                        echo '</div>';
+                    }
+                }
+                echo '</div></section>';
+            }
+
+            if($aPppz['wy']['iShow']){
+                echo '<section class=" floor_plan brand_configuration">
+                        <h3>
+                            <span></span>
+                            '.$aPppz['wy']['text'].'
+                        </h3>
+                        <div class="Kitchen_system kitchen">';
+                foreach ($aPppz['wy']['subcat'] as $key => $value) {
+                    if($value['iShow']){
+                        echo '<div>
+                                <ul ';
+                        if (!empty($value['img'])) {
+                            echo 'class="bord_ty"';
+                        }
+                        echo '>
+                                    <li>'.$value['text'].'</li>
+                                    <li>'.$value['pp'].'</li>
+                                    <li>'.$value['cz'].'</li>
+                                </ul>';                        
+                        if(!empty($value['img'])){
+                            foreach ($value['img'] as $k => $v) {
+                                echo '<div class="house_pic">
+                                        <a href="'.$aEntrenceInfo['bigPic']['url'].'?eID='.$eID.'&iImageId='.$v['iAutoID'].'">
+                                        <canvas data-src="'.$v['sImage'].'"></canvas>
+										<span class="pic_tip"></span> 
+                                        </a>
+                                    </div>';
+                            }
+                        }
+                        echo '</div>';
+                    }
+                }
+                echo '</div></section>';
+            }
+
+            if($aPppz['ws']['iShow']){
+                echo '<section class=" floor_plan brand_configuration">
+                        <h3>
+                            <span></span>
+                            '.$aPppz['ws']['text'].'
+                        </h3>
+                        <div class="Kitchen_system kitchen">';
+                foreach ($aPppz['ws']['subcat'] as $key => $value) {
+                    if($value['iShow']){
+                        echo '<div><ul ';
+                        if (!empty($value['img'])) {
+                            echo 'class="bord_ty"';
+                        }
+                          echo  '>
+                                    <li>'.$value['text'].'</li>
+                                    <li>'.$value['pp'].'</li>
+                                    <li>'.$value['cz'].'</li>
+                                </ul>';
+                        if(!empty($value['img'])){
+                            foreach ($value['img'] as $k => $v) {
+                                echo '<div class="house_pic">
+                                        <a href="'.$aEntrenceInfo['bigPic']['url'].'?eID='.$eID.'&iImageId='.$v['iAutoID'].'">
+                                        <canvas data-src="'.$v['sImage'].'"></canvas>
+										<span class="pic_tip"></span> 
+                                        </a>
+                                    </div>';
+                            }
+                        }
+                        echo '</div>';
+                    }
+                }
+                echo '</div></section>';
+            }
+
+            if($aPppz['qw']['iShow']){
+                echo '<section class=" floor_plan brand_configuration">
+                        <h3>
+                            <span></span>
+                            '.$aPppz['qw']['text'].'
+                        </h3>
+                        <div class="Kitchen_system kitchen">';
+                foreach ($aPppz['qw']['subcat'] as $key => $value) {
+                    if($value['iShow']){
+                        echo '<div><ul ';
+                        if (!empty($value['img'])) {
+                            echo 'class="bord_ty"';
+                        }
+                        echo '>
+                                    <li>'.$value['text'].'</li>
+                                    <li>'.$value['pp'].'</li>                                    
+                                </ul>';
+                        if(!empty($value['img'])){
+                            foreach ($value['img'] as $k => $v) {
+                                echo '<div class="house_pic">
+                                        <a href="'.$aEntrenceInfo['bigPic']['url'].'?eID='.$eID.'&iImageId='.$v['iAutoID'].'">
+                                        <canvas data-src="'.$v['sImage'].'"></canvas> 
+										<span class="pic_tip"></span>
+                                        </a>
+                                    </div>';
+                            }
+                        }
+                        echo '</div>';
+                    }
+                }
+                echo '</div></section>';
+            }
+
+            if($aPppz['ybgc']['iShow']){
+                echo '<section class=" floor_plan brand_configuration">
+                        <h3>
+                            <span></span>
+                            '.$aPppz['ybgc']['text'].'
+                        </h3>
+                        <div class="Kitchen_system kitchen">';
+                foreach ($aPppz['ybgc']['subcat'] as $key => $value) {
+                    if($value['iShow']){
+                        echo '<div>';
+                        if("gq" === $key){
+                            echo '<ul>
+                                    <li>'.$value['text'].'</li>
+                                    <li>'.$aHxfx['data']['iHouseGq'].'</li>
+                                    <li>-</li>
+                                </ul>';
+                        }else {
+                            echo '<ul>
+                                    <li>'.$value['text'].'</li>
+                                    <li>'.$value['pp'].'</li>
+                                    <li>'.$value['cz'].'</li>
+                                </ul>';
+                        }
+                        echo '</div>'; 
+                    }
+                }
+                echo '</div></section>';
+            }
+
+            if( isset($aHxfx['data']['ppqtImage']) && !empty($aHxfx['data']['ppqtImage'])){
+                echo '<section class=" floor_plan house_analysis"><h3>
+                        <span></span>
+                        其他图片
+                    </h3>
+                    <div class="floor_plan_pic">';
+                foreach ($aHxfx['data']['ppqtImage'] as $key => $value) {
+                    echo '<div class="floor_plan_pic01">';
+                    echo '<a href="'.$aEntrenceInfo['bigPic']['url'].'?eID='.$eID.'&iImageId='.$value['iAutoID'].'">';
+                    echo '<canvas data-src='.$value['sImage'].'></canvas>';
+					echo '<span class="pic_tip"></span>';
+                    echo '<p class="pic_name">'.$value['sTitle'].'</p>';
+                    echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+                    echo '</a>';
+                    echo '</div>';
+                }
+                echo '</div></section>';
+            }
+
+            if(isset($aHxfx['data']['sOtherComment']) && !empty($aHxfx['data']['sOtherComment'])){
+                echo '<section class="floor_plan plan_description evaluation_description">
+                    <h3>
+                        <span></span>
+                        点评
+                    </h3>';
+                echo '<p>'.$aHxfx['data']['sOtherComment'].'</p>';
+                echo '</section>';
+            }
+        ?>
+
+</section>
+
+<?php
+}
+?>

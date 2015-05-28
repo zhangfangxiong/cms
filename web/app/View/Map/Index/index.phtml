@@ -1,0 +1,171 @@
+<style type="text/css">
+    .amap-container{cursor:url(http://webapi.amap.com/theme/v1.3/openhand.cur),default;}
+    .amap-drag{cursor:url(http://webapi.amap.com/theme/v1.3/closedhand.cur),default;}
+</style>
+<input id="keyword" name="keyword" type="hidden" value="">
+<input id="cityCode" name="cityCode" type="hidden" value="<?php echo $cityInfo["CityCode"]; ?>">
+<section class="map_con">
+    <article class="map_left_con">
+        <div id="map"></div>
+    </article>
+    <article style="position: absolute; right: 0px; top: 0px; width: 502px;">
+        <aside id="pannel" class="map_right_con">
+            <div class="key_words clearfix">
+                您目前在 <?php echo $cityInfo["CityName"]; ?>
+                搜索关键字 “ <b><?php echo $mapDatarray["Keyword"]; ?></b> ”</div>
+            <div class="no_find_ban clearfix" style="display: none;">
+                <s></s><span>找不到任何楼盘？ 尝试<b>放大地图</b>以显示更多结果，或<b>重新选择条件</b>进行搜索！</span>
+            </div>
+            <div class="result_txt clearfix">
+                <span>共找到符合条件的楼盘-个</span>
+            </div>
+            <div id="units" class="result_list clearfix">
+            </div>
+        </aside>
+        <div class="page" style="position: fixed; bottom: 0; padding: 10px 15px; height: 27px;   background-color: #eee; width: 474px; margin: 0 0 0 -2px;">
+        </div>
+    </article>
+</section>
+<div id="unit_template" style="display: none;">
+    <dl class="clearfix" onmouseover="MoveToUnit('$PK')" id="ui$PK">
+        <dt>
+            <a href="$Url" target="_blank" title="$Tip">
+                <img src="$PictureUrl" alt="$Tip" onerror="this.srcX='<?php echo $sStaticRoot ?>/img/news/not_exists.jpg'" />
+            </a>
+        </dt>
+        <dd class="clearfix">
+            <h6>
+                <s class="$IconClass"></s>
+                <a href="$Url" target="_blank" title="$Tip"> $Tip</a>
+            </h6>
+            <div class="pannel_con clearfix">
+                <div class="pannel_left">
+                    <div class="txt_info clearfix">
+                        <ul class="panel_left">
+                            <li><cite>$PriceName2：</cite> <em>$Price2</em> <s>$PriceTag2</s></li>
+                            <li><cite>$PriceName：</cite> <em>$Price</em> <s>元/㎡</s></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pannel_right" evaluationflag="$EvaluationFlag" category="$Category" onmouseover="show_fljy(this)"   onmouseout="$(this).children('cite').show();  $(this).children('span').hide();">
+                    <cite><b>综合评定：<em>$TScore</em></b> $Star  </cite>
+                    <span class="clearfix" style="display: none;">
+                        <a href="$UnitCommentUrl"   target="_blank" class="cor_l">楼盘点评 </a>
+                        <a href="$EvaluationUrl" target="_blank" class="cor_g">楼盘测评 </a>
+                        <a href="$PriceTableUrl" target="_blank" class="cor_h">价目表 </a>
+                        <a href="$DiscountUrl" target="_blank" class="cor_z">优惠折扣 </a>
+                    </span>
+                </div>
+            </div>
+            <h5>[$Region]$OfficalAddr</h5>
+        </dd>
+    </dl>
+</div>
+<div id="unit_template_esf" style="display: none;">
+    <dl class="clearfix" onmouseover="MoveToUnit('$PK')" id="ui$PK">
+        <dt>
+            <a href="$Url" target="_blank" title="$Tip">
+                <img src="$PictureUrl" alt="$Tip" onerror="this.srcX='<?php echo $sStaticRoot ?>/img/news/not_exists.jpg'" />
+            </a>
+        </dt>
+        <dd>
+            <h6>
+                <s class="$IconClass"></s>
+                <a href="$Url" target="_blank" title="$Tip">  $Tip</a> 
+            </h6>
+            <div class="pannel_con clearfix">
+                <div class="pannel_left">
+                    <div class="txt_info clearfix">
+                        <ul class="panel_left">
+                            <li><cite>$PriceName：</cite> <em>$Price</em> <s>元/㎡</s></li>
+                            <li><cite>$PriceName2：</cite> <em>$Price2</em> <s>$PriceTag2</s></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pannel_right" evaluationflag="$EvaluationFlag" category="$Category" blocktotal="$BlockTotal"  onmouseover="show_fljy_esf(this)" onmouseout="$(this).children('ul').show(); $(this).children('span').hide();">
+                    <ul class="panel_right">
+                        <li><cite>楼栋数：</cite> <em>$BlockTotal</em> <s>栋</s></li>
+                        <li><cite>房间数：</cite> <em>$RoomTotal</em> <s>套</s></li>
+                    </ul>
+                    <span class="clearfix" style="display: none;">
+                        <a href="$Url" target="_blank" class="cor_l"> 小区首页</a> 
+                        <a style="display: none" href="$PriceTableUrl" target="_blank" class="cor_g fangjia">  一房一价</a>  
+                        <a href="$PriceInfoUrl" target="_blank" class="cor_h">价格行情</a>
+                        <a href="$EsfUnitDescriptionUrl" target="_blank" class="cor_z">小区概述</a>
+                    </span>
+                </div>
+            </div>
+            <h5>
+                [$Region]$OfficalAddr</h5>
+        </dd>
+    </dl>
+</div>
+  <!--[if IE]><script type="text/javascript" src="http://res.fangjia.cric.com/scripts/fe_html5.js"></script><![endif]-->
+<!--[if IE 6]>
+<script src="http://res0.xzlres.com/web/scripts/ddpng.js" type="text/javascript"></script>
+<script type="text/javascript">DD_belatedPNG.fix('.ddpng');</script>
+<![endif]-->   
+<script type="text/javascript">
+    localurls = '<?php echo $sStaticRoot ?>';
+    window.Searcher.Page = "Map";
+    MapConfig.MapData = <?php echo $mapData; ?>;
+    MapConfig.InitFilter = {Category: 1, Filter: ""};
+    MapConfig.CityName = "<?php echo $cityInfo['CityName'] ?>";
+    $(function () {
+        $(".city_wap .wap_list").hover(function () {
+            $(this).children("ul").show();
+        }, function () {
+            $(this).children("ul").hide();
+        });
+        if ($("#keyword").val() != "") {
+            $("#key").val('');
+        }
+        var windowRes = function () {
+            if ($(window).width() <= 1024) {
+                $("#pannel").width(325);
+                $(".map_left_con").css("margin-right", 325);
+                $("#units dl dd").css("width", 175);
+                $("#units .pannel_right").css("display", "none");
+                $("#map").width($("#Header").width() - ($("#pannel").width() + 2));
+            } else {
+                $("#pannel").width(502);
+                $(".map_left_con").css("margin-right", 502);
+                $("#units dl dd").css("width", 355);
+                $("#units .pannel_right").css("display", "block");
+                $("#map").width($("#Header").width() - ($("#pannel").width() + 2));
+            }
+        };
+        windowRes();
+        //自适应高度宽度
+        $(window).resize(function () {
+            var fixHight = $(window).height() - $("#Header").height();
+            $("#pannel").height(fixHight - 60);
+            $("#map").height(fixHight);
+            $("#map").width($("#Header").width() - ($("#pannel").width() + 2));
+            $(".filter_cond_box").width($("#Header").width() - ($("#pannel").width() + 2));
+            $(".filter_cond_list").width($("#Header").width() - ($("#pannel").width() + 2) - 60);
+            $(".filter_cond_box").height($(".filter_cond_list").height() + 12);
+            windowRes();
+        }).resize();
+    });
+    function show_fljy(obj) {
+        var flag = $(obj).attr("EvaluationFlag");
+        //产品规则：flag==1则显示否则不显示
+        //暂行规则：flag==1||flag==-1则显示否则不显示
+        if (flag == 1 || flag == -1) {
+            $(obj).children('cite').hide();
+            $(obj).children('span').show();
+        }
+    }
+    function show_fljy_esf(obj) {
+        var flag = $(obj).attr("BlockTotal");
+        if (flag > 0) {
+            $(obj).children('span').find(".fangjia").show();
+            $(obj).children('span').find(".jiusan").hide();
+        }
+        $(obj).children('ul').hide();
+        $(obj).children('span').show();
+    };
+
+</script>
+      

@@ -1,0 +1,19 @@
+<?php
+
+    $cityCode = isset($cityInfo[$news['iCityID']]) ?$cityInfo[$news['iCityID']]['sFullPinyin']:$lpCityCode;
+    if (!empty($news['sImage'])) {
+        $imageUrl = strpos($news['sImage'], 'house.sina.com') > 0 ? $news['sImage'] : Util_Uri::getDFSViewURL($news['sImage'], 130, 94);
+    } else {
+        $imageUrl = 'http://'.$staticBaseUrl .'/img/news/not_exists.jpg';
+    }
+?>
+<dl>
+    <dt><a target="_blank" href="<?php echo 'http://'.$newsBaseUrl.'/'.$cityCode .'/news/detail/' .$news['iNewsID']; ?>">
+            <img src="<?php echo $imageUrl ?>"
+                 alt=""></a></dt>
+    <dt></dt>
+    <dd><a target="_blank" href="<?php echo 'http://'.$newsBaseUrl.'/'.$cityCode .'/news/detail/' .$news['iNewsID']; ?>">
+            <b><?php echo $news['sTitle']?></b>
+            <cite><?php echo $news['desc']?></cite></a>
+        <span><em>作者：<?php echo $news['sAuthor'] ?> </em><em><?php echo  date('Y-m-d H:i',$news['iPublishTime']) ?></em></span></dd>
+</dl>

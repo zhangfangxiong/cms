@@ -1,0 +1,54 @@
+<div class="one_list">
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label">*医院名称：</label>
+
+        <div class="col-sm-9">
+             <input type="text" class="form-control  input-validate" validate="!required:医院名称"  placeholder="医院名称" name="hospitalName" class="hospitalName">
+               <span class="validate_checktip"></span>
+        </div>
+        <div class="col-sm-1 tlr" style=""><a href="javascript:void(0);" title="删除"  style="display: <?php echo $index == 0 ? 'none' : '' ?>" class="deletehospital glyphicon glyphicon-remove fr"></a>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label">医院图片：</label>
+        <div class="col-sm-2 mt5">
+            <input type="button" value="请选择医院图" data-placeholder-name="图片名称" data-placeholder-dec="请针对医院图进行描述" class="plupload yyupload"  data-target="qyPositionImages" data-img="#sImageShow" data-callback="showImg" data-limit="10" data-dec="1"/>
+        </div>
+        <div class="col-sm-8">
+            <div class="ts_tips">单张图片不能大于2M，支持png、jpg，最多可上传10张。</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+            <div class="eHxImgDiv" style="display: <?php echo isset($qyPositionImages) && !empty($qyPositionImages) ? '' : 'none' ?>;">
+                <div class="row" id="sImageShow" >
+                    <?php
+                    if (isset($qyPositionImages) && !empty($qyPositionImages)) {
+                        foreach ($qyPositionImages as $item) {
+                            ?>
+                            <div class="image_list">
+                                <img  src="<?php echo Model_EvaluationImage::getImageUrl($item['iCricId'], $item['sImage']) ?>" data-content-id="<?php echo $item['iAutoID'] ?>">
+                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                <div class="top-group">
+                                    <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qyPositionImagesTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle'] ?>"> </div>
+                                </div>
+                                <div class="top-group">
+                                    <div class="col-sm-12 duiq"> <textarea class="form-control" maxlength="300" rows="2" name="qyPositionImagesDesc[]" placeholder="请针对区位图进行描述"><?php echo $item['sDesc'] ?></textarea> </div>
+                                </div>
+                                <input type="hidden" name="qyPositionUpImageId[]" value="<?php echo $item['iAutoID'] ?>" />
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label">其他点评：</label>
+        <div class="col-sm-9">
+            <textarea class="form-control clearflags" rows="3" placeholder="最多可以输入200字" name="zsDp[<?php echo $k ?>]"></textarea>
+        </div>
+    </div>
+</div>

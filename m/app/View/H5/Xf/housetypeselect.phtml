@@ -1,0 +1,57 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">
+
+    <!--选择户型开始-->
+    <div class="viewport">
+        <!--头部开始-->
+         <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="goback"></a>
+                <div class="inner_title">选择户型</div>
+            </div>
+        </header>
+        <!--头部开始-->
+        <!--户型列表开始-->
+            <?php
+                if($aHouseType && $aHouseType['list']) {
+                    echo '<section class="main_section pl12 house_type" id="mainsection">';
+                    foreach ($aHouseType['list'] as $key => $value) {
+                        echo '  <div class="zh_eval border_bottom clearfix">
+                                    <a href="xfdetail?id='.$loupanId.'&area='.$value['sAcreage'].'&type='.$value['sHouseType'].'&typecode='.$value['sTypeCode'].'#onelineSelectfang">
+                                        <div class="left_hx_img">
+                                            <canvas data-src="'.$value['imageUrlList'].'"></canvas>
+                                        </div>
+                                        <div class="right_hx_info">
+                                            <p>户型：'.$value['sName'].'</p>
+                                            <p>房型：'.$value['sHouseType'].'</p>
+                                            <p>面积：'.$value['sAcreage'].'</p>
+                                        </div>
+                                    </a>
+                                </div>';
+                    }
+                    echo '</section>';
+                }else {
+                    echo '  <section class="search_result index_search_result" style="display: block">
+                                <div class="search_result_tip">
+                                    <div class="tip1">暂无户型</div>
+                                </div>
+                            </section>';
+                }
+            ?>
+        
+        <!--户型列表结束-->
+    </div>
+    <!--选择户型结束-->
+    <script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js" ></script>
+    <script>
+     requirejs.config({
+        baseUrl: '<?php echo $sStaticRoot ?>/touchweb/lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'webtouchcommon': 'js/webtouchcommon'
+        }
+    })
+  require(["jquery","webtouchcommon"], function () {
+        webtouchObj.canvasload();
+    })
+    </script>
+</body>

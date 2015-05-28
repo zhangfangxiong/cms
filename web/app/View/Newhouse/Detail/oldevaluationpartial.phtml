@@ -1,0 +1,302 @@
+﻿<div class=" clearfix n_cont_warp mb30">
+    <div class="n_cont_warp_m">
+        <h2>
+            <b>
+                <s></s>详细评测
+            </b>
+            <?php
+
+             $pingceCss = "border-bottom:0;";
+            if ($cricTotalCount > 0 || $totalCount > 0 || $unit['EvaluationFlag'] == 1) {
+                $pingceCss = "";
+                ?>
+                <a href="<?php echo $unit['EvaluationUrl']?>" target="_blank">详细评测<s></s></a>
+            <?php
+            }
+            ?>
+        </h2>
+        <div class="detail_eval clearfix">
+            <div class="wg_wrap clearfix" style="@pingceCss">
+                <div class="wg_left">
+                    <cite>
+                        综合评定:<span><?php echo $unit['TotalScore']?></span>
+                    </cite>
+                            <span class="middle-start">
+                                <?php
+                                echo Model_Util::getStar($unit['TotalScore']);
+                                ?>
+                            </span>
+                </div>
+                <div class="wg_right">
+                    <div class="wg_trgm">
+                        <span>3分以下：不做推荐</span><s></s>
+                        <span>3-4分：合格项目</span><s></s>
+                        <span>4-4.5分：优秀项目</span><s></s>
+                        <span>4.5分以上：强烈推荐</span>
+                    </div>
+                    <ul>
+                        <?php
+                        if (!empty($unit['RoomTypeScore'])) {
+                            ?>
+                            <li><s></s>户型分析 <?php echo sprintf("%01.1f",$unit['RoomTypeScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['DesignScore'])) {
+                            ?>
+                            <li><s></s>装修分析 <?php echo sprintf("%01.1f",$unit['DesignScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['HouseManageScore'])) {
+                            ?>
+                            <li><s></s>物业分析 <?php echo sprintf("%01.1f",$unit['HouseManageScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['ParkScore'])) {
+                            ?>
+                            <li><s></s>车位情况 <?php echo sprintf("%01.1f",$unit['ParkScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['LocationScore'])) {
+                            ?>
+                            <li><s></s>区位分析 <?php echo sprintf("%01.1f",$unit['LocationScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['CPRatioScore'])) {
+                            ?>
+                            <li><s></s>性价比 <?php echo sprintf("%01.1f",$unit['LocationScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+            <?php
+             if ($cricTotalCount > 0 || $totalCount > 0 || $unit['EvaluationFlag'] == 1)
+            {
+                  ?>
+            <div class="wg_content clearfix">
+                <div class="wgc_left">
+                <?php
+                    if (sizeof($recommendedRoomTypes) > 0)
+                    {
+                     $recommendedRoomType = current($recommendedRoomTypes);
+                     $rrtUrl = $unit['EvaluationUrl'] . "_4";
+                        if ($unit['ResFlag'] == 1)
+                        {
+                            $rrtUrl = $unit['EvaluationUrl'] . "_5";
+                        }
+                        ?>
+                    <div class="wgc_img">
+                        <a href="<?php echo $rrtUrl?>" target="_blank">
+                            <img src="<?php echo $recommendedRoomType['imgUrl']?>" alt="" />
+                        </a>
+                    </div>
+                    <div class="wgc_ment">
+                        <div class="wgc_tit"><a href="@(rrtUrl)" target="_blank"> <?php echo $recommendedRoomType['RecommendedRoomTypeTitle']?> </a></div>
+                        <div class="wgc_gm">
+                            <?php
+                             echo Model_Util::subString($recommendedRoomType['RecommendedRoomTypeRemark'],140);
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+                    }
+                    else
+                    {
+                        ?>
+                    <div class="no_con clearfix">
+                        <img src="<?php echo $sStaticRoot ?>/web/images/pc_zwf.png">
+                    </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+                <div class="wgc_right">
+                    <ul class="wgc_tlist" id="eval_menu"></ul>
+                    <?php
+                     if ($cricTotalCount > 0)
+                    {
+                        ?>
+                    <script type="text/javascript">
+                        //获取测评报告
+                        var evalData = {};
+                        var cricInReport = <?php echo json_encode($HomeNewReport);?>;
+                        $(function () {
+                            if (cricInReport) {
+                                for (var i = 0, item; i < cricInReport.length, item = cricInReport[i]; i++) {
+                                    if (evalData[item.TopColumn]) {
+                                        continue;
+                                    }
+                                    evalData[item.TopColumn] = item;
+                                }
+                                var html = "";
+                                if (evalData["户型"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=1\" target = \"_blank\">户型分析</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">户型分析</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["装修"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=2\" target = \"_blank\">装修标准</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">装修标准</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["社区品质"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=3\" target = \"_blank\">社区品质</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">社区品质</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["物业"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=4\" target = \"_blank\">物业服务</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">物业服务</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["区域配套"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=5\" target = \"_blank\">生活配套</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">生活配套</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["不利因素"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=6\" target = \"_blank\">不利因素</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">不利因素</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                            }
+                            else {
+                                $("#eval_menu").html($("#eval_menu_template").html());
+                            }
+                        });
+                    </script>
+                    <?php
+                    }
+                    else
+                    {
+                    if ($totalCount > 0)
+                    {
+                    ?>
+                    <script type="text/javascript">
+                        //获取测评报告
+                        var evalData = {};
+                        var cmsData =  <?php echo json_encode($EvaluationReportData);?>;
+                        $(function () {
+                            if (cmsData) {
+                                var data = cmsData.data;
+                                for (var i = 0, item; i < data.length, item = data[i]; i++) {
+                                    if (evalData[item.topcolumn]) {
+                                        continue;
+                                    }
+                                    evalData[item.topcolumn] = item;
+                                }
+                                var html = "";
+                                if (evalData["户型"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=1\" target = \"_blank\">户型分析</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">户型分析</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["装修"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=2\" target = \"_blank\">装修标准</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">装修标准</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["社区品质"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=3\" target = \"_blank\">社区品质</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">社区品质</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["物业"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=4\" target = \"_blank\">物业服务</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">物业服务</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["区域配套"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=5\" target = \"_blank\">生活配套</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">生活配套</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                                if (evalData["不利因素"]) {
+                                    html = "<li><a href=\"<?php echo $unit['EvaluationUrl']?>?t=6\" target = \"_blank\">不利因素</a></li>";
+                                } else {
+                                    html = "<li><a href=\"javascript:;\" class=\"disb\">不利因素</a></li>";
+                                }
+                                $("#eval_menu").append(html);
+                            } else {
+                                $("#eval_menu").html($("#eval_menu_template").html());
+                            }
+                        });
+                    </script>
+                    <?php
+                    }
+                    else
+                    {
+                    if ($unit['EvaluationFlag'] == 1)
+                    {
+                    if ($unit['ResFlag'] != 1)
+                    {
+                        ?>
+                    <script type="text/javascript">
+                        var html = "";
+                        html = '<li><a href="@(unit.EvaluationUrl)_1" title="点评综述" target="_blank">点评综述</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_2" title="好房推荐" target="_blank">好房推荐</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_3" title="房源信息" target="_blank">房源信息</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_4" title="户型分析" target="_blank">户型分析 </a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_5" title="装修标准" target="_blank">装修标准</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_6" title="物业服务" target="_blank">物业服务</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_7" title="生活配套" target="_blank">生活配套</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_8" title="不利因素" target="_blank">不利因素</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_9" title="购房提醒" target="_blank">购房提醒</a></li>';
+
+                        $("#eval_menu").html(html);
+                    </script>
+                    ?>
+                    <?php
+                    }
+                    else
+                    {
+                    ?>
+                    <script type="text/javascript">
+                        var html = "";
+                        html = '<li><a href="@(unit.EvaluationUrl)_1" title="点评综述" target="_blank">点评综述</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_4" title="好房推荐" target="_blank">好房推荐</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_2" title="房源信息" target="_blank">房源信息</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_5" title="户型分析" target="_blank">户型分析</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_6" title="装修标准" target="_blank">装修标准</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_7" title="物业服务" target="_blank">物业服务</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_8" title="生活配套" target="_blank">生活配套</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_9" title="不利因素" target="_blank">不利因素</a></li>';
+                        html = html+'<li><a href="@(unit.EvaluationUrl)_10" title="购房提醒" target="_blank">购房提醒</a></li>';
+                        $("#eval_menu").html(html);
+                    </script>
+                    <?php
+                    }
+                    }
+                    }
+                    }
+?>
+                </div>
+            </div>
+            <?php
+            }
+?>
+        </div>
+    </div>
+</div>

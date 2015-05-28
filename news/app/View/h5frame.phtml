@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <title><?php echo isset($aMeta['title']) ? $aMeta['title'] : '' ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/Evaluation/css/swiper.min.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/Evaluation/css/style.css">
+    </head>
+
+    <body>
+        <?php
+        $aa = 111;
+        ?>
+        <?php
+        if (isset($aa)) {
+            ?>
+            <header class="tophead">
+                <div class="tophead_inner">
+                    <a href="javascript:history.back()" class="goback"></a>
+                    <div class="inner_title">仁恒西郊花园</div>
+                    <a href="javascript:void(0)" class="collectit collectit_gray"></a><!--点击灰色的星星之后收藏，星星变红色，即去掉collectit_gray类，加上collectit_red类；点击红色的星星取消收藏，星星变为灰色，即去掉collectit_red类，加上collectit_gray类-->
+                    <a href="javascript:void(0)" class="shares" id="sharesCode"></a>
+                </div>
+            </header>
+        
+            <?php
+        }
+        ?>
+
+        <input type="hidden" id="appornot" value="<?php echo isset($aa) ? $aa : '' ?>">
+        <!--品牌配置导航开始-->
+        <nav class="nav <?php if (count($aSonMenus) > 3) { ?>swiper-container<?php } ?>">
+            <!--去除点击闪动css-->
+            <?php if (count($aSonMenus) == 2): ?>
+                <style>
+                    .nav .line {width: 100%;}
+                    .nav .line li {width:50%;}
+                </style>
+            <?php elseif (count($aSonMenus) == 3): ?>
+                <style>
+                    .nav .line {width: 100%;}
+                    .nav .line li {width: 33.3333333333333%;}
+                </style>
+            <?php elseif (count($aSonMenus) > 3): ?>
+                <style>
+                    .nav .line {width: 100%;}
+                    .nav .line li {width: 28.571428%;}
+                </style>
+            <?php endif; ?>
+            <ul class="line <?php if (count($aSonMenus) > 3) { ?> swiper-wrapper<?php } ?>"<?php if (count($aSonMenus) > 3) { ?> <?php if (isset($addLeft)) { ?> style="transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate3d(-267.857142857143px, 0px, 0px); -webkit-transform: translate3d(-267.857142857143px, 0px, 0px);"   <?php }
+            } ?>>
+                <?php
+                foreach ($aSonMenus as $key => $value) {
+                    $value = ucfirst(strtolower($value));
+                    ?>
+                    <li <?php if (count($aSonMenus) > 3) { ?> class="swiper-slide"<?php } ?>>
+                        <a class="<?php
+                        if (!$iSonIfNull[$key]) {
+                            echo 'no_con';
+                        } elseif ($sCurrSon == $value) {
+                            echo 'current';
+                        } else {
+                            echo '';
+                        }
+                        ?>" href="<?php
+                           if (!$iSonIfNull[$key]) {
+                               echo 'javascript:void(0)';
+                           } elseif ($sCurrSon == $value) {
+                               echo 'javascript:void(0)';
+                           } else {
+                               echo $sUrlPrifix . $sCurrParent . $value . '?eID=' . $eID;
+                           }
+                           ?>"><?php echo $aSonMenusName[$key]; ?></a>
+    <?php echo ($sCurrSon != $value) ? '' : '<span></span>' ?>
+                    </li>
+            <?php
+        }
+        ?>
+            </ul>
+        </nav>
+        <!--第一个显示的menu必显示的一个模块start-->
+<?php
+if (!empty($aFirstActionName)) {
+    if (strtolower($sCurrParent) == $aFirstActionName['sToControl'] && strtolower($sCurrSon) == $aFirstActionName['sToAction']) {
+        ?>
+
+                <section class="analyze_wrap" style="padding-top:45px;margin-bottom: -45px;">
+                    <div class="analyze_head_bg">
+                        <img src="<?php echo $sStaticRoot ?>/touchweb/Evaluation/image/analyze_bg.png">
+
+                        <div class="analyze_name">
+                            <p><?php echo is_array($analysts['data']) ? $analysts['data']['AnalystsName'] : '' ?></p>
+                            <span><?php echo is_array($analysts['data']) ? $analysts['data']['AnalystLevel'] : '' ?></span>
+                        </div>
+                        <div class="analyze_head">
+                            <img
+                                src="<?php echo is_array($analysts['data']) ? $analysts['data']['AnalystHead'] : $sStaticRoot . '/touchweb/Evaluation/image/nopic.png' ?>">
+                        </div>
+                    </div>
+                </section>
+                <?php
+            }
+        }
+        ?>
+        <!--第一个显示的menu必显示的一个模块end-->
+                <?php include $_script; ?>
+        <!--底部导航开始-->
+        <footer class="footer_wrap">
+            <ul class="footer">
+                       <?php
+                       foreach ($sParentName as $key => $value) {
+                           $sControl = strtolower($sParentUrl[$key]);
+                           ?>
+                    <li>
+                        <a href="<?php echo ($iParentIfNull[$key] && $sControl != $sCurrParent) ? $sUrlPrifix . $sControl . $aParentTo[$key]['name'] . '?eID=' . $eID : 'javascript:void(0)' ?>"
+                           class="<?php
+                        if (!$iParentIfNull[$key]) {
+                            echo 'no_con';
+                        } elseif ($sControl == $sCurrParent) {
+                            echo 'current';
+                        } else {
+                            echo '';
+                        }
+                        ?>"><?php echo $value ?></a></li>
+    <?php }
+?>
+            </ul>
+        </footer>
+        <!--底部导航结束-->
+        <?php
+        if (isset($aa)) {
+            ?>
+        <div class="return_top" id="backtop">
+            <div class="return_top_bg"></div>
+            <div class="return_top_txt">返回顶部</div>
+        </div>
+        <div id="BgDiv" class="black_bg" style="display:none ;"></div>
+        <div class="sharesdiv" style="display:none;">
+            <div class="topshare">
+<!--                <a href="jacascript:void(0)" class="oneshare pyq">
+                    <span class="sharename">朋友圈</span>
+                </a>-->
+                <a href="jacascript:void(0)" class="oneshare qqzone">
+                    <span class="sharename">QQ空间</span>
+                </a>
+                <a href="jacascript:void(0)" class="oneshare qqfriend">
+                    <span class="sharename">QQ好友</span>
+                </a>
+                <a href="jacascript:void(0)" class="oneshare sinaweibo">
+                    <span class="sharename">微博</span>
+                </a>
+                
+                
+            </div>
+            <div class="bottomcancle">
+                <div class="innerCancle">取消</div>
+            </div>
+        </div>
+        <?php } ?>
+        
+        <script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"
+        data-main="<?php echo $sStaticRoot ?>/touchweb/lib/js/main.js"></script>
+        <script>
+            var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+        </script>
+    </body>
+</html>

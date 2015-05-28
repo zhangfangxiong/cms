@@ -1,0 +1,57 @@
+﻿<!--周边设施 start-->
+<div class="clearfix n_cont_warp mb30">
+    <div class="n_cont_warp_m">
+        <h2>
+            <b>
+                <s></s>周边
+            </b>
+            <a href="@unit.DetailUrl" target="_blank">更多<s></s></a>
+        </h2>
+        <div class="periphery_list">
+            <ul class="clearfix">
+                <li>
+                    <cite>
+                        <a href="@(unit.DetailUrl)?t=station" keywords="公交车站,地铁站" target="_blank" id="station"><b>交通</b><s></s></a>
+                        <em>1公里内的交通设施</em>
+                    </cite>
+                    <span>
+                    </span>
+                    <a href="@(unit.DetailUrl)?t=station" target="_blank"> <i class="i_jt"></i></a>
+                </li>
+                <li>
+                    <cite>
+                        <a href="@(unit.DetailUrl)?t=edu" keywords="幼儿园,小学,中学,大学" target="_blank" id="edu"><b>教育</b><s></s></a>
+                        <em>1公里内的学校</em>
+                    </cite>
+                    <span>
+                    </span>
+                    <a href="@(unit.DetailUrl)?t=edu" target="_blank"> <i class="i_jy"></i></a>
+                </li>
+                <li>
+                    <cite>
+                        <a href="@(unit.DetailUrl)?t=life" keywords="银行,购物,餐厅,邮局" target="_blank" id="life"><b>生活</b><s></s></a>
+                        <em>1公里内的生活配套</em>
+                    </cite>
+                    <span>
+                    </span>
+                    <a href="@(unit.DetailUrl)?t=life" target="_blank"> <i class="i_sh"></i></a>
+                </li>
+                <li>
+                    <cite>
+                        <a href="@(unit.DetailUrl)?t=health" keywords="医院,健身" target="_blank" id="health"><b>健康</b><s></s></a>
+                        <em>1公里内的医疗配套</em>
+                    </cite>
+                    <span>
+                    </span>
+                    <a href="@(unit.DetailUrl)?t=health" target="_blank"> <i class="i_jk"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        SurFac.init("<?php echo $unit['X']?>", "<?php echo $unit['Y']?>");
+    });
+</script>
+<!--周边设施 end-->

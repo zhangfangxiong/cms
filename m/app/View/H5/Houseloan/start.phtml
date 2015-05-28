@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name='apple-touch-fullscreen' content='yes'>
+    <meta name="full-screen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="address=no">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
+    <title>房贷计算神器</title>
+    <script type="text/javascript" src="<?php echo $sStaticRoot ?>/js/jquery-1.11.1.min.js"></script>
+    <script src="<?php echo $sStaticRoot ?>/js/calculator.js"></script>
+    <script src="<?php echo $sStaticRoot ?>/js/dataHelper.js"></script>
+    <link rel="stylesheet" href="<?php echo $sStaticRoot ?>/css/weixin.css" type="text/css" media="screen"/>
+</head>
+
+
+
+<body>
+<section>
+    <div class="nf_nav">
+        <div class="nf_nlink">
+            <ul>
+                <li><a class="nf_bd1 cur" href="javascript:;">商贷</a></li>
+                <li><a href="javascript:;" class="nf_bd2">公积金</a></li>
+                <li><a href="javascript:;" class="nf_bd3">组合</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+<section class="mw_slide nf_item">
+    <ul class="mw_slide_ul">
+        <li>
+            还款方式
+            <select class="nf_c_select" id="C_refundType">
+                <option value="C_refundType_PI">等额本息</option>
+                <option value="C_refundType_AC">等额本金</option>
+            </select>
+        </li>
+        <li>
+            计算方式
+            <select class="nf_c_select" id="C_calculateType">
+                <option value="C_calculateType_SUM">按贷款总额</option>
+                <option value="C_calculateType_ARE">按单价计算</option>
+            </select>
+        </li>
+        <li id="li_CommercialLoan_SumPrice">
+            贷款总额
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="CommercialLoan_SumPrice">
+                    <em>万元</em>
+                </span>
+        </li>
+        <li style=" display:none" id="li_CommercialLoan_Price">
+            单价
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="CommercialLoan_Price">
+                    <em>元/平米</em>
+                </span>
+        </li>
+        <li style=" display:none" id="li_CommercialLoan_area">
+            面积
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="CommercialLoan_area">
+                    <em>平米</em>
+                </span>
+        </li>
+        <li style=" display:none" id="li_CommercialLoan_Payment">
+            首付成数
+            <select class="nf_c_select" id="CommercialLoan_Payment">
+                <option value="1">1成</option>
+                <option value="2">2成</option>
+                <option value="3">3成</option>
+                <option value="4">4成</option>
+                <option value="5">5成</option>
+                <option value="6">6成</option>
+                <option value="7">7成</option>
+                <option value="8">8成</option>
+                <option value="9">9成</option>
+            </select>
+        </li>
+        <li>
+            按揭年数
+            <select class="nf_c_select" id="CommercialLoan">
+                <option>20年(240期)</option>
+            </select>
+        </li>
+        <li>
+            贷款利率
+            <select class="nf_c_select" id="CommercialRate">
+                <option value="5.90">2015年03月01日基准利率</option>
+                <option value="4.72">2015年03月01日(8折)</option>
+                <option value="5.01">2015年03月01日(85折)</option>
+                <option value="5.31">2015年03月01日(9折)</option>
+                <option value="6.49">2015年03月01日(1.1倍)</option>
+                <option value="6.15">2014年11月21日基准利率</option>
+                <option value="4.92">2014年11月21日(8折)</option>
+                <option value="5.23">2014年11月21日(85折)</option>
+                <option value="5.53">2014年11月21日(9折)</option>
+                <option value="6.77">2014年11月21日(1.1倍)</option>
+                <option value="6.55">2012年07月06日基准利率</option>
+                <option value="5.24">2012年07月06日(8折)</option>
+                <option value="5.57">2012年07月06日(85折)</option>
+                <option value="5.90">2012年07月06日(9折)</option>
+                <option value="7.21">2012年07月06日(1.1倍)</option>
+                <option value="6.80">2012年06月08日基准利率</option>
+                <option value="5.44">2012年06月08日(8折)</option>
+                <option value="5.78">2012年06月08日(85折)</option>
+                <option value="6.12">2012年06月08日(9折)</option>
+                <option value="7.48">2012年06月08日(1.1倍)</option>
+            </select>
+        </li>
+    </ul>
+    <div class="nf_fbm">商业贷款利率 <span class="nb_f_span Commercial_Rate">6.15%</span></div>
+    <div class="nf_bpar">
+        <a href="javascript:;" class="nf_btn bt1">开始计算</a>
+    </div>
+</section>
+<section class="mw_slide nf_item" style="display:none;">
+    <ul class="mw_slide_ul">
+        <li>
+            还款方式
+            <select class="nf_c_select" id="F_refundType">
+                <option value="F_refundType_PI">等额本息</option>
+                <option value="F_refundType_AC">等额本金</option>
+            </select>
+        </li>
+        <li>
+            计算方式
+            <select class="nf_c_select" id="F_calculateType">
+                <option value="F_calculateType_SUM">按贷款总额</option>
+                <option value="F_calculateType_ARE">按单价计算</option>
+            </select>
+        </li>
+        <li id="li_FundLoad_SumPrice">
+            贷款总额
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="FundLoad_SumPrice">
+                    <em>万元</em>
+                </span>
+        </li>
+        <li style=" display:none" id="li_FundLoad_Price">
+            单价
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="FundLoad_Price">
+                    <em>元/平米</em>
+                </span>
+        </li>
+        <li style=" display:none" id="li_FundLoad_area">
+            面积
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="FundLoad_area">
+                    <em>平米</em>
+                </span>
+        </li>
+        <li style=" display:none" id="li_FundLoad_Payment">
+            首付成数
+            <select class="nf_c_select" id="FundLoad_Payment">
+                <option value="1">1成</option>
+                <option value="2">2成</option>
+                <option value="3">3成</option>
+                <option value="4">4成</option>
+                <option value="5">5成</option>
+                <option value="6">6成</option>
+                <option value="7">7成</option>
+                <option value="8">8成</option>
+                <option value="9">9成</option>
+            </select>
+        </li>
+        <li>
+            按揭年数
+            <select class="nf_c_select" id="FundLoad">
+                <option>20年(240期)</option>
+            </select>
+        </li>
+        <li>
+            贷款利率
+            <select class="nf_c_select" id="FundRate">
+                <option value="4.0">2015年03月01日基准利率</option>
+            </select>
+        </li>
+    </ul>
+    <div class="nf_fbm">公积金利率<span class="nb_f_span F_nf_fbm">4.00%</span></div>
+    <div class="nf_bpar">
+        <a href="javascript:;" class="nf_btn bt2">开始计算</a>
+    </div>
+</section>
+<section class="mw_slide nf_item" style="display:none;">
+    <ul class="mw_slide_ul">
+        <li>
+            还款方式
+            <select class="nf_c_select" id="S_refundType">
+                <option value="S_refundType_PI">等额本息</option>
+                <option value="S_refundType_AC">等额本金</option>
+            </select>
+        </li>
+        <li>
+            商业贷款
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="SyndicatedLoan_cl">
+                    <em>万元</em>
+                </span>
+        </li>
+        <li>
+            公积金贷款
+                <span class="nf_putm">
+                    <input type="number" placeholder="请输入" id="SyndicatedLoan_fl">
+                    <em>万元</em>
+                </span>
+        </li>
+
+        <li>
+            按揭年数
+            <select class="nf_c_select" id="SyndicatedLoan">
+                <option>20年(240期)</option>
+            </select>
+        </li>
+        <li>
+            贷款利率
+            <select class="nf_c_select" id="SyndicatedRate">
+                <option value="5.90">2015年03月01日基准利率</option>
+                <option value="4.72">2015年03月01日(8折)</option>
+                <option value="5.01">2015年03月01日(85折)</option>
+                <option value="5.31">2015年03月01日(9折)</option>
+                <option value="6.49">2015年03月01日(1.1倍)</option>
+                <option value="6.15">2014年11月21日基准利率</option>
+                <option value="4.92">2014年11月21日(8折)</option>
+                <option value="5.23">2014年11月21日(85折)</option>
+                <option value="5.53">2014年11月21日(9折)</option>
+                <option value="6.77">2014年11月21日(1.1倍)</option>
+                <option value="6.55">2012年07月06日基准利率</option>
+                <option value="5.24">2012年07月06日(8折)</option>
+                <option value="5.57">2012年07月06日(85折)</option>
+                <option value="5.90">2012年07月06日(9折)</option>
+                <option value="7.21">2012年07月06日(1.1倍)</option>
+                <option value="6.80">2012年06月08日基准利率</option>
+                <option value="5.44">2012年06月08日(8折)</option>
+                <option value="5.78">2012年06月08日(85折)</option>
+                <option value="6.12">2012年06月08日(9折)</option>
+                <option value="7.48">2012年06月08日(1.1倍)</option>
+            </select>
+        </li>
+    </ul>
+    <div class="nf_fbm">商业贷款利率<span id="sp_commercialloanrate_S" class="nb_f_span">5.90%</span><br />公积金利率<span id="sp_fundsloanrate_S" class="nb_f_span">4.00%</span></div>
+    <div class="nf_bpar">
+        <a href="javascript:;" class="nf_btn bt3">开始计算</a>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $(".m_nav_tip").click(function () {
+            var $this = $(this);
+            if (!$this.hasClass("on")) {
+                $(this).addClass("on");
+                $(".mk_options").addClass("on");
+            } else {
+                $(document).click();
+            }
+            return false;
+        });
+        $(document).on("click", function () {
+            $(".m_nav_tip").removeClass("on")
+            $(".mk_options").removeClass("on");
+        });
+    })
+    $(function () {
+        $.jqtab = function (tabtit, tab_conbox, shijian) {
+            $(tabtit).find("a").bind(shijian, function () {
+                $(tabtit).find("a").removeClass("cur");
+                $(this).addClass("cur");
+                var activeindex = $(tabtit).find("a").index(this);
+                $(tab_conbox).hide();
+                $(tab_conbox).eq(activeindex).show();
+
+                return false;
+            });
+
+        };
+        /*调用方法如下：*/
+        $.jqtab(".nf_nlink", ".nf_item", "click");
+
+    })
+</script>
+
+<script type="text/javascript">
+    //精确小数点
+    function round(v, e) {
+        var t = 1;
+        for (; e > 0; t *= 10, e--);
+        for (; e < 0; t /= 10, e++);
+        return Math.round(v * t) / t;
+
+    }
+    function update(Number) {
+        var x;
+        switch (Number) {
+            case "5.90":
+                x = "5.75";
+                break;
+            case "4.72":
+                x = "4.60";
+                break;
+            case "5.01":
+                x = "4.89";
+                break;
+            case "5.31":
+                x = "5.17";
+                break;
+            case "6.49":
+                x = "6.33";
+                break;
+            case "6.15":
+                x = "6.00";
+                break;
+            case "4.92":
+                x = "4.80";
+                break;
+            case "5.23":
+                x = "5.10";
+                break;
+            case "5.53":
+                x = "5.40";
+                break;
+            case "6.77":
+                x = "6.60";
+                break;
+            case "6.55":
+                x = "6.40";
+                break;
+            case "5.24":
+                x = "5.12";
+                break;
+            case "5.57":
+                x = "5.44";
+                break;
+            case "5.90":
+                x = "5.76";
+                break;
+            case "7.21":
+                x = "7.04";
+                break;
+            case "6.80":
+                x = "6.65";
+                break;
+            case "5.44":
+                x = "5.32";
+                break;
+            case "5.78":
+                x = "5.65";
+                break;
+            case "6.12":
+                x = "5.99";
+                break;
+            case "7.48":
+                x = "7.32";
+                break;
+        }
+        return x;
+    }
+    $(function () {
+        $("#C_calculateType").change(function () {
+            //debugger;
+            if ($("#C_calculateType").val() == "C_calculateType_SUM") {
+                $("#li_CommercialLoan_SumPrice").css("display", "block");
+                $("#li_CommercialLoan_Price").css("display", "none");
+                $("#li_CommercialLoan_area").css("display", "none");
+
+                $("#li_CommercialLoan_Payment").css("display", "none");
+            }
+            if ($("#C_calculateType").val() == "C_calculateType_ARE") {
+                $("#li_CommercialLoan_SumPrice").css("display", "none");
+                $("#li_CommercialLoan_Price").css("display", "block");
+                $("#li_CommercialLoan_area").css("display", "block");
+                $("#li_CommercialLoan_Payment").css("display", "block");
+            }
+        })
+        $("#F_calculateType").change(function () {
+            if ($(this).val() == "F_calculateType_SUM") {
+
+                $("#li_FundLoad_SumPrice").css("display", "block");
+                $("#li_FundLoad_Price").css("display", "none");
+                $("#li_FundLoad_area").css("display", "none");
+                $("#li_FundLoad_Payment").css("display", "none");
+            }
+            if ($(this).val() == "F_calculateType_ARE") {
+                $("#li_FundLoad_SumPrice").css("display", "none");
+                $("#li_FundLoad_Price").css("display", "block");
+                $("#li_FundLoad_area").css("display", "block");
+                $("#li_FundLoad_Payment").css("display", "block");
+            }
+        })
+
+        $("#CommercialLoan").change(function () {
+            //debugger;
+            var a = parseInt($("#CommercialLoan").val());
+            if (a < 72) {
+                $(".nb_f_span").eq(0).html(update($("#CommercialRate").val()) + "%");
+
+            }
+            else {
+                $(".nb_f_span").eq(0).html($("#CommercialRate").val() + "%");
+            }
+        })
+
+        $("#CommercialRate").change(function () {
+            //debugger;
+            var a = parseInt($("#CommercialLoan").val());
+            if (a < 72) {
+                $(".nb_f_span").eq(0).html(update($(this).val()) + "%");
+
+            }
+            else {
+                $(".nb_f_span").eq(0).html($(this).val() + "%");
+            }
+        })
+        $("#SyndicatedRate").change(function () {
+            //debugger;
+            var a = parseInt($("#SyndicatedLoan").val());
+            if (a < 72) {
+                $("#sp_commercialloanrate_S").text(update($("#SyndicatedRate").val()) + "%");
+                $("#sp_fundsloanrate_S").text("3.50" + "%");
+
+            }
+            else {
+                $("#sp_commercialloanrate_S").text($("#SyndicatedRate").val() + "%");
+                $("#sp_fundsloanrate_S").text("4.00" + "%");
+            }
+        })
+        $("#SyndicatedLoan").change(function () {
+            //debugger;
+            var a = parseInt($("#SyndicatedLoan").val());
+            if (a < 72) {
+                $("#sp_commercialloanrate_S").text(update($("#SyndicatedRate").val()) + "%");
+                $("#sp_fundsloanrate_S").text("3.50" + "%");
+
+            }
+            else {
+                $("#sp_commercialloanrate_S").text($("#SyndicatedRate").val() + "%");
+                $("#sp_fundsloanrate_S").text("4.00" + "%");
+            }
+        })
+        $("#FundLoad").change(function () {
+            var a = parseInt($("#FundLoad").val());
+            if (a < 72) {
+                $(".F_nf_fbm").html("3.50%");
+            }
+            else {
+                $(".F_nf_fbm").html("4.00%");
+            }
+        })
+    });
+    $(function () {
+        var text = "";
+        for (var i = 1; i <= 30; i++) {
+            text += "<option value='" + 12 * i + "'>" + i + "年(" + 12 * i + "期)</option>";
+        }
+        $("#CommercialLoan").html(text);
+        $("#SyndicatedLoan").html(text);
+        $("#FundLoad").html(text);
+
+        $("#CommercialLoan option").eq(19).attr("selected", true);
+        $("#SyndicatedLoan option").eq(19).attr("selected", true);
+        $("#FundLoad option").eq(19).attr("selected", true);
+        $("#CommercialLoan_Payment option").eq(2).attr("selected", true);
+        $("#SyndicatedLoan_Payment option").eq(2).attr("selected", true);
+
+        $("#FundLoad_Payment option").eq(2).attr("selected", true);
+    });
+
+    //商业贷款 CommercialLoan
+    //公积金 FundLoad
+    //组合 SyndicatedLoan
+    //商贷
+    $(".bt1").click(function () {
+        var Load = "";
+        //debugger;
+        //C_refundType_PI 等额本息       C_refundType_AC 等额本金
+        //C_calculateType_SUM 按贷款总额  C_calculateType_ARE 按单位计算
+        if ($("#C_calculateType").val() == "C_calculateType_SUM") {
+            //Load = $("input[name='a1']:checked").val() + "," + $("input[name='a2']:checked").val() + "," + $("#CommercialLoan_SumPrice").val() + "," + $("#CommercialLoan").val() + "," + $(".Commercial_Rate").text().replace("%", "");
+            if($("#CommercialLoan_SumPrice").val() <= 0) {
+                alert('请输入贷款总额');
+                return false;
+            }
+            Load = $("#C_refundType").val() + "," + $("#C_calculateType").val() + "," + $("#CommercialLoan_SumPrice").val() + "," + $("#CommercialLoan").val() + "," + $(".Commercial_Rate").text().replace("%", "");
+            window.location.href = "/h5/houseloan/results?Type=C&Load=" + Load + "";
+
+        }
+        if ($("#C_calculateType").val() == "C_calculateType_ARE") {
+//            debugger;
+            $("#CommercialLoan_SumPrice").val();
+            $("#CommercialLoan_Price").val();
+            $("#CommercialLoan_area").val();
+
+            if($("#CommercialLoan_Price").val() <= 0) {
+                alert('请输入单价');
+                return false;
+            }
+            if($("#CommercialLoan_area").val() <= 0) {
+                alert('请输入面积');
+                return false;
+            }
+
+            var CommercialLoan_SumPrice = ($("#CommercialLoan_Price").val() * $("#CommercialLoan_area").val() * (10 - $("#CommercialLoan_Payment").val()) * 0.00001);
+            //Load = $("input[name='a1']:checked").val() + "," + $("input[name='a2']:checked").val() + "," + CommercialLoan_SumPrice + "," + $("#CommercialLoan").val() + "," + $(".Commercial_Rate").text().replace("%", "") + "," + $("#CommercialLoan_Payment").find("option:selected").val();
+            Load = $("#C_refundType").val() + "," + $("#C_calculateType").val() + "," + CommercialLoan_SumPrice + "," + $("#CommercialLoan").val() + "," + $(".Commercial_Rate").text().replace("%", "") + "," + $("#CommercialLoan_Payment").find("option:selected").val();
+
+            window.location.href = "/h5/houseloan/results?Type=C&Load=" + Load + "";
+            $("input[name='a2']").eq(0).attr("checked", "checked");
+        }
+        //本金或者本息，贷款总额或者单价，贷款总额，按揭年数，利率，首付成数
+    })
+    $(".bt2").click(function () {
+        var Load = "";
+        if ($("#F_calculateType").val() == "F_calculateType_SUM") {
+            if($("#FundLoad_SumPrice").val() <= 0) {
+                alert('请输入贷款总额');
+                return false;
+            }
+
+            Load = $("#F_refundType").val() + "," + $("#F_calculateType").val() + "," + $("#FundLoad_SumPrice").val() + "," + $("#FundLoad").val() + "," + $(".F_nf_fbm").html().replace("公积金利率", "").replace("%", "");
+            window.location.href = "/h5/houseloan/resultsFund?Type=C&Load=" + Load + "";
+
+        }
+        if ($("#F_calculateType").val() == "F_calculateType_ARE") {
+            $("#CommercialLoan_SumPrice").val();
+            $("#CommercialLoan_Price").val();
+            $("#CommercialLoan_area").val();
+
+            if($("#FundLoad_Price").val() <= 0) {
+                alert('请输入单价');
+                return false;
+            }
+            if($("#FundLoad_area").val() <= 0) {
+                alert('请输入面积');
+                return false;
+            }
+
+            var FundLoad_SumPrice = ($("#FundLoad_Price").val() * $("#FundLoad_area").val() * (10 - $("#FundLoad_Payment").val()) * 0.00001);
+            Load = $("#F_refundType").val() + "," + $("#F_calculateType").val() + "," + FundLoad_SumPrice + "," + $("#FundLoad").val() + "," + $(".F_nf_fbm").html().replace("公积金利率", "").replace("%", "") + "," + $("#FundLoad_Payment").find("option:selected").val();
+
+            window.location.href = "/h5/houseloan/resultsFund?Type=C&Load=" + Load + "";
+            $("input[name='a2']").eq(0).attr("checked", "checked");
+        }
+        //本金或者本息，贷款总额或者单价，贷款总额，按揭年数，利率，首付成数
+    })
+    $(".bt3").click(function () {
+        //debugger;
+        var Load = "";
+
+        if($("#SyndicatedLoan_cl").val() <= 0) {
+            alert('请输入商业贷款数');
+            return false;
+        }
+        if($("#SyndicatedLoan_fl").val() <= 0) {
+            alert('请输入公积金贷款数');
+            return false;
+        }
+
+        Load = $("#S_refundType").val() + "," + $("#SyndicatedLoan_cl").val() + "," + $("#SyndicatedLoan_fl").val() + "," + $("#SyndicatedLoan").val() + "," + $("#sp_commercialloanrate_S").text().replace("%", "") + "," + $("#sp_fundsloanrate_S").text().replace("%", "");
+        window.location.href = "/h5/houseloan/resultsSyndicated?Type=C&Load=" + Load + "";
+        //本金或者本息，贷款总额或者单价，贷款总额，按揭年数，利率，首付成数
+    })
+    $(function () {
+        jQuery.jqtab = function (tabtit, tab_conbox, shijian) {
+            //$(tab_conbox).find(".mw_content").hide();
+            //$(tabtit).find("li:first").addClass("current").show();
+            //$(tab_conbox).find(".mw_content:first").show();
+
+            $(tabtit).find("li").bind(shijian, function () {
+                $(this).addClass("current").siblings("li").removeClass("current");
+                var activeindex = $(tabtit).find("li").index(this);
+                $(tab_conbox).children().eq(activeindex).show().siblings().hide();
+                return false;
+            });
+
+        };
+        /*调用方法如下：*/
+        $.jqtab(".nb_tab", ".nb_content", "click");
+    });
+</script>
+</body>
+</html>

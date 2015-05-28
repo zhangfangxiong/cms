@@ -1,0 +1,43 @@
+﻿<!--新百分点代码-->
+<div class="recomend_house clearfix" style="overflow:hidden;">
+    <h2>您可能感兴趣的楼盘</h2>
+    <ul class="clearfix" id="bfdRecommended"></ul>
+</div>
+
+<script type="text/javascript">
+    window["_BFD"] = window["_BFD"] || {};
+    _BFD.BFD_INFO = {
+        "id": "<?php echo $aUnit["ID"] ?>",   //房源id号
+        "city": "<?php echo $cityInfo["CityName"] ?>",
+        "name": "<?php echo $aUnit["UnitName"] ?>",   //房源名称
+        "subtitle": "<?php echo $aUnit["UnitName"] ?>", //房源别名
+        "link": "<?php echo $sCurUrl ?>",   //商品链接
+        "image_link": "<?php echo $aUnit["ZongPingXqUrl"] ?>",   //商品大图地址
+        "simage_link": "<?php echo $aUnit["ZongPingXqUrlS"] ?>",   //商品小图地址
+        "price": "<?php echo $aUnit["BidingPriceFmt"] ?>",   //实际售价/参考租金
+        "market_price": "<?php echo $aUnit["PriceFmt"] ?>",   //指导均价/参考售价
+        "price_str": "万", //商品价格的单位
+        "category": [["新房", "http://www.fangjiadp.com/<?php echo $aUnit["CityCode"] ?>/xinfang"], ["<?php echo $cityInfo["CityName"] ?>", "http://www.fangjiadp.com/<?php echo $aUnit["CityCode"] ?>"], ["<?php echo $aUnit["RegionName"]?>", "http://www.fangjiadp.com/<?php echo $aUnit["CityCode"] ?>/<?php echo $aUnit["RegionName"] ?>"]],   //商品的类别详细信息，第一个元素为类别名称，第二个元素为类别地址，2维数组;类别从大到小，数组最后一项为商品当前属类别
+        "tag": ["<?php echo $aUnit["EJScore"] ?>"], //购房建议
+        "address": "<?php echo $aUnit["Address"] ?>", //房源地址
+        "residential_area": "<?php echo $aUnit["RegionName"] ?>-<?php echo $aUnit["DistrictName"] ?>", //房源所属片区
+        "property_type": "-", //物业类型
+        "property_fee": "<?php echo $aUnit["ManagerFee"] ?>", //物业费，单位 平米/月
+        "area": "<?php echo $aUnit["BuildAreaFmt"] ?>", //建筑面积，单位 平米
+        "sale_time": "<?php echo $aUnit["OpenTime"] ?>", //开盘时间
+        "owner": "<?php echo $aUnit["Developer"] ?>/<?php echo $aUnit["ManagerCorp"] ?>", //开发商/物业公司
+        "housing_features": "小区共有<?php echo $aUnit["BlockTotal"] ?>栋楼，共<?php echo $aUnit["RoomTotal"] ?>套房屋", //房源特色/规划户数
+        "user_id": "", //网站当前用户id，如果未登录就为0或空字符串
+        "EvaluationFlag": "<?php echo $aUnit["EvaluationFlag"] ?>", //报告标识
+        "state":<?php echo $aUnit["State"] ?>,
+        "page_type": "detail" //当前页面全称，请勿修改
+    };
+    _BFD.bfdshow_sh = function(data) {
+        var html = "";
+        for (var i = 0; i < 5; i++) {
+            html += "<li><a href='"+data[i].url+"' target='_blank'> <img src='"+data[i].simg+"'alt=''/></a><cite><a href='"+data[i].url+"' target='_blank'><i></i><span>["+data[i].cat[2]+"]</span>"+data[i].name+"</a></cite><cite>分析师指导价："+data[i].price+"元/㎡</cite></li>";
+        }
+        $("#bfdRecommended").html(html);
+        _BFD.showbind(data, "detail"); //此处是推荐返回时百分点绑定事件的方法，请不要修改。
+    };
+</script>

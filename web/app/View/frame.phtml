@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<!--[if IE 7 ]>    <html class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html class="no-js ie9"> <![endif]-->
+<!--[if IE 10 ]>    <html class="no-js ie10"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="no-js">
+    <!--<![endif]-->
+    <head>
+        <title>房价_房价走势_房价评估_房产估价网 - 房价点评网</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta content="房价,房价走势,房价评估,房产估价网 - 房价点评网" name="keywords" />
+        <meta content="房价点评网独立第三方房产价格指导平台，历经11年的基础数据准备和理论研究积累，经多方专家论证及严密计算，让用户得到的报告更加权威专业。 所有数据真实丈量，信息详实，是市面上唯一能够精准到房间号的评估工具。时时监测一手房和二手房的相关成交以及市场调研数据，定期发布全国重点城市的房价指数报告。"
+              itemprop="description" name="description" />
+        <meta itemprop="image" content="图片" />
+        <meta itemprop="name" content="标题" />
+        <meta property="wb:webmaster" content="ba7f6188aa032207" />
+        <meta property="qc:admins" content="455077502766167211406375" />
+        <script type="text/javascript" src="<?php echo $sStaticRoot ?>/js/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="<?php echo $sStaticRoot ?>/js/web/switchable.js" charset="utf-8"></script>
+        <!--[if IE]><script type="text/javascript" src="http://res.fangjia.cric.com/scripts/fe_html5.js" charset="utf-8"></script><![endif]-->
+        <!--[if IE 6]>
+        <script src="http://res0.xzlres.com/web/scripts/ddpng.js" type="text/javascript"></script>
+        <script type="text/javascript">DD_belatedPNG.fix('*');</script>
+        <![endif]-->
+        <script src="<?php echo $sStaticRoot ?>/js/web/common.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo $sStaticRoot ?>/js/web/goTop.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo $sStaticRoot ?>/js/web/pager.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo $sStaticRoot ?>/js/web/share.js" type="text/javascript" charset="utf-8"></script>
+        <!--<script src="<?php echo $sStaticRoot ?>/js/web/tracker.js" type="text/javascript" charset="utf-8"></script>-->
+         <script src="http://webapi.amap.com/maps?v=1.3&key=577a65ddaca22905a96eba25f4a0a94b" type="text/javascript"></script>
+        <script src="<?php echo $sStaticRoot ?>/js/web/map/map.js"></script>
+        <script src="<?php echo $sStaticRoot ?>/js/web/search.js" type="text/javascript" charset="utf-8"></script>
+        <link href="<?php echo $sStaticRoot ?>/web/css/global.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/news.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/home.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/public.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/welcome.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/map.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/login.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/help.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/details.css" rel="stylesheet"/>
+        <link href="<?php echo $sStaticRoot ?>/web/css/verification.css" rel="stylesheet"/>
+
+    </head>
+    <body class="font_define">
+        <?php
+            Model_Util::setCityCode($sCurrCityCode); //设置城市代码
+        ?>
+        <!--首页头部-->
+        <?php if (isset($sCurrController) && $sCurrController == 'Index') { ?>
+            <section id="Header" class="new_r_head">
+                <div class="new_row_cont clearfix">
+                    <div class="new_r_h_left clearfix">
+                        <h1>
+                            <a href="/"><img alt="房价点评网" src="<?php echo $sStaticRoot ?>/web/images/n_logo_img.png"></a>
+                        </h1>
+                        <div class="city_select" onmouseover="$(this).children('div').show()" onmouseout="$(this).children('div').hide()">
+                            <span><?php echo $sCurrCityName ?></span><s></s>
+                            <div class="citys_link shadow1">
+                                <?php if (!empty($citylist['data']['list'])) { ?>
+                                    <?php foreach ($citylist['data']['list'] as $k => $v) { ?>
+                                        <a href="/change/<?php echo $v['sPinyin'] ?>"><?php echo $v['sName'] ?></a>
+                                    <?php }
+                                } ?>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="new_r_h_right clearfix">
+                        <div class="new_h_search clearfix">
+                            <cite class="house_type" id="select_category">
+                                <span style="display: none;"><em cat="-1">新房</em><s></s></span>
+                                <input type="text" value="输入楼盘名，看评测报告"
+                                       onfocus="if (this.value == '输入小区名，看一房一价') {
+                                               this.value = '';
+                                           }"
+                                       onblur="if (this.value == '') {
+                                               this.value = '输入小区名，看一房一价';
+                                               this.style.color = '#ccc';
+                                           }"
+                                       autocomplete="off" id="key"/>
+                            </cite>
+                            <input type="hidden" id="city" name="city" value="shanghai">
+                            <a href="javascript:void(0)" target="_blank" id="searchList"><s></s></a>
+                        </div>
+                        <div class="seachList shadow1" id="suggestList">
+                        </div>
+                        <div id="suggestTemplate" style="display: none;">
+                            <dl url="$Url">
+                                <dd>
+                                    <a  target="_blank"  title="$Tip$NameList" href="$Url">
+                                        <span><em class="n_xf_icon_$Category"></em>$Tip</span>
+                                        <var>[$Region] $OfficalAddr</var>
+                                    </a>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="per_login login_index clearfix">
+                            <div class="user_link"><a href="/map" title="地图找房">地图找房</a></div>
+                             <?php if (!empty($userInfo)) { ?>
+                                <cite class="ct_per_info">
+                                    <span><img src="<?php echo $userInfo['HeadImg'] ?>"/></span>
+                                    <em id="login_username">
+                                  <?php echo $userInfo['UserName'] ?>
+                                    </em>
+                                </cite>
+                                <ul style="display: none;">
+                                    <li><a href="/user/index/userinfo" target="_blank"><s class="s_person_set"></s>个人设置</a></li>
+                                    <li style="border: none;">
+                                        <a href="javascript:void(0)" onclick="logout()">
+                                            <s class="s_sign_in"></s>退出登录
+                                        </a>
+                                    </li>
+                                </ul>
+                         <?php } else { ?>
+                                <cite class="ct_login">
+                                    <span><a href="/user/index/login">登录</a> </span>
+                                    <span><a href="/user/index/register" target="_blank">注册</a></span>
+                                </cite>
+                          <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <?php
+    } else {
+        ?>
+        <!--新房头部-->
+        <section class="new_r_head" id="Header">
+            <div class="new_row_cont clearfix">
+                <div class="new_r_h_left clearfix">
+                    <h1>
+                        <a href="/"><img src="<?php echo $sStaticRoot ?>/web/images/n_logo_img.png" alt="房价点评网"></a>
+                    </h1>
+                    <ul class="clearfix">
+
+                        <li>
+                            <a href="/" class="">首页</a>
+                        </li>
+
+                        <li>
+                            <a href="/<?php echo $sCurrCityCode ?>/Newhouse/index/" target="_blank" class="cur">新房</a>
+                        </li>
+                        <li>
+                            <a href="/<?php echo $sCurrCityCode ?>/esf/advanced/search" target="_blank" class="">二手房</a>
+                        </li>
+
+                        <li>
+                            <a href="<?php echo $newsUrl; ?>/<?php echo $sCurrCityCode ?>/news/index" target="_blank" class="">资讯</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="new_r_h_right clearfix">
+                    <div class="new_h_search clearfix">
+                        <cite>
+                            <input id="city" type="hidden" name="city" value="shanghai">
+                            <input type="text" id="key" value="输入楼盘名，看评测报告" autocomplete="off" onfocus="if (this.value == '输入楼盘名，看评测报告') {
+                                    this.value = '';
+                                }
+                                " onblur=" if (this.value == '') {
+                                            this.value = '输入楼盘名，看评测报告';
+                                            $(this).css('color', '#bebebe');
+                                        }">
+                        </cite>
+                        <a href="javascript:void(0)" id="searchList"><s></s></a>
+                    </div>
+                    <div id="suggestList" class="seachList cleaefix shadow1" style="display: none;" searchid="">
+                    </div>
+                    <div id="suggestTemplate" style="display: none;">
+                        <dl url="$Url">
+                            <dd>
+                                <a   target="_blank" title="$Tip$NameList" href="$Url">
+                                    <span><em class="n_xf_icon_$Category"></em>$Tip</span>
+                                    <var>[$Region]$OfficalAddr</var>
+                                </a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="per_login clearfix">
+                            <?php if (!empty($userInfo)) { ?>
+                            <cite class="ct_per_info">
+                                <span><img src="<?php echo $userInfo['HeadImg'] ?>"/></span>
+                                <em id="login_username">
+                                    <?php echo $userInfo['UserName'] ?>
+                                </em>
+                            </cite>
+                            <ul style="display: none;">
+                                <li><a href="/user/index/userinfo" target="_blank"><s class="s_person_set"></s>个人设置</a></li>
+                                <li style="border: none;">
+                                    <a href="javascript:void(0)" onclick="logout()">
+                                        <s class="s_sign_in"></s>退出登录
+                                    </a>
+                                </li>
+                            </ul>
+                            <?php } else { ?>
+                            <cite class="ct_login">
+                                <span><a href="/user/index/login">登录</a> </span>
+                                <span><a href="/user/index/register" target="_blank">注册</a></span>
+                            </cite>
+                            <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <?php
+    }
+    ?>
+<?php include $_script; ?>
+        <?php if(!isset($mapfoot)){ ?>
+    <footer>
+        <div class="new_row_cont newfooterbox clearfix">
+            <div class="nf_left">
+                <a href="/" class="a_logo_link"><b>房价点评网</b></a>
+                <a href="/help/index/about" target="_blank">关于我们</a>
+                <a href="/help/index/contact" target="_blank">联系我们</a>
+                <a href="/help/index/declare" target="_blank">网络服务协议</a>
+                <a href="http://m.fangjiadp.com" class="tel_ico"><s></s>手机版</a>
+            </div>
+
+            <div class="nf_right">
+                <dl class="clearfix">
+                    <dt>
+                    <img alt="" src="<?php echo $sStaticRoot ?>/web/images/weixin/shanghai.jpg">
+                    </dt>
+                    <dd>
+                        <p>微信扫一扫</p>
+                        <p>房价点评，精彩发布</p>
+                    </dd>
+                </dl>
+                <dl class="clearfix">
+                    <dt>
+                    <img alt="" src="<?php echo $sStaticRoot ?>/web/images/weibo/shanghai.png" class="wb_ico">
+                    </dt>
+                    <dd>
+                        <p>关注微博</p>
+                        <p>成为粉丝，立享即时资讯</p>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="footer_ban">
+            <span>Copyright©2014 房价点评 版权所有</span><span>
+                <a href="http://www.miitbeian.gov.cn"
+                   rel="nofollow" class="G" target="_blank" style="color: #a0a0a0; margin-left: 0;">沪ICP备10210785号-9</a>
+            </span>
+        </div>
+    </footer>
+        <?php } ?>
+    <!-- <script type="text/javascript" src="/Scripts/ga.js"></script> -->
+
+    <!--<div id="funTop" class="tool_box" style="display: none">
+        <div class="box_center">
+            <dl class="tool_list clearfix">
+                <dd class="top_dd">
+                    <a onclick="goTop();
+                        return false;" href="javascript:void(0);" class="tool_link">
+                        <i class="top_arrow"></i><span>顶部</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+        <div class="box_bottom">
+        </div>
+    </div>-->
+
+    <div id="fullBg"></div>
+      <?php if(!isset($mapfoot)){ ?>
+    <div class="tool_box">
+        <div class="box_center">
+            <dl class="tool_list clearfix">
+                <?php include Yaf_G::getViewPath()."/favoriteshare.phtml"; ?>
+                <dd class="top_dd" id="funTop" style="display: none">
+                    <a onclick="goTop(); return false;" href="#" class="tool_link">
+                        <i class="top_arrow">
+                        </i><span>顶部</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+    </div>
+      <?php } ?>
+
+    <script type="text/javascript">
+    window["_BFD"] = window["_BFD"] || {};
+      _BFD.client_id = "Ctest_leju_keerrui";
+      _BFD.script = document.createElement("script");
+      _BFD.script.type = "text/javascript";
+      _BFD.script.async = true;
+      _BFD.script.charset = "utf-8";
+      _BFD.script.src = (('https:' == document.location.protocol ? 'https://ssl-static1' : 'http://static1') + '.baifendian.com/service/leju_keerrui/test_leju_keerrui.js');
+      document.getElementsByTagName("head")[0].appendChild(_BFD.script);
+
+        function saveLiXiangJia() {
+            var userName = $.trim($("#txt_username").val());
+            var unitName = $.trim($("#txt_unitname").val());
+            var phone = $.trim($("#txt_phone").val());
+            var miniPrice = $.trim($("#txt_miniprice").val());
+            if (userName.length == 0 || unitName.length == 0 || phone.length == 0 || miniPrice.length == 0 || userName == "请输入您的姓名" || unitName == "请输入楼盘名称" || phone == "请输入您的手机号码" || miniPrice == "告诉我们你想要的最低价") {
+                alert("请输入完整信息！");
+                return;
+            }
+            var reg = /1[3|4|5|7|8|][0-9]\d{8}$/;
+            if (!reg.test(phone)) {
+                alert("手机号格式不正确，请重新输入！");
+                return;
+            }
+            //var lixiangjia = { UserName: userName, UnitName: unitName, Phone: phone, MiniPrice: miniPrice };
+            $.post("/index/index/savelixiangjia", {UserName: userName, UnitName: unitName, Phone: phone, MiniPrice: miniPrice}, function (result) {
+                $("#idealBox").hide();
+                $("#idealBoxOk").css("visibility", "visible");
+                start = 3;
+                countdown("span_time", "idealBoxOk");
+                $("#txt_username").val("请输入您的姓名");
+                $("#txt_username").css("color", "#ccc");
+                $("#txt_unitname").val("请输入楼盘名称");
+                $("#txt_unitname").css("color", "#ccc");
+                $("#txt_phone").val("请输入您的手机号码");
+                $("#txt_phone").css("color", "#ccc");
+                $("#txt_miniprice").val("告诉我们你想要的最低价");
+                $("#txt_miniprice").css("color", "#ccc");
+            });
+        }
+        $(function () {
+            $("img[src='']").each(function (val) {
+                $(this).attr("src", $(this).attr("data-src"));
+                $(this).removeAttr("data-src");
+            });
+            $(".index_good_count").click(function () {
+                var $this = $(this);
+                var aId = $(this).attr("analy_id");
+                if (!aId) {
+                    return;
+                }
+                $.post("/index/index/AnalystsListUp", {
+                    AnalystsID: aId
+                }, function (result) {
+                    var $b = $this.next();
+                    var count = $b.text();
+                    if (parseInt(count)) {
+                        $b.html((parseInt(count) + 1));
+                    }
+                });
+                $(this).unbind("click");
+            });
+            //快速找房
+            $(".main_cont .left_bar .all_select a:last-child em").hide();
+            $(".main_cont .left_bar .all_select p a:last-child em").hide();
+
+            selectAll("byArea", "allArea");
+            selectAll("byPrice", "allPrice");
+            selectAll("byHouseType", "allHouseType");
+            selectAll("priceSuggest", "buySuggest");
+            function selectAll(dlId, divId) {
+                var timeout;
+                $("#" + dlId).hover(
+                        function () {
+                            $(this).prev().addClass("dl_hover");
+                            $(this).next().addClass("dl_hover");
+                            if ($("#" + divId).css("display") == "none") {
+                                $("#" + divId).fadeIn("slow");
+                            }
+                        },
+                        function () {
+                            $(this).prev().removeClass("dl_hover");
+                            $(this).next().removeClass("dl_hover");
+                            timeout = setTimeout(function () {
+                                if ($("#" + divId).css("display") == "block") {
+                                    $("#" + divId).fadeOut();
+                                }
+                            }, 100);
+
+                        });
+
+                $("#" + divId).hover(
+                        function () {
+                            if (timeout) {
+                                clearTimeout(timeout);
+                            }
+                            $(this).show();
+                        },
+                        function () {
+                            $(this).hide();
+                        });
+            }
+            ;
+            //快速找房阴影
+            $("#allPrice .yy_line").height($("#allPrice").height() - $("#byPrice").height() - 12);
+            //大图轮播
+            $('#picSlider').switchable({
+                triggers: $('.triggers').find('li'),
+                putTriggers: 'insertBefore',
+                effect: 'fade',
+                easing: 'ease-in-out',
+                autoplay: true,
+                prev: '#prev',
+                next: '#next'
+            });
+
+            //大图左右切换按钮显示、隐藏
+            btnHover(".main_cont .center_bar .pic_slider");
+            function btnHover(slideClass) {
+                $(slideClass).hover(
+                        function () {
+                            $(this).find(".button a").show();
+                        },
+                        function () {
+                            $(this).find(".button a").hide();
+                        });
+            }
+            ;
+
+            //评级上调下调
+            $('.recomend_right').switchable({
+                triggers: $('.recomend_right').find('.pj_tab li a'),
+                triggerType: 'click',
+                panels: '.tab_content'
+            });
+
+            //楼盘性价比测评榜
+            $('.list_wrap').switchable({
+                triggers: $('.list_wrap').find('.list_tab dd a'),
+                triggerType: 'click',
+                panels: '.list_con'
+            });
+
+            //评级推荐
+            $('.evaluate_wrap').switchable({
+                triggers: $('.evaluate_wrap').find('.tj_tab li a'),
+                triggerType: 'click',
+                panels: '.tj_con'
+            });
+
+            $(".evaluate_wrap .tj_con dl:odd").addClass("dl_bg");//偶数加背景色
+
+            $(".evaluate_wrap .tj_con dl:eq(0)").addClass("pic_style");//默认第一条记录为图片展示
+
+            $(".evaluate_wrap .tj_con dl").mouseover(function () {
+                $(this).addClass("pic_style").siblings().removeClass("pic_style");
+            });
+
+            //最新楼盘
+            $('.news_wrap .new_kp').switchable({
+                triggers: '&bull',
+                panels: $('.xkp_dl'),
+                effect: 'scrollUp',
+                prev: '.prev_btn',
+                next: '.next_btn'
+            });
+
+            //welcome页面效果控制
+            if(window.location.href=="http://"+window.location.hostname+"/welcome"){
+                $("#collectStatus").hide();
+                $("#Share_li").hide();
+            }
+        });
+
+
+    //退出登陆
+    <?php if(isset($userInfo['Id']) && isset($sToken)){ ?>
+    function logout() {
+        $.post("/user/index/logout", {userID:<?php echo $userInfo['Id'] ?>,token:"<?php echo $sToken ?>"}, function (result) {
+            if (result.data.msg == 'ok') {
+                window.location = "/index/index";
+            } else {
+                alert('退出失败请稍后再试');
+            }
+        },'json');
+    }
+<?php } ?>
+    </script>
+</body>
+
+</html>

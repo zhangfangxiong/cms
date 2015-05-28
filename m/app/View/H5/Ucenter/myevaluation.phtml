@@ -1,0 +1,245 @@
+<!--我的收藏开始-->
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l" onclick="history.go(-1)">
+            </div>
+            <div class="uc_return_c">我收藏的评测</div>
+            <?php
+            if (!empty($aData['data']['list'])) {
+                ?>
+                <div class="finish" id="edit"><a href="javascript:void(0)">编辑</a></div>
+            <?php
+            }
+            ?>
+        </div>
+    </header>
+    <!--头部开始-->
+    <?php
+    if (!empty($aData['data']['list'])) {
+        ?>
+        <!--评测收藏列表开始-->
+        <section class="bgf collect_evaluation_list" id="mainsection">
+            <?php
+            if (!empty($aData['data']['list'])) {
+                foreach ($aData['data']['list'] as $key => $value) {
+                    ?>
+                    <a class="fangurl" href="<?php echo $value['sCompletePageUrl']; ?>"
+                       data-url="<?php echo $value['sCompletePageUrl']; ?>">
+                        <div class="item pl12 pr12">
+                            <div class="cnt mt12 mb12 border">
+                                <div class="pic">
+                                	<div class="pic_height">
+                                    	<canvas data-src="<?php echo $value['sImgUrl'] ?>"></canvas>
+                                    </div>
+                                    <div class="pic_txt">
+                                        <div class="pic_name">
+                                            <span><?php echo $value['sName'] ?></span>
+                                            <span>|</span>
+                                            <span>[<?php echo $value['sRegion'] ?>]</span>
+                                        </div>
+                                        <div class="hose_price_wrap">
+                                            <span class="house_price"><?php echo $value['sPrice'] ?></span>
+                                            <span>元/平</span>
+                                        </div>
+                                    </div>
+                                    <div class="analyst_wrap">
+                                        <img src="<?php echo $value['analystHead'] ?>" width="120" height="120"
+                                                style="background-image: none;">
+                                    </div>
+                                    <div class="finish_icon finish_icon_gray"
+                                         unitId="<?php echo $value["iEvaluationID"] ?>"></div>
+                                </div>
+                                <div class="wrap pl12">
+                                    <div class="pd_star border_bottom">
+                                            <span class="star star<?php echo $value['iCssNum']; ?>">
+                                            <em></em>
+                                        </span>
+                                        <span class="pd_num"><?php echo $value['sRate'] ?></span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul class="pr12">
+                                            <?php
+                                            if (!empty($value['chapter'])) {
+                                                foreach ($value['chapter'] as $k => $v) {
+                                                    if (isset($aLouInfo[$v['sChapterCode']])) {
+                                                        ?>
+                                                        <li class="<?php echo $v['iEnable'] ? $aLouInfo[$v['sChapterCode']]['class'] : substr($aLouInfo[$v['sChapterCode']]['class'], 0, strpos($aLouInfo[$v['sChapterCode']]['class'], '_')) . '_noData'; ?>">
+                                                            <a
+                                                                href="<?php echo $v['iEnable'] ? $v['sPageUrl'] : 'javascript:void(0)' ?>"><?php echo $aLouInfo[$v['sChapterCode']]['name'] ?></a>
+                                                        </li>
+                                                    <?php
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <?php
+                }
+            }
+            ?>
+            <div class="del">
+                <ul class="clearfix">
+                    <li><a href="javascript:;" id="all_deleteE">全部删除</a></li>
+                    <li><a href="javascript:;" id="select_deleteE">删除选中</a></li>
+                </ul>
+            </div>
+        </section>
+        <!--评测收藏列表结束-->
+    <?php
+    } else {
+        ?>
+        <!--暂无收藏记录开始-->
+        <div>
+            <div class="no_collect_con">
+                <img src="<?php echo $sStaticRoot ?>/touchweb/resource/images/no_collect.png"/>
+
+                <div class="newhouse_no_collect_txt">您暂无收藏评测</div>
+            </div>
+        </div>
+        <!--暂无收藏记录结束-->
+    <?php
+    }
+    ?>
+    <!--暂无收藏记录结束-->
+    <section class="tip_dialog" id="tip_dialog"></section>
+    <!--返回顶部开始-->
+    <div class="return_top" id="backtop">
+        <div class="return_top_bg"></div>
+    </div>
+    <!--返回顶部结束-->
+</div>
+<!--我的收藏结束-->
+<script type="text/javascript">
+    var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+    var ifLoad = true;
+</script>
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script type="text/javascript">
+    requirejs.config({
+        baseUrl: '<?php echo $sStaticRoot ?>/touchweb/lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'webtouchcommon': 'js/webtouchcommon',
+            'usercenter': 'js/usercenter'
+        }
+    })
+
+    require(["jquery", "usercenter", "webtouchcommon"], function () {
+        //canvas加载
+        webtouchObj.canvasload();
+
+        pageIndex = 1;
+
+        $(window).scroll(initScroll);
+
+        //回到顶部
+        $('#backtop').on("click", webtouchObj.backtoTopdh);
+
+        //窗口滚动处理
+        function initScroll() {
+            backTop();
+            var pageH = $(document).height()
+            var scrollT = $(window).scrollTop(); //滚动条top
+            var aa = pageH - $(window).height() - scrollT;
+            if (aa < 1) {
+                pageIndex++;
+                if (ifLoad) {
+                    loadData();
+                }
+            }
+        }
+
+        //返回顶部
+        function backTop() {
+            var screenheight = $(window).height();
+            if ($(window).scrollTop() > screenheight) {
+                $('#backtop').fadeIn();
+            } else {
+                $('#backtop').fadeOut();
+            }
+        }
+
+        //加载下一页数据
+        function loadData() {
+            $.post('/h5/ucenter/myevaluationlist', {iPage: pageIndex}, function (res) {
+                res = eval("(" + res + ")");
+                var html = "";
+                if (res.data.data.list.length > 0) {
+                    var aData = res.data.data.list;
+                    for (var i = 0; i < aData.length; i++) {
+                        var item = aData[i];
+                        var chapterHtml = "";
+                        if (item.chapter) {
+                            for (var j = 0; j < item.chapter.length; j++) {
+                                var chapterItem = item.chapter[j];
+                                if (res.data.aLouInfo[chapterItem.sChapterCode]) {
+                                    var chapterClass = chapterItem.iEnable ?
+                                        res.data.aLouInfo[chapterItem.sChapterCode].class :
+                                    res.data.aLouInfo[chapterItem.sChapterCode].class.split('_')[0] + "_noData";
+                                    var chapterUrl = chapterItem.iEnable ? chapterItem.sPageUrl : "javascript:void(0)";
+                                    var chapterText = res.data.aLouInfo[chapterItem.sChapterCode].name;
+                                    chapterHtml += "<li class=\"" + chapterClass + "\">" +
+                                    "<a href=\"" + chapterUrl + "\">" + chapterText + "</a>" +
+                                    "</li>";
+                                }
+                            }
+                        }
+
+                        html += "<a class='fangurl' href='" + item.sCompletePageUrl + "'>" +
+                        "<div class=\"item pl12 pr12\"> " +
+                        "<div class=\"cnt mt12 mb12 border\">" +
+                        "<div class=\"pic\">" +
+						"<div class=\"pic_height\">" +
+                        "<canvas data-src=\"" + item.sImgUrl + "\"></canvas>" +
+						"</div>" +
+                        "<div class=\"pic_txt\">" +
+                        "<div class=\"pic_name\">" +
+                        "<span>" + item.sName + "</span>" +
+                        "<span>|</span>" +
+                        "<span>[" + item.sRegion + "]</span>" +
+                        "</div>" +
+                        "<div class=\"hose_price_wrap\">" +
+                        "<span class=\"house_price\">" + item.sPrice + "</span>" +
+                        "<span>" + item.sUnit + "</span>" +
+                        "</div>" +
+                        "</div>" +
+                        "<div class=\"analyst_wrap\">" +
+                        "<img src=\"" + item.analystHead + "\" width=\"120\" height=\"120\"style=\"background-image: none;\">" +
+                        "</div>" +
+                        "<div class=\"finish_icon finish_icon_gray\" unitId=\"" + item.iEvaluationID + "\"></div>" +
+                        "</div>" +
+                        "<div class=\"wrap pl12\">" +
+                        "<div class=\"pd_star border_bottom\">" +
+                        "<span class=\"star star" + item.iCssNum + "\"><em></em></span>" +
+                        "<span class=\"pd_num\">" + item.sRate + "</span>" +
+                        "</div>" +
+                        "<div class=\"evaluation_title\">" +
+                        "<ul class=\"pr12\">" +
+                        chapterHtml +
+                        "</ul>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>" +
+                        "</a>";
+                    }
+                    $("#mainsection").append(html);
+                    //canvas加载
+                    webtouchObj.canvasload();
+                }
+                else {
+                    $("#overnotload").val("0");
+                }
+            });
+        }
+    });
+</script>
+

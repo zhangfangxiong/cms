@@ -1,0 +1,71 @@
+<style>
+    .tubiao {
+        font-weight: bold;
+        color: red;
+        padding-right: 2px;
+    }
+    .publish-div {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="pheader clearfix"><?php echo isset($aTemps) ? "修改" : "添加" ?>模板</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="tubiao">*</span> 模板名称：</label>
+
+            <div class="col-sm-10">
+                <input name="sTitle" validate="!clength:4-22" type="text"
+                       value="<?php echo isset($aTemps['sTitle']) ? $aTemps['sTitle']: '' ?>"
+                       class="form-control input-validate" placeholder="模板名称不能超过22字">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="tubiao">*</span> 模板描述：</label>
+
+            <div class="col-sm-10">
+                <textarea name="sDesc" rows="1" id="sDesc" class="form-control input-validate"><?php echo isset($aTemps['sDesc']) ? $aTemps['sDesc'] : '' ?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="tubiao">*</span> 模板内容：</label>
+
+            <div class="col-sm-10">
+                <textarea name="sContent" rows="6" id="sContent" class="form-control input-validate"><?php echo isset($aTemps['sContent']) ? $aTemps['sContent'] : '' ?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+
+        <div class="btn-toolbar text-center col-sm-9 publish-div">
+            <button id="save" onclick="$(this.form).attr('must', 0); $( '#iOptype' ).val(0)" class="btn btn-primary">保存</button>
+            <button id="cancel" class="btn" onclick="location.href='<?=$sListUrl?>';return false;">取消</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        //提交表单
+        $("#myform").validate({
+            submitHandler: function (form) {
+                form.action = '';
+                $.post(form.action, $(form).serialize(), function (ret) {
+                    if (ret.status) {
+                        var sEditUrl = '<?=$sEditUrl?>?id=' + ret.data.iTempID;
+                        var sMsg = ret.data.sMsg;
+                    } else {
+                        alert(ret.data);
+                        return false;
+                    }
+                    showNewsMsgTips(sMsg, '<?=$sListUrl?>', sEditUrl, '<?=$sAddUrl?>');
+                }, 'json');
+                return false;
+            }
+        });
+    });
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8"
+        src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>

@@ -1,0 +1,111 @@
+<!--服务费用内容开始-->
+<section class="plan_wrap">
+    <section class="analyze_wrap <?php if (empty($aTraRail['data']['sBadTag']) && empty($aTraRail['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+        <div class="analyze_txt floor_plan">
+            <h3>
+                <span></span>
+                分析师点评
+            </h3>
+            <p><?php echo isset($aTraRail['data']['sComment']) ? $aTraRail['data']['sComment'] : ''; ?></p>
+        </div>
+    </section>
+
+    <section class="condition">
+        <?php 
+            if(isset($aTraRail['data']['sGoodTag']) && !empty($aTraRail['data']['sGoodTag'])){
+                echo '<section class="advantage">
+                        <h3>优势</h3>
+                        <div class="advantage_con">';
+                foreach ($aTraRail['data']['sGoodTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section>';
+            }
+            if(isset($aTraRail['data']['sBadTag']) && !empty($aTraRail['data']['sBadTag'])){
+                echo '<section class="advantage disadvantaged">
+                    <h3>劣势</h3>
+                    <div class="advantage_con">';
+                foreach ($aTraRail['data']['sBadTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section>';
+            }
+        ?>        
+    </section>
+
+    <section class=" floor_plan house_analysis">
+        <h3>
+            <span></span>
+            轨交线路 
+        </h3>
+        <div class="floor_plan_pic btm_line_h"></div>
+        <?php
+          if(isset($aTraRail['data']['aMetroInfo'])){
+              foreach ($aTraRail['data']['aMetroInfo'] as $key => $value) {
+                  echo '<div class="floor_plan_pic service_detail">';
+                  echo '<div class="station_li">';
+                  
+                  echo '<div class="station_li_title">';
+                  echo '<span class="sta_name">'.$value['sStation'].'</span>';
+                  echo '<span class="bux_jl">步行 <label>'.$value['iDistance'].'</label> 米</span>';
+                  echo '</div>';
+
+                  if(!empty($value['aMetroList'])){
+                      foreach ($value['aMetroList'] as $k => $val) {
+                          echo '<div class="xllist clearfix">';
+                          echo '<div class="xlName">'.$val['sMetroName'].'</div>';
+                          echo '<div class="xl_yjf">早高峰－'.@$val['iMorningPeak'].'</div>';
+                          echo '<div>| </div>';
+                          echo '<div class="ml3"> 晚高峰－'.@$val['iEveningPeak'].'</div>';
+                          echo '</div>';
+                      }  
+                  }
+
+                  if(!empty($value['images'])){
+                    foreach ($value['images'] as $k => $val) {
+                      echo '<div class="floor_plan_pic01">';
+                      echo '<img src="'.$val['sImage'].'">';
+                      echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+                      echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+                      echo '</div>';  
+                    }
+                  }                                                   
+
+                  echo '</div>';
+                  echo '</div></div>';
+              }
+          }
+        ?>  
+    </section>    
+        
+    <?php 
+      if(!empty($aTraRail['data']['ddqtImage'])){
+          echo '<section class=" floor_plan house_analysis"><h3>
+                  <span></span>
+                  其他图片
+              </h3>
+              <div class="floor_plan_pic">';
+          foreach ($aTraRail['data']['ddqtImage'] as $key => $value) {
+              echo '<div class="floor_plan_pic01">';
+              echo '<canvas data-src='.$value['sImage'].'></canvas>';
+              echo '<p class="pic_name">'.$value['sTitle'].'</p>';
+              echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+              echo '</div>';
+          }
+          echo '</div></section>';
+      }
+
+      if(isset($aTraRail['data']['sOtherComment']) && !empty($aTraRail['data']['sOtherComment'])){
+          echo '<section class="floor_plan plan_description evaluation_description">
+              <h3>
+                  <span></span>
+                  点评
+              </h3>';
+          echo '<p>'.$aTraRail['data']['sOtherComment'].'</p>';
+          echo '</section>';
+      }
+    ?>
+
+<!--服务费用内容结束-->
+</section>
+

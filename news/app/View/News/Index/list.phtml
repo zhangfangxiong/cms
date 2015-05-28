@@ -1,0 +1,147 @@
+
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot?>/css/news/newsindex.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot?>/css/news/newsList.css">
+
+<!--最新资讯内容开始-->
+<div class="news_con">
+    <!--资讯列表左侧内容开始-->
+    <div class="news_con_l">
+        <div class="hot_news">
+            <h6 class="hot_news_title">资讯</h6>
+            <div class="hot_news_tag">
+            	<span class="tag_l"></span>
+                <div class="tag_c"><?php if(!empty($currentTagName)){echo $currentTagName;}?></div>
+                <span class="tag_r"></span>
+            </div>
+        </div>
+        <ul class="hot_news_list">
+            <?php foreach($newses as $news) {?>
+                <li>
+                    <?php if (!empty($news['sImage'])):?>
+                        <div class="hot_news_list_img">
+                            <img src="<?php echo Util_Uri::getNewsImgUrl($news['sImage'], 180, 130);?>" width="180" height="130">
+                            <div class="hot_news_share">
+                                <p><a href="<?php echo $nDetailUrl .$news['iNewsID']; ?>" target="_blank"><?php echo $news['iShareTimes']?></a></p>
+                            </div>
+                        </div>
+                        <div class="hot_news_list_r">
+                            <div class="hot_news_list_text">
+                                <h6 class="hot_news_list_r_title"><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" target="_blank"><?php echo $news['sTitle']?></a></h6>
+                                <p class="hot_news_list_r_con"><?php echo $news['sAbstract']?>&nbsp;&nbsp;<a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" class="detail" target="_blank">详细>></a></p>
+                            </div>
+                            <div class="hot_news_list_rb">
+                                <div class="hot_news_list_tag">
+                                    <?php if(!empty($news['sTag'])){?>
+                                        <?php foreach($news['sTag'] as $tid=>$name) {?>
+                                            <span><a href="<?php echo $nListUrl. $tid; ?>" target="_blank"><?php echo $name;?></a></span>
+                                        <?php }?>
+                                    <?php }?>
+                                </div>
+                                <div class="hot_news_list_author">
+                                    <span><?php echo $news['sAuthor']. '  '. $news['iPublishTime'];?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else:?>
+                        <div class="hot_news_list_t">
+                            <span class="share_icon"><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" target="_blank"><?php echo $news['iShareTimes']?></a></span>
+                            <h6 class="hot_news_list_r_title"><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>"  target="_blank"><?php echo $news['sTitle']?></a></h6>
+                        </div>
+                        <div class="hot_news_list_r no_img ">
+                            <div class="hot_news_list_text">
+                                <p class="hot_news_list_r_con"><?php echo $news['sAbstract']?>&nbsp;&nbsp;<a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" class="detail" target="_blank">详细>></a></p>
+                            </div>
+                            <div class="hot_news_list_rb">
+                                <div class="hot_news_list_tag">
+                                    <?php if(!empty($news['sTag'])) {?>
+                                        <?php foreach($news['sTag'] as $tid=>$name) {?>
+                                            <span><a href="<?php echo $nListUrl. $tid; ?>" target="_blank"><?php echo $name;?></a></span>
+                                        <?php }?>
+                                    <?php }?>
+                                </div>
+                                <div class="hot_news_list_author">
+                                    <span><?php echo $news['sAuthor']. '  '. $news['iPublishTime'];?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </li>
+            <?php }?>
+        </ul>
+
+        <?php echo $pager ?>
+    </div>
+    <!--资讯列表左侧内容结束-->
+    <!--资讯列表右侧内容开始-->
+    <div class="news_con_r">
+        <div class="tady_hot">
+            <h6 class="tady_hot_title">
+                <span></span>
+                今日热点
+            </h6>
+            <ul>
+            <?php if(!empty($hotNews)): ?>
+                <?php foreach($hotNews as $news) { ?>
+                    <li><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" target="_blank"><?php echo $news['sShortTitle'];?></a></li>
+                <?php }?>
+            <?php endif?>
+            </ul>
+        </div>
+
+        <?php if(!empty($buildings)) { ?>
+        <div class="evaluate_floor">
+            <h6 class="evaluate_floor_title">
+                <span></span>
+                分析师评楼
+            </h6>
+                <?php foreach($buildings as $building){ ?>
+                <div class="evaluate_floor_d">
+                    <div class="evaluate_floor_img">
+                        <div class="evaluate_floor_img_in">
+                            <a href="<?php echo $building['sUrl']; ?>" target="_blank"><img src="<?php if(!empty($building['ZongPingXQ'])){echo Util_Uri::getCricViewURL($building['ZongPingXQ'], 228, 171);}else{ echo $sStaticRoot.'/img/news/not_exists.jpg';} ?>" width="228" height="" ></a>
+
+                            <?php if($building['ListType'] == '尽快入手') {?>
+                                <span class="rushou"><?php echo $building['ListType'];?></span>
+                            <?php }?>
+                            <?php if($building['ListType'] == '推荐购买') {?>
+                                <span class="goumai"><?php echo $building['ListType'];?></span>
+                            <?php }?>
+                            <?php if($building['ListType'] == '谨慎购买') {?>
+                                <span class="jingshen"><?php echo $building['ListType'];?></span>
+                            <?php }?>
+                            <?php if($building['ListType'] == '持币观望') {?>
+                                <span class="guanwang"><?php echo $building['ListType'];?></span>
+                            <?php }?>
+
+                            <?php if(!empty($building['OpinionSummary'])){?>
+                            <div class="shadow">
+                                <div class="shadow_in"></div>
+                                <p>
+                                    <?php
+                                    $len = mb_strlen($building['OpinionSummary']);
+                                    if($len > 15) {
+                                        echo mb_substr($building['OpinionSummary'], 0, 15). "...";
+                                    } else {
+                                        echo mb_substr($building['OpinionSummary'], 0, 15);
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+                            <?php } ?>
+
+                        </div>
+                        <div class="floor_name">[<?php echo $building['Region']?>] <a href="<?php echo $building['sUrl']; ?>" target="_blank"><?php echo $building['UnitName']?></a></div>
+                        <dl class="evaluate_floor_price">
+                            <dt>开发商售价</dt>
+                            <dd><span class="detail"><?php echo ($building['Price'] > 0) ? number_format($building['Price']): '待定'; ?></span> 元/㎡</dd>
+                            <dt>指导价</dt>
+                            <dd><span><?php echo number_format($building['CricPrice']);?></span> 元/㎡</dd>
+                        </dl>
+                    </div>
+                </div>
+                <?php }?>
+        </div>
+        <?php }?>
+    </div>
+
+    <!--资讯列表右侧内容结束-->

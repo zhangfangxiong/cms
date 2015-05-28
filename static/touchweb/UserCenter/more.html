@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>房价点评</title>
+    <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="../resource/css/usercenter.css">
+    <script src="../lib/jquery/jquery-1.10.2.js"></script>
+    <script src="../lib/js/commonus.js"></script>
+</head>
+<body>
+    <!--个人中心开始已登录-->
+    <div class="viewport">
+        <header class="UserCenter_head outborder">
+            <div class="uc_return">
+                <div class="uc_return_l">
+                    <a href="#"></a>
+                </div>
+                <div class="uc_return_c">个人中心</div>
+            </div>
+        </header>
+        <section class="uc_content">
+            <div class="uc_login">
+                <div class="uc_login_in">
+                    <ul class="outborder">
+                        <li class="p12">
+                            <div class="login_wrap" id="skip_login_page">
+                                <div class=" logged_l">
+                                <s class="uc_head"></s>
+                                <span class="user_phone" id="tel_login_state">您尚未登录</span>
+                            </div>
+                                <div class="logged_r" id="modification_password">
+                                    <span class="on_m_l font14" id="state_tex">
+                                        点击登录
+                                    </span>
+                                    <span class="uc_return_gray"></span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="My pl12 bgf outborder">
+                <ul>
+                    <li class="border_bottom" id="my_colle">
+                        <s class="My_collect"></s>
+                        <span>我收藏的新房</span>
+                        <span class="uc_return_gray"></span>
+                    </li>
+                    <li id="my_history">
+                        <s class="My_skim"></s>
+                        <span>我收藏的评测</span>
+                        <span class="uc_return_gray"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="exit" id="exit_userName">退出当前账号</div>
+        </section>
+    </div>
+    <!--个人中心结束已登录-->
+    <script type="text/javascript">
+        var city = getQueryString("cityName");
+        $(function () {
+            $("#skip_login_page").on("click", function () {
+                var count = $("#tel_login_state").html();
+                if (count == "您尚未登录") {
+                    location.href = "Plogin.html?cityName=" + city;
+                }
+            });
+
+            $("#my_colle").click(function () {
+                location.href = "MyFavorites.html?cityName=" + city;
+            });
+
+            $("#my_history").click(function () {
+                location.href = "BrowseHistory.html?cityName=" + city;
+            });
+
+            $("#exit_userName").on("click", function () {
+                addCookie("userName", "");
+                location.href = "more.html?cityName=" + city;
+            });
+
+            var userName = getCookie("userName");
+
+            if (userName != "" && userName != null && typeof (userName) != "undefined") {
+                var mphone = userName.substr(3, 4);
+                var lphone = userName.replace(mphone, "****");
+                $("#tel_login_state").html(lphone);
+                $("#exit_userName").show();
+                $("#modification_password").show();
+                $(".return_hide").hide();
+				$('#state_tex').html("修改登录密码");
+            } else {
+                $("#tel_login_state").html("您尚未登录");
+                $("#exit_userName").hide();
+                $(".return_hide").show();
+            }
+
+            $("#modification_password").on("click", function () {
+                location.href = "Pamend.html?user=" + userName + "&cityName=" + city;
+            });
+
+        });
+
+
+        function getCookie(objName) {//获取指定名称的cookie的值
+            var arrStr = document.cookie.split(";");
+            for (var i = 0; i < arrStr.length; i++) {
+                var temp = arrStr[i].split("=");
+                if (temp[0] == objName)
+                    return unescape(temp[1]);
+            }
+        }
+
+        function addCookie(objName, objValue) {//添加cookie
+            var str = objName + "=" + escape(objValue);
+            document.cookie = str;
+        }
+
+
+        $(function () {
+            $("body > a").hide();
+        });
+    </script>
+
+    <script src="/Scripts/ga.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        window["_BFD"] = window["_BFD"] || {};
+        _BFD.BFD_INFO = {
+            "user_id": "0", //网站当前用户id，如果未登录就为0或空字符串
+            "page_type": "others" //当前页面全称，请勿修改
+        };
+    </script>
+    <script type="text/javascript">
+        window["_BFD"] = window["_BFD"] || {};
+        _BFD.client_id = "Cleju_keerrui";
+        _BFD.script = document.createElement("script");
+        _BFD.script.type = "text/javascript";
+        _BFD.script.async = true;
+        _BFD.script.charset = "utf-8";
+        _BFD.script.src = (('https:' == document.location.protocol ? 'https://ssl-static1' : 'http://static1') + '.baifendian.com/service/leju_keerrui/iPhoneleju_keerrui.js');
+        document.getElementsByTagName("head")[0].appendChild(_BFD.script);
+    </script>
+</body>
+</html>

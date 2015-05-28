@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <title>价格趋势</title>
+        <script src="../lib/jquery/jquery.min.js"  type="text/javascript"></script>
+        <script src="../lib/plugs/highcharts.src.js"  type="text/javascript"></script>
+        <script src="../lib/plugs/highcharts.ext.js"  type="text/javascript"></script>
+        <style>
+            html, body, div, span { margin: 0; padding: 0; border: 0; outline: 0; vertical-align: baseline; background: transparent; list-style:none; } 
+            html{height:100%;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:transparent;font-size:62.5%;}
+            body{font-family:Microsoft Yahei, Hiragino Sans GB,Arial,Helvetica,"微软雅黑","宋体",sans-serif;font-size:1.2rem;width:100%;background-color:#fff;-webkit-touch-callout:none;-webkit-user-select:none; color:#333;}
+            .charts_outcontent{padding:1rem;}
+            .charts_title {font-size:1.4rem;color:#999;line-height: 1.5;padding-bottom: 0.5rem;}
+            .borderline{border-bottom:1px solid #e5e5e5;}
+            .zst_info{padding-bottom:10px; position:absolute; width:263px; height:81px; background:url(images/zst_info_bg.png) no-repeat 0 0; padding:15px 0;}
+            .zst_info span{display:block; margin-bottom:15px; overflow:hidden;}
+            .zst_info span b{float:left; width:95px; text-align:right; color:#333}
+            .zst_info span em{float:left; font-family:microsoft yahei; color:#999;}
+            .zst_info span em var{font:500 18px/14px verdana; margin:0 3px;}
+            .zst_info span em var.r_cor{color:#e8382b;}
+            .zst_info span em var.g_cor{color:#666;}
+            .zst_info span em.em_jy{color:#fff; height:18px; line-height:18px; width:60px; text-align:center; border-radius:5px;}
+            .zst_info span em.jkrs_em{background-color:#e8382b;}
+            .zst_info span em.tjgm_em{background-color:#f9ab2a;}
+            .zst_info span em.jsgm_em{background-color:#3e8fc8;}
+            .zst_info span em.cbgw_em{background-color:#b1a18b;}
+            .chartinfo{margin:1rem auto;}
+            .prc_left_t s{background: url(images/icon.png) no-repeat;background-size: 35px;display: block;width: 30px;height: 15px;float: left;margin-top:3px;}
+            .prc_left_t em{float: left;color: #a0a0a0;margin-right: 15px;font-style:normal;}
+            .prc_left_t em span{float:left;}
+            .prc_left_t s.i_icon_1{background-position: 0 -28px;}
+            .prc_left_t s.i_icon_2{background-position: 0 0px;}
+            .prc_left_t s.i_icon_2{background-position: 0 -14px;}
+            .prc_left_t{margin-left:40px;}
+            .toptitle{font-size:1.5rem;text-align: center;margin:1rem 0;}
+            .toptitle span{color:#e8382b;font-weight:bold;}
+            .toptitle s{text-decoration:none;}
+        </style>
+    </head>
+
+    <body>
+
+        <section class="charts_outcontent clearfix">
+            <div class="charts_title borderline">价格趋势</div>
+
+            <div class="toptitle">本月楼盘价格<span><s id="mothprice">36000</s>元/平</span> 对比上月<s id="price_status">持平</s></div>
+
+            <div id="spContainer" style="min-width: 310px; height: 225px;" class="chartinfo">
+
+            </div>
+
+            <div class="prc_left_t">
+                <em><span>区域均价</span><s class="i_icon_1"></s></em>
+                <em><span>住宅</span><s class="i_icon_2"></s></em>
+                <em><span>别墅</span><s class="i_icon_3"></s></em>
+            </div>
+
+
+        </section>
+        <div id="unitPriceTemplate" style="display:none;">
+            <s></s>
+            <cite>
+                <span>
+                    <b>开发商售价：</b>
+                    <em>普通住宅<var class="r_cor">$SalePrice</var>元/㎡</em>
+                </span>
+                <span>
+                    <b>指导价：</b>
+                    <em>普通住宅<var class="g_cor">$CricPrice</var>元/㎡</em>
+                </span>
+                <span>
+                    <b>建议：</b>
+                    <em class="em_jy $Css">$ManualLevelCode</em>
+                </span>
+            </cite>
+        </div>
+        <div class="zst_info" style="display:none;">
+
+        </div>
+        <script type="text/javascript">
+            $(initPage);
+            function initPage() {
+                var userAgent = window.navigator.userAgent.toLowerCase();
+
+                var extraData = [];//计算鼠标一上去价格的时候用
+                extraData["区域"] = null;
+                extraData["普通住宅"] = [{"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "9218df7e-eb10-48c9-9858-33fbb99de942", "CricPrice": 12501, "SalePrice": 11000, "ManualLevelCode": "0", "BatchId": "b0939746-359e-4bdf-be53-c2188dc43dd4", "BatchTypeCode": "高层", "PushDate": "\/Date(1415376000000)\/", "RowDate": "\/Date(1415613541000)\/", "MarketDate": "\/Date(1415548800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["3号楼", "ea342f36-f7ec-e7f0-7f01-099f3b47c416", null]], "RoomCount": 176, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "普通住宅"}, {"UnitId": "9218df7e-eb10-48c9-9858-33fbb99de942", "CricPrice": 12501, "SalePrice": 11000, "ManualLevelCode": "0", "BatchId": "b0939746-359e-4bdf-be53-c2188dc43dd4", "BatchTypeCode": "高层", "PushDate": "\/Date(1415376000000)\/", "RowDate": "\/Date(1415613541000)\/", "MarketDate": "\/Date(1417104000000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["3号楼", "ea342f36-f7ec-e7f0-7f01-099f3b47c416", null]], "RoomCount": 176, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "普通住宅"}, {"UnitId": "9218df7e-eb10-48c9-9858-33fbb99de942", "CricPrice": 12501, "SalePrice": 11000, "ManualLevelCode": "0", "BatchId": "b0939746-359e-4bdf-be53-c2188dc43dd4", "BatchTypeCode": "高层", "PushDate": "\/Date(1415376000000)\/", "RowDate": "\/Date(1415613541000)\/", "MarketDate": "\/Date(1419868800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["3号楼", "ea342f36-f7ec-e7f0-7f01-099f3b47c416", null]], "RoomCount": 176, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "普通住宅"}, {"UnitId": "9218df7e-eb10-48c9-9858-33fbb99de942", "CricPrice": 12501, "SalePrice": 11000, "ManualLevelCode": "0", "BatchId": "b0939746-359e-4bdf-be53-c2188dc43dd4", "BatchTypeCode": "高层", "PushDate": "\/Date(1415376000000)\/", "RowDate": "\/Date(1415613541000)\/", "MarketDate": "\/Date(1422460800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["3号楼", "ea342f36-f7ec-e7f0-7f01-099f3b47c416", null]], "RoomCount": 176, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "普通住宅"}, {"UnitId": "9218df7e-eb10-48c9-9858-33fbb99de942", "CricPrice": 12501, "SalePrice": 11000, "ManualLevelCode": "0", "BatchId": "b0939746-359e-4bdf-be53-c2188dc43dd4", "BatchTypeCode": "高层", "PushDate": "\/Date(1415376000000)\/", "RowDate": "\/Date(1415613541000)\/", "MarketDate": "\/Date(1424966400000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["3号楼", "ea342f36-f7ec-e7f0-7f01-099f3b47c416", null]], "RoomCount": 176, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "普通住宅"}, {"UnitId": "9218df7e-eb10-48c9-9858-33fbb99de942", "CricPrice": 12501, "SalePrice": 11000, "ManualLevelCode": "0", "BatchId": "b0939746-359e-4bdf-be53-c2188dc43dd4", "BatchTypeCode": "高层", "PushDate": "\/Date(1415376000000)\/", "RowDate": "\/Date(1415613541000)\/", "MarketDate": "\/Date(1427385600000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["3号楼", "ea342f36-f7ec-e7f0-7f01-099f3b47c416", null]], "RoomCount": 176, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "普通住宅"}, {"UnitId": "9218df7e-eb10-48c9-9858-33fbb99de942", "CricPrice": 12501, "SalePrice": 11000, "ManualLevelCode": "0", "BatchId": "b0939746-359e-4bdf-be53-c2188dc43dd4", "BatchTypeCode": "高层", "PushDate": "\/Date(1415376000000)\/", "RowDate": "\/Date(1415613541000)\/", "MarketDate": "\/Date(1427385600000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["3号楼", "ea342f36-f7ec-e7f0-7f01-099f3b47c416", null]], "RoomCount": 176, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "普通住宅"}];
+                extraData["别墅"] = [{"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "00000000-0000-0000-0000-000000000000", "CricPrice": 0, "SalePrice": 0, "ManualLevelCode": null, "BatchId": "00000000-0000-0000-0000-000000000000", "BatchTypeCode": null, "PushDate": "\/Date(-62135596800000)\/", "RowDate": "\/Date(-62135596800000)\/", "MarketDate": "\/Date(-62135596800000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [], "RoomCount": 0, "FitmentDesign": null, "BatchStr": null, "HomeType": null}, {"UnitId": "0f36ed25-e165-4890-bfba-e70318e473ec", "CricPrice": 14505, "SalePrice": 13500, "ManualLevelCode": "1", "BatchId": "7c5e4d69-5c7b-4f55-8e0c-6980436d73f5", "BatchTypeCode": "联排", "PushDate": "\/Date(1427385600000)\/", "RowDate": "\/Date(1427788472000)\/", "MarketDate": "\/Date(1427731200000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["502号", "a89773e0-cb50-636e-8da3-6fc3904f4ab7", null], ["503号", "2aff0893-7f2a-6dea-08d2-c9fae09effb6", null], ["504号", "cfd46859-a9e7-1078-9a90-8df3ff42f10f", null], ["501号", "8a7df8ba-0b72-f452-6842-bf53f46b7b8e", null]], "RoomCount": 44, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "别墅"}, {"UnitId": "0f36ed25-e165-4890-bfba-e70318e473ec", "CricPrice": 14505, "SalePrice": 13500, "ManualLevelCode": "1", "BatchId": "7c5e4d69-5c7b-4f55-8e0c-6980436d73f5", "BatchTypeCode": "联排", "PushDate": "\/Date(1427385600000)\/", "RowDate": "\/Date(1427788472000)\/", "MarketDate": "\/Date(1427731200000)\/", "TotalScore": 0, "RemainingRoomTotal": 0, "BatchBlock": [["502号", "a89773e0-cb50-636e-8da3-6fc3904f4ab7", null], ["503号", "2aff0893-7f2a-6dea-08d2-c9fae09effb6", null], ["504号", "cfd46859-a9e7-1078-9a90-8df3ff42f10f", null], ["501号", "8a7df8ba-0b72-f452-6842-bf53f46b7b8e", null]], "RoomCount": 44, "FitmentDesign": "毛坯", "BatchStr": null, "HomeType": "别墅"}];
+                var dataParam = [{"type": "area", "name": "区域", "color": "#E9A248", "data": [9554, 9695, 9909, 10040, 9763, 10174, 10288]}, {"type": "line", "name": "普通住宅", "color": "#F4352B", "data": [null, null, null, null, null, 11000, 11000]}, {"type": "line", "name": "别墅", "color": "#B6D244", "data": [null, null, null, null, null, 13500, 13500]}];
+
+                DrawMixtureChart("spContainer", "100%", 225, dataParam, 2015, 12, 22);
+
+                var tmpChart = $('#spContainer').highcharts();
+                var options = tmpChart.options;
+
+                var tooltip = {
+                    formatter: function () {
+                        var seriesName = this.series.name;
+
+                        if (seriesName != "区域")
+                        {
+                            return false;
+                        }
+
+                        return  this.x + "<br />" + seriesName + ": " + "<span style=\" font-weight:bold;\">" + formatPrice(this.y) + "元/m2</span>";
+                    },
+                    crosshairs: true,
+                    backgroundColor: "#fff",
+                    borderWidth: 2,
+                    borderColor: "#EEEEEE",
+                    shadow: true,
+                    hideDelay: 0
+                };
+
+                var $tooltipbox = $(".zst_info");
+                var templateHtml = $("#unitPriceTemplate").html();
+
+                var plotOptions = {
+                    area: {
+                        fillOpacity: 0.3
+                    },
+                    series: {
+                        marker: {
+                            radius: 5, //曲线点半径，默认是4
+                            symbol: 'circle' //曲线点类型："circle", "square", "diamond", "triangle","triangle-down"，默认是"circle"
+                        },
+                        point: {
+                            events: {
+                                mouseOver: function (event) {
+                                    //设置提示框的位置
+                                    var yMax = event.target.series.yAxis.max;
+                                    var x = event.target.plotX - 132;
+                                    var y = event.target.plotY - 114;
+
+                                    if (yMax >= 100000) {
+                                        x = event.target.plotX - 125;
+                                    }
+
+                                    if (userAgent.indexOf("msie") > -1) {
+                                        x = event.target.plotX - 135;
+                                    }
+
+                                    $tooltipbox.css("left", parseInt(x) - 10);
+                                    $tooltipbox.css("top", parseInt(y) + 88);
+                                    //设置数据提示的DIV显示
+                                    //定义提示框的内容 可以根据个人喜好修改
+                                    var seriesName = event.target.series.name;
+                                    var index = event.target.index;
+                                    if (extraData[seriesName])
+                                    {
+                                        $tooltipbox.html(buildHtml(extraData[seriesName][index], templateHtml));
+                                        $tooltipbox.css("display", "block");
+                                    }
+                                },
+                                mouseOut: function (event) {
+                                    $tooltipbox.css("display", "none");
+                                }
+                            }
+                        }
+                    }
+                };
+
+                options.tooltip = tooltip;
+                options.plotOptions = plotOptions;
+                new Highcharts.Chart(options);
+                var numprice = $("#mothprice").html();
+                $("#mothprice").html(formatPrice(numprice));
+            }
+
+            function buildHtml(data, templateHtml) {
+                var html = templateHtml;
+
+                for (var p in data) {
+                    var reg = new RegExp("\\$" + p + "\\b", "gi");
+
+                    if (p == "SalePrice") {
+                        if (data[p]) {
+                            html = html.replace("$SalePrice", formatPrice(data[p]));
+                        } else {
+                            html = html.replace(reg, data[p] || "-");
+                        }
+                    }
+                    else if (p == "CricPrice") {
+                        if (data[p]) {
+                            html = html.replace("$CricPrice", formatPrice(data[p]));
+                        } else {
+                            html = html.replace(reg, data[p] || "-");
+                        }
+                    }
+                    else if (p == "ManualLevelCode") {
+                        var memo = "-";
+                        var css = "";
+                        switch (data[p]) {
+                            case "0":
+                                memo = "尽快入手";
+                                css = "jkrs_em";
+                                break;
+                            case "1":
+                                memo = "推荐购买";
+                                css = "tjgm_em";
+                                break;
+                            case "2":
+                                memo = "谨慎购买";
+                                css = "jsgm_em";
+                                break;
+                            case "3":
+                                memo = "持币观望";
+                                css = "cbgw_em";
+                                break;
+                            default:
+                                memo = "-";
+                                break;
+                        }
+                        html = html.replace("$ManualLevelCode", memo);
+                        html = html.replace("$Css", css);
+                    }
+                }
+
+                return html;
+            }
+
+            function formatPrice(n) {
+                var t = parseInt(n), i, r;
+                for (t = t.toString().replace(/^(\d*)$/, "$1."), t = (t + "00").replace(/(\d*\.\d\d)\d*/, "$1"), t = t.replace(".", ","), i = /(\d)(\d{3},)/; i.test(t); )
+                    t = t.replace(i, "$1,$2");
+                return t = t.replace(/,(\d\d)$/, ".$1"), r = t.split("."), r[1] == "00" && (t = r[0]), t
+            }
+        </script>
+    </body>
+</html>
+

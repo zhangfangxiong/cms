@@ -1,0 +1,119 @@
+﻿<section class="loginMinbox">
+	<div class="login_box clearfix">
+		<div class="cuccess_box">
+			<h2 class="cuccess_title">
+				<s></s>注册用户</h2>
+			<p class="cuccess_text">
+				<a href=""><?php echo isset($userInfo['UserName'])?$userInfo['UserName']:header("location:/user/index/login") ?>，您好！</a> <cite>马上设置手机号和密码，您就可以直接使用手机号登录房价点评网。</cite>
+			</p>
+			<form id="formRegister">
+			<dl class="login_dl">
+				<dt><b>手机号码：</b> </dt>
+				<dd>
+					<cite>
+						<input id="account" name="account" type="text" maxlength="20"  onkeyup="clearNoNumNew(this)" onblur="clearNoNumNew(this)"/>
+					</cite><span></span>
+				</dd>
+			</dl>
+			<dl class="login_dl">
+				<dt><b>验证码：</b> </dt>
+				<dd class="verification_code">
+					<cite>
+						<input id="VCode" name="VCode" type="text" />
+					</cite><a id="getVCode" href="javascript:sendSMS()">获取验证码</a> <span></span>
+				</dd>
+			</dl>
+			<dl class="login_dl">
+				<dt><b>设置密码：</b> </dt>
+				<dd>
+					<cite>
+						<input id="pwd" name="pwd" type="password" />
+					</cite><span></span>
+				</dd>
+			</dl>
+			</form>
+			<dl class="login_dl">
+				<dt><b>确认密码：</b> </dt>
+				<dd>
+					<cite>
+						<input id="confirmPwd" name="confirmPwd" type="password" />
+					</cite><span></span>
+				</dd>
+			</dl>
+			<p>
+				<cite>
+					<input type="checkbox" id="ck_agreement" />
+					<em><label for="ck_agreement">我已接受</label></em> </cite><a href="/help/index/useragreement" target="_blank" style="">《房价点评网用户协议》</a>
+			</p>
+            <div style="padding-top:10px;">
+			    <div class="loginBtn">
+					<input type="hidden" id="userid" value="<?php echo isset($userInfo['Id'])?$userInfo['Id']:'' ?>" />
+				    <input type="button" value="提交注册" onclick="registerSubmit()" />
+			    </div>
+			    <a href="/index/index" style="margin-left:10px;">以后再说，立即查找楼盘</a>
+            </div>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+	$(function () {
+		$("#account").focus(function () {
+			$("#account").parent().next("span").html("");
+			$("#account").parent().parent().removeClass("dd_error");
+		});
+		$("#account").blur(function () {
+			checkAccount(false, $(this), 2);
+		});
+		$("#pwd").focus(function () {
+			$("#pwd").parent().next("span").html("");
+			$("#pwd").parent().parent().removeClass("dd_error");
+		});
+		$("#pwd").blur(function () {
+			checkPwd(false, $(this));
+		});
+
+		$("#confirmPwd").focus(function () {
+			$("#confirmPwd").parent().next("span").html("");
+			$("#confirmPwd").parent().parent().removeClass("dd_error");
+		});
+		$("#confirmPwd").blur(function () {
+			checkConfirmPwd(false, $("#pwd"), $(this));
+		});
+
+		$("#VCode").focus(function () {
+			$("#getVCode").next("span").html("");
+			$("#getVCode").parent().removeClass("dd_error");
+		});
+		$("#VCode").blur(function () {
+			checkVCode(false, $(this), $("#account"), 1);
+		});
+
+	});
+
+	function registerSubmit() {
+		var checkPwdResult = checkConfirmPwd(false, $("#pwd"), $("#confirmPwd"));
+		var checkCodeResult = checkVCode(false, $("#VCode"), $("#account"), 1);
+		if (!(checkPwdResult && checkCodeResult)) {
+			return;
+		}
+		var ck = $("#ck_agreement").attr("checked");
+//		if (!ck) {
+//			alert("请先同意房价用户协议");
+//			return;
+//		}
+
+		var mobile = $("#account").val();
+		var pwd = $("#confirmPwd").val();
+		var code = $("#VCode").val();
+		var userID = $("#userid").val();
+
+		$.post("/user/index/registerUser", {mobile:mobile,pwd:pwd,code:code,userID:userID}, function (result) {
+			if (result.data.msg == 'ok') {
+				window.location = "/";
+			} else {
+				alert(result.data.msg);
+			}
+		},'json');
+
+	}
+</script>

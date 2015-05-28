@@ -1,0 +1,158 @@
+<div class="pheader clearfix">日志列表</div>
+<style>
+    .bbox{
+        float: left;
+        margin-right: 15px;
+    }
+
+    .fl{
+        float: left;
+        margin-right: 15px;
+    }
+
+    .bbox div{
+        margin-top: 5px;
+    }
+
+    .form-inline .bbox .form-control {
+        width: 140px;
+    }
+
+    #formbtn{
+        margin-top: 80px;
+    }
+</style>
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/question/index/logs">
+        <div class="row sousuo_now">
+            <div class="bbox">
+                <div class=".col-xs-2">
+                    帐号城市：
+                    <select class="form-control input-sm" name="city">
+                        <option value="0">全部</option>
+                        <?php foreach ($citys as $city) { ?>
+                            <?php if($seCity == $city['iCityID']) {?>
+                                <option value="<?php echo $city['iCityID']; ?>" selected="selected"><?php echo $city['sCityName']; ?></option>
+                            <?php }else{?>
+                                <option value="<?php echo $city['iCityID']; ?>"><?php echo $city['sCityName']; ?></option>
+                            <?php }?>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <div class=".col-xs-2">
+                    登录帐号：
+                    <select class="form-control input-sm" name="userName">
+                        <option value="0">全部</option>
+                        <?php foreach ($users as $user) { ?>
+                            <?php if($userName == $user['sUserName']) {?>
+                                <option value="<?php echo $user['sUserName']; ?>" selected="selected"><?php echo $user['sUserName']; ?></option>
+                            <?php }else{?>
+                                <option value="<?php echo $user['sUserName']; ?>"><?php echo $user['sUserName']; ?></option>
+                            <?php }?>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <div class=".col-xs-2">
+                    真实姓名：
+                    <select class="form-control input-sm" name="realName">
+                        <option value="0">全部</option>
+                        <?php foreach ($users as $user) { ?>
+                            <?php if($realName == $user['sRealName']) {?>
+                                <option value="<?php echo $user['sRealName']; ?>" selected="selected"><?php echo $user['sRealName']; ?></option>
+                            <?php }else{?>
+                                <option value="<?php echo $user['sRealName']; ?>"><?php echo $user['sRealName']; ?></option>
+                            <?php }?>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bbox">
+                <div class="fl">
+                    <div class=".col-xs-2">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作：
+                        <input type="text" value="" class="form-control input-sm" name="operate">
+                    </div>
+
+                    <div class=".col-xs-2">
+                        操作结果：
+                        <select class="form-control input-sm" name="oprateResult">
+                            <option value="0" <?php if(0 == $oprateResult){?> selected = "selected"<?php }?> >全部</option>
+                            <option value="1" <?php if(1 == $oprateResult){?> selected = "selected"<?php }?> >成功</option>
+                            <option value="2" <?php if(2 == $oprateResult){?> selected = "selected"<?php }?> >失败</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="fl">
+                    <div class=".col-xs-2">
+                        问题编号：
+                        <input type="text" value="" class="form-control input-sm" name="questionID" autocomplete="off">
+                    </div>
+
+                    <div class=".col-xs-2">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参数：
+                        <input type="text" value="" class="form-control input-sm" name="param" autocomplete="off">
+                    </div>
+                </div>
+
+                <div style="clear: both;"></div>
+                <div>
+                    <div class="form-group .col-xs-2">
+                        提问时间：
+                        <input name="sCreateTime" autocomplete="off" class="laydate form-control" validate="" type="text"
+                               value="<?php echo date('Y-m-d',$start); ?>" class="form-control" onclick="laydate({format: 'YYYY-MM-DD'});">
+                    </div>
+                    <div class="form-group .col-xs-2">至
+                        <input name="eCreateTime"  autocomplete="off" class="laydate form-control" validate="" type="text" value="<?php echo date('Y-m-d', $end); ?>" onclick="laydate({format: 'YYYY-MM-DD'});">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group .col-xs-2">
+                <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+            </div>
+        </div>
+
+    </form>
+    <hr>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>用户名</th>
+            <th class="text-center">真实姓名</th>
+            <th class="text-center">帐号城市</th>
+            <th class="text-center">操作时间</th>
+            <th class="text-center">操作项</th>
+            <th class="text-center">参数</th>
+            <th class="text-center">操作结果</th>
+            <th class="text-center">问题编号</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if(!empty($logs['aList'])){?>
+            <?php foreach ($logs['aList'] as $q) { ?>
+                <tr>
+                    <td><?php echo $q['sUserName'];?></td>
+                    <td><?php echo $q['sRealName'];?></td>
+                    <td><?php echo $q['cityName'];?></td>
+                    <td><?php echo date('Y-m-d h:i',$q['iCreateTime']);?></td>
+                    <td><?php echo $q['operate'];?></td>
+                    <td><?php echo $q['sContent'];?></td>
+                    <td><?php echo empty($q['iIsSuccess']) ? '失败' : '成功';?></td>
+                    <td><?php echo $q['sQuestionIDs'];?></td>
+                </tr>
+            <?php } ?>
+        <?php }?>
+        </tbody>
+    </table>
+    <?php echo $logs['aPager'] ?>
+</div>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+

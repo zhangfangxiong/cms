@@ -1,0 +1,32 @@
+<dd id="collectStatus">
+    <a onclick="saveFavorite()" href="javascript:void(0);" class="tool_link">
+        <i class="collect_ico">
+        </i><span id="favorite_title">收藏</span>
+        <cite>收藏成功</cite> <!--sf_acc收藏成功  -->
+        <em>取消收藏</em><!--sf_have已收藏-->
+    </a>
+</dd>
+<dd id="Share_li">
+    <a class="tool_link" href="javascript:void(0);" onclick="$(this).next().toggle()"><i class="share_ico"></i><span>分享</span></a>
+    <div id="share_unit" class="jiathis_share" style="display: none;">
+        <i></i>
+        <div class="jiadiv_title"><h3>分享到</h3></div>
+        <div class="jiathis_sers_list">
+            <a href="javascript:window.Share(window.ShareUrl.sina,'<?php echo $unit['UnitName']?>',window.ShareUrl.xfShareTitle,'<?php echo $unit['BidingPrice']?>','<?php echo $unit['OpinionSummary']?>','<?php echo $unit['NewRlv']?>');">
+                <span><s class="jtico_tsina"></s>新浪微博</span>
+            </a>
+            <a href="javascript:window.Share(window.ShareUrl.qzone,'<?php echo $unit['UnitName']?>',window.ShareUrl.xfShareTitle,'<?php echo $unit['BidingPrice']?>','<?php echo $unit['OpinionSummary']?>','<?php echo $unit['NewRlv']?>');">
+                <span><s class="jtico_tqq"></s>QQ空间</span>
+            </a>
+            <a href="javascript:window.Share(window.ShareUrl.c_qq,'<?php echo $unit['UnitName']?>',window.ShareUrl.xfShareTitle,'<?php echo $unit['BidingPrice']?>','<?php echo $unit['OpinionSummary']?>','<?php echo $unit['NewRlv']?>');">
+                <span><s class="jtico_cqq"></s>QQ好友</span>
+            </a>
+            <a href="javascript:window.Share(window.ShareUrl.renren,'<?php echo $unit['UnitName']?>',window.ShareUrl.xfShareTitle,'<?php echo $unit['BidingPrice']?>','<?php echo $unit['OpinionSummary']?>','<?php echo $unit['NewRlv']?>');">
+                <span><s class="jtico_renren"></s>人人网</span>
+            </a>
+            <a href="javascript:void(0)" class="jiathis_button_weixin">
+                <span><s class="jtico_weixin"></s>微信</span>
+            </a>
+        </div>
+    </div>
+</dd>

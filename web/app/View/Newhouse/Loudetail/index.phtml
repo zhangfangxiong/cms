@@ -1,0 +1,444 @@
+﻿<?php include Yaf_G::getViewPath() . "/Newhouse/header.phtml"; ?>
+<section class=" clearfix">
+
+    <section class="new_row_cont new_r_c_t clearfix">
+
+        <div class="new_r_c_t_left">
+            <div class="swic_tab">
+                <cite id="Sidetab">
+                    <?php
+                    if (!empty($aLargeImage)) {
+                        foreach ($aLargeImage as $key => $value) {
+                        ?>
+                        <img item="<?php echo $key; ?>"
+                             src="<?php echo $value; ?>"
+                             alt="">
+                    <?php
+                    }}
+                    ?>
+                </cite>
+            </div>
+            <ul class="ul_img clearfix" id="Trigges_img">
+                <?php
+                if (!empty($aLitterImage)) {
+                    foreach ($aLitterImage as $key => $value) {
+                        ?>
+                        <li>
+                            <img src="<?php echo $value; ?>">
+                        </li>
+                    <?php
+                    }}
+                ?>
+            </ul>
+            <div id="mask"></div>
+        </div>
+        <script type="text/javascript">
+            var UnitPicture = function () {
+                $('#Sidetab').switchable({
+                    triggers: $('#Trigges_img').find('li'),
+                    effect: 'fade',
+                    speed: 15,
+                    autoplay: true,
+                    onSwitch: function (event, currentIndex) {
+                        var api = this,
+                            cfg = api.config;
+                        var item = $('#Trigges_img').find('li')[currentIndex].getAttribute("item");
+                        var img = $("#Sidetab img[item=" + item + "]");
+                        if (!img.attr("src")) {
+                            img.attr("src", img.attr("srcurl"));
+                            img.removeAttr("srcurl");
+                        }
+                        new $.switchable.Anim(
+                            $('#mask'),
+                            {left: 0 + 101 * currentIndex},
+                            cfg.duration,
+                            cfg.easing
+                        ).run();
+                    }
+                });
+
+            };
+            var up = new UnitPicture();
+        </script>
+        <div class="new_r_c_t_right">
+            <div class="property_t">
+                <cite>
+                    <b>综合评定：</b>
+                    <em class="middle-start">
+                        <?php echo $sStar ?>
+                    </em>
+                    <var><?php echo !empty($aComment) ? $aComment['sRate'] : ''; ?></var>
+                </cite>
+            <span>
+                    <em>户型 4.2</em>
+                                    <em>装修 <?php echo !empty($aComment) ? number_format($aComment['sRateDesign'], 1) : ''; ?></em>
+                                    <em>物业 <?php echo !empty($aComment) ? number_format($aComment['sRateHouse'], 1) : ''; ?></em>
+                                    <em>车位 <?php echo !empty($aComment) ? number_format($aComment['sRatePark'], 1) : ''; ?></em>
+                                    <em>区位 <?php echo !empty($aComment) ? number_format($aComment['sRateLocation'], 1) : ''; ?></em>
+
+                    <em>性价比 <?php echo !empty($aComment) ? number_format($aComment['sCPRatio'], 1) : ''; ?></em>
+            </span>
+            </div>
+            <div class="property_m">
+                <dl>
+                    <dt>地址：</dt>
+                    <dd><?php echo isset($LouInfo['sAddress']) ? $LouInfo['sAddress'] : ''; ?></dd>
+                </dl>
+                <dl>
+                    <dt>区域：</dt>
+                    <dd><?php echo isset($LouInfo['sCircleLocation']) ? $LouInfo['sCircleLocation'] : ''; ?></dd>
+                </dl>
+                <div class="clearfix">
+                    <dl>
+                        <dt>开发商售价：</dt>
+                        <dd>
+                            <b class="cor_r"><?php echo isset($LouInfo['sPrice']) ? $LouInfo['sPrice'] : ''; ?></b><?php echo isset($LouInfo['sPriceUnit']) ? $LouInfo['sPriceUnit'] : ''; ?>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>指导价：</dt>
+                        <dd>
+                            <b><?php echo isset($LouInfo['suggestPrice']) ? $LouInfo['suggestPrice'] : ''; ?></b><?php echo isset($LouInfo['suggestPriceUnit']) ? $LouInfo['suggestPriceUnit'] : ''; ?>
+                        </dd>
+                    </dl>
+                    <span><s></s><a href="/shanghai/minhang/huacao/412541_pricetable?f=d"
+                                    target="_blank">价格走势</a></span>
+                </div>
+            </div>
+            <div class="property_f">
+                <ul>
+                    <li>
+                        <b>开盘日期：</b>
+                        <span><?php echo isset($LouDetail['sOpenTime']) ? $LouDetail['sOpenTime'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>交房日期：</b>
+                        <span><?php echo isset($LouDetail['sDeliverTime']) ? $LouDetail['sDeliverTime'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>规划户数：</b>
+                        <span><?php echo isset($LouDetail['iPlanCount']) ? $LouDetail['iPlanCount'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>建筑面积：</b>
+                        <span><?php echo isset($LouDetail['sAcreage']) ? $LouDetail['sAcreage'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>物业类型：</b>
+                        <span><?php echo isset($LouDetail['sEstateType']) ? $LouDetail['sEstateType'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>建筑形态：</b>
+                    <span>
+<?php echo isset($LouDetail['sBuildType']) ? $LouDetail['sBuildType'] : ''; ?>
+                    </span>
+                    </li>
+                    <li>
+                        <b>装修情况：</b>
+                        <span><?php echo isset($LouDetail['sFitmentDesign']) ? $LouDetail['sFitmentDesign'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>装修标准：</b>
+                        <span><?php echo isset($LouDetail['iFitmentPrice']) ? $LouDetail['iFitmentPrice'] : ''; ?>
+                            元/㎡</span>
+                    </li>
+                    <li>
+                        <b>绿化率：</b>
+                        <span><?php echo isset($LouDetail['sGreenRate']) ? $LouDetail['sGreenRate'] : ''; ?>.00%</span>
+                    </li>
+                    <li>
+                        <b>容积率：</b>
+                        <span><?php echo isset($LouDetail['iPlotRatio']) ? $LouDetail['iPlotRatio'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>车位数：</b>
+                        <span><?php echo isset($LouDetail['iParkCount']) ? $LouDetail['iParkCount'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>车位配比：</b>
+                        <span>1:<?php echo isset($LouDetail['sParking']) ? $LouDetail['sParking'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>物业公司：</b>
+                        <span><?php echo isset($LouDetail['sManageCorp']) ? $LouDetail['sManageCorp'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>物业费用：</b>
+                        <span><?php echo isset($LouDetail['sManageFee']) ? $LouDetail['sManageFee'] : ''; ?>元/㎡/月</span>
+                    </li>
+                    <li>
+                        <b>开发商：</b>
+                        <span><?php echo isset($LouDetail['sName']) ? $LouDetail['sName'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>售楼处：</b>
+                        <span><?php echo isset($LouDetail['sSaleAddress']) ? $LouDetail['sSaleAddress'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>售楼电话：</b>
+                        <span><?php echo isset($LouDetail['59552200']) ? $LouDetail['59552200'] : ''; ?></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="new_row_cont">
+        <div class="n_cont_warp mb30" id="roomTypeArea">
+            <div class="n_cont_warp_m">
+                <div class="clearfix type_area_menu">
+                    <h2>
+                        <b>
+                            <s></s>房型面积
+                        </b>
+                    </h2>
+                    <ul id="detail_type_menu">
+                        <li>
+                            <a href="javascript:void(0)" class="cur" roomtype="all"
+                               count="<?php echo '(' . count($aHxImage) . ')' ?>">全部</a>
+                            <em>|</em>
+                        </li>
+                        <?php
+                        if (!empty($aHxData)) {
+                            foreach ($aHxData as $key => $value) {
+                                ?>
+                                <li>
+                                    <a href="javascript:void(0)" roomtype="<?php echo $key; ?>"
+                                       count="<?php echo count($value); ?>"><?php echo $key . '(' . count($value) . ')'; ?></a>
+                                    <em>|</em>
+                                </li>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <div class="type_area">
+                    <div class="type_area_list" id="room_type_scroll">
+                        <ul class="clearfix">
+                            <?php
+                            if (!empty($aHxImage)) {
+                                foreach ($aHxImage as $key => $value) {
+                                    ?>
+                                    <li class="<?php echo $value['typeName']; ?>"
+                                        roomtype="<?php echo $value['typeName'] . $value['typeCode']; ?>"
+                                        onclick="XfDetail.showTypeDetail(this)">
+                                        <img srcurl='' src='<?php echo $value['sImageUrl'] ?>' alt=''>
+                                        <em><?php echo $value['typeName'] . ' ' . $value['area'] ?>㎡</em>
+
+                                        <div class="rt_info" style="display: none">
+                                            <span class="type_code"><?php echo $value['typeCode'] ?></span>
+                                            <span class="type_name"><?php echo $value['typeName'] ?></span>
+                                            <span class="type_area"><?php echo $value['area'] ?>㎡</span>
+                                            <span class="type_img_url"><?php echo $value['sImageUrlBig'] ?></span>
+                                            <dl class="type_youshi">
+                                                <?php if (isset($value['advantage'])) {
+                                                    foreach ($value['advantage'] as $k => $v) {
+                                                        ?>
+                                                        <dd><?php echo $k + 1; ?>、<?php echo $v; ?></dd>
+                                                    <?php
+                                                    }
+                                                } ?>
+                                            </dl>
+                                            <dl class="type_lieshi">
+                                                <?php if (isset($value['disadvantage'])) {
+                                                    foreach ($value['disadvantage'] as $k => $v) {
+                                                        ?>
+                                                        <dd><?php echo $k + 1; ?>、<?php echo $v; ?></dd>
+                                                    <?php
+                                                    }
+                                                } ?>
+                                            </dl>
+                                        </div>
+                                    </li>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                        <span>
+                            <em class="s_prev"><s></s></em>
+                            <em class="s_next"><s></s></em>
+                        </span>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="new_row_cont">
+
+        <div class="n_cont_warp mb30">
+            <div class="n_cont_warp_m">
+                <h2>
+                    <b>
+                        <s></s>周边配套
+                    </b>
+                </h2>
+
+                <div class="per_support clearfix">
+                    <div class="per_sup_map" id="surr_fa_map">
+                    </div>
+                    <div class="per_sup_info" id="surrou_type_menu">
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" keywords="公交车站,地铁站" id="station">
+                                    <s class="s_jt"></s>
+                                    <em>交通</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="幼儿园,小学,中学,大学" id="edu">
+                                    <s class="s_jy"></s>
+                                    <em>教育</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="银行,购物,邮局" id="life">
+                                    <s class="s_sh"></s>
+                                    <em>生活</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="医院,健身" id="health">
+                                    <s class="s_jk"></s>
+                                    <em>健康</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="中餐,川菜" id="food">
+                                    <s class="s_cy"></s>
+                                    <em>餐饮</em>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="sup_info_list" id="surr_info_list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                SFMap.init("<?php echo $LouInfo['sLat'];?>", "<?php echo $LouInfo['sLon'];?>", "<?php echo $LouInfo['sBuildName'];?>");
+            });
+        </script>
+    </section>
+    <section class="new_row_cont">
+        <div class="n_cont_warp mb30">
+            <div class="n_cont_warp_m">
+                <div class="clearfix type_area_menu">
+                    <h2>
+                        <b>
+                            <s></s>楼盘相册
+                        </b>
+                    </h2>
+
+                    <ul id="detail_pic_menu">
+                        <li>
+                            <a href="javascript:void(0)" type="all" class="cur"
+                               count="<?php echo $aImagesNum; ?>">全部</a>
+                            <em>|</em>
+                        </li>
+                        <?php
+                        foreach ($aTypeArr as $key => $value) {
+                            ?>
+                            <li>
+                                <a href="javascript:void(0)" type="imagelist<?php echo $key; ?>"
+                                   count="<?php echo count($aImages[$key]['Url']); ?>"><?php echo $value . '(' . count($aImages[$key]['Url']) . ')'; ?></a>
+                                <em>|</em>
+                            </li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <div class="type_area">
+                    <div class="type_area_list" id="detail_picture_scroll">
+                        <ul class="clearfix">
+                            <?php
+                            $i = 0;
+                            foreach ($aImages as $key => $value) {
+                                if (!empty($value['Url'])) {
+                                    foreach ($value['Url'] as $k => $v) {
+                                        ?>
+                                        <li style="display: block" class="imagelist<?php echo $key; ?>"
+                                            onclick="XfDetail.showPictureDetail(<?php echo $i; ?>,'<?php echo $value['sRemark'][$k]; ?>',this,<?php echo $k; ?>)">
+                                            <img srcurl=''
+                                                 src='<?php echo $v; ?>'
+                                                 alt='' mark='<?php echo $value['sRemark'][$k]; ?>'
+                                                 bigurl='<?php echo $value['bigUrl'][$k]; ?>'>
+                                            <em><?php echo $value['sRemark'][$k]; ?></em>
+                                        </li>
+                                        <?php
+                                        $i++;
+                                    }
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                    <span>
+                        <em class="s_prev_pic"><s></s></em>
+                        <em class="s_next_pic"><s></s></em>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="new_row_cont">
+        <?php include Yaf_G::getViewPath()."/Newhouse/interestxf.phtml"; ?>
+    </section>
+
+    <div class="trybox" style="display:none;" id="room_type_dialog">
+        <div class="ml-overlay"></div>
+        <div class="ml-box kb_nb_01">
+            <div class="ml-tit kb_tit">
+                <a href="javascript:void(0);" onclick="$('#room_type_dialog').hide()" class="close"><i></i></a>
+
+                <h2 class="rt_title"></h2>
+            </div>
+            <div class="kb_ctw clearfix">
+                <div class="ctw_left">
+                    <img class="rt_img_url" src="" alt="">
+                </div>
+                <div class="ctw_right">
+                    <div class="ctw_r_fran">
+                        <div class="rt_typecode"></div>
+                        <div class="rt_typename"></div>
+                        <div class="rt_typearea"></div>
+                    </div>
+                    <div class="ctw_r_fp">
+                        <span>优势</span>
+                        <dl class="rt_youshi"></dl>
+                    </div>
+                    <div class="ctw_r_fp">
+                        <span class="r_fp_c1">不足</span>
+                        <dl class="rt_lieshi"></dl>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix ctw_fvb" id="other_type"></div>
+        </div>
+    </div>
+    <div class="pro_album_list" id="Proalbumbox">
+        <h3>
+            <b class="picName"></b>
+            <a href="javascript:closeBg('Proalbumbox')">x</a>
+        </h3>
+
+        <div class="prc_box" id="Prcboxside">
+
+        </div>
+        <div class="pro_album_button">
+            <a class="prev_l" id="album_prev" href="javascript:void(0);" style="z-index:50;"><s></s></a>
+            <a class="next_r" id="album_next" href="javascript:void(0);" style="z-index:50;"><s></s></a>
+        </div>
+        <div class="album_sz"></div>
+    </div>
+    <script type="text/javascript">
+        XfDetail.init(eval('<?php echo json_encode($aHxImage); ?>'));
+    </script>
+</section>
+

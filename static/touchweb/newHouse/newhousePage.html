@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <title>新房-新房单页</title>
+        <link rel="stylesheet" type="text/css" href="../resource/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="../resource/css/swiper.min.css">
+        <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+        <link rel="stylesheet" type="text/css" href="../resource/css/analysis_zs.css">	
+    </head>
+
+    <body>
+        <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="goback"></a>
+                <div class="inner_title">仁恒西郊花园</div>
+                <a href="javascript:void(0)" class="collectit collectit_gray"></a><!--点击灰色的星星之后收藏，星星变红色，即去掉collectit_gray类，加上collectit_red类；点击红色的星星取消收藏，星星变为灰色，即去掉collectit_red类，加上collectit_gray类-->
+            </div>
+
+        </header>
+        <section  id="mainsection">
+            <section class="main_section">
+                <div class="topphotos">
+                    <canvas data-src="../resource/images/testlou.jpg"></canvas>
+                    <div class="imgnumbers">共998张</div>
+                </div>
+                <div class="house_price clearfix">
+                    <div class="inner_house_price  border_bottom">
+                        <div class="left_houseprice fl">
+                            <div class="zj_price"><span class="zj_name">住宅售价：</span><span class="format_price red_import">36000</span>元/m2</div>
+                            <div class="zd_price"><span class="zd_name">指导价格：</span><span class="format_price pricesize">36000</span>元/m2</div>
+                        </div>
+                        <div class="right_tips fl swiper-container" id="pcSlide">
+                            <div class="swiper-wrapper">
+                            <div class="not_collect swiper-slide" >
+                                <a href="#" class="gaishan_pc">改善评测榜</a>
+                                <a href="#" class="year_top3">年度户型TOP3</a>
+                            </div>
+                            <a  class="allready_collect swiper-slide" href="#" ></a>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="loupan_address" href="#">
+                        <div class="lp_address_name">楼盘地址：</div>
+                        <div class="lp_address_info">[青浦-徐泾]改善评测榜改善评测榜改善评测榜改善评测榜改善评测榜</div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="main_section mt12">
+                <div class="buystatus buy_cb"></div><!-- 尽快入手buy_rs   推荐购买buy_buy  谨慎购买buy_js   -->
+                <div class="commontoptitle"><div class="border_bottom">楼盘评测</div></div>
+                <div class="zh_score">
+                    <div class="pb12 border_bottom">
+                        <div class="anay_com_list_title">
+                            <span class="title_name">综合评分</span>
+                            <span class="title_star"></span>
+                            <span class="title_star_score">3.65</span>
+                        </div>
+                        <div class="hid mt5">
+                            <div class="good_factors">品牌开发商、户型尺度舒适</div>
+                            <div class="bad_factors ml10">处于飞机航道</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zh_eval border_bottom">
+                    <div class="evaluation_title">
+                        <ul class="pr12">
+                            <li class="hx_analyze"><a href="#">户型分析</a></li> <!--不能点击的时候class是 hx_noData   -->
+                            <li class="zx_stander zx_noData"><a href="#">装修标准</a></li>
+                            <li class="sq_sever sq_noData"><a href="#">社区服务</a></li>
+                            <li class="wy_sever wy_noData"><a href="#">物业服务</a></li>
+                            <li class="sq_Supporting sh_noData"><a href="#">生活配套</a></li>
+                            <li class="bad_factor bl_noData"><a href="#">不利因素</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pl12">
+                    <a class="loupan_address seepc" href="#">
+                        查看完成评测
+                    </a>
+                </div>
+            </section>
+
+            <section class="main_section mt12">
+                <div class="commontoptitle"><div class="border_bottom">在线选房</div></div>
+                <div class="pl12">
+                    <div class="border_bottom clearfix pb5">
+                        <div class="one_select_line clearfix">
+                            <div class="line_leftname">请选择户型面积：</div>
+                            <a class="line_rightselect" href="#">5房 678m² <span></span></a>
+                        </div>
+                        <div class="onlyleft">仅剩18套</div>
+                    </div>
+                </div>
+
+                <div class="pl12 mt5">
+                    <div class="border_bottom clearfix">
+                        <div class="one_select_line clearfix pb12">
+                            <div class="line_leftname">选择单元楼栋：</div>
+                            <div class="newhouse_select clearfix fr">
+                                <a class="line_downselect" data-classes="loudongselect"  id="loudongselect" href="javascript:void(0)"><span>23号楼</span><span class="jt"></span></a>
+                                <a class="line_downselect" data-classes="hshiselect"  id="hshiselect" href="javascript:void(0)"><span>1-301室</span><span class="jt"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main_piechart">
+                    <div class="one_select_line clearfix pb12">
+                        <div class="line_leftname fl">指导总价：<span class="all_price"><b>733</b>万元</span></div>
+                        <a href="#" class="iwlowprice fr">我要拿低价</a>
+                    </div>
+                    <div class="trianglebg">
+                        <div class="topnamedes">贷款678万，等额本息还款，按揭20年，商业贷款</div>
+                        <div class="main_piechart_inner">
+                            <div id="pieContent" class="piecontent">
+                            </div>
+                            <div class="piezhshi">
+                                <div class="piezhshili shoufu">首期付款：220万</div>
+                                <div class="piezhshili zhifu">支付利息：124万</div>
+                                <div class="piezhshili daikuan">贷款总额：678万</div>
+                                <div class="piezhshili yuejun">月均还款：<span class="redhk">42568元</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="main_section mt12">
+                <div class="commontoptitle"><div class="border_bottom">价格趋势</div></div>
+
+                <div class="toptitle">本月楼盘价格<span><s id="mothprice">36000</s>元/平</span> 对比上月<s id="price_status">持平</s></div>
+
+                <div id="spContainer" style="min-width: 305px; height: 130px;" class="chartinfo">
+
+                </div>
+
+                <div class="prc_left_t clearfix mb10">
+                    <em><span>区域均价</span><s class="i_icon_1"></s></em>
+                    <em><span>住宅</span><s class="i_icon_2"></s></em>
+                    <em><span>别墅</span><s class="i_icon_3"></s></em>
+                </div>
+            </section>
+
+            <section class="main_section mt12">
+                <div class="commontoptitle"><div class="border_bottom">分析师点评</div></div>
+                <div class="zh_eval border_bottom clearfix">
+                    <div class="leftanay_info">
+                        <div class="anay_headimg_newhouse"><img src="../resource/images/analyst_pic1.png"></div>
+                        <div class="n_anay_name">李振宇</div>
+                        <div class="n_anay">首席分析师</div>
+                    </div>
+                    <div class="rightcom_info">
+                        2013年10月14日恒大集团买下马陆镇43-05地块，楼板价14,598元/㎡，可以预见的是，随着楼板价的提升，未来马陆区域的成交均价势必上涨。届时，佳兆业壹号23000元/㎡的这种单价，肯定是买不到了。
+                    </div>
+                </div>
+                <div class="pl12">
+                    <a class="loupan_address seepc" href="#">
+                        查看全部6篇分析师点评
+                    </a>
+                </div>
+            </section>
+
+            <section class="main_section mt12">
+                <div class="commontoptitle"><div class="border_bottom">详细信息</div></div>
+                <div class="loupan_info">
+                    <p>楼盘开发商：上海仁恒置业发展有限公司</p>
+                    <p>建筑面积：240,000m2</p>
+                    <p>物业类型：普通住宅;</p>
+                    <p>建筑形态： 小高层,高层</p>
+                    <div class="hide-content" id="hide-content">
+                        <p>楼盘开发商：上海仁恒置业发展有限公司</p>
+                        <p>楼盘开发商：上海仁恒置业发展有限公司</p>
+                        <p>楼盘开发商：上海仁恒置业发展有限公司</p>
+                    </div>
+                </div>
+                <a  href="javascript:void(0);" id="updownshow" class="infodown"></a>
+            </section>
+
+            <section class="main_section mt12">
+                <div class="commontoptitle"><div class="border_bottom">户型 <span class="f10">（9套）</span></div></div>
+                <div class="zh_eval border_bottom clearfix">
+                    <div class="left_hx_img">
+                        <canvas data-src="../resource/images/testlou.jpg"></canvas>
+                    </div>
+                    <div class="right_hx_info">
+                        <p>户型：02/03/06/07户型</p>
+                        <p>房型：两房</p>
+                        <p>面积：113m2</p>
+                        <p>价格：420万</p>
+                    </div>
+                </div>
+                <div class="pl12">
+                    <a class="loupan_address seepc" href="#">
+                        查看全部9套户型
+                    </a>
+                </div>
+            </section>
+
+            <section class="main_section mt12">
+                <div class="commontoptitle"><div class="border_bottom">周边配套 </div></div>
+                <div class="swiper-container Regionulcontain">
+                    <div class="swiper-wrapper p12" id="Regionul">
+                        <div class="swiper-slide regionli_jt">
+                            <p class="r_name mt10">交通</p>
+                            <p class="r_des">1公里以内的公交设施</p>
+                        </div>
+                        <div class="swiper-slide regionli_jy">
+                            <p class="r_name mt10">教育</p>
+                            <p class="r_des">1公里以内的学校</p>
+                        </div>
+                        <div class="swiper-slide regionli_cy">
+                            <p class="r_name mt10">餐饮</p>
+                            <p class="r_des">1公里以内的餐饮配套</p>
+                        </div>
+                        <div class="swiper-slide regionli_sh">
+                            <p class="r_name mt10">生活</p>
+                            <p class="r_des">1公里以内的生活配套</p>
+                        </div>
+                        <div class="swiper-slide regionli_jk">
+                            <p class="r_name mt10">健康</p>
+                            <p class="r_des">1公里以内的医疗配套</p>
+                        </div>
+                        <div class="swiper-slide"></div>
+                    </div>
+                </div>     
+            </section>
+
+            <section class="main_section mt12">
+                <div class="commontoptitle"><div class="border_bottom">楼盘导购 <span class="f10">（4条）</span></div></div>
+                <div class="house_price clearfix">
+                    <a class="inner_house_price loupan_address border_bottom block hid" href="#">
+                        <p class="title_name_dg">上海2015年1月即将加推楼盘一览</p>
+                        <p class="content_dg">快到春节了，这一段时间内开发商向来动作比
+                            较小， 开盘的、加推的楼盘推的楼盘家... </p>
+                    </a>
+                    <a class="loupan_address" href="#">
+                        <div class="lpdg">  查看全部楼盘资讯</div>
+                    </a>
+                </div>
+            </section>
+
+
+            <section class="main_section mt12">
+                <div class="commontoptitle loupan_address"><div class="border_bottom">网友点评 <span class="fr  mr20">4条</span></div></div>
+                <div class="netcomment">
+                    <p>综合看性价比还不错，值得购买!文字内容超过就换行，字段左对齐</p>
+                </div>
+                <a class="iwantsay" href="#">
+                    我也来说两句，限50字
+                </a>
+            </section>
+
+        </section>
+
+
+        <footer class="foot_wrap pb60">
+            <div class="foot">
+                <div class="device border_bottom">
+                    <a href="#" class="pr5">电脑版</a>
+                    <a href="#" class="pr5 pl5">客户端</a>
+                    <a href="#" class="pr5 pl5">关于我们</a>
+                    <a href="#" class="pl5">网络服务协议</a>        		 
+                </div>
+                <div class="tel border_bottom">
+                    <span>免费咨询热线：400-810-6999转1034</span>
+                </div>
+                <div class="copyRight">
+                    Copyright© 2014-2015  房价点评
+                </div>
+            </div>
+        </footer>   
+
+        <div class="footfixed">
+            <a href="tel:4008106999 1034">400-810-6999 转 1034</a>
+        </div>
+
+
+        <div class="return_top" id="backtop">
+            <div class="return_top_bg"></div>
+            <div class="return_top_txt">返回顶部</div>
+        </div>
+        <div id="BgDiv" class="black_bg" style="display:none ;"></div>
+        <section class="choice_wrap2">
+            <ul class="bgf choice_item loudongselect" data-flag="loudongselect">
+                <li>23号楼</li>
+                <li>24号楼</li>
+                <li>25号楼</li>
+                <li>26号楼</li>
+                <li>27号楼</li>
+                <li>28号楼</li>
+                <li>29号楼</li>
+                <li>30号楼</li>
+                <li>31号楼</li>
+                <li>32号楼</li>
+                <li>33号楼</li>
+                <li>34号楼</li>
+                <li>334号楼</li>
+                <li>455号楼</li>
+                <li>456号楼</li>
+            </ul>
+            <ul class="bgf choice_item hshiselect" data-flag="hshiselect">
+                <li>1-301室</li>
+                <li>2-301室</li>
+                <li>3-341室</li>
+                <li>5-341室</li>
+                <li>5-641室</li>
+            </ul>
+        </section>
+
+        <script src="../lib/requirejs/require.js"  data-main="../lib/js/newhouseconfig"></script>  
+
+    </body>
+</html>
+

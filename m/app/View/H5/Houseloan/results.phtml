@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name='apple-touch-fullscreen' content='yes'>
+    <meta name="full-screen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="address=no">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
+    <title>房贷计算神器</title>
+<script type="text/javascript" src="<?php echo $sStaticRoot ?>/js/jquery-1.11.1.min.js"></script>
+<script src="<?php echo $sStaticRoot ?>/js/calculator.js"></script>
+<script src="<?php echo $sStaticRoot ?>/js/dataHelper.js"></script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/css/weixin.css" type="text/css" media="screen"/>
+<style>
+    section .demo2015 {
+        font-size: 13px;
+        width: 300px;
+        margin: 0 auto;
+        overflow: hidden;
+        height: 250px;
+    }
+
+    ul.notes {
+        position: relative;
+        height: 500px;
+    }
+
+    ul.notes li {
+        position: absolute;
+    }
+
+    ul.notes li:last-child {
+        margin: 0;
+    }
+
+    ul.notes li span.skill {
+        display: block;
+        text-align: center;
+        text-shadow: 1px 0 0 #FFFFFF;
+    }
+
+    .notesite {
+        display: inline-block;
+        position: relative;
+        font-size: 5.4em;
+        cursor: default;
+    }
+
+    .cicle1 .notesite {
+        width: 1.4em;
+        height: 1.4em;
+    }
+
+    .cicle2 .notesite {
+        width: 2.2em;
+        height: 2.2em;
+    }
+
+    .cicle3 .notesite {
+        width: 3em;
+        height: 3em;
+    }
+
+    .notesite > .percent {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        z-index: 2;
+        -moz-transform: rotate(180deg) !important;
+        -webkit-transform: rotate(180deg) !important;
+        -o-transform: rotate(180deg) !important;
+        transform: rotate(180deg) !important;
+        visibility: hidden;
+    }
+
+    .cicle1 .notesite > .percent {
+        top: 20px;
+        left: 0;
+        font-size: 25px;
+        visibility: hidden;
+    }
+
+    .cicle2 .notesite > .percent {
+        visibility: hidden;
+        top: 50px;
+        left: 0;
+        font-size: 25px;
+    }
+
+    .cicle3 .notesite > .percent {
+        visibility: hidden;
+		top: 80px;
+        left: 0;
+        font-size: 25px;
+    }
+
+    .notesite > .percent .dec {
+        font-size: 15px;
+    }
+
+    .cicle1 .notesite > #slice {
+        position: absolute;
+        width: 1.4em;
+        height: 1.4em;
+        clip: rect(0px,1.4em,1.4em,0.7em);
+    }
+
+    .cicle2 .notesite > #slice {
+        position: absolute;
+        width: 2.2em;
+        height: 2.2em;
+        clip: rect(0px,2.2em,2.2em,1.1em);
+    }
+
+    .cicle3 .notesite > #slice {
+        position: absolute;
+        width: 3em;
+        height: 3em;
+        clip: rect(0px,3em,3em,1.5em);
+    }
+
+    .notesite {
+        -moz-transform: rotate(-180deg) !important;
+        -webkit-transform: rotate(-180deg) !important;
+        -o-transform: rotate(-180deg) !important;
+        transform: rotate(-180deg) !important;
+    }
+
+    .notesite > #slice.gt50 {
+        clip: rect(auto, auto, auto, auto);
+    }
+
+    .cicle1 .notesite > #slice > .pie {
+        position: absolute;
+        border: 0.4em solid #444;
+        width: 0.6em;
+        height: 0.6em;
+        clip: rect(0em,0.7em,1.4em,0em);
+        -moz-border-radius: 0.7em;
+        -webkit-border-radius: 0.7m;
+        border-radius: 0.7em;
+    }
+
+    .cicle2 .notesite > #slice > .pie {
+        position: absolute;
+        border: 0.4em solid #444;
+        width: 1.4em;
+        height: 1.4em;
+        clip: rect(0em,1.1em,2.2em,0em);
+        -moz-border-radius: 1.1em;
+        -webkit-border-radius: 1.1em;
+        border-radius: 1.1em;
+    }
+
+    .cicle3 .notesite > #slice > .pie {
+        position: absolute;
+        border: 0.8em solid #444;
+        width: 1.4em;
+        height: 1.4em;
+        clip: rect(0em,1.5em,3em,0em);
+        -moz-border-radius: 1.5em;
+        -webkit-border-radius: 1.5em;
+        border-radius: 1.5em;
+    }
+
+    li.cicle1 .notesite > #slice > .pie {
+        border-color: #80cdbb;
+    }
+
+    li.cicle2 .notesite > #slice > .pie {
+        border-color: #ff9900;
+    }
+
+    li.cicle3 .notesite > #slice > .pie {
+        border-color: #ea4c40;
+    }
+
+    .notesite > #slice > .pie.fill {
+        -moz-transform: rotate(180deg) !important;
+        -webkit-transform: rotate(180deg) !important;
+        -o-transform: rotate(180deg) !important;
+        transform: rotate(180deg) !important;
+    }
+
+    .notesite.fill > .percent {
+        display: none;
+    }
+
+    .notesite:after {
+        content: '';
+        display: block;
+        position: absolute;
+        background: #fff;
+    }
+
+    .cicle1 .notesite:after {
+        top: 0.3em;
+        left: 0.3em;
+        width: 0.8em;
+        height: 0.8em;
+        -moz-border-radius: 0.7em;
+        -webkit-border-radius: 0.7em;
+        border-radius: 0.7em;
+        z-index: 1;
+    }
+
+    .cicle2 .notesite:after {
+        top: 0.3em;
+        left: 0.3em;
+        width: 1.6em;
+        height: 1.6em;
+        -moz-border-radius: 1.1em;
+        -webkit-border-radius: 1.1em;
+        border-radius: 1.1em;
+        z-index: 1;
+    }
+
+    .cicle3 .notesite:after {
+        top: 0.3em;
+        left: 0.3em;
+        width: 2.4em;
+        height: 2.4em;
+        -moz-border-radius: 1.3em;
+        -webkit-border-radius: 1.3em;
+        border-radius: 1.3em;
+        z-index: 1;
+    }
+
+    .notesite:before {
+        content: '';
+        display: block;
+        position: absolute;
+        zoom: 1;
+        filter: alpha(opacity=50);
+        opacity: .5;
+        z-index: 0;
+    }
+
+    .cicle1 .notesite:before {
+        width: 1.4em;
+        height: 1.4em;
+        -moz-border-radius: 0.7em;
+        -webkit-border-radius: 0.7em;
+        border-radius: 0.7em;
+    }
+
+    .cicle2 .notesite:before {
+        width: 2.2em;
+        height: 2.2em;
+        -moz-border-radius: 1.1em;
+        -webkit-border-radius: 1.1em;
+        border-radius: 1.1em;
+    }
+
+    .cicle3 .notesite:before {
+        width: 4em;
+        height: 4em;
+        -moz-border-radius: 2em;
+        -webkit-border-radius: 2em;
+        border-radius: 2em;
+    }
+
+    li.cicle1 .notesite:before {
+        background: #fff;
+    }
+
+    li.cicle2 .notesite:before {
+        background: #fff;
+    }
+
+    li.cicle3 .notesite:before {
+        background: #fff;
+    }
+
+    li.cicle1 {
+        left: 98px;
+        top: 77px;
+        z-index: 3;
+    }
+
+    li.cicle2 {
+        left: 69px;
+        top: 48px;
+        z-index: 2;
+    }
+
+    li.cicle3 {
+        left: 40px;
+        top: 19px;
+        z-index: 1;
+    }
+
+    .cirnums {
+        position: absolute;
+        top: 20px;
+        z-index: 9;
+        left: 160px;
+        width:130px;
+    }
+
+    .cirnums s {
+        width: 9px;
+        margin-right: 5px;
+        height: 17px;
+        float: left;
+        display: block;
+    }
+
+    .cirnums p {
+        clear: both;
+        line-height: 17px;
+        margin-bottom: 11px;
+    }
+
+    .cirnums .renum {
+        background-color: #ea4c40;
+    }
+
+    .cirnums .ornum {
+        background-color: #ff9900;
+    }
+
+    .cirnums .grnum {
+        background-color: #80cdbb;
+    }
+</style>
+</head>
+
+<body style="background:#fff;">
+<div class="pw_lp">
+    <div class="pw_wp">
+        <p>房屋总价300万，贷款总额278万;</p>
+        <p>等额本金还款，按揭20年，组合贷款;</p>
+    </div>
+</div>
+<!--<div class="pw_rq_wp">
+    <div class="pu_list_t">
+        <ul>
+            <li><s class="lt_01"></s>贷款：278 万元</li>
+            <li><s class="lt_02"></s>利息：173.99 万元</li>
+            <li><s class="lt_03"></s>首付：73 万元</li>
+        </ul>
+    </div>
+    <div class="pu_01">
+        <div class="ku_hd_01">
+            <div class="ku_pie_01 ku_pie1_01" style="-webkit-transform: rotate(-70.99999deg);"></div>
+        </div>
+        <div class="ku_hd_01">
+            <div class="ku_pie_01 ku_pie2_01" style="-webkit-transform: rotate(0deg); background-color: #80cdbb;"></div>
+        </div>
+        <div class="ku_bg_01"> </div>
+        <div class="ku_fb_01"></div>
+    </div>
+    <div class="pu_02">
+        <div class="ku_hd_02">
+            <div class="ku_pie_02 ku_pie1_02" style="-webkit-transform: rotate(-40.99999deg);"></div>
+        </div>
+        <div class="ku_hd_02">
+            <div class="ku_pie_02 ku_pie2_02" style="-webkit-transform: rotate(0deg); background-color: #ff9900;"></div>
+        </div>
+        <div class="ku_bg_02"> </div>
+        <div class="ku_fb_02"></div>
+    </div>
+    <div class="pu_03">
+        <div class="ku_hd_03">
+            <div class="ku_pie_03 ku_pie1_03" style="-webkit-transform: rotate(-89.99999deg);"></div>
+        </div>
+        <div class="ku_hd_03">
+            <div class="ku_pie_03 ku_pie2_03" style="-webkit-transform: rotate(0deg); background-color: #ea4c40;"></div>
+        </div>
+        <div class="ku_bg_03"> </div>
+        <div class="ku_fb_03"></div>
+    </div>
+</div>-->
+<section>
+    <div class="demo2015">
+        <ul class="notes">
+            <li class="cicle3"><div class="notesite" id="note_2" dir="75"></div><span class="skill"></span></li>
+            <li class="cicle2"><div class="notesite" id="note_1" dir="58"></div><span class="skill"></span></li>
+            <li class="cicle1" ><div class="notesite" id="note_0" dir="23"></div><span class="skill"></span></li>
+            <div class="cirnums">
+                <!--<p><s class="renum"></s>贷款：<span id="cirnum1">278</span>万元</p>
+                <p><s class="ornum"></s>利息：<span id="cirnum2">173.99</span>万元</p>
+                <p><s class="grnum"></s>首付：<span id="cirnum3">73</span>万元</p>-->
+            </div>
+        </ul>
+    </div>
+</section>
+<div class="xf_foot">
+    <div class="xf_ht xh_pu_ht"></div>
+    <div class="xf_pu_c">
+        <p>首月还款：28942.20元</p>
+        <p>末月还款：8942.20元</p>
+        <a href="javascript:;">查看明细</a>
+    </div>
+</div>
+<div class="recalculate">
+    <a href="/h5/houseloan/start" class="recalculate_btn">重新计算</a>
+</div>
+<script type="text/javascript">
+
+    //圆形定义
+    function drawTimer(id, percent) {
+        $('#note_' + id).html('<div class="percent"></div><div id="slice"' + (percent > 5 ? ' class="gt50"' : '') + '><div class="pie"></div>' + (percent > 5 ? '<div class="pie fill"></div>' : '') + '</div>');
+        var deg = -(360 / 10 * percent);
+        $('#note_' + id + ' #slice .pie').css({
+            '-moz-transform': 'rotate(' + deg + 'deg)',
+            '-webkit-transform': 'rotate(' + deg + 'deg)',
+            '-o-transform': 'rotate(' + deg + 'deg)',
+            'transform': 'rotate(' + deg + 'deg)'
+        });
+        percent = Math.floor(percent * 100) / 100;
+        arr = percent.toString().split('.');
+        int = arr[0];
+        $('#note_' + id + ' .percent').html('<span class="int">' + int + '</span>');
+    }
+    //计算值
+    function stopNote(id, note) {
+        var seconds = (timerFinish - (new Date().getTime())) / 100;
+        var percent = 100 - ((seconds / timerSeconds) * 10);
+        percent = Math.floor(percent * 100) / 100;
+        if (percent <= note) {
+            drawTimer(id, percent);
+        } else {
+            note = $('#note_' + id).attr('dir') / 10;
+            arr = note.toString().split('.');
+            $('#note_' + id + ' .percent .int').html(arr[0]);
+        }
+    }
+    //旋转速度
+    $(document).ready(function () {
+        timerSeconds = 8;
+        timerFinish = new Date().getTime() + (timerSeconds * 1000);
+        $('.notesite').each(function (id) {
+            note = $('#note_' + id).attr('dir') / 10;
+            timer = setInterval('stopNote(' + id + ', ' + note + ')', 0);
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $(".m_nav_tip").click(function () {
+            var $this = $(this);
+            if (!$this.hasClass("on")) {
+                $(this).addClass("on");
+                $(".mk_options").addClass("on");
+            } else {
+                $(document).click();
+            }
+            return false;
+        });
+        $(document).on("click", function () {
+            $(".m_nav_tip").removeClass("on")
+            $(".mk_options").removeClass("on");
+        });
+    })
+    function GetRequest() {
+
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+    $(".nb_btn").click(function () {
+        //var Load = asd;
+        window.location.href = "/h5/houseloan/start?Type=C";
+        //公积金 FundLoad
+        //组合 SyndicatedLoan
+        //商业贷款 CommercialLoan
+    })
+    //等额本息
+    function GetInterest(Interest, month) {
+        //debugger;
+        var a = 1 + Interest / 12;
+        var number;
+        for (var i = 0; i < month - 1; i++) {
+            if (i == 0) {
+                number = a * a;
+            }
+            if (i < month && i != 0) {
+                number = (number * a);
+            }
+        }
+        return number;
+    }
+    //精确小数点
+    function round(v, e) {
+        var t = 1;
+        for (; e > 0; t *= 10, e--);
+        for (; e < 0; t /= 10, e++);
+        return Math.round(v * t) / t;
+
+    }
+    //等额本金利息
+    function GetCapital(SumMoney, Interest, month) {
+        //debugger;
+        var a = Interest / 12;
+        var Money;
+        var Money1 = (SumMoney / month);
+        var SumInterest;
+        var monthInterest;
+        for (var i = 0; i < month ; i++) {
+            if (i == 0) {
+                SumInterest = round((SumMoney * a), 2);
+            }
+            if (i < month && i != 0) {
+                monthInterest = round(((SumMoney - Money1 * (i)) * a), 2);
+                SumInterest += monthInterest;
+            }
+        }
+        return SumInterest;
+    }
+    //等额本金利息Html
+    //function GetCapitalHtml(SumMoney, Interest, month) {
+    //debugger;
+    function GetCapitalHtml(SumMoney, Interest, month) {
+        var a = Interest / 12;
+        var Money;
+        var Money1 = (SumMoney / month);
+        var SumInterest = "<ul class='res_fb res_ul'>";
+        var monthInterest;
+        for (var i = 0; i < month ; i++) {
+            if (i == 0) {
+                SumInterest += "<li><div class='mw_content'>第" + parseInt(i + 1) + "月";
+                SumInterest += "<span><cite>" + round((Money1 + SumMoney * a), 2) + "</cite>元</span>";
+                SumInterest += "</div></li>";
+            }
+            if (i < month && i != 0) {
+                //monthInterest = round(((SumMoney - Money1 * (i)) * a), 2);
+                //SumInterest += monthInterest;
+                SumInterest += "<li><div class='mw_content'>第" + parseInt(i + 1) + "月";
+                SumInterest += "<span><cite>" + round(Money1 + ((SumMoney - Money1 * (i)) * a), 2) + "</cite>元</span>";
+                SumInterest += "</div></li>";
+            }
+        }
+        SumInterest += "</ul>";
+        return SumInterest;
+    }
+    //返回HMTL
+    function GetLastCapitalHtml(SumMoney, Interest, month) {
+        var a = Interest / 12;
+        var Money;
+        var Money1 = (SumMoney / month);
+        var SumInterest1="";
+        var SumInterest = "<p>首月还款：28942.20元</p><p>末月还款：8942.20元</p>";
+        var monthInterest;
+        for (var i = 0; i < month ; i++) {
+            if (i == 0) {
+                SumInterest += "<li><div class='mw_content'>第" + parseInt(i + 1) + "月";
+                SumInterest += "<span><cite>" + round((Money1 + SumMoney * a), 2) + "</cite>元</span>";
+                SumInterest += "</div></li>";
+                SumInterest1 += "<p>首月还款：" + round((Money1 + SumMoney * a), 2) + "元</p>";
+
+            }
+            if (i < month && i != 0) {
+                //monthInterest = round(((SumMoney - Money1 * (i)) * a), 2);
+                //SumInterest += monthInterest;
+                SumInterest += "<li><div class='mw_content'>第" + parseInt(i + 1) + "月";
+                SumInterest += "<span><cite>" + round(Money1 + ((SumMoney - Money1 * (i)) * a), 2) + "</cite>元</span>";
+                SumInterest += "</div></li>";
+            }
+            if (i == month - 1) {
+                SumInterest1 += "<p>末月还款：" + round(Money1 + ((SumMoney - Money1 * (i)) * a), 2) + "元</p>";
+            }
+        }
+        //SumInterest += "</ul>";
+        return SumInterest1;
+    }
+    //数字加逗号
+    function fmoney(s, n) {
+        n = n > 0 && n <= 20 ? n : 2;
+        s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+        var l = s.split(".")[0].split("").reverse(), r = s.split(".")[1];
+        t = "";
+        for (i = 0; i < l.length; i++) {
+            t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+        }
+        return t.split("").reverse().join("") + "." + r;
+    }
+    function Show_Detail(SumMoney, Interest, month) {
+        //alert("123");
+        var html = GetCapitalHtml(SumMoney, Interest, month);
+        $(".res_ul").append(html);
+        $(".priceDatail li").eq(4).html("<div class='mw_content'>月均还款<span><cite  ></cite><i class='res_tip' onclick='Hide_Detail(" + SumMoney + "," + Interest + "," + month + ")'></i></span></div>");
+    }
+    function Hide_Detail(SumMoney, Interest, month) {
+        //alert("123");
+        var html = GetCapitalHtml(SumMoney, Interest, month);
+        $(".res_fb").html("");
+        $(".priceDatail li").eq(4).html("<div class='mw_content'>月均还款<span onclick='Show_Detail(" + SumMoney + "," + Interest + "," + month + ")'><cite  >点击查看详情</cite><i class='res_tip_down'></i></span></div></li>");
+    }
+    function Show_Detail1(SumMoney, Interest, month) {
+        //alert("123");
+        var html = GetCapitalHtml(SumMoney, Interest, month);
+        $(".res_ul").append(html);
+        $(".priceDatail li").eq(5).html("<div class='mw_content'>月均还款<span><cite  ></cite><i class='res_tip' onclick='Hide_Detail1(" + SumMoney + "," + Interest + "," + month + ")'></i></span></div>");
+    }
+    function Hide_Detail1(SumMoney, Interest, month) {
+        //alert("123");
+        var html = GetCapitalHtml(SumMoney, Interest, month);
+        $(".res_fb").html("");
+        $(".priceDatail li").eq(5).html("<div class='mw_content'>月均还款<span onclick='Show_Detail1(" + SumMoney + "," + Interest + "," + month + ")'><cite  >点击查看详情</cite><i class='res_tip_down'></i></span></div></li>");
+    }
+
+    //debugger;
+    var Request = new Object();
+    Request = GetRequest();
+    var Type = Request["Type"];
+    var Load = Request["Load"];
+    if (Type == "C") {
+        //debugger;
+        //商业贷款
+        //debugger;
+        //C_refundType_PI 等额本息       C_refundType_AC 等额本金
+        //C_calculateType_SUM 按贷款总额  C_calculateType_ARE 按单位计算
+        var arr = Load.split(',');
+        var countNumber = arr[2] * 10000;//总金额
+        var month = arr[3];//总月份
+        var rate = arr[4] / 100 //利率;
+        var a = GetInterest(rate, month);
+        var ReservedFunds = (countNumber * (rate / 12) * GetInterest(rate, month)) / (GetInterest(rate, month) - 1); //月均还款
+        var TotalAmount = ReservedFunds * month;
+        ReservedFunds = round(ReservedFunds, 2); //月均还款,保留2位小数
+        TotalAmount = round(TotalAmount, 2); //还款总额,保留2位小数
+        TotalInterest = round((TotalAmount - countNumber), 2);//还款利息(本息)
+        //debugger;
+        var b = GetCapital(countNumber, rate, month);
+        TotalCapital = round(b, 2);//还款利息(本金)
+        if (arr[0] == "C_refundType_PI" && arr[1] == "C_calculateType_SUM") {//等额本息(按贷款计算)
+            //debugger;
+            var html = "<li><div class='mw_content'>贷款总额<span><cite>" + fmoney(countNumber, 0) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>支付利息<span><cite>" + fmoney(TotalInterest, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>还款总额<span><cite>" + fmoney(TotalAmount, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>贷款月数<span><cite>" + month + "</cite>月</span></div></li>";
+            html += "<li><div class='mw_content'>月均还款<span><cite>" + fmoney(ReservedFunds, 2) + "</cite>元</span></div></li>";
+            $(".res_ul").html(html);
+
+            $(".xf_pu_c").html("<p>月均还款：" + fmoney(ReservedFunds, 2) + "元</p>");
+            $(".pw_wp").html("<p>贷款总额" + countNumber / 10000 + "万，等额本息还款;</p><p>按揭" + month / 12 + "年，商业贷款;</p>");
+            //$(".pu_list_t").html("<ul><li><s class='lt_01'></s>贷款：" + round( countNumber / 10000,0) + " 万元</li><li><s class='lt_02'></s>利息：" + fmoney(TotalInterest / 10000, 2) + " 万元</li></ul>");
+            $(".cirnums").html("<p><s class='renum'></s>贷款：<span id='cirnum1'>" + round(countNumber / 10000, 0) + " </span>万元</p><s class='ornum'></s>利息：<span id='cirnum2'>" + fmoney(TotalInterest / 10000, 2) + "</span>万元</p><p style='visibility:hidden'><s class='grnum'></s>首付：<span id='cirnum3'>73</span>万元</p>");
+            //$(".pu_01").css("display", "none");
+            $(".cicle1").css("visibility", "hidden");
+            //var a1 = (TotalInterest / countNumber) -0.25;
+            //var a2 = round(a1*100, 0);
+            //$("#note_1").attr("dir", a2);
+        }
+
+        if (arr[0] == "C_refundType_PI" && arr[1] == "C_calculateType_ARE") {//等额本息(按单价计算)
+            var html = "<li><div class='mw_content'>房款总额<span><cite>" + fmoney((countNumber / ((10 - arr[5]) / 10)), 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>贷款总额<span><cite>" + fmoney(countNumber, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>支付利息<span><cite>" + fmoney(TotalInterest, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>还款总额<span><cite>" + fmoney((TotalInterest + countNumber), 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>贷款月数<span><cite>" + month + "</cite>月</span></div></li>";
+            html += "<li><div class='mw_content'>月均还款<span><cite>" + fmoney(ReservedFunds, 2) + "</cite>元</span></div></li>";
+            $(".res_ul").html(html);
+            $(".xf_pu_c").html("<p>月均还款：" + fmoney(ReservedFunds, 2) + "元</p>");
+            $(".pw_wp").html("<p>房屋总价" + round((arr[2]/(10-arr[5])/0.1),0)+ "万，贷款总额" +round( countNumber / 10000,0) + "万;</p><p>等额本息还款，按揭" + month / 12 + "年，商业贷款;</p>");
+            //$(".pu_list_t").html("<ul><li><s class='lt_01'></s>贷款：" + round( countNumber / 10000,0) + " 万元</li><li><s class='lt_02'></s>利息：" + fmoney(TotalInterest / 10000, 2) + " 万元</li><li><s class='lt_03'></s>首付：" + round( (arr[2] / (10 - arr[5]) / 0.1) * (arr[5])/10,0) + "万元</li></ul>");
+            $(".cirnums").html("<p><s class='renum'></s>贷款：<span id='cirnum1'>" + round(countNumber / 10000, 0) + " </span>万元</p><s class='ornum'></s>利息：<span id='cirnum2'>" + fmoney(TotalInterest / 10000, 2) + "</span>万元</p><p><s class='grnum'></s>首付：<span id='cirnum3'>" + round((arr[2] / (10 - arr[5]) / 0.1) * (arr[5]) / 10, 0) + "</span>万元</p>");
+
+        }
+        if (arr[0] == "C_refundType_AC" && arr[1] == "C_calculateType_SUM") {//等额本金(按贷款计算)
+
+            var html = "<li><div class='mw_content'>贷款总额<span><cite>" + fmoney(countNumber, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>支付利息<span><cite>" + fmoney(TotalCapital, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>还款总额<span><cite>" + fmoney((TotalCapital + countNumber), 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>贷款月数<span><cite>" + month + "</cite>月</span></div></li>";
+            html += "<li><div class='mw_content'>月均还款<span  onclick='Show_Detail(" + countNumber + "," + rate + "," + month + ")'><cite >点击查看详情</cite><i class='res_tip_down'></i></span></div></li>";
+            $(".res_ul").html(html);
+            var Load = countNumber / 10000 + "," + month / 12 + "," + countNumber + "," + rate + "," + month;
+            $(".xf_pu_c").html("" + GetLastCapitalHtml(countNumber, rate, month) + "<a href='/h5/houseloan/resultsDetail?Type=C1&Load=" + Load + "'>查看明细</a>");
+            $(".pw_wp").html("<p>贷款总额" + countNumber / 10000 + "万，等额本金;</p><p>按揭" + month / 12 + "年，商业贷款;</p>");
+            //$(".pu_list_t").html("<ul><li><s class='lt_01'></s>贷款：" + round(countNumber / 10000, 0) + " 万元</li><li><s class='lt_02'></s>利息：" + fmoney(TotalCapital / 10000, 2) + " 万元</li></ul>");
+            $(".cirnums").html("<p><s class='renum'></s>贷款：<span id='cirnum1'>" + round(countNumber / 10000, 0) + " </span>万元</p><s class='ornum'></s>利息：<span id='cirnum2'>" + fmoney(TotalInterest / 10000, 2) + "</span>万元</p><p style='visibility:hidden'><s class='grnum'></s>首付：<span id='cirnum3'>73</span>万元</p>");
+            //$(".pu_01").css("display", "none");
+            $(".cicle1").css("visibility", "hidden");
+        }
+        if (arr[0] == "C_refundType_AC" && arr[1] == "C_calculateType_ARE") {//等额本金(按贷款计算)
+            var html = "<li><div class='mw_content'>房款总额<span><cite>" + fmoney((countNumber / ((10 - arr[5]) / 10)), 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>贷款总额<span><cite>" + fmoney(countNumber, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>支付利息<span><cite>" + fmoney(TotalCapital, 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>还款总额<span><cite>" + fmoney((TotalCapital + countNumber), 2) + "</cite>元</span></div></li>";
+            html += "<li><div class='mw_content'>贷款月数<span><cite>" + month + "</cite>月</span></div></li>";
+            html += "<li><div class='mw_content'>月均还款<span  onclick='Show_Detail1(" + countNumber + "," + rate + "," + month + ")'><cite >点击查看详情</cite><i class='res_tip_down'></i></span></div></li>";
+            $(".res_ul").html(html);
+
+            var Load =round((arr[2] / (10 - arr[5]) / 0.1), 0)+","+ countNumber / 10000 + "," + month / 12 + "," + countNumber + "," + rate + "," + month;
+            $(".xf_pu_c").html("" + GetLastCapitalHtml(countNumber, rate, month) + "<a href='/h5/houseloan/resultsDetail?Type=C2&Load=" + Load + "'>查看明细</a>");
+            $(".pw_wp").html("<p>房屋总价" + round((arr[2] / (10 - arr[5]) / 0.1), 0) + "万，贷款总额" + round(countNumber / 10000, 0) + "万;</p><p>等额本金还款，按揭" + month / 12 + "年，商业贷款;</p>");
+            //$(".pu_list_t").html("<ul><li><s class='lt_01'></s>贷款：" + round(countNumber / 10000, 0) + " 万元</li><li><s class='lt_02'></s>利息：" + fmoney(TotalCapital / 10000, 2) + " 万元</li><li><s class='lt_03'></s>首付：" + round((arr[2] / (10 - arr[5]) / 0.1) * (arr[5]) / 10, 0) + "万元</li></ul>");
+            $(".cirnums").html("<p><s class='renum'></s>贷款：<span id='cirnum1'>" + round(countNumber / 10000, 0) + " </span>万元</p><s class='ornum'></s>利息：<span id='cirnum2'>" + fmoney(TotalInterest / 10000, 2) + "</span>万元</p><p><s class='grnum'></s>首付：<span id='cirnum3'>" + round((arr[2] / (10 - arr[5]) / 0.1) * (arr[5]) / 10, 0) + "</span>万元</p>");
+
+        }
+    }
+
+
+</script>
+</body>
+</html>

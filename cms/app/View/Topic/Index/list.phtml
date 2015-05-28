@@ -1,0 +1,107 @@
+<div class="pheader clearfix">专题列表</div>
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/topic/list">
+        <div class="form-group">
+            标题：
+            <input type="text" value="<?php echo isset($aParam['sTitle'])?$aParam['sTitle']:''?>" class="form-control input-sm" name="sTitle">
+        </div>
+        <div class="form-group">
+            状态:
+            <select class="form-control input-sm" name="iPublishStatus">
+                <option value="-1">请选择</option>
+                <option value="1" <?php echo isset($aParam['iPublishStatus'])&&1==$aParam['iPublishStatus']?'selected':''?>>已发布</option>
+                <option value="0" <?php echo isset($aParam['iPublishStatus'])&&0==$aParam['iPublishStatus']?'selected':''?>>未发布</option>
+            </select>
+        </div>
+        <input type="hidden" id="fOrder" name="sOrder" value="<?php echo isset($aParam['sOrder'])?$aParam['sOrder']:''?>">
+        <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+    </form>
+    <hr>
+    <div class="btn-toolbar list-toolbar">
+        <a class="btn btn-primary" id="topic_add"><i class="icon-plus"></i> 增加专题</a>
+        <div style="float:right">
+            <label> 排序方式：</label>
+            <select class="input-sm" id="sOrder">
+                <option value="iTopicID ASC">按创建时间正序</option>
+                <option value="iTopicID DESC" <?php echo isset($aParam['sOrder'])&&'iNewsID DESC'==$aParam['sOrder']?'selected':''?>>按创建时间倒序</option>
+                <option value="iUpdateTime ASC" <?php echo isset($aParam['sOrder'])&&'iUpdateTime ASC'==$aParam['sOrder']?'selected':''?>>按发布时间正序</option>
+                <option value="iUpdateTime DESC" <?php echo isset($aParam['sOrder'])&&'iUpdateTime DESC'==$aParam['sOrder']?'selected':''?>>按发布时间倒序</option>
+            </select>
+        </div>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="col-sm-1 text-center">序号</th>
+            <th>标题</th>
+            <th class="text-center">访问连接</th>
+            <!-- <th class="text-center">默认图片</th> -->
+            <th class="text-center">发布状态</th>
+            <th class="text-center">发布时间</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($aList['aList'] as $v) {?>
+            <tr>
+                <td class="col-sm-1 text-center"><?php echo $v['iTopicID']?></td>
+                <td><?php echo $v['sTitle']?></td>
+                <td><?php echo 'http://'.Yaf_G::getConf('news','domain').'/topic/'.$v['sUrl']?></td>
+                <!-- <td><img id="sImageShow" style="width:160px;height:120px;" src="<?php echo isset($v['sImage'])?Util_Uri::getDFSViewURL($v['sImage']):''?>">
+                </td> -->
+
+                <td class="text-center"><?php echo $v['iPublishStatus']?'已发布':'未发布'?></td>
+                <td class="text-center"><?php echo date('Y-m-d H:i', $v['iPublishTime'])?></td>
+                <td class="text-center"><?php echo date('Y-m-d H:i', $v['iCreateTime'])?></td>
+                <td class="text-center">
+                    <a class="topic_publish" href="<?php echo $v['iPublishStatus']?'/topic/offline?id='.$v['iTopicID']:'/topic/online?id='.$v['iTopicID'];?>" data-type="<?php echo $v['iPublishStatus']?>" title="<?php echo $v['iPublishStatus']?'下架':'上架'?>">
+                        <img class="cric-icon" src="<?php echo $sStaticRoot . '/img/icon/' . ($v['iPublishStatus']?'iconfont-zanting.png':'iconfont-tuiguangzhong.png')?>">
+                    </a>
+                    <a href="/topic/edit?id=<?php echo $v['iTopicID']?>" title="编辑"><i class="icon-pencil icon-large"></i></a>
+                    <a class="topic_delete" href="/topic/del?id=<?php echo $v['iTopicID']?>" role="button" data-toggle="modal" title="删除"><i class="icon-trash icon-large"></i></a>
+                </td>
+            </tr>
+        <?php }?>
+        </tbody>
+    </table>
+    <?php echo $aList['aPager']?>
+</div>
+<script>
+    $('#formbtn').click(function(){
+        $('#fOrder').val($('#sOrder').val());
+    });
+    $('#sOrder').change(function(){
+        $('#fOrder').val($('#sOrder').val());
+        $('#myform').submit();
+    });
+
+    $('.topic_delete').click(function() {
+        if (confirm("您确认要删除该专题吗？")) {
+            $.get(this.href, function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+        }
+        return false;
+    });
+
+    $('.topic_publish').click(function() {
+        var type = $(this).data('type')==1 ? '下架' : '上架';
+        if (confirm("您确认要"+type+"该专题吗？")) {
+            $.get(this.href, function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+        }
+        return false;
+    });
+
+    $('#topic_add').click(function(){
+        location.href = '/topic/add';
+    });
+</script>

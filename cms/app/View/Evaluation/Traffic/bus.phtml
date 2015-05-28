@@ -1,0 +1,357 @@
+<?php include APP_PATH . '/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform">
+    <input type="hidden" name="iAutoID" value="<?php echo empty($busInfo) ? '' : $busInfo['iAutoID']; ?>" />
+    <input type="hidden" name="iEvaluationID" value="<?php echo empty($iEvaluationID) ? '' : $iEvaluationID; ?>" />
+    <input type="hidden" name="iCreateTime" value="<?php echo empty($busInfo) ? '' : $busInfo['iCreateTime']; ?>" />
+    <div class="panel mt15">
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+            <div class="col-sm-9">
+                <textarea autocomplete="off" class="form-control input-validate" rows="3" placeholder="最多可以输入255字" name="sComment" validate="!clength:1-255"><?php echo empty($busInfo) ? '' : $busInfo['sComment']; ?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">优势：</label>
+            <div class="col-sm-9">
+                <?php
+                if (isset($goodTags) && !empty($goodTags)) {
+                    foreach ($goodTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sGoodTag[]" <?php echo!empty($busInfo['sGoodTag']) && in_array($k, $busInfo['sGoodTag']) ? 'checked' : '' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">劣势：</label>
+            <div class="col-sm-9">
+                <?php
+                if (isset($badTags) && !empty($badTags)) {
+                    foreach ($badTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sBadTag[]" <?php echo!empty($busInfo['sBadTag']) && in_array($k, $busInfo['sBadTag']) ? 'checked' : '' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+
+        <?php if (!empty($relatedBus)) {
+            $index = 0;
+            ?>
+    <?php foreach ($relatedBus as $related) { ?>
+                <div class="bus_group one_list bg_gray">
+                    <input type="hidden" name="busInfoID[<?php echo $index; ?>]" value="<?php echo $related['iAutoId']; ?>" />
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 col-sm-offset-1 control-label">*公交站点：</label>
+                        <div class="col-sm-3">
+                            <input type="text"  validate="!required:true" name="busStationName[<?php echo $index; ?>]" class="form-control  bus_name busSites input-validate dataflagth" autocomplete="off" placeholder="公交站点" value="<?php echo $related['sBusName']; ?>">
+                            <span class="validate_checktip"></span>
+                        </div>
+                        <label for="" class="col-sm-1 control-label pr0">步行距离：</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control input-validate dataflagth" placeholder="步行距离" name="iDistance[<?php echo $index; ?>]" value="<?php echo $related['iDistance']; ?>" autocomplete="off" validate="!digit:true">
+                            <span class="input-validate" style="width: 20px;line-height: 34px;">(米)</span>
+                            <span class="validate_checktip"></span>
+                        </div>
+                        <div style="" class="col-sm-1 tlr"><a class="deletehospital glyphicon glyphicon-remove fr" title="删除" href="javascript:void(0);"></a></div>
+                    </div>
+                    <div class="siteBusList" style="display:<?php echo !$related['html'] ? 'none':'' ?>;">
+                        <?php
+                            echo preg_replace('/#index/',$index,$related['html']);
+                        ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 col-sm-offset-1  control-label">站点实拍图：</label>
+                        <div class="col-sm-9 mt5" id="qu_pingmian">
+                            <input type="button" value="添加站点实拍图" data-placeholder-name="图片名称" data-placeholder-dec="请针对实拍图进行描述"  class="plupload"  data-target="busImage[<?php echo $index; ?>]" data-img="#sImageShowbus<?php echo $index; ?>" data-callback="showImg"  data-callback="clearUploadtips" data-limit="10" data-dec="1"/>
+                            <span class="validate_checktip"></span>
+                            <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                            <div class="eHxImgDiv" style="display: <?php echo isset($related['images'][$related['iAutoId']][515]) && !empty($related['images'][$related['iAutoId']][515]) ? '' : 'none' ?>;">
+                                <div class="row" id="sImageShowbus<?php echo $index; ?>" >
+                                    <?php
+                                    if (isset($related['images'][$related['iAutoId']][515]) && !empty($related['images'][$related['iAutoId']][515])) {
+                                        foreach ($related['images'][$related['iAutoId']][515] as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img class="datahovers" src="<?php echo Model_EvaluationImage::getImageUrl($item['iCricId'], $item['sImage']) ?>" data-content-id="<?php echo $item['iAutoID'] ?>">
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <input type="text" class="form-control" maxlength="50" name="busImageTitle[<?= $index; ?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle'] ?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="busImageDesc[<?= $index; ?>][]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc'] ?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="busUpImageId[<?= $index; ?>][]" value="<?php echo $item['iAutoID'] ?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php $index ++; ?>
+            <?php } ?>
+<?php } else { ?>
+            <div class="bus_group one_list bg_gray">
+                <input type="hidden" name="busInfoID[0]" value="0" />
+                <div class="form-group">
+                    <label for="" class="col-sm-2 col-sm-offset-1 control-label">*公交站点：</label>
+                    <div class="col-sm-3">
+
+                        <input type="text" validate="!required:true" name="busStationName[0]"  class="form-control bus_name busSites input-validate dataflagth" autocomplete="off" placeholder="公交站点" >
+
+                        <span class="validate_checktip"></span>
+                    </div>
+                    <label for="" class="col-sm-1 control-label pr0">步行距离：</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control input-validate dataflagth" placeholder="步行距离" name="iDistance[0]" autocomplete="off"  validate="!digit:true">
+                        <span class="input-validate" style="width: 20px;line-height: 34px;">(米)</span>
+                        <span class="validate_checktip"></span>
+                    </div>
+                    <div style="" class="col-sm-1 tlr"><a class="deletehospital glyphicon glyphicon-remove fr" title="删除" href="javascript:void(0);"></a></div>
+                </div>
+
+
+                <div class="siteBusList" style="display:none;">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 col-sm-offset-1  control-label">站点实拍图：</label>
+                    <div class="col-sm-9 mt5" id="qu_pingmian">
+                        <input type="button" value="添加站点实拍图" data-placeholder-name="图片名称" data-placeholder-dec="请针对实拍图进行描述"  class="plupload"  data-target="busImage[0]" data-img="#sImageShow" data-callback="showImg"  data-callback="clearUploadtips" data-limit="10" data-dec="1"/>
+                        <span class="validate_checktip"></span>
+                        <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                        <div class="eHxImgDiv" style="display: none;">
+                            <div class="row" id="sImageShow" >
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+<?php } ?>
+
+        <div class="form-group" id="BtBusAdd">
+            <label for="" class="col-sm-2 control-label"><a href="javascript:void(0);"><span class="glyphicon glyphicon-plus"></span>添加公交线路</a></label>
+            <div class="col-sm-9"> </div>
+        </div>
+
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">其他点评：</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" rows="3" placeholder="其他点评" name="sOtherComment" autocomplete="off"><?php echo empty($busInfo) ? '' : $busInfo['sOtherComment']; ?></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+            <div class="col-sm-10">
+                <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload" id="qtimgs"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                    <div class="row" id="sImageQt" >
+                        <?php
+                        if (isset($qtImage)&&!empty($qtImage)) {
+                            foreach($qtImage as $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                    <?php if($evaluationSwitch == 0){ ?>
+                                    <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                    <?php } ?>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                    </div>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                    </div>
+                                    <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <button id="save" class="btn btn-primary">发布</button>
+                <button id="sync" class="btn btn-info"  >同步</button>
+                <button id="cancel"class="btn" onclick="location.href = '/evaluation/draft/';
+                        return false;">取消</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="bus_temple" style="display: none;">
+    <div class="one_list bus_group bg_gray">
+        <input type="hidden" name="busInfoID[0]" value="0" />
+        <div class="form-group">
+            <label for="" class="col-sm-2 col-sm-offset-1 control-label">*公交站点：</label>
+            <div class="col-sm-3">
+                <input type="text" validate="!required:true" name="busStationName[0]" class="form-control bus_name busSites input-validate dataflagth" autocomplete="off" placeholder="公交站点" >
+                <span class="validate_checktip"></span>
+            </div>
+            <label for="" class="col-sm-1 control-label pr0">步行距离：</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control input-validate dataflagth" placeholder="步行距离" name="iDistance[0]" autocomplete="off"  validate="!digit:true">
+                <span class="input-validate" style="width: 20px;line-height: 34px;">(米)</span>
+                <span class="validate_checktip"></span>
+            </div>
+            <div style="" class="col-sm-1 tlr"><a class="deletehospital glyphicon glyphicon-remove fr" title="删除" href="javascript:void(0);"></a></div>
+        </div>
+        <div class="siteBusList" style="display:none;">
+
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 col-sm-offset-1  control-label">站点实拍图：</label>
+            <div class="col-sm-9 mt5" id="qu_pingmian">
+                <input type="button" value="添加站点实拍图" data-placeholder-name="图片名称" data-placeholder-dec="请针对实拍图进行描述"  class="yyupload busupload"  data-target="busImage[0]" data-img="#sImageShow" data-callback="showImg"  data-callback="clearUploadtips" data-limit="10" data-dec="1"/>
+                <span class="validate_checktip"></span>
+                <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                <div class="eHxImgDiv" style="display: none;">
+                    <div class="row" id="sImageShow" >
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/evaluation.js"></script>
+<script type="text/javascript">
+                    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url') ?>';
+                    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url') ?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8">
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    if(Switch == 1) {
+        $("textarea[name='sComment']").attr("readonly", 'readonly');
+        $("input[name='sGoodTag[]']").attr("disabled", 'disabled');
+        $("input[name='sBadTag[]']").attr("disabled", 'disabled');
+        $("textarea[name='sOtherComment']").attr("readonly", 'readonly');
+        $("#qtimgs").attr("disabled", 'disabled');
+    }
+    // 同步数据
+    $("#sync").click({c: 'Traffic', a: 'bus', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    var iCityId = "<?php echo $iCityId; ?>";
+    var index = 0;
+
+    function busCheck(value, args, element) {
+
+        var iBusID = $(element).prev().val();
+        var sSelectBusName = $(element).next().val();
+        var sBus = $(element).val();
+
+        if (parseInt(iBusID) > 0 && sSelectBusName == sBus) {
+            return true;
+        }
+        return false;
+    }
+
+    function formValidate() {
+        $('#myform').unbind('submit');
+        $.data($('#myform')[0], 'validator', '');
+        $("#myform").validate({submitHandler: function (form) {
+                $.post("/evaluation/Traffic/saveBus", $(form).serialize(), function (ret) {
+                    alert(ret.data);
+                    location.reload();
+                }, 'json');
+
+                return false;
+            }});
+    }
+
+    $('#BtBusAdd a').click(function () {
+        addBox();
+        //为新添元素注册autocomplete事件
+        bindBusAutocomplete();
+
+        formValidate();
+        var ccuploader = initUpload($("#myform").find(".one_list:last").find(".busupload")[0]);
+        ccuploader.init();
+    });
+
+    //增加新的公交路线
+    function addBox() {
+        var oneBox = $('.bus_temple').html().replace(/\[0\]/g, '[' + index + ']').
+                replace(/sImageShow/g, "sImageShow" + index);
+        $("#BtBusAdd").before(oneBox);
+
+        index++;
+    }
+
+
+
+    $(function () {
+
+        // 提交公交线路表单
+        formValidate();
+        index = $('.one_list').length;
+        index -= 1;
+        $('#myform').on('click', '.deletehospital', function () {
+            delID = $(this).parent().parent().prev().val();
+            delID = parseInt(delID);
+            if (delID > 0) { //如果删除的内容是已经保存过的，则记录对应的id，传到后台用于删除数据库内容，否则直接删掉dom元素即可
+                $('#myform').append('<input type="hidden" name="delBusInfoID[]" value="' + $(this).parent().parent().prev().val() + '" />');
+            }
+
+            $(this).parents('.bus_group').remove();
+
+            if ($('.bus_group').length == 1) {
+                addBox();
+                $.data($('#myform')[0], 'validator', '');
+                bindBusAutocomplete();
+                formValidate();
+            }
+        });
+
+        $('#myform').on('blur', '.busSites', function () {
+            //console.log($(this).html());
+            arr = $(this).attr('name').match(/[0-9]/);
+            input = $(this);
+            $(this).parents(".one_list").find(".siteBusList").eq(0).show();
+            $.get("/evaluation/Traffic/getBusLines?busStationName="+$(this).val(), function(ret){
+                input.parents(".one_list").find(".siteBusList").eq(0).html(ret.data.replace(/#index/g,arr[0]));
+
+           }, 'json');
+
+        })
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+        // 移除边框
+        $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+        //鼠标移上显示大图
+        $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+        $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    })
+
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/busStation.js"></script>

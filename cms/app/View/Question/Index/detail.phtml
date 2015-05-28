@@ -1,0 +1,19 @@
+<h2>问答查看</h2>
+<hr>
+
+<div>
+    <p><?php echo $detail['sContent'];?></p>
+    <span><?php echo $detail['sUname'];?></span>
+    <span><?php echo date('Y-m-d h:i:s', $detail['iCreateTime']);?></span>
+</div>
+
+<hr>
+<?php foreach($replys as $reply) {?>
+<div>
+    <span><?php echo $reply['sAppUName'];?></span>
+    <span><?php echo date('Y-m-d h:i:s', $reply['iCreateTime']);?></span>
+    <p><?php echo $reply['sContent'];?></p>
+</div>
+<?php }?>
+
+<a href="javascript:history.go(-1);">返回</a>

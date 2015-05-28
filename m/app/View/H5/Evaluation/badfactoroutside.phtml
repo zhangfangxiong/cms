@@ -1,0 +1,76 @@
+<!--社区外部内容开始-->
+<section class="plan_wrap sqwb">
+    <section class="analyze_wrap <?php  if (empty($aOut['data']['sBadTag'])){  ?>analyze_txt_border<?php } ?>">
+        <div class="floor_plan analyze_txt">
+            <h3>
+                <span></span>
+                分析师点评
+            </h3>
+            <p><?php echo isset($aOut['data']['sComment']) ? $aOut['data']['sComment'] : ''; ?></p>
+        </div>
+    </section>
+
+    <?php
+        if(isset($aOut['data']['sBadTag']) && !empty($aOut['data']['sBadTag'])){
+            echo '<section class="condition"><section class="advantage disadvantaged">
+                <h3>劣势</h3>
+                <div class="advantage_con">';
+            foreach ($aOut['data']['sBadTag'] as $key => $value) {
+                echo '<span>'.$value.'</span>';
+            }
+            echo '</div></section></section>';
+        }
+   
+        if(isset($aOut['data']['sBadTag']) && !empty($aOut['data']['sBadTag'])){
+            foreach ($aOut['data']['sBadTag'] as $key => $value) {
+                echo '<section class=" floor_plan house_analysis">';
+                echo '<h3><span></span>'.$value.'</h3>';
+                echo '<div class="floor_plan_pic">';
+
+                if(!empty($aOut['data']['badTagImgs'][$key])){
+                    foreach ($aOut['data']['badTagImgs'][$key] as $k => $val) {
+                        echo '<div class="floor_plan_pic01">';
+                        echo '<a href="'.$aEntrenceInfo['bigPic']['url'].'?eID='.$eID.'&iImageId='.$val['iAutoID'].'">';
+                        echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+						echo '<span class="pic_tip"></span>';
+                        echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+                        echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+                        echo '</a>';
+                        echo '</div>';
+                    }
+                }
+                echo '</div></section>';
+            }
+        }
+
+        if(!empty($aOut['data']['wbqtImage'])){
+            echo '<section class=" floor_plan house_analysis"><h3>
+                    <span></span>
+                    其他图片
+                </h3>
+                <div class="floor_plan_pic">';
+            foreach ($aOut['data']['wbqtImage'] as $key => $value) {
+                echo '<div class="floor_plan_pic01">';
+                echo '<a href="'.$aEntrenceInfo['bigPic']['url'].'?eID='.$eID.'&iImageId='.$value['iAutoID'].'">';
+                echo '<canvas src='.$value['sImage'].'></canvas>';
+				echo '<span class="pic_tip"></span>';
+                echo '<p class="pic_name">'.$value['sTitle'].'</p>';
+                echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+                echo '</a>';
+                echo '</div>';
+            }
+            echo '</div></section>';
+        }
+
+        if(isset($aOut['data']['sContent']) && !empty($aOut['data']['sContent'])){
+            echo '<section class="floor_plan plan_description evaluation_description">
+                <h3>
+                    <span></span>
+                    点评
+                </h3>';
+                echo '<p>'.$aOut['data']['sContent'].'</p>';
+            echo '</section>';
+        }
+    ?>
+</section>
+

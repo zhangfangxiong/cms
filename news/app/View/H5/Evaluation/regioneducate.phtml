@@ -1,0 +1,146 @@
+<!--教育资源内容开始-->
+<section class="plan_wrap">
+<section class="analyze_wrap <?php if (empty($aEducate['data']['sBadTag']) && empty($aEducate['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+    <div class="analyze_txt floor_plan">
+    	<h3>
+        	<span></span>
+            分析师点评
+        </h3>
+        <p><?php echo isset($aEducate['data']['sComment']) ? $aEducate['data']['sComment'] : ''; ?></p>
+    </div>
+</section>
+
+<section class="condition">
+    <?php 
+        if(isset($aEducate['data']['sGoodTag']) && !empty($aEducate['data']['sGoodTag'])){
+            echo '<section class="advantage">
+                    <h3>优势</h3>
+                    <div class="advantage_con">';
+            foreach ($aEducate['data']['sGoodTag'] as $key => $value) {
+                echo '<span>'.$value.'</span>';
+            }
+            echo '</div></section>';
+        }
+        if(isset($aEducate['data']['sBadTag']) && !empty($aEducate['data']['sBadTag'])){
+            echo '<section class="advantage disadvantaged">
+                <h3>劣势</h3>
+                <div class="advantage_con">';
+            foreach ($aEducate['data']['sBadTag'] as $key => $value) {
+                echo '<span>'.$value.'</span>';
+            }
+            echo '</div></section>';
+        }
+    ?>
+</section>
+
+<?php
+    if(!empty($aEducate['data']['kInfo'])){
+        echo '<section class="floor_plan have_bottom_border">
+                <h3>
+                    <span></span>
+                    周边幼儿园
+                </h3>
+                <div class="kindergarten_wrap">
+            ';
+        foreach ($aEducate['data']['kInfo'] as $key => $value) {
+            echo '<div class="kindergarten">';
+            echo '<div class="kindergarten_title">';
+            echo '<span>'.$value['sSchoolType'].'</span><h4>'.$value['sSchoolName'].'</h4>';
+            echo '</div>';
+            echo '<p>'.$value['sSchoolDesc'].'</p>';
+            echo '</div>';
+            if(!empty($value['images'])){
+                foreach ($value['images'] as $k => $val) {
+                    echo '<div class="floor_plan_pic01">';
+                    echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+                    echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+                    echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+                    echo '</div>';
+                }
+            }                                    
+        }
+        echo '</div></section>';
+    }
+
+    if(!empty($aEducate['data']['pInfo'])){
+        echo '<section class=" floor_plan have_bottom_border">
+            <h3>
+                <span></span>
+                周边小学
+            </h3>
+            <div class="kindergarten_wrap">';
+        foreach ($aEducate['data']['pInfo'] as $key => $value) {
+            echo '<div class="kindergarten">';
+            echo '<div class="kindergarten_title">';
+            echo '<span>'.$value['sSchoolType'].'</span><h4>'.$value['sSchoolName'].'</h4>';
+            echo '</div>';
+            echo '<p>'.$value['sSchoolDesc'].'</p>';
+            echo '</div>';
+            if(!empty($value['images'])){
+                foreach ($value['images'] as $k => $val) {
+                    echo '<div class="floor_plan_pic01">';
+                    echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+                    echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+                    echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+                    echo '</div>';
+                }
+            } 
+            echo '</div></section>'; 
+        }
+    }
+
+    if(!empty($aEducate['data']['mInfo'])){
+        echo '<section class=" floor_plan have_bottom_border">
+            <h3>
+                <span></span>
+                周边中学
+            </h3>
+            <div class="kindergarten_wrap">';
+        foreach ($aEducate['data']['mInfo'] as $key => $value) {
+            echo '<div class="kindergarten">';
+            echo '<div class="kindergarten_title">';
+            echo '<span>'.$value['sSchoolType'].'</span><h4>'.$value['sSchoolName'].'</h4>';
+            echo '</div>';
+            echo '<p>'.$value['sSchoolDesc'].'</p>';
+            echo '</div>';
+            if(!empty($value['images'])){
+                foreach ($value['images'] as $k => $val) {
+                    echo '<div class="floor_plan_pic01">';
+                    echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+                    echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+                    echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+                    echo '</div>';
+                }
+            }  
+        }
+        echo '</div></section>'; 
+    }
+
+    if(!empty($aEducate['data']['jyqtImage'])){
+        echo '<section class=" floor_plan">';
+        echo '<h3><span></span>其他图片</h3>';
+        echo '<div class="floor_plan_pic">';
+        foreach ($aEducate['data']['jyqtImage'] as $key => $val) {
+            echo '<div class="floor_plan_pic01">';
+            echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+            echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+            echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+            echo '</div>';  
+        }
+        echo '</div>';
+        echo '</section>';
+    }
+
+    if(isset($aEducate['data']['sOtherComment']) && !empty($aEducate['data']['sOtherComment'])){
+        echo '<section class="floor_plan plan_description evaluation_description">
+            <h3>
+                <span></span>
+                点评
+            </h3>';
+        echo '<p>'.$aEducate['data']['sOtherComment'].'</p>';
+        echo '</section>';
+    }
+?>
+
+</section>
+

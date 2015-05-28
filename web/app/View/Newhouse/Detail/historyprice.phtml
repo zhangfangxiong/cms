@@ -1,0 +1,160 @@
+﻿<?php
+if (sizeof($batchType) > 0) {
+    ?>
+    <div class="clearfix n_cont_warp mb30">
+        <div class="n_cont_warp_m">
+            <h2>
+                <b>
+                    <s></s>历史价格
+                </b>
+                <?php
+                if ($isShowPriceTable) {
+                    ?>
+                    <a href="@(unit.PriceTableUrl)" target="_blank">更多<s></s></a>
+                <?php
+                }
+                ?>
+            </h2>
+
+            <div class="clearfix price_list">
+
+                <?php
+                $cutOffDate = empty($roomTypeRemaining) ? date('Y-m-d') : Model_Util::getFormatDate($roomTypeRemaining[0]['EndTime']);
+                ?>
+                <div class="<?php echo $remainingRooms > 0 ? "price_list_left" : "" ?>">
+                    <div class="sale_listings">
+                        <b>在售房源</b>
+                        <table class="sale_listings_tab">
+                            <tr>
+                                <td class="td_title wd_115">日期</td>
+                                <td class="td_title" style="<?php echo $remainingRooms == 0 ? "width:300px;" : "" ?>">
+                                    在售楼栋
+                                </td>
+                                <td class="td_title">建筑形态</td>
+                                <td class="td_title">装修情况</td>
+                                <td class="td_title">开发商售价</td>
+                                <td class="td_title">评分</td>
+                                <td class="td_title">评级</td>
+                            </tr>
+
+                            <?php
+                            //显示记录数
+                            $batchTypeCnt = 0;
+                            foreach ($batchType as $item) {
+                                if ($batchTypeCnt < 3) {
+                                    $blockIdAndNumbers = Model_BatchTypes::getBlockIdAndNumbers($batchBlock,
+                                        $item['BatchId']);
+                                    $bNumber = array();
+                                    $temBatchTypeNew = Model_BatchTypes::filterBatchTypeFullNews($batchTypeFullNews,
+                                        $unit['HomeID'],
+                                        $item['BatchId']);
+
+                                    foreach ($blockIdAndNumbers as $b) {
+                                        $blo = Model_Block::filterBlocks($block, $b[1]);
+                                        if (!empty($blo)) {
+                                            //bNumber.Append("<a title = '" + (blo.BlockAddress + b[0]) + "' href ='" + unit.PriceTableUrl + "?block=" + blo.BlockID + "' target = '_blank' >" + b[0] + "</a> ");
+                                            $bNumber[] = $b[0];
+                                        }
+                                    }
+                                    //roomTotal += item.RoomCount;
+                                    $manualMemo = "";
+                                    $manualCss = "";
+                                    switch ($item['ManualLevelCode']) {
+                                        case "0":
+                                            $manualMemo = "尽快入手";
+                                            $manualCss = "s_cor_1";
+                                            break;
+                                        case "1":
+                                            $manualMemo = "推荐购买";
+                                            $manualCss = "s_cor_2";
+                                            break;
+                                        case "2":
+                                            $manualMemo = "谨慎购买";
+                                            $manualCss = "s_cor_3";
+                                            break;
+                                        case "3":
+                                            $manualMemo = "持币观望";
+                                            $manualCss = "s_cor_4";
+                                            break;
+                                        default:
+                                            $manualMemo = "";
+                                            $manualCss = "";
+                                            break;
+                                    }
+                                    ?>
+                                    <tr onclick="<?php $isShowPriceTable ? "javascript:window.open('" . '' . "#SalesHouse');" : "javascript:void(0)" ?>">
+                                        <td class="bor_dot">
+                                            <?php echo Model_Util::getFormatDate($item['PushDate']) ?>
+                                        </td>
+                                        <td class="bor_dot">
+                                            <em class="com_em"><?php echo implode('、', $bNumber) ?></em>
+                                        </td>
+                                        <td class="bor_dot">
+                                            <?php echo $item['BatchTypeCode'] ?>
+                                        </td>
+                                        <td class="bor_dot">
+                                            <?php echo $item['FitmentDesign'] ?>
+                                        </td>
+                                        <td class="bor_dot">
+                                            <em style="color:#e8382b"> <?php echo Model_Util::getFormatPrice($item['SalePrice']) ?> </em>元/㎡
+                                        </td>
+                                        <td class="bor_dot">
+                                            <?php echo !empty($temBatchTypeNew) ? $temBatchTypeNew['CompositeScoreALL'] : '-' ?>
+                                        </td>
+                                        <td class="bor_dot">
+                                            <span class="<?php echo $manualCss ?>"> <?php echo $manualMemo ?></span>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    $batchTypeCnt++;
+                                }
+                            }
+
+                            ?>
+                        </table>
+                    </div>
+                </div>
+
+                <?php
+
+                if ($remainingRooms > 0) {
+                    ?>
+                    <div class="price_list_right">
+                        <div class="guide_info">
+
+                            <cite>
+                                <b><var><?php echo $remainingRooms; ?></var>套剩余房源在售</b>
+                                <em>截止<?php echo $cutOffDate;?></em>
+                            </cite>
+                                <span class="span_t">
+                                    <em>房型</em>
+                                    <em style="width:100px;">面积段</em>
+                                    <em>剩余房源</em>
+                                </span>
+                            <?php
+                            $roomTypeCnt = 0;
+                            foreach ($roomTypeRemaining as $item) {
+                                if ($roomTypeCnt < 3) {
+                                    ?>
+                                    <span
+                                        class="span_c  <?php $roomTypeCnt == 2 || $roomTypeCnt == (sizeof($roomTypeGroup) - 1) ? " last" : "" ?>">
+            <em><?php echo $item['HomeType'] ?></em>
+            <em style="width:100px;"><?php echo $item['HomeArea'] ?>㎡</em>
+            <em class="cor_1"><?php echo $item['HomeRemainingNum'] ?></em>
+            </span>
+                                    <?php
+                                    $roomTypeCnt++;
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+<?php
+}
+?>

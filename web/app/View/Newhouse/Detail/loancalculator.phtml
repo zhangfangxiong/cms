@@ -1,0 +1,217 @@
+﻿<?php
+    //是否有房间
+    $isHasRoom = $unit['RoomTotal'] > 0;
+    $loanCss = $isHasRoom ? "" : "party_dl";
+
+?>
+<script src="<?php echo $sStaticRoot?>/js/web/highcharts/highcharts.4.4.js"></script>
+<script src="<?php echo $sStaticRoot?>/js/web/highcharts/highcharts.ext.js"></script>
+<div class="clearfix mb30">
+    <div class="n_cont_warp mg_calculator">
+        <div class="n_cont_warp_m">
+            <h2>
+                <b>
+                    <s></s>房贷计算器
+                </b>
+            </h2>
+            <div class="mg_calcu_cont clearfix">
+                <div class="calcu_cont_left @loanCss">
+                    <dl>
+                        <dt><?php echo $isHasRoom ? "选房" : "总价"?></dt>
+                        <dd>
+                            <?php
+                            if ($isHasRoom)
+                            {
+                            ?>
+                            <cite>
+                                <select id="block_select">
+                                </select>
+                                <select id="room_select">
+                                </select>
+
+                            </cite>
+                            <?php
+                            }
+                            else
+                            {
+                            ?>
+                            <cite class="ct_party">
+                                <input type="text" id="txtTotalPrice" onkeyup="clearNoNum(this);" /><em>万元</em>
+                            </cite>
+                            <?php
+                            }
+                            ?>
+                        </dd>
+                    </dl>
+                    <?php
+                    if ($isHasRoom)
+                    {
+                    ?>
+                    <dl>
+                        <dt>指导总价</dt>
+                        <dd>
+                            <cite>
+                                <b id="zongjia"></b>
+                                <span id="zongmianji"></span>
+                                <span id="zhidaojia"></span>
+                                <input type="text" />
+                            </cite>
+                        </dd>
+                    </dl>
+                    <?php
+                    }
+                     ?>
+                    <dl>
+                        <dt>按揭</dt>
+                        <dd>
+                            <select id="anjie_select">
+                                <option value="9">9成</option>
+                                <option value="8">8成</option>
+                                <option value="7" selected="selected">7成</option>
+                                <option value="6">6成</option>
+                                <option value="5">5成</option>
+                                <option value="4">4成</option>
+                                <option value="3">3成</option>
+                                <option value="2">2成</option>
+                                <option value="2">1成</option>
+                            </select>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>年限</dt>
+                        <dd>
+                            <select id="qishu_select">
+                                <option value="12">1年</option>
+                                <option value="24">2年</option>
+                                <option value="36">3年</option>
+                                <option value="48">4年</option>
+                                <option value="60">5年</option>
+                                <option value="72">6年</option>
+                                <option value="84">7年</option>
+                                <option value="96">8年</option>
+                                <option value="108">9年</option>
+                                <option value="120">10年</option>
+                                <option value="132">11年</option>
+                                <option value="144">12年</option>
+                                <option value="156">13年</option>
+                                <option value="168">14年</option>
+                                <option value="180">15年</option>
+                                <option value="192">16年</option>
+                                <option value="204">17年</option>
+                                <option value="216">18年</option>
+                                <option value="228">19年</option>
+                                <option value="240" selected="selected">20年</option>
+                                <option value="300">25年</option>
+                                <option value="360">30年</option>
+                            </select>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>利率</dt>
+                        <dd>
+                            <select id="lilv_select">
+                                <option value="5.9" d="1" selected="selected">商业贷款基准利率（5.9%）</option>
+                                <option value="5.9" d="1.1">商业贷款利率上限（1.1倍）</option>
+                                <option value="5.9" d="0.7">商业贷款利率下限（7折）</option>
+                                <option value="5.9" d="0.85">商业贷款利率下限（8.5折）</option>
+                                <option value="4" d="1">公积金贷款基准利率（4.0%）</option>
+                                <option value="4" d="1.1">公积金贷款利率上限（1.1倍）</option>
+                                <option value="4" d="0.7">公积金贷款利率下限（7折）</option>
+                                <option value="4" d="0.85">公积金贷款利率下限（8.5折）</option>
+                            </select>
+                        </dd>
+                    </dl>
+                    <div class="check_fd">
+                        <a href="javascript:void(0)" onclick="LoanC.calculator(<?php echo $isHasRoom ? 1 : 0 ?>)">查房贷</a>
+                    </div>
+                </div>
+                <div class="calcu_cont_right">
+                    <span id="container"></span>
+                    <cite>
+                        <em>
+                            <s class="s_g"></s>
+                            <var>首期付款：</var><var id="shouFu"></var>
+                        </em>
+                        <em>
+                            <s class="s_l"></s>
+                            <var>支付利息：</var><var id="liXi"></var>
+                        </em>
+                    </cite>
+                    <cite>
+                        <em>
+                            <s class="s_h"></s>
+                            <var>贷款总额：</var><var id="zonge"></var>
+                        </em>
+                        <em>
+                            <s class="s_z"></s>
+                            <var>月均还款：</var><var id="huangkuan" style="color:#f00;"></var>
+                        </em>
+                    </cite>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="n_cont_warp mor_rates">
+        <div class="n_cont_warp_m">
+            <h2>
+                <b>
+                    <s></s>房贷利率
+                </b>
+            </h2>
+            <div class="mor_rates_info">
+                <b>公积金贷款利率（单位%）</b>
+                <ul>
+                    <li>
+                        <cite>
+                            <em class="w_115" style="margin-left:15px;">年限</em>
+                            <em class="w_75">1-5年</em>
+                            <em class="w_75">5-30年</em>
+                        </cite>
+                        <span>
+                            <em class="w_130"><s></s>2015.03.01后</em>
+                            <em class="w_75">3.5</em>
+                            <em class="w_75">4.0</em>
+                        </span>
+                        <span>
+                            <em class="w_130"><s></s>2014.11.22后</em>
+                            <em class="w_75">3.75</em>
+                            <em class="w_75">4.25</em>
+                        </span>
+                        <span>
+                            <em class="w_130"><s></s>2012.07.06后</em>
+                            <em class="w_75">4.00</em>
+                            <em class="w_75">4.50</em>
+                        </span>
+
+                    </li>
+                </ul>
+            </div>
+            <div class="mor_rates_info">
+                <b>商业贷款利率（单位%）</b>
+                <ul>
+                    <li>
+                        <cite>
+                            <em class="w_115" style="margin-left:15px;">年限</em>
+                            <em class="w_75">3-5年</em>
+                            <em class="w_75">5-30年</em>
+                        </cite>
+                        <span>
+                            <em class="w_130"><s></s>2015.03.01后</em>
+                            <em class="w_75">5.75</em>
+                            <em class="w_75">5.90</em>
+                        </span>
+                        <span>
+                            <em class="w_130"><s></s>2014.11.22后</em>
+                            <em class="w_75">6.00</em>
+                            <em class="w_75">6.15</em>
+                        </span>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    LoanC.init(<?php echo json_encode($block); ?>,"<?php echo $sCurrCityCode ?>","","<?php echo $unit['ID']?>",<?php echo $isHasRoom ? 1 : 0?>);
+</script>

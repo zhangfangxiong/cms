@@ -1,0 +1,32 @@
+﻿<dl>
+    <dt><?php echo $sCurrCityName ?>房价</dt>
+    <dd>
+        <?php if(!empty($reigonlist['data'])){ ?>
+        <?php foreach ($reigonlist['data'] as $key=>$item){ ?>
+            <?php if($item['RegionName'] == '上海周边'){ continue;} ?>
+            <a title="<?php echo $item['RegionName'] ?>房价" target="_blank" href="<?php echo Model_Util::getShortSearchUrl(array('r'=>  $item['RegionName'] )) ?>"><?php echo $item['RegionName'] ?>房价</a>
+        <?php }} ?>
+    </dd>
+</dl>
+<dl>
+    <dt><?php echo $sCurrCityName ?>房产</dt>
+    <dd>
+        <?php if(!empty($shouzimu['data'])){ ?>
+        <?php foreach ($shouzimu['data'] as $key=>$value){ ?>
+            <a title="@ch" href="/<?php echo strtoupper($value['FirstLetter']) ?>/@(ch)"><?php echo strtoupper($value['FirstLetter']) ?></a>
+        <?php }} ?>
+    </dd>
+</dl>
+<dl>
+    <dt>友情链接</dt>
+    <dd>
+        <?php if(!empty($link['data'])) { ?>
+        <?php foreach ($link['data'] as $key=>$value) { ?>
+            <a href="<?php echo $value['Url'] ?>" target="_blank" title="<?php echo $value['Name'] ?>"><?php echo $value['Name'] ?></a>
+        <?php }} ?>
+    </dd>
+</dl>
+<dl class="mzsm_dl">
+    <dt>免责声明</dt>
+    <dd>本网站所载的测评榜内容均依据专业测评规则所产生，依托专业官方数据及市场调研数据。本网站所载排名和观点仅代表本网站的客观分析，仅供投资者投资购买参考。本网站所载排名和观点会随市场实际情况的变化予以调整或变更。投资者任何投资购买行为或后果与本网站无关。若您对本网站所发布的测评结果、数据、信息、榜单及其他内容有任何异议、意见或建议的，请及时与本网站联系。联系邮箱：fangjia_yj@cric.com</dd>
+</dl>

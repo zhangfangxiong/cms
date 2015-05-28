@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">检测评测报告</h4>
+</div>
+<div class="modal-body">
+    <div class="panel mb0">
+        <?php
+            foreach($chapter['child'] as $k => $item) {
+                $pUrl = '/evaluation/' . $chapter['controller'][$k] . '/?eID=' . $eID;
+        ?>
+        <div class="one_out_ullist">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="<?php echo $pUrl ?>"   style="cursor: pointer;padding-top:5px;padding-bottom: 5px;"><?php  echo $chapter['parent'][$k]; ?></a>
+                </li>
+            </ul>
+            <div class="tab-content  out_border" style="padding-bottom: 2px;padding-top:2px;">
+                <div class="panel mb0">
+                    <?php
+                        foreach($item as $kc => $vc) {
+                            $cUrl = '/evaluation/' . $chapter['controller'][$k] . '/' .  $chapter['action'][$k][$kc] . '/?eID=' . $eID . '&cID=' . $kc;
+                    ?>
+                    <div class="children_list">
+                        <a href="<?php echo $cUrl ?>"><span class="glyphicon <?php echo in_array($kc, $sFinished) ?  'glyphicon-ok':'glyphicon-remove'  ?>"></span><span class="fonts"><?php echo $vc;?></span></a>
+                    </div>
+                    <?php
+                        }
+                    ?>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <?php
+            }
+        ?>
+    </div>
+</div>

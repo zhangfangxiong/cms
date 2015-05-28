@@ -1,0 +1,199 @@
+<?php include APP_PATH.'/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform"><!---->
+    <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+    <div class="panel mt15">
+                    <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+                            <div class="col-sm-9">
+                                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate" validate="!clength:1-255"><?php echo $blOutSideInfo['sComment']?></textarea>
+                                <span class="validate_checktip"></span>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 control-label">劣势：</label>
+                        <div class="col-sm-9">
+                            <?php
+                            foreach($badTags as $k => $v) {
+                                ?>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="sBadTag[]" data-badname="<?php echo $v ?>" id="sBadTag<?php echo $k ?>" <?php echo !empty($blOutSideInfo['sBadTag'])&&in_array($k,$blOutSideInfo['sBadTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                                </label>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+        <div class="all_badlistUl">
+                        <?php
+                       foreach($badTags as $k => $v) {
+                            ?>
+            <div class="onebadlist" id="bad<?php echo $k ?>" style="display:<?php echo !empty($blOutSideInfo['sBadTag'])&&in_array($k,$blOutSideInfo['sBadTag'])?'block':'none' ?> ">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">*<span class="badTagname" data-id="<?php echo $k ?>"><?php echo $v ?></span>：</label>
+                         <div class="col-sm-9 mt5">
+                             <input type="button" value="不利因素实拍" data-placeholder-name="图片名称" data-placeholder-dec="请针对不利因素实拍图进行描述"  class="plupload fl hxupload"  data-target="sBlImage" data-img="#sImageShow<?php echo $k ?>"  data-callback="showImg" data-outside="1" data-limit="10"  data-dec="1" >
+                             <span  style="position:absolute" class="validate_checktip"></span>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                            <div class="eHxImgDiv" style="display: <?php echo isset($blImage[$k])&&!empty($blImage[$k])? '':'none' ?>;">
+                                <div class="row" id="sImageShow<?php echo $k ?>" >
+                                    <?php
+                                    if (isset($blImage[$k])&&!empty($blImage[$k])) {
+                                        foreach($blImage[$k][$imgTypeConfig['blsp']] as $item) {
+                                            ?>
+
+                                            <div class="image_list">
+                                                <img class="datahovers"  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <input type="text" class="form-control" maxlength="50"  name="sBlImageTitle[<?php echo $k ?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="sBlImageDesc[<?php echo $k ?>][]" placeholder="请针对不利因素实拍图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="sBlUpImageId[<?php echo $k ?>][]" value="<?php echo $item['iAutoID']?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                        <?php
+                       }
+                        ?>
+        </div>
+                    <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">不利因素描述：</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="3" placeholder="不利因素描述" name="sContent"><?php echo $blOutSideInfo['sContent']?></textarea>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+                        <div class="col-sm-10">
+                            <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                                <div class="row" id="sImageQt" >
+                                    <?php
+                                    if (isset($qtImage)&&!empty($qtImage)) {
+                                        foreach($qtImage as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <button id="save" class="btn btn-primary">发布</button>
+                                <button id="sync" class="btn btn-info"  >同步</button>
+                                <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+                            </div>
+                    </div>
+       </div>
+</form>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+
+<script>
+    $(outsideInitPage)
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Badfactor', a: 'outSide', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+   function outsideInitPage(){
+           $("#myform").on('click','.action',deleteUploadimg);
+        // 提交整体评价表单
+        $("#myform").validate({submitHandler: function(form) {
+
+             flag = 0;
+            if(!outallNotempty()){
+                flag = 1;
+            }
+            if (!imageNamenotBlank()) {
+                flag = 1;
+            }
+            if (flag) {
+                return false;
+            }
+            $.post("/evaluation/Badfactor/saveOutSide", $(form).serialize(), function(ret){
+                alert(ret.data);
+                location.reload();
+            }, 'json');
+            return false;
+        }});
+    
+    $("input[type='checkbox'][name='sBadTag[]']").on("click",checkNextShow)
+    
+   }
+   
+   function checkNextShow(){
+             var divId="bad"+$(this).val();
+            if ($(this).is(':checked')==true) {
+                  $("#"+divId).show();    
+            } else {
+               $("#"+divId).hide();
+              // $("#sImageShow"+$(this).val()).parent().hide();
+               //$("#sImageShow"+$(this).val()).empty();
+             //  $("#sImageShow"+$(this).val()).siblings().remove();
+               // $("#sImageShow"+$(this).val()).parents(".onebadlist").find(".validate_checktip").removeClass('validate_wrong').html("");  
+            }
+   }
+  //判断全都不能为空
+  function outallNotempty(){
+      var tflag=0;
+     for(var i=0;i<$("#myform").find('.all_badlistUl').find("div.eHxImgDiv div.row").length;i++){
+         if($("#myform").find('.all_badlistUl').find("div.eHxImgDiv div.row").eq(i).children("div").length<=0){
+             if(!$("#myform").find('.all_badlistUl').find("div.eHxImgDiv").eq(i).parents(".onebadlist ").is(":hidden")){
+               $("#myform").find('.all_badlistUl').find("div.eHxImgDiv").eq(i).parents(".onebadlist ").find(".validate_checktip").addClass('validate_wrong').html("请选择图片");
+                 tflag=1;
+             }
+         }else{
+              $("#myform").find('.all_badlistUl').find("div.eHxImgDiv").eq(i).parents(".onebadlist ").find(".validate_checktip").removeClass('validate_wrong').html("");
+         }
+     }
+     if(tflag){
+         return false;
+     }else{
+          return true; 
+     }
+ }
+    // 移除边框
+    $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+    //鼠标移上显示大图
+    $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+    $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    
+</script>

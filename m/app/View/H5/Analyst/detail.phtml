@@ -1,0 +1,83 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">	
+
+<input id="analystId" type="hidden" value="<?php echo $analystId ?>" />
+<input id="currentpage" type="hidden" value="<?php echo $currentpage ?>" />
+<input id="pagenumlength" type="hidden" value="1" />
+<?php if (isset($aAnalyst['detail']) && $aAnalyst['detail']) { ?>
+    <header class="anay_header clearfix">
+        <div class="topbg">
+            <a  class="uc_return_l backbtns" href="javascript:history.go(-1)"></a>
+            <div class="anay_headimg"><img src="<?php echo $aAnalyst['detail']['sAvataImg']; ?>"></div>
+            <div class="anay_names">
+                <span class="name"><?php echo $aAnalyst['detail']['sName']; ?></span>
+                &nbsp;&nbsp;
+                <span class="des"><?php echo $aAnalyst['detail']['sTitle']; ?></span>
+            </div>
+        </div>
+        <div class="anay_info">
+            <div class="dianzan border_bottom">
+                <div class="pt3"> <?php echo $aAnalyst['detail']['sZanCount']; ?>个赞</div>
+            </div>
+            <div class="anay_intro">
+                <?php echo $aAnalyst['detail']['sDescribe']; ?>
+            </div>
+        </div>
+    </header>
+<?php } ?>
+
+<?php
+/**
+ * 点评div
+ */
+if (isset($aAnalyst['comment']) && 0 < $aAnalyst['comment']['iTotalNum']) {
+    echo '  <section class="anay_comments clearfix" id="mainsection">
+                        <div class="anay_com_title">
+                            <div class=" border_bottom">楼盘点评</div>
+                        </div>
+                        <div class="anay_com_ul"  id="anay_com_ulid">';
+
+    foreach ($aAnalyst['comment']['list'] as $key => $value) {
+        echo '  <div class="anay_com_list arc_bottom">
+                    <a href="/h5/xf/xfdetail?id='.$value['iBuildingID'].'"/>
+                                <div class="anay_com_list_title">';
+        echo '<span class="title_name">' . $value['sBuildingTitle'] . '</span>';
+        echo '   <span class="title_star title_star' . ceil(2 * $value['sScore'] + 1) . '">';
+        echo '   </span>';
+        echo '<span class="title_star_score">' . $value['sScore'] . '</span>';
+        echo '</div>';
+        echo '  <div class="anay_com_list_des">
+                        ' . $value['sComment'] . '
+                        </div>';
+        echo '  <div class="anay_com_list_img">';
+        foreach ($value['images'] as $k => $v) {
+            echo '<canvas data-src="' . $v . '"></canvas>';
+        }
+        echo '  </div>
+                    </a>
+                    <div class="anay_com_list_time">' . $value['sDate'] . '</div>
+                </div>';
+    }
+
+    echo '      </div><div class="loaddiv"></div>
+                    </section>';
+}
+
+/**
+ * 咨询tab
+ */
+if (isset($aAnalyst['detail']) && $aAnalyst['detail']) {
+    echo '  <footer class="ask_fixed">
+                <a class="phoneask" href="tel:' . $aAnalyst['detail']['sTel'] . '">电话咨询</a>
+                <a class="lineask" href="ask?id=' . $analystId . '" target="_self">在线咨询</a>
+            </footer>';
+}
+?>
+<div class="return_top" id="backtop" style="bottom:60px;">
+    <div class="return_top_bg"></div>
+</div>
+
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"    data-main="<?php echo $sStaticRoot ?>/touchweb/lib/js/listconfig">
+</script>  
+<script>
+    var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+</script>

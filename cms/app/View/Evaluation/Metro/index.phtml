@@ -1,0 +1,132 @@
+<div class="pheader clearfix">轨交线路 <a class="btn btn-primary col-lg-offset-2" id="btnMetroAdd"><i class="icon-plus"></i> 增加线路</a></div>
+<div class="pbody clearfix">
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">线路名称</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">最后修改时间</th>
+            <th class="text-center">最后修改人</th>
+            <th class="text-center">状态</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if($aMetroList):?>
+            <?php foreach ($aMetroList as $v) {?>
+                <tr id="metroInfo<?=$v['iMetroID']?>">
+                    <td class="col-sm-1 text-center"><?=$v['sMetroName']?></td>
+                    <td class="col-sm-1 text-center"><?=date('Y-m-d H:i:s', $v['iCreateTime'])?></td>
+                    <td class="col-sm-1 text-center"><?=date('Y-m-d H:i:s', $v['iUpdateTime'])?></td>
+                    <td class="col-sm-1 text-center"><?=$v['sOperationName']?></td>
+                    <td class="col-sm-1 text-center"><?=$v['iStatus'] == 1 ? '启用' : '禁用' ?></td>
+                    <td class="col-sm-2 text-center">
+                        <a href="javascript:metroEdit(<?php echo $v['iMetroID']?>);" title="编辑线路">编辑线路</a>
+                        <a href="/evaluation/metro/station?id=<?php echo $v['iMetroID']?>" title="编辑站点">编辑站点</a>
+                        <?php if ($v['iStatus'] == 1):?>
+                            <a class="metro_convert" href="/evaluation/metro/unable?id=<?php echo $v['iMetroID']?>"  title="设为禁用">设为禁用</a>
+                        <?php else:?>
+                            <a class="metro_convert" href="/evaluation/metro/enable?id=<?php echo $v['iMetroID']?>"  title="设为启用">设为启用</a>
+                        <?php endif;?>
+                        <a href="/evaluation/metro/direction?id=<?php echo $v['iMetroID']?>" title="线路方向">线路方向</a>
+                    </td>
+                </tr>
+            <?php }?>
+        <?php else:?>
+            <tr><td colspan="6" align="center">暂未找到地铁数据数据</td></tr>
+        <?php endif;?>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="metroForm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="metroModalLabel">添加轨交</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="metroOperationForm">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+
+        $('.metro_convert').click(function() {
+            var title = $(this).prop('title');
+            if (confirm("您确认要将该地铁" + title + "吗？")) {
+                $.get(this.href, function(ret){
+                    alert(ret.data);
+                    if (ret.status) {
+                        location.reload();
+                    }
+                }, 'json');
+            }
+            return false;
+        });
+
+
+
+
+        $('#btnMetroAdd').click(function () {
+            var modalForm = '<div class="form-group"> <label for="inputEmail3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;线路名称：</label> <div class="col-sm-10"> ' +
+                '<input type="text" id="sMetroName" validate="!length:1-10" value="" name="sMetroName" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>' +
+                '<input type="hidden" value="" name="iMetroID">';
+
+            modalForm += '<div class="form-group"> <div class="col-sm-offset-2 col-sm-10"> <button type="submit" class="btn btn-primary">保存</button> ' +
+            '</div> </div>';
+            $('#metroModalLabel').text('添加线路');
+
+            $('#metroOperationForm').html(modalForm);
+            $('#metroOperationForm').prop('action', '/evaluation/metro/add/');
+
+            $('#metroForm').modal().css({
+                "margin-top": function () {return ($(window).height() / 2 - 200);}
+            }).modal('show');
+
+            $("#metroOperationForm").validate({submitHandler: function(form) {
+                $.post(form.action, $(form).serialize(), function(ret){
+                    alert(ret.data);
+                    if (ret.status) {
+                        location.reload();
+                    }
+                }, 'json');
+                return false;
+            }});
+        });
+    });
+
+
+    function metroEdit(iMetroID) {
+        var tdList = $('#metroInfo'+iMetroID).find("td");
+        var modalForm = '<div class="form-group"> <label for="inputEmail3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;线路名称：</label> <div class="col-sm-10"> ' +
+            '<input type="text" id="sMetroName" name="sMetroName" validate="!length:1-10" value="' + $(tdList[0]).text() + '" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>' +
+            '<input type="hidden" value="' + iMetroID + '" name="iMetroID">';
+        modalForm += '<div class="form-group"> <div class="col-sm-offset-2 col-sm-10"> <button type="submit" class="btn btn-primary">保存</button> ' +
+        '</div> </div>';
+        $('#metroModalLabel').text('编辑线路');
+        $('#metroOperationForm').prop('action', '/evaluation/metro/edit/');
+        $('#metroOperationForm').html(modalForm);
+
+        $('#metroForm').modal().css({
+            "margin-top": function () {return ($(window).height() / 2 - 200);}
+        }).modal('show');
+
+        $("#metroOperationForm").validate({submitHandler: function(form) {
+            $.post(form.action, $(form).serialize(), function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+            return false;
+        }});
+
+    }
+
+</script>

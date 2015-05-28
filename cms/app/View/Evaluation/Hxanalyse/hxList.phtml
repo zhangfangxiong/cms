@@ -1,0 +1,54 @@
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th class="text-center">户型</th>
+        <th class="text-center">户型编号</th>
+        <th class="text-center">面积</th>
+        <th class="text-center">梯户比</th>
+        <th class="text-center">层高</th>
+        <th class="text-center">客厅面宽</th>
+        <th class="text-center">主卧面宽</th>
+        <th class="text-center">主卧朝向</th>
+        <th class="text-center">次主卧朝向</th>
+        <th class="text-center">明卫</th>
+        <th class="text-center">暗卫</th>
+        <th class="text-center">南北通透</th>
+        <th class="text-center">得房率</th>
+        <?php if($evaluationSwitch == 0){ ?>
+        <th class="text-center">操作</th>
+        <?php } ?>
+    </tr>
+    </thead>
+    <tbody id="HxChildrenlength">
+    <?php
+            if (!empty($list)) {
+            foreach($list as $item) {
+    ?>
+    <tr>
+
+        <td class="text-center"><?php echo $item['iRoomNum'].$item['iHallNum'].$item['iToiletNum']?></td>
+        <td class="text-center"><?php echo $item['sHuXingID']?></td>
+        <td class="text-center"><?php echo $item['iAreaNum']?></td>
+        <td class="text-center"><?php echo $item['iStairsNum']?>:<?php echo $item['iDoorNum']?></td>
+        <td class="text-center"><?php echo $item['iFloorNum']?></td>
+        <td class="text-center"><?php echo $item['iHallWidth']?></td>
+        <td class="text-center"><?php echo $item['iMasterRoomWidth']?></td>
+        <td class="text-center"><?php echo $item['iMasterRoomToward']?></td>
+        <td class="text-center"><?php echo $item['iSecondRoomToward']?></td>
+        <td class="text-center"><?php echo $item['iObviousToilet']?></td>
+        <td class="text-center"><?php echo $item['iHideToilet']?></td>
+        <td class="text-center"><?php echo $item['iIsNorthSouth']?></td>
+        <td class="text-center"><?php echo $item['iAreaRate']?></td>
+        <?php if($evaluationSwitch == 0){ ?>
+        <td class="text-center">
+            <a href=""  data-toggle="modal" data-target="#hxModal" data-content-id="<?php echo $item['iAutoID'] ?>" data-info-id="<?php echo $item['iHxInfoID'] ?>" class="upHxbH">编辑</a>
+            <a href=""  data-content-id="<?php echo $item['iAutoID'] ?>" class="delHx">删除</a>
+        </td>
+        <?php } ?>
+    </tr>
+    <?php
+         }
+    }
+        ?>
+    </tbody>
+</table>

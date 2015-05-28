@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="<?php echo $sStaticRoot?>/web/css/jquery-autocomplete.css" rel="stylesheet"/>
+    <link href="<?php echo $sStaticRoot?>/web/css/jquery-datepicker.css" rel="stylesheet"/>
+    <script type="text/javascript" src="<?php echo $sStaticRoot?>/js/redirectToMobile.js"></script>
+    <title>APP客户端下载 - 房价点评网 房价走势 房价评估 房产估价网</title>
+</head>
+<body class="app_page">
+    <div class="first-screen">
+        <div class="wrapper clearfix">
+            <div class="hd clearfix">
+                <a href="javascript:;" class="app_logo"><img src="<?php echo $sStaticRoot?>/web/images/app_logo.png" /></a>
+                <ul class="plat-list">
+                    <li>
+                        <a href="javascript:;" class="cur">
+                            <i class="mb"></i>
+                            手机版
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/">
+                            <i class="pc"></i>
+                            电脑版
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bd clearfix">
+                <div class="grid_ft"></div>
+                <div class="grid_download clearfix">
+                    <a href="https://itunes.apple.com/cn/app/fang-jia-dian-ping/id891596731?mt=8" target="_blank" class="app"><i></i></a>
+                    <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.cric.housingprice" target="_blank" class="google"><i></i></a>
+                </div>
+                <div class="grid_2code">
+                    <span></span>
+                </div>
+                <div class="app_hand">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="group_wrap">
+        <div class="wrapper">
+            <div class="group clearfix">
+                <div class="mp_kind">
+                    <dl>
+                        <dt>
+                            <span class="icon_mp_kind mp_lppj"></span>
+                            楼盘评级
+                        </dt>
+                        <dd>
+                            <p>综合评判专业评级</p>
+                            <p>买房决策更轻松</p>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="mp_kind">
+                    <dl>
+                        <dt>
+                            <span class="icon_mp_kind mp_jgzd"></span>
+                            价格指导
+                        </dt>
+                        <dd>
+                            <p>买对了还是买贵了？</p>
+                            <p>上房价点评网一查便知！</p>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="mp_kind">
+                    <dl>
+                        <dt>
+                            <span class="icon_mp_kind mp_fxsdp"></span>
+                            分析师点评
+                        </dt>
+                        <dd>
+                            <p>房价分析师深入楼盘</p>
+                            <p>多角度解析楼盘优劣</p>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="mp_kind">
+                    <dl>
+                        <dt>
+                            <span class="icon_mp_kind mp_lpcp"></span>
+                            楼盘评级
+                        </dt>
+                        <dd>
+                            <p>买对了还是买贵了？</p>
+                            <p>上房价点评网一查便知！</p>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="feature-list-01">
+        <div class="f1"></div>
+    </div>
+    <div class="feature-list-02">
+        <div class="f2"></div>
+    </div>
+    <div class="feature-list-03">
+        <div class="f3"></div>
+    </div>
+    <div class="feature-list-04">
+        <div class="f4"></div>
+    </div>
+
+    <ul class="onepage-pagination t">
+        <li><a data-index="first-screen" href="javascript:;" class="active"></a></li>
+        <li><a data-index="feature-list-01" href="javascript:;"></a></li>
+        <li><a data-index="feature-list-02" href="javascript:;"></a></li>
+        <li><a data-index="feature-list-03" href="javascript:;"></a></li>
+        <li><a data-index="feature-list-04" href="javascript:;"></a></li>
+    </ul>
+
+
+    <script>
+
+        $(function () {
+            $('.app_hand').stop().animate({
+                bottom: 0
+            }, 900, function () {
+                $(this).show();
+            });
+
+            var pgtools = {
+                nav: function () {
+                    var tops = $(document).scrollTop();
+                    var o = $(".onepage-pagination li a");
+                    for (var i = 0; i <= $(".onepage-pagination li").length; i++) {
+                        if (tops >= $(".first-screen").offset().top && tops < $(".feature-list-01").offset().top) {
+                            o.removeClass("active");
+                            o.eq(0).addClass("active");
+                            $(".onepage-pagination").addClass("t");
+                        } 
+                        if (tops >= $(".first-screen").offset().top + 400) {
+                            $(".onepage-pagination").removeClass("t");
+                        }
+                        if (tops >= $(".feature-list-01").offset().top && tops < $(".feature-list-02").offset().top) {
+                            o.removeClass("active");
+                            o.eq(1).addClass("active");
+                            $(".onepage-pagination").removeClass("t");
+                        }
+                        if (tops >= $(".feature-list-02").offset().top && tops < $(".feature-list-03").offset().top) {
+                            o.removeClass("active");
+                            o.eq(2).addClass("active");
+                            $(".onepage-pagination").removeClass("t");
+                        }
+                        if (tops >= $(".feature-list-03").offset().top && tops < $(".feature-list-04").offset().top) {
+                            o.removeClass("active");
+                            o.eq(3).addClass("active");
+                            $(".onepage-pagination").removeClass("t");
+                        }
+                        if (tops >= $(".feature-list-04").offset().top) {
+                            o.removeClass("active");
+                            o.eq(4).addClass("active");
+                            $(".onepage-pagination").removeClass("t");
+                        }
+
+                    }
+                },
+                cpeg: function () {
+                    $body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
+                    var a = $(".onepage-pagination");
+
+                    a.find("li a").click(function () {
+                        pgtools.nav();
+                        $body.animate({ scrollTop: $("."+$(this).attr("data-index")).offset().top }, 700);
+                    });
+                }
+            }
+            pgtools.cpeg();
+
+            window.onscroll = pgtools.nav;
+            window.onresize = pgtools.nav;
+        })
+    </script>
+</body>
+</html>

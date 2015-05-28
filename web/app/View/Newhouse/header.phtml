@@ -1,0 +1,80 @@
+﻿<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/loupan_v1.js"></script>
+<section class="new_row_cont mb20" style="margin-top:15px;">
+    <div class="new_room_t clearfix">
+        <div class="new_room_t_l clearfix">
+            <a class="a_t" href="/shanghai/shanghaizhoubian/kunshan/280202"><?php echo $unit['UnitName']?></a>
+            <div class="sale_status">
+                <em class="<?php echo $aSaleSate[$unit['FinalSaleStateIndex']]["class"]?>"><?php echo $unit['FinalSaleState']?></em>
+            </div>
+        </div>
+        <div class="new_room_t_r">
+            <span>分析师热线</span>
+            <b><?php echo $tel400['400'] ?><em>转</em><?php echo $tel400['ext'] ?></b>
+        </div>
+    </div>
+    <div class="new_room_menu">
+        <ul class="clearfix">
+            <?php
+            foreach ($aMenu as $key => $value) {
+                ?>
+                <li>
+                    <a href="<?php echo $value['url'] ?>" class="<?php echo ($iMenuIndex== $value['index']) ? 'cur' : ''  ?>"><?php echo $value['name'] ?></a>
+                </li>
+            <?php
+            }
+            ?>
+        </ul>
+    </div>
+    <div class="fixNHouseWrap">
+        <div class="fix_house_box">
+            <div class="new_page_wrap">
+                <div class="new_fp_left">
+                    <h2><?php echo $unit['UnitName']?></h2>
+                    <ul>
+                        <?php
+                        foreach ($aMenu as $key => $value) {
+                            ?>
+                            <li>
+                                <a href="<?php echo $value['url'] ?>" class="<?php echo ($iMenuIndex== $value['index']) ? 'cur' : ''  ?>"><?php echo $value['name'] ?></a>
+                            </li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <div class="new_fp_right">
+                    <span>分析师热线</span>
+                    <b><?php echo $tel400['400'] ?><em>转</em><?php echo $tel400['ext'] ?></b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var Dwrap = {
+            'fixtool': function () {
+                var a = function () {
+                    var top = $(document).scrollTop();
+                    var nav_top = $(".new_room_menu").offset().top + $(".new_room_menu").height();
+                    if (top > nav_top) {
+                        $(".fixNHouseWrap").show();
+                        $(".fixNHouseWrap").stop().animate({
+                            top: 0
+                        });
+
+                    } else {
+                        $(".fixNHouseWrap").stop().animate({
+                            top: -60
+                        });
+                        $(".fixNHouseWrap").hide();
+                    }
+                }
+                $(window).bind("scroll", a);
+            }
+        }
+
+        $(document).ready(function () {
+            Dwrap.fixtool();
+        });
+    </script>
+
+</section>

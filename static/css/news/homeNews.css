@@ -1,0 +1,28 @@
+.news_wrap .new_kp{height:280px;}
+.news_wrap .left_shows{width:382px;height:283px;position: relative;overflow: hidden;float:left;margin-right:10px;}
+.news_wrap .left_shows a{display: block; overflow: hidden;}
+.news_wrap .left_shows .art_title{font-family: "Microsoft Yahei";position: absolute;bottom: 0;width:379px;height:73px; background: url("../../img/news/touming.png") no-repeat;}
+.news_wrap .left_shows a img{border:0; width:379px;height: 283px;}
+.news_wrap .one_children{height:140px;border-bottom: 1px dashed #dcdcdc;width:375px;}
+.news_wrap .child_img img{border:0; width:150px;height: 112px;}
+.news_wrap .child_img{float:left;margin-right:10px; overflow: hidden;}
+.news_wrap  .child_content{float:left;width:215px; overflow: hidden;}
+.right_list{float:left;margin-left:10px;width:375px;overflow: hidden;}
+.child_content .child_content_title{width:205px;display: block;font-size: 14px;font-family: "Microsoft Yahei";color:#333333;text-decoration: none; font-weight: bold;}
+.child_content .child_content_title:hover{color:#666;}
+.child_content .child_content_content{width:215px;overflow:hidden;font-size:12px;color:#666;margin-top:12px;line-height: 1.5;height:52px;}
+.child_content .author{color:#999;font-size:12px;margin-top:20px;width:205px;display: block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.news_wrap  .bdn{border-bottom: none;margin-top:29px;}
+.art_title_title{width:370px;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;color:#FFF;margin-top:26px;text-indent: 15px;font-weight: bold;}
+.art_auther{font-size:12px;margin-top:10px;color:#fff;}
+.left_shows a .art_title_title:hover,.left_shows a .art_auther:hover{color:#f0f0f0;}
+#adImg3 img,#adImg2 img,#adImg1 img {width: 1100px;}
+.art_auther span{display: inline-block;margin:0 5px 0px 15px;}
+.child_content .author span{margin:0 10px 0 0;}
+.hd{overflow: hidden;display: block;}
+
+
+#index_mid_banner ul.index_mid_ul li{list-style-type:none;width:220px;height:109px;border: 1px solid #eaeaea;border-left: none;border-top:none;float:left;position:relative;overflow:hidden;}
+#index_mid_banner ul.index_mid_ul li a img{width:220px;height:109px;border:0;}
+#index_mid_banner ul.index_mid_ul li a{overflow:hidden;display:block;}
+#index_mid_banner ul.index_mid_ul li p.font_name{position:absolute;left:20px;bottom:25px;font: 12px/14px "microsoft yahei";color: #999;cursor:pointer;}

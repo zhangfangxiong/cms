@@ -1,0 +1,181 @@
+<?php include APP_PATH . '/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform">
+    <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+
+    <div class="panel mt15">
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+
+            <div class="col-sm-9">
+                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate"
+                          validate="!clength:1-255"><?php echo $qyPublic['sComment'] ?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">优势：</label>
+
+            <div class="col-sm-9">
+                <?php
+
+                if (isset($goodTags) && !empty($goodTags)) {
+                    foreach ($goodTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox"
+                                   name="sGoodTag[]" <?php echo !empty($qyPublic['sGoodTag']) && in_array($k, $qyPublic['sGoodTag']) ? 'checked' : '' ?>
+                                   value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                    <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">*景观实拍图：</label>
+
+            <div class="col-sm-9 mt5">
+                <input type="button" value="选择景观实拍图" class="plupload" data-target="publicImage" data-img="#sImageShow"
+                       data-error-msg="请上传景观实拍图" data-callback="showImgBuild" data-limit="10"/>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group mtf">
+            <div class="col-md-offset-2 col-md-9">
+                <div class="eHxImgDiv"
+                     style="display: <?php echo isset($publicImage) && !empty($publicImage) ? '' : 'none' ?>;">
+                    <div class="row"  id="sImageShow">
+                        <?php
+                        if (isset($publicImage) && !empty($publicImage)) {
+                            foreach ($publicImage as  $k => $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers" src="<?php echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage']) ?>" data-content-id="<?php echo $item['iAutoID'] ?>">
+                                    <?php if($evaluationSwitch == 0){ ?>
+                                    <a href="javascript:void(0);" title="删除" class="action  icon-trash"></a>
+                                    <?php } ?>
+                                    <div class="col-sm-12">
+                                        <input type="text" name="publicImageName[]" value="<?php echo $item['sTitle']?>" class="form-control" placeholder="图片名称">
+                                    </div>
+                                    <input type="hidden" name="publicImageTitle[]" value="<?php echo $item['iTypeImage']?>">
+                                    <div validate="!radio:publicImageTitleCheck<?php echo $k?>:建设情况" placeholder="请选择一个">
+                                        <div class="top-group mb0">
+                                            <div class="col-sm-12"><span class="fl">*建设情况</span>
+
+                                                <div class="radio tzrd"><label><input type="radio"
+                                                                                      onclick="setPublicImageTitleValue(this)"
+                                                                                      name="publicImageTitleCheck<?php echo $k?>"
+                                                                                        <?php echo $item['iTypeImage']==$jsText[0] ? 'checked': ''?>
+                                                                                      data-title="<?php echo $jsText[0] ?>" >
+                                                        <?php echo $jsText[0] ?></label></div>
+                                            </div>
+                                        </div>
+                                        <div class="top-group mb0">
+                                            <div class="col-sm-offset-3 col-sm-8 mltz" style="margin-top:-8px;">
+                                                <div class="radio"><label><input type="radio"
+                                                                                 name="publicImageTitleCheck<?php echo $k?>"
+                                                                                 <?php echo $item['iTypeImage']==$jsText[1] ? 'checked': ''?>
+                                                                                 onclick="setPublicImageTitleValue(this)"
+                                                                                 data-title="<?php echo $jsText[1] ?>" >
+                                                        <?php echo $jsText[1] ?></label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="validate_checktip col-sm-8 mltz"></span>
+                                    <input type="hidden" name="publicUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">描述：</label>
+
+            <div class="col-sm-9">
+                <textarea name="sDesc" class="form-control" rows="3"
+                          placeholder="描述"><?php echo $qyPublic['sDesc'] ?></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">其他点评：</label>
+
+            <div class="col-sm-9">
+                <textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control"
+                          placeholder="其他点评"><?php echo $qyPublic['sOtherComment'] ?></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+            <div class="col-sm-10">
+                <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                    <div class="row" id="sImageQt" >
+                        <?php
+                        if (isset($qtImage)&&!empty($qtImage)) {
+                            foreach($qtImage as $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                    <?php if($evaluationSwitch == 0){ ?>
+                                    <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                    <?php } ?>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                    </div>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                    </div>
+                                    <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <button id="save" class="btn btn-primary">发布</button>
+                <button id="sync" class="btn btn-info"  >同步</button>
+                <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8"
+        src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/evaluation.js"></script>
+<script>
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Region', a: 'public', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    $(function () {
+        index = 1;
+        publickformUrl = "/evaluation/Region/savePublic";
+        initPublickForm(publickformUrl);
+        // 删除图片
+        $(".eHxImgDiv").on('click', '.action', deleteUploadimg);
+           //鼠标移上显示大图
+    $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+     $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    })
+
+
+</script>

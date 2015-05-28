@@ -1,0 +1,30 @@
+﻿<!--推荐楼盘 start-->
+<div class="clearfix n_cont_warp mb30">
+    <div class="n_cont_warp_m">
+        <h2>
+            <b>
+                <s></s>推荐楼盘
+            </b>
+            <a href="<?php echo Model_Util::getShortSearchUrl(array())?>" target="_blank">更多<s></s></a>
+        </h2>
+        <div class="recom_pro">
+            <ul class="clearfix" id="recommended_unit_list"></ul>
+        </div>
+    </div>
+</div>
+<div id="recommended_unit_list_template" style="display: none;">
+    <li>
+        <a href="$Url" target="_blank">
+            <img src="$PicUrl">
+            <b>［$RegionName］$UnitName</b>
+            <cite>
+                <span>开发商售价：</span>
+                <em><var>$SalePrice</var>元／㎡</em>
+            </cite>
+        </a>
+    </li>
+</div>
+<script type="text/javascript">
+    RecommU.init("<?php echo $sCurrCityCode ?>","","<?php echo $unit['ID']?>","<?php echo $unit['HomeID']?>");
+</script>
+<!--推荐楼盘 end-->

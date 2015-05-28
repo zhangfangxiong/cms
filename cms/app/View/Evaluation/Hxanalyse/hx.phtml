@@ -1,0 +1,214 @@
+<?php include 'eHeader.phtml'; ?>
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+        <input type="hidden" name="iAuID" value="<?php echo isset($HxAnalyse['iAutoID']) ? $HxAnalyse['iAutoID']:'' ?>"/>
+         <div class="panel mt15 pcContents">
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">*分析师点评：</label>
+            <div class="col-sm-10">
+                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate" validate="!clength:1-255"><?php echo $HxAnalyse['sComment']?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">优势：</label>
+            <div class="col-sm-10">
+                <?php
+                if (isset($goodTags) && !empty($goodTags)) {
+                    foreach($goodTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sGoodTag[]" <?php echo !empty($HxAnalyse['sGoodTag'])&&in_array($k,$HxAnalyse['sGoodTag']) ? 'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                    <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">劣势：</label>
+            <div class="col-sm-10">
+                <?php
+                if (isset($badTags) && !empty($badTags)) {
+                    foreach($badTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sBadTag[]" <?php echo !empty($HxAnalyse['sBadTag'])&&in_array($k,$HxAnalyse['sBadTag']) ? 'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                    <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label pl0">*选择户型编号：</label>
+            <div class="col-sm-10">
+                <select class="form-control pcSelect input-validate"  name="sHuXingID[1]" id="sHuXingID[1]" >
+                  <option value="">请选择户型编号</option>
+                    <?php
+                        $index = 0;
+                        foreach($HxType as $v) {
+                    ?>
+                            <option
+                                value="<?php echo $v['iAutoID']?>" <?php echo isset($HxAnalyse['sHuXingID']) && ($HxAnalyse['sHuXingID']==$v['iAutoID']) ?'selected':'' ?>>
+                                <?php echo $v['iRoomNum'].$v['iHallNum'].$v['iToiletNum'].'&nbsp'.$v['sHuXingID']?>
+                            </option>
+
+                    <?php
+                     }
+                    ?>
+                </select>
+                <a href="javascript:void(0)" class="addbtn  glyphicon glyphicon-plus" id="AddNewbtn"></a>
+                <span id="checktips" class="validate_checktip"></span>
+            </div>
+        </div>
+        <?php
+        if (empty($HxImages)) {
+            $HxImages[0] = ''; // 默认显示一个
+        }
+            $index = '';
+            foreach($HxImages as $k => $arr) {
+        ?>
+        <div class="dpList" style="display: <?php echo isset($HxImages[0])? 'none':''?>">
+        <?php if($evaluationSwitch == 0){ ?>
+        <div class="top-group"><div class="showtitle" data-value="<?php echo $k ?>"><?php echo isset($HxType[$k]) ? $HxType[$k]['iRoomNum'].$HxType[$k]['iHallNum'].$HxType[$k]['iToiletNum'].'&nbsp'.$HxType[$k]['sHuXingID']:''  ?></div><a href="javascript:void(0);" title="删除" class="deletebtn glyphicon glyphicon-remove"></a></div>
+        <?php } ?>
+        <div class="form-group" id="hxImg">
+            <label class="col-sm-2 control-label">*户 型 图：</label>
+            <div class="col-sm-9">
+                <input type="button" value="选择" class="plupload fl hxupload" data-placeholder-name="图片名称，一般为户型编号+面积+房型" data-placeholder-dec="请针对此户型图进行描述" data-error-msg="请上传户型图" data-target="sHxImage" data-img="#sImageShow<?php echo $index ?>"  data-limit="10" data-callback="showImg" data-dec="1" >
+                <span style="float: left;" class="validate_checktip"></span>
+                <div style="clear: both;"></div>
+                <div class="eHxImgDiv" style="display: <?php echo isset($arr[$imgTypeConfig['hd']])&&!empty($arr[$imgTypeConfig['hd']])? '':'none'?>;">
+                    <div class="row" id="sImageShow<?php echo $index ?>" >
+                        <?php
+                            if (isset($arr[$imgTypeConfig['hd']])&&!empty($arr[$imgTypeConfig['hd']])) {
+                                foreach($arr[$imgTypeConfig['hd']] as $item) {
+                        ?>
+                            <div class="image_list">
+                                <img  src="<?php echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" class="datahovers"   data-content-id="<?php echo $item['iAutoID']?>">
+                                <?php if($evaluationSwitch == 0){ ?>
+                                <a href="javascript:void(0);" title="删除" class="action  icon-trash"></a>
+                                <?php } ?>
+                                <div class="top-group">
+                                    <div class="col-sm-12 duiq"> <input type="text" class="form-control" maxlength="50" name="sHxImageTitle[<?php echo $k ?>][]" placeholder="图片名称，一般为户型编号+面积+房型"  value="<?php echo $item['sTitle']?>"> </div>
+                                </div>
+                                <div class="top-group">
+                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="sHxImageDesc[<?php echo $k ?>][]" placeholder="请针对此户型图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                </div>
+                                <input type="hidden" name="sHxUpImageId[<?php echo $k ?>][]" value="<?php echo $item['iAutoID']?>" />
+                            </div>
+                        <?php
+                                }
+                            }
+                        ?>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="hxRealImg">
+            <label class="col-sm-2 control-label">户型实拍：</label>
+            <div class="col-sm-9">
+                <input type="button" value="选择" class="plupload fl hxupload2"  data-placeholder-name="图片名称，一般为户型编号+面积+房型" data-placeholder-dec="请针对此户型图进行描述" data-error-msg="请上传户型实拍图" data-target="sHxRealImage" data-img="#hxshipaiID<?php echo $index ?>"  data-limit="10" data-callback="showImg"  data-dec="1" />
+                <span style="float: left;" class="validate_checktip"></span>
+                <div style="clear: both;"></div>
+                <div class="eHxImgDiv" style="display: <?php echo isset($arr[$imgTypeConfig['sp']])&&!empty($arr[$imgTypeConfig['sp']])? '':'none'?>;">
+                    <div class="row" id="hxshipaiID<?php echo $index ?>" >
+                        <?php
+                        if (isset($arr[$imgTypeConfig['sp']])&&!empty($arr[$imgTypeConfig['sp']])) {
+                            foreach($arr[$imgTypeConfig['sp']] as $item) {
+                                ?>
+                           <div class="image_list">
+                               <img  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" class="datahovers"  data-content-id="<?php echo $item['iAutoID']?>">
+                                <?php if($evaluationSwitch == 0){ ?>
+                                <a href="javascript:void(0);" title="删除" class="action  icon-trash"></a>
+                                <?php } ?>
+                               <div class="top-group">
+                                   <div class="col-sm-12 duiq"> <input type="text" class="form-control" maxlength="50" name="sHxRealImageTitle[<?php echo $k ?>][]" placeholder="图片名称，一般为户型编号+面积+房型"  value="<?php echo $item['sTitle']?>"> </div>
+                               </div>
+                               <div class="top-group">
+                                   <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="sHxRealImageDesc[<?php echo $k ?>][]" placeholder="请针对此户型图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                               </div>
+                               <input type="hidden" name="sHxRealUpImageId[<?php echo $k ?>][]" value="<?php echo $item['iAutoID']?>" />
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <?php
+                $index = intval($index);
+                $index++;
+        }
+        ?>
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+                <div class="col-sm-9">
+                    <input type="button" value="请选择图片" class="plupload"  data-placeholder-name="图片名称，一般为户型编号+面积+房型" data-placeholder-dec="请针对此户型图进行描述"  data-target="sHxOtherDpImg" data-img="#sHxOtherImgShow" data-callback="showImg"  data-limit="10" data-dec="1">
+                    <div class="eHxImgDiv" style="display: <?php echo isset($dpImages)&&!empty($dpImages)? '':'none'?>;">
+                        <div class="row" id="sHxOtherImgShow" >
+                            <?php
+                            if (isset($dpImages)&&!empty($dpImages)) {
+                                foreach($dpImages as $item) {
+                                    ?>
+                                    <div class="image_list">
+                                        <img  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" class="datahovers" data-content-id="<?php echo $item['iAutoID']?>">
+                                        <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                        <div class="top-group">
+                                            <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sHxOtherDpImgTitle[]" placeholder="图片名称，一般为户型编号+面积+房型"  value="<?php echo $item['sTitle']?>"> </div>
+                                        </div>
+                                        <div class="top-group">
+                                            <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sHxOtherDpImgDesc[]" placeholder="请针对此户型图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                        </div>
+                                        <input type="hidden" name="sHxOtherUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+
+                                    </div>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">&nbsp;</label>
+            <div class="col-sm-9">
+                <textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control"><?php echo $HxAnalyse['sOtherComment']?></textarea>
+            </div>
+        </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-9" >
+            <button id="save" class="btn btn-primary">发布</button>
+            <button id="sync" class="btn btn-info"  >同步</button>
+            <button id="cancel"class="btn" onclick="location.href='/evaluation/draft/';return false;">取消</button>
+        </div>
+      </div>
+     </div>    
+    </form>
+
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/documentReady.js"></script>
+<script type="text/javascript">
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+    var tops=0;
+    var valueId=[];
+    var ifhas="";
+    // 同步数据
+    $("#sync").click({c:'Hxanalyse',a:'hxfx',unitid:'<?php echo $iEvaluationInfo['iUnitID'] ?>'},syncCricin)
+     $(HxinitPage);
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>

@@ -1,0 +1,981 @@
+﻿<section class="wrap_con clearfix">
+    <?php echo Model_Bundle::getHighchartScripts();?>
+    <?php echo Model_Bundle::getSwitchableScripts();?>
+    <?php
+     // 设置城市代码
+    Model_Util::setCityCode($sCurrCityCode);
+    ?>
+    <section id="breadcrumb_nav">
+        <nav class="breadcrumb_nav new_row_cont">
+          <?php echo $sBreadcrumbs?>
+        </nav>
+
+    <div class="seltion-cont">
+        <dl class="selitem clearfix">
+            <dt>区域：</dt>
+            <dd>
+                <div class="area clearfix" id="allregionfilter">
+                    <a href="<?php echo Model_Util::getSearchUrl(array('r'=>'','d'=>'')) ?>" class="<?php echo empty($searchParam['r'])?'cur':'';  ?>" >全部</a>
+                    <div class="area_div">
+                        <?php
+                            $districtArr = array();
+                            if (isset($searchfilter['region']['list']) && !empty($searchfilter['region']['list'])) {
+                            foreach($searchfilter['region']['list'] as $k => $item) {
+                                if( $k == 0) {
+                                    continue;
+                                }
+                                if ($searchParam['r']==$item['sName']) {
+                                    $districtArr = $item['children'];
+                                }
+
+                        ?>
+                        <a href="<?php echo Model_Util::getSearchUrl(array('r'=>$item['sName'])) ?>" class="<?php echo  $searchParam['r']==$item['sName'] ? 'cur':''?>" value="<?php echo $item['sName']?>"><?php echo $item['sName']?></a>
+                        <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div class="subarea clearfix" id="alldistrictfilter" style="display:<?php echo !empty($districtArr) ? '':'none' ?> ">
+
+                    <?php
+
+                        if (!empty($districtArr)) {
+                    ?>
+                    <a href="<?php echo Model_Util::getSearchUrl(array('d'=>'')) ?>" class="<?php echo empty($searchParam['d'])?'cur':'';  ?>" value=''>全部</a>
+                    <?php
+                            foreach($districtArr as $k => $item) {
+                                if ($k==0) {
+                                    continue;
+                                }
+
+                      ?>
+                             <a href="<?php echo Model_Util::getSearchUrl(array('d'=>$item['sName'])) ?>" class="<?php echo  $searchParam['d']==$item['sName'] ? 'cur':''?>"  value=''><?php echo $item['sName']?></a>
+                   <?php
+                                }
+                        }
+                    ?>
+
+
+                </div>
+            </dd>
+        </dl>
+        <dl class="selitem clearfix">
+            <dt>售价：</dt>
+            <dd>
+                <div class="area clearfix" id="priceFilter">
+                    <a href="<?php echo Model_Util::getSearchUrl(array('p'=>'')) ?>" class="<?php echo empty($searchParam['p'])?'cur':'';  ?>" value="">全部</a>
+                    <div class="area_div">
+                        <?php
+                        if (isset($searchfilter['price']['list']) && !empty($searchfilter['price']['list'])) {
+                            foreach($searchfilter['price']['list'] as $k => $item) {
+                                if( $k == 0) {
+                                    continue;
+                                }
+                                ?>
+                                <a href="<?php echo Model_Util::getSearchUrl(array('p'=>$item['sName'])) ?>" class="<?php echo  $searchParam['p']==$item['sName'] ? 'cur':''?>" value="<?php echo $item['sName']?>"><?php echo $item['sName']?></a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        <dl class="selitem clearfix">
+            <dt>预算：</dt>
+            <dd>
+                <div class="area clearfix" id="prevFilter">
+                    <a href="<?php echo Model_Util::getSearchUrl(array('prev'=>'')) ?>" class="<?php echo empty($searchParam['prev'])?'cur':'';  ?>">全部</a>
+                    <div class="area_div">
+                        <?php
+                        if (isset($searchfilter['PriceSection']) && !empty($searchfilter['PriceSection'])) {
+                            foreach($searchfilter['PriceSection'] as $k => $item) {
+
+                                ?>
+                                <a href="<?php echo Model_Util::getSearchUrl(array('prev'=>$item)) ?>" class="<?php echo  $searchParam['prev']==$item ? 'cur':''?>" value="<?php echo $item?>"><?php echo $item?></a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        <dl class="selitem clearfix">
+            <dt>户型：</dt>
+            <dd>
+                <div class="area clearfix" id="allRoomTypeFilter">
+                    <a href="<?php echo Model_Util::getSearchUrl(array('st'=>'')) ?>" class="<?php echo empty($searchParam['rt'])?'cur':'';  ?>" >全部</a>
+                    <div class="area_div">
+                        <?php
+                        if (isset($searchfilter['layout']['list']) && !empty($searchfilter['layout']['list'])) {
+                            foreach($searchfilter['layout']['list'] as $k => $item) {
+                                if( $k == 0) {
+                                    continue;
+                                }
+                                ?>
+                                <a href="<?php echo Model_Util::getSearchUrl(array('rt'=>$item['sName'])) ?>" class="<?php echo  $searchParam['rt']==$item['sName'] ? 'cur':''?>" value="<?php echo $item['sName']?>"><?php echo $item['sName']?></a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        <dl class="selitem clearfix" style="margin-bottom:0;">
+            <dt>建议：</dt>
+            <dd>
+                <div class="area clearfix" id="recommandLevelFilter">
+                    <a href="<?php echo Model_Util::getSearchUrl(array('s'=>'')) ?>" class="<?php echo empty($searchParam['s'])?'cur':'';  ?>" value="">全部</a>
+                    <div class="area_div">
+                        <?php
+                        if (isset($searchfilter['Suggest']) && !empty($searchfilter['Suggest'])) {
+                            foreach($searchfilter['Suggest'] as $k => $item) {
+
+                                ?>
+                                 <a href="<?php echo Model_Util::getSearchUrl(array('s'=>$item)) ?>" class="<?php echo  $searchParam['s']==$item ? 'cur':''?>" value="0"><?php echo $item ?></a>
+                            <?php
+                            }
+                        }
+                        ?>
+
+                    </div>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <div class="clearfix">
+        <div class="seh_list_left">
+            <div class="slf_are clearfix">
+                <div class="sort_title clearfix">
+                    <ul class="sort_ult">
+                        <!--<li><label><input type="checkbox" onclick="filterXfUnitByDiscount(this);" />有优惠</label></li>-->
+                        <li><label><input type="checkbox" id="chkEvaluation" />有评测</label></li>
+                        <li><label><input type="checkbox" id="chkPriceTable" />有价目表</label></li>
+                    </ul>
+                    <div class="sort_type">
+                        <a href="<?php echo Model_Util::getSearchUrl(array('st'=>0,'ord'=>0)) ?>" class="cur">智能</a>
+                        <a href="<?php echo Model_Util::getSearchUrl(array('st'=>1,'ord'=>1)) ?>" class="" id="priceOrder">价格<i class="down"></i></a>
+                        <a href="<?php echo Model_Util::getSearchUrl(array('st'=>2,'ord'=>0)) ?>" class="">评分<i></i></a>
+                    <span class="drp_qt_type">
+
+                        <cite id="otherSort" class="">
+                            其他排序<i></i>
+                        </cite>
+                        <dl>
+                            <dt>其他排序<i></i></dt>
+                            <?php
+                                foreach ($orderType as $k => $item) {
+                            ?>
+                            <dd><a href="<?php echo Model_Util::getSearchUrl(array('st'=>$k,'ord'=>0)) ?>" class=""><?php echo $item;?></a></dd>
+                            <?php
+                                }
+                            ?>
+                        </dl>
+                    </span>
+                        <a href="/shanghai/xinfang" class="link_map" target="_blank"></a>
+                    </div>
+                </div>
+                <div class="house-list clearfix">
+                    <p style="margin: 20px;"> 正在加载.......</p>
+                </div>
+            </div>
+
+            <div class="slf_ftb clearfix">
+                <div class="ftb_left">共<span id="totalUnitCnt"><?php echo $unitsCount;?></span>个楼盘</div>
+
+                <?php
+                    if ($totalPage > 1) {
+                ?>
+                <div class="advan_search_page" id="pagination">
+                    <div class="pagination">
+                        <?php echo Model_Util::pageHtml($totalPage,$searchParam['pg'],Model_Util::getSearchUrl(null)); ?>
+                    </div>
+                </div>
+                <?php
+                    }
+                ?>
+
+            </div>
+
+
+
+        </div>
+        <div class="seh_list_right">
+            <div class="allhouse_tj">
+                <h2>分析师评楼</h2>
+                <ul>
+                    <?php
+                    if (!empty($unitRecommended)) {
+                        foreach($unitRecommended as $k => $item) {
+                            if (empty($item)) {
+                                continue;
+                            }
+                            $className = "";
+                            switch ($item['ListType'])
+                            {
+                                case "尽快入手": $className = "gpb_2"; break;
+                                case "推荐购买": $className = "gpb_1"; break;
+                                case "谨慎购买": $className = "gpb_3"; break;
+                                case "持币观望": $className = "gpb_4"; break;
+                            }
+
+                            ?>
+                            <li>
+                                <div class="atl_img">
+                                    <a href="-" target="_blank">
+                                        <span class="<?php echo $className ?>"></span>
+                                        <img
+                                            src="<?php echo $item['image']?>"/>
+                                    <span class="gtitle rgba">
+                                        <?php echo $item['OpinionSummary'] ?>
+                                    </span>
+                                    </a>
+                                </div>
+                                <div class="atl_tt">
+                                    <a href="javascript:;"><?php echo $item['UnitName'] ?></a>
+                                </div>
+                                <div class="atl_ft">
+                                    [<?php echo $item['Region'] ?>]<?php echo isset($item['ADDRESS']) ? $item['ADDRESS']:'' ?>
+                                </div>
+                                <div class="atl_fb clearfix">
+                                    <cite>
+                                        <?php
+                                                if ($item['Price']> 0) {
+                                       ?>
+
+                                                    <span><?php echo $item['newPrice'] ?></span>元/㎡
+                                        <?php
+                                                 } else {?>
+                                              <span><?php echo $item['newPrice'] ?></span>
+                                       <?php
+                                            }
+                                        ?>
+                                    </cite>
+                                    <cite class="u">
+
+                                        <?php
+                                        if ($item['CricPrice']> 0) {
+                                            ?>
+
+                                            <span><?php echo $item['newCricPrice'] ?></span>元/㎡
+                                        <?php
+                                        } else {?>
+                                            <span><?php echo $item['newCricPrice'] ?></span>
+                                        <?php
+                                        }
+                                        ?>
+
+                                    </cite>
+                                </div>
+                            </li>
+                        <?php
+                        }
+                    }
+                    ?>
+                </ul>
+            </div>
+            <?php
+                if ($newPriceList) {
+
+             ?>
+                    <div class="allhouse_tj">
+                        <div class="fty_zs clearfix">
+                            <h2>房价行情走势</h2>
+                            <dl class="clearfix">
+                                <dt>
+                                    4月
+                                </dt>
+                                <dd>
+                                    <cite>参考均价<span><?php echo number_format($cityInfo['Price']) ?></span>元/㎡</cite>
+                                    <cite>环比上月<span class="down">
+                                      <?php $des = '持平';
+                                      switch ($baifen['Result']) {
+                                          case 1:
+                                              $des = "上涨";
+                                              break;
+                                          case -1:
+                                              $des = "下跌";
+                                              break;
+                                      };
+                                      echo $des . $baifen['realRate'];
+                                      if (!empty($baifen['realRate'])) {
+                                          echo '%';
+                                      } ?></span></cite>
+                                </dd>
+                            </dl>
+                            <div style="background:#ddd;height:155px;" id="container">
+                            </div>
+                            <?php
+                            $priceTimes = strtotime($cityInfo['PriceTime']);
+                            ?>
+                            <script type="text/javascript" language="javascript">
+                                window.DrawLineChart([<?php echo $newPriceList?>], 'container', '', '', 215, 155, <?php echo date('Y',$priceTimes);?>, <?php echo date('m',$priceTimes);?>, <?php echo date('d',$priceTimes);?>, "");
+                            </script>
+
+                        </div>
+                    </div>
+                <?php
+                    }
+                ?>
+            <div class="allhouse_tj">
+                <div class="jq_prop">
+                    <h2>
+                        <b>近期开盘</b>
+                        <cite>
+                            <a href="" class="prev_btn"><s></s></a>
+                            <a href="" class="next_btn"><s></s></a>
+                        </cite>
+                    </h2>
+                    <div class="rec_open_list" id="Recentlyopend">
+                        <ul>
+                            <?php
+                                if (!empty($newOpen)) {
+                                    foreach($newOpen as $k => $item){
+
+                            ?>
+                            <li>
+                                <s></s>
+                                <span><?php echo $k?></span>
+                                <?php
+                                    foreach($item as $v) {
+                                ?>
+                                 <p><a href="" target="_blank">[<?php echo $v['sRegionName'];?>]<?php echo $v['sName'];?> <b><?php echo $v['iBidingPrice']>0 ? "<i>".number_format($v['iBidingPrice'])."</i>元/㎡":'待定'; ?></b></a></p>
+                                <?php
+                                    }
+                                ?>
+
+                            </li>
+                            <?php
+                                }
+                             }
+                            ?>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <?php echo Model_Util::getNewsHtml("api/banner/getlistindexone?sCity=".$sCurrCityCode); ?>
+
+    <div class="trybox" id="unitMapDialog" style="visibility:hidden">
+        <div class="ml-overlay"></div>
+        <div class="ml-box">
+            <div class="ml-tit">
+                <a href="javascript:;" onclick="$('.trybox').css('visibility','hidden');$('#unit_map .amap-toolbar').css('visibility','hidden');" class="close"><i></i></a>
+                <h2 class="unit_name"></h2>
+                <cite class="unit_address"></cite>
+            </div>
+            <div class="ml-map" style="background:#ddd;height:323px;" id="unit_map">
+
+            </div>
+        </div>
+    </div>
+    <div id="unit_Template" style="display:none;">
+        <div class="searchresult-list">
+            <div class="house-img">
+                <a href="$Url" target="_blank">
+                    <span class="$recClass"></span>
+                    <img src="$MainPic" />
+                </a>
+            </div>
+            <div class="house-info clearfix">
+                <div class="house-main-box clearfix">
+                    <div class="house-content">
+                        <div class="house-name clearfix">
+                            <h2><a href="$Url" target="_blank">$UnitName</a></h2>
+                            <!--<i class="ico-jia"></i>-->
+                            $EvaluationFlagNew
+                            $RoomTotalNew
+                        </div>
+                        <div class="house-htladdress">
+                            [$RegionName-$DistrictName] $Address
+                        </div>
+                    </div>
+                    <div class="house-sid">
+                        <div>开发商售价$SalePrice</div>
+                        <div style="padding-top:10px;">指导价 $CricPrice 元/㎡</div>
+                    </div>
+                </div>
+                <div class="house-score clearfix">
+                <span class="middle-start">
+                    $StarLevel
+                    $TotalScore
+                </span>
+                    <cite class="middle-cmpt">
+                        $RoomTypeScore
+                        $DesignScore
+                        $HouseManageScore
+                        $ParkScore
+                        $LocationScore
+                        $CPRatioScore
+                    </cite>
+                </div>
+                <div class="dtb-box clearfix">
+                    <div class="dtb_left">
+                        <ul>
+                            $RoomRemaining
+
+
+                        </ul>
+                    </div>
+                    <div class="dtb_right">
+                        <a class="dtb_ico_dp" href="$CommentUrl" target="_blank"><i></i>点评</a>
+                        $UnitID <!--<a class="dtb_ico_sc" href="javascript:saveFavorite($Obj);"><i></i>收藏</a>-->
+                        <a class="dtb_ico_dt" href="javascript:moveToUnit('$UnitName','$Address','$X','$Y','$Url')"><i></i>地图</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+    <div class="recomend_house clearfix">
+        <h2>您可能感兴趣的楼盘</h2>
+        <ul class="clearfix">
+            <li>
+                <a href="javascript:;">
+                    <img src="http://get.file3.dc.cric.com/CRICa381576a5c4f5e4bb0bbfa28e6ad3c01_130X90_0_0_0.jpg" />
+                </a>
+                <cite>
+                    <a href="javascript:;"><i></i><span>[松江]</span>江城苑</a>
+                </cite>
+                <cite>
+                    参考均价：14956元/㎡
+                </cite>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <img src="http://get.file3.dc.cric.com/CRICa381576a5c4f5e4bb0bbfa28e6ad3c01_130X90_0_0_0.jpg" />
+                </a>
+                <cite>
+                    <a href="javascript:;"><i></i><span>[松江]</span>江城苑</a>
+                </cite>
+                <cite>
+                    参考均价：14956元/㎡
+                </cite>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <img src="http://get.file3.dc.cric.com/CRICa381576a5c4f5e4bb0bbfa28e6ad3c01_130X90_0_0_0.jpg" />
+                </a>
+                <cite>
+                    <a href="javascript:;"><i></i><span>[松江]</span>江城苑</a>
+                </cite>
+                <cite>
+                    参考均价：14956元/㎡
+                </cite>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <img src="http://get.file3.dc.cric.com/CRICa381576a5c4f5e4bb0bbfa28e6ad3c01_130X90_0_0_0.jpg" />
+                </a>
+                <cite>
+                    <a href="javascript:;"><i></i><span>[松江]</span>江城苑</a>
+                </cite>
+                <cite>
+                    参考均价：14956元/㎡
+                </cite>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <img src="http://get.file3.dc.cric.com/CRICa381576a5c4f5e4bb0bbfa28e6ad3c01_130X90_0_0_0.jpg" />
+                </a>
+                <cite>
+                    <a href="javascript:;"><i></i><span>[松江]</span>江城苑</a>
+                </cite>
+                <cite>
+                    参考均价：14956元/㎡
+                </cite>
+            </li>
+        </ul>
+    </div>-->
+
+    <script>
+        //window.Searcher.Page = "AdvancedSearch";
+        var unitMapConfig = {
+            mapObj: null,
+            mapElement: "unit_map",
+            level: 17,
+            minLevel: 13,
+            maxLevel: 19
+        };
+
+        var page = <?php echo $searchParam['pg'];?>;
+        var region = "<?php echo $searchParam['r'];?>";
+        var district = "<?php echo $searchParam['d'];?>";
+        var price = "<?php echo $searchParam['p'];?>";
+        var feature = <?php echo $searchParam['f'];?>;
+        var priceSection = "<?php echo $searchParam['prev'];?>" ;//预算价格段
+        var recommandLevel= "<?php echo $searchParam['s'];?>";
+        var roomtype = "<?php echo $searchParam['rt'];?>";
+        var descOrAsc = <?php echo $searchParam['ord'];?>; //0：升序；1：降序；
+        var sort = <?php echo $searchParam['st'];?>; //0：智能；1：价格；2：评分；3：最优户型；4：装修适宜；5：物业无忧；6：车位充足；7：人气区位；
+        var pageSize = <?php echo $pageSize?>;
+        //var districts = "";
+        var isDisCount = 0; //0：无优惠；1：有优惠
+        var isEvaluation = <?php echo $searchParam['ev'];?>; //0：无评测；1：有评测
+        var isPriceTable = <?php echo $searchParam['pr'];?>; //0：无价目表；1：有价目表
+        var keyword = "<?php echo $searchParam['k'];?>"; //小区搜索
+        var $mapContrain = $("#" +unitMapConfig.mapElement);
+        var unitData =<?php echo $units;?>;  //小区列表
+        var userFavorite = '';
+
+            $(function () {
+                $(".drp_qt_type").mouseover(function(){
+                    $(this).find("dl").show();
+                })
+                $(".drp_qt_type").mouseout(function(){
+                    $(this).find("dl").hide();
+                })
+
+                $('#Recentlyopend').switchable({
+                    triggers: '&bull',
+                    panels: 'li',
+                    effect: 'scrollUp',
+                    steps: 2,
+                    visible: 2, // important,
+                    prev: '.prev_btn',
+                    next: '.next_btn'
+                });
+
+                if ($mapContrain[0] != null) {
+                    unitMapConfig.mapObj = new window.AMap.Map(unitMapConfig.mapElement, { level: unitMapConfig.level, zooms: [unitMapConfig.minLevel, unitMapConfig.maxLevel] });
+                }
+                var x = $(".highcharts-axis-labels").first().find("tspan").last().attr("x");
+                $(".highcharts-axis-labels").first().find("tspan").last().attr("x",parseFloat(x) - 12);
+
+                $("#search_units_left,#search_units_right").on("mouseover", "li", function () {
+                    $(this).css("border-color", "#eda890");
+                });
+                $("#search_units_left,#search_units_right").on("mouseout", "li", function () {
+                    $(this).css("border-color", "#fff");
+                });
+
+                init();
+            });
+
+
+        function init(){
+
+            $(".prev").css("display","block");
+            $(".next").css("display","block");
+
+
+            var pr = 0;
+            if(pr){
+                isPriceTable = pr > 0 ? 1 : 0;
+                $("#chkPriceTable").attr("checked",true);
+            }
+
+            $("#chkPriceTable").bind("change",function(){ filterXfUnitByPriceTable(this); });
+
+            var ev = 0;
+            if(ev){
+                isEvaluation = ev > 0 ? 1 : 0;
+                $("#chkEvaluation").attr("checked",true);
+            }
+            $("#chkEvaluation").bind("change",function(){ filterXfUnitByEvaluation(this); });
+
+            var k = "";
+            if(k){
+                keyword = k;
+                $("#key").val(k);
+            }
+
+            loadData();
+        }
+
+        function loadData(){
+            var resultCode = <?php echo $resultCode;?>;
+            var units = unitData;
+
+            var html = "";
+            if(resultCode == 1 ){
+                html = noExistsUnitInfo();
+                $("#pagination").css("display","none");
+            }
+            else{
+                $("#pagination").css("display","block");
+            }
+
+            for (var i = 0; i < units.length; i++) {
+                html += buildHtml(units[i], $("#unit_Template").html());
+            }
+
+            $(".house-list").html(html);
+        }
+
+
+        function loadXfData(bo) {
+
+            var keyword = $("#key").val();
+            if( keyword =="输入楼盘名查看测评报告"){
+                keyword = "";
+            }
+
+            var u = "/shanghai/advanced/search?r=&d=&f=0&p=&prev=&rt=&s=&pr=0&ev=0&k=" + keyword + "&st=0&ord=0&pg=1";
+
+            window.location.href = u;
+
+        }
+
+        function getAlertResult(){
+
+            var result = "";
+            if(region) {
+                result += ' '+region;
+            }
+            if(district){
+                result += ' '+district;
+            }
+            if(price){
+                result += ' '+$("#priceFilter a[value='" + price + "']").html();
+            }
+            if(priceSection){
+                result += ' ' + priceSection
+            }
+            if(roomtype){
+                result += ' ' + roomtype;
+            }
+
+            if(recommandLevel!=''){
+                result += ' ' + recommandLevel;
+            }
+
+            if(isEvaluation > 0){
+                result += ' 有评测';
+            }
+            if(isPriceTable > 0){
+                result += ' 有价目表';
+            }
+            if(keyword.length > 0 ){
+                result += ' ' + keyword;
+            }
+            result = result.replace("undefined","");
+            return result;
+        }
+
+        //有优惠
+        function filterXfUnitByDiscount(currentTarget){
+            var chk = $(currentTarget);
+            if(chk.attr("checked")) isDisCount = 1;
+            else isDisCount = 0;
+
+            page = 1;
+            //特色房只在第一次加载有效
+            feature = 0;
+            loadXfData(true);
+        }
+
+        //有评测
+        function filterXfUnitByEvaluation(currentTarget){
+            var chk = $(currentTarget);
+            if(chk.attr("checked")) isEvaluation = 1;
+            else isEvaluation = 0;
+
+            var u = "/shanghai/advanced/search?r=&d=&f=0&p=&prev=&rt=&s=&pr=0&ev="+isEvaluation+"&k=&st=0&ord=0&pg=1";
+
+            window.location.href = u;
+
+            //loadXfData(true);
+        }
+
+        //有价目表
+        function filterXfUnitByPriceTable(currentTarget){
+            var chk = $(currentTarget);
+            if(chk.attr("checked")) isPriceTable = 1;
+            else isPriceTable = 0;
+
+            var u = "/shanghai/advanced/search?r=&d=&f=0&p=&prev=&rt=&s=&pr="+isPriceTable+"&ev=0&k=&st=0&ord=0&pg=1";
+
+            window.location.href = u;
+
+            //loadXfData(true);
+        }
+
+        function buildHtml(unit, templateHtml) {
+            var html = templateHtml;
+            html = html.replace(/\.srcX/gi, ".src");
+            for (var p in unit) {
+                var reg = new RegExp("\\$" + p + "\\b", "gi");
+                if (p == "AnalystId") {
+                    if (!unit[p]) {
+                        html = html.replace("$class", "n_dp_fot_none");
+                    } else {
+                        html = html.replace(reg, unit[p] || "-");
+                    }
+                } else if (p == "SalePrice") {
+                    var salePrice = unit[p];
+                    if (parseInt(salePrice) > 0) {
+                        html = html.replace(reg, "<span>" + unit[p] + "</span>元/㎡");
+                    } else {
+                        html = html.replace(reg, "<span style='color:#BCBCBC;'>待定</span>");
+                    }
+                } else if(p == "EJScore") {
+
+                    if (!unit[p]) {
+                        html = html.replace("$recClass", "");
+                    } else {
+                        var recType = "";
+                        switch(unit[p])
+                        {
+                            case 'AAA' : recType = "drg_img_01"; break;
+                            case 'A+' : recType = "drg_img_02"; break;
+                            case 'BBB+' : recType = "drg_img_03"; break;
+                            case 'C' : recType = "drg_img_04"; break;
+                            default :recType = "";break;
+                        }
+
+                        html = html.replace("$recClass", recType);
+                    }
+                }
+                else if(p == "TotalScore"){
+                    var score = unit[p] || 0;
+                    html = html.replace("$TotalScore", score);
+                    var startLevel = "";
+
+                    if(score == 0){
+                        startLevel = "<i></i><i></i><i></i><i></i><i></i>";
+                    }
+                    else if(score == 1){
+                        startLevel ='<i class="o"></i><i></i><i></i><i></i><i></i>';
+                    }
+                    else if( score > 1 && score < 2){
+                        startLevel = '<i class="o"></i><i class="c"></i><i></i><i></i><i></i>';
+                    }
+                    else if(score == 2){
+                        startLevel = '<i class="o"></i><i class="o"></i><i></i><i></i><i></i>';
+                    }
+                    else if(score > 2 && score < 3){
+                        startLevel = '<i class="o"></i><i class="o"></i><i class="c"></i><i></i><i></i>';
+                    }
+                    else if(score == 3){
+                        startLevel = '<i class="o"></i><i class="o"></i><i class="o"></i><i></i><i></i>';
+                    }
+                    else if(score > 3 && score < 4){
+                        startLevel = '<i class="o"></i><i class="o"></i><i class="o"></i><i class="c"></i><i></i>';
+                    }
+                    else if(score == 4){
+                        startLevel = '<i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i></i>';
+                    }
+                    else if(score > 4 && score < 5){
+                        startLevel = '<i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="c"></i>';
+                    }
+                    else if(score == 5){
+                        startLevel = '<i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i>';
+                    }
+                    else{
+                        startLevel = '<i></i><i></i><i></i><i></i><i></i>';
+                    }
+                    html = html.replace("$StarLevel", startLevel);
+
+                }
+                else if(p == "RoomTypeScore"){
+                    var RoomTypeScore = unit[p];
+                    if(RoomTypeScore){
+                        html = html.replace("$RoomTypeScore", "<span>户型 "+ RoomTypeScore+"</span>");
+                    }
+                    else{
+                        html = html.replace("$RoomTypeScore", "");
+                    }
+                }
+                else if(p == "DesignScore"){
+                    var DesignScore = unit[p];
+                    if(DesignScore){
+                        html = html.replace("$DesignScore", "<span>装修 "+ DesignScore+"</span>");
+                    }
+                    else{
+                        html = html.replace("$DesignScore", "");
+                    }
+                }
+                else if(p == "HouseManageScore"){
+                    var HouseManageScore = unit[p];
+                    if(HouseManageScore){
+                        html = html.replace("$HouseManageScore", "<span>物业 "+ HouseManageScore+"</span>");
+                    }
+                    else{
+                        html = html.replace("$HouseManageScore", "");
+                    }
+                }
+                else if(p == "ParkScore"){
+                    var ParkScore = unit[p];
+                    if(ParkScore){
+                        html = html.replace("$ParkScore", "<span>车位 "+ ParkScore+"</span>");
+                    }
+                    else{
+                        html = html.replace("$ParkScore", "");
+                    }
+                }
+                else if(p == "LocationScore"){
+                    var LocationScore = unit[p];
+                    if(LocationScore){
+                        html = html.replace("$LocationScore","<span>区位 "+ LocationScore + "</span>");
+                    }
+                    else{
+                        html = html.replace("$LocationScore", "");
+                    }
+                }
+                else if(p == "CPRatioScore"){
+                    var CPRatioScore = unit[p];
+                    if(CPRatioScore){
+                        html = html.replace("$CPRatioScore","<span>性价比 "+ CPRatioScore + "</span>");
+                    }
+                    else{
+                        html = html.replace("$CPRatioScore", "");
+                    }
+                }
+                else if(p == "EvaluationFlag")
+                {
+                    if(unit[p]=="1")
+                    {
+                        html = html.replace("$EvaluationFlagNew","<i class=\"ico-hui\" title=\"本楼盘有完整测评报告\"></i>");
+                    }
+                    else{
+                        html = html.replace("$EvaluationFlagNew","");
+                    }
+                }
+                else if(p == "RoomTotal"){
+                    if(unit[p] > 0)
+                    {
+                        html = html.replace("$RoomTotalNew","<i class=\"ico-pingce\"></i>");
+                    }
+                    else{
+                        html = html.replace("$RoomTotalNew","");
+                    }
+                }
+                else if(p == "UnitID"){
+                    var unitid = unit[p] || "";
+
+                    var obj = "'"+unit.UnitID+ ","+unit.UnitName+"," + unit.ID+ "," + unit.RegionName+ "," + unit.NewRecommandedLevelStr+ "," + unit.BidingPrice+ "," +unit.Price+ "," + unit.EJScore+ "," +unit.ZongPingXQ+ "," + unit.DistrictName+ "," + unit.Category+ "," +unit.Url +"'";
+
+                    var tem = "";
+                    for(var i = 0 ; i< userFavorite.length; i++){
+                        if(unitid == userFavorite[i].UnitId ){
+                            tem = "<a id=\"u_" + unitid + "\" class=\"dtb_ico_sc\" href=\"javascript:void(0);\"><i></i>已收藏</a>";
+                            break;
+                        }
+                        else{
+                            tem = "<a id=\"u_" + unitid + "\" class=\"dtb_ico_sc\" href=\"javascript:saveFavorite(" + obj + ");\"><i></i>收藏</a>"
+                        }
+                    }
+                    html = html.replace("$UnitID",tem);
+                }
+                else if(p == "RoomRemaining"){
+                    var roomRemaining = unit[p] || "0"
+                    var roomRemainingHtml = "<li><span>房源:</span>"+unit[p]+"套剩余房间在售</li>";
+
+                    if(unit[p] != "-" && unit[p] != "0"){
+                        html = html.replace("$RoomRemaining",roomRemainingHtml);
+                    }
+                    else{
+                        html = html.replace("$RoomRemaining","");
+                    }
+                }
+                else {
+                    html = html.replace(reg, unit[p] || "-");
+                }
+            }
+
+            return html;
+        }
+
+        function noExistsUnitInfo()
+        {
+            var r = getAlertResult();
+            var html = '<div class="nam_par clearfix">'
+                + '<dl class="clearfix">'
+                + '<dt></dt>'
+                + ' <dd>'
+                + '<div class="s_14">抱歉，没有找到与“<span>' + decodeURI(r) + '</span>"有关的楼盘</div>'
+                + '<div>请重新输入关键字或重新选择筛选条件</div>'
+                + '</dd>'
+                + '</dl>'
+                + '<div>'
+                + '推荐给您：其他的相关楼盘'
+                + '</div>'
+                + '</div>';
+            return html;
+        }
+
+        function moveToUnit(unitName, unitAddress, x, y,url) {
+            if (isNaN(x) || isNaN(y)) {
+                return;
+            }
+            $("#unitMapDialog .unit_name").html("<a href='" + url + "' target='_blank' >"+ unitName + "</a>");
+            $("#unitMapDialog .unit_address").html("<span>地址:</span>" + unitAddress);
+            $("#unitMapDialog").css("visibility","");
+            $("#unit_map .amap-toolbar").css("visibility", "");
+            if (unitMapConfig.mapObj == null) {
+                if ($mapContrain[0] != null) {
+                    unitMapConfig.mapObj = new window.AMap.Map(unitMapConfig.mapElement, { level: unitMapConfig.level, zooms: [unitMapConfig.minLevel, unitMapConfig.maxLevel] });
+                    unitMapConfig.mapObj.plugin(["AMap.ToolBar"], function() {
+                        var toolbar = new window.AMap.ToolBar();
+                        toolbar.autoPosition = true; //加载工具条
+                        unitMapConfig.mapObj.addControl(toolbar);
+
+                    });
+                }
+            } else {
+                unitMapConfig.mapObj.plugin(["AMap.ToolBar"], function() {
+                    var toolbar = new window.AMap.ToolBar();
+                    toolbar.autoPosition = true; //加载工具条
+                    unitMapConfig.mapObj.addControl(toolbar);
+
+                });
+            }
+            if (unitMapConfig.mapObj != null) {
+                var content = "<a class = \"tooltip_new_map\"  href = \""+url+"\" target='_blank'></a>";
+                content += "<div class=\"tooltip_area\" style=\"display:block\" ><div style=\"display:block;\" class=\"tooltip_box bdr1 shadow2\" ><s class=\"zbt_tip\"></s><dl><dd><h6><a href=\""+url+"\" target = '_blank'>" + unitName + "</a></h6></dd></dl></div></div>";
+                var marker = new window.AMap.Marker({
+                    position: new window.AMap.LngLat(x, y), //位置
+                    zIndex: 201,
+                    content: content
+                });
+                unitMapConfig.mapObj.clearMap();
+                marker.setMap(unitMapConfig.mapObj);
+                unitMapConfig.mapObj.setCenter(new AMap.LngLat(x, y));
+            }
+
+        }
+
+        //收藏
+        function saveFavorite(unit) {
+
+            if ("".length == 0) {
+                alert("登录以后才能收藏，请先登录");
+                return;
+            }
+
+            var arr = unit.split(',');
+
+            $.post("/user/favorite", {
+                UnitId: arr[0],
+                UnitName: arr[1],
+                UnitIntId: arr[2],
+                RegionName: arr[3],
+                AnalystOpinion: arr[4],
+                SalePrice: arr[5],
+                CricPrice: arr[6],
+                LevelCode: arr[7],
+                PicCode: arr[8],
+                DistrictName: arr[9],
+                Category: arr[10],
+                Url: arr[11]
+            }, function (data) {
+                if (data.dataCode == 1) {
+                    $("#u_"+arr[0]).html("<i></i>已收藏");
+                    $("#u_"+arr[0]).attr("href","javascript:void(0);");
+                    showBg("favorite_tip");
+                    start = 3;
+                    countdown("em_time", "favorite_tip");
+
+                }
+
+            });
+        }
+    </script>
+</section>

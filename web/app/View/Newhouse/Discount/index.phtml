@@ -1,0 +1,104 @@
+﻿<?php include Yaf_G::getViewPath()."/Newhouse/header.phtml"; ?>
+<section class="new_row_cont">
+    <div class="clearfix mb30">
+        <div class="n_cont_warp bestrates_box">
+            <div class="n_cont_warp_m">
+                <h2>
+                    <b>
+                        <s></s>优惠价格
+                    </b>
+                    <em>免责声明：优惠折扣信息以售楼处最终公布的优惠信息为准</em>
+                </h2>
+                <div class="bestrates_list">
+                    <?php $index=1;
+                          $total=count($aSales);
+                    ?>
+                    <?php if($total>0){
+                        $dlClass=$index==$total?"last":"";
+                        $curTime=time();
+                    ?>
+                        <?php foreach($aSales as $sale){
+                            $sale["SaleStartTime"]=date("Y.m.d",strtotime($sale["SaleStartTime"]));
+                            $sale["SaleEndTime"]=date("Y.m.d",strtotime($sale["SaleEndTime"]));
+                            $sale["SaleStartTime"]=$sale["SaleStartTime"]=="1970.01.01"?"":$sale["SaleStartTime"];
+                            $sale["SaleEndTime"]=$sale["SaleEndTime"]=="1970.01.01"?"":$sale["SaleEndTime"];
+                        ?>
+                            <dl class="<?php echo $dlClass ?>">
+                                <dt>
+                                    <?php if($sale["SaleEndTime"]>$curTime||empty($sale["SaleEndTime"])){?>
+                                        <span class="span_com">进行中</span>
+                                    <?php }
+                                    elseif($sale["SaleEndTime"]<$curTime&&!empty($sale["SaleEndTime"])){?>
+                                        <span class="span_end">结束</span>
+                                    <?php } ?>
+                                </dt>
+                                <dd>
+                                    <cite class="ct_com"><?php echo $sale["SaleType"] ?></cite>
+                                    <span class="s_comm">
+                                        <em>优惠名称： <?php echo $sale["SaleName"] ?></em>
+                                        <em>优惠人群： <?php echo $sale["SalePeople"] ?></em>
+                                        <em>优惠来源： <?php echo $sale["SaleChannel"] ?></em>
+                                        <em>优惠时间：
+                                        <?php
+                                            if($sale["SaleEndTime"]>$curTime||empty($sale["SaleEndTime"])){
+                                                if(empty($sale["SaleStartTime"])){
+                                                    echo "-";
+                                                }
+                                                else{
+                                                    $sEndTimeText=$sale["SaleEndTime"]>0?$sale["SaleEndTime"]:"迄今";
+                                                    echo $sale["SaleStartTime"]."-".$sEndTimeText;
+                                                }
+                                            }
+                                            elseif((!empty($sale["SaleEndTime"]))&&$sale["SaleEndTime"]<$curTime){
+                                                echo "已结束".$sale["SaleStartTime"]."-".$sale["SaleEndTime"];
+                                            }
+                                        ?>
+                                        </em>
+                                    </span>
+                                </dd>
+                            </dl>
+                        <?php
+                            $index++;
+                        } ?>
+                    <?php }?>
+                </div>
+            </div>
+        </div>
+        <div class="surr_estat_box n_cont_warp">
+            <div class="n_cont_warp_m">
+                <h2>
+                    <b>
+                        <s></s>周边楼盘
+                    </b>
+                    <a href="/<?php echo $cityInfo["CityCode"] ?>/newhouse/index" target="_blank">更多<s></s></a>
+                </h2>
+                <div class="surr_estat">
+                    <?php
+                        if(!empty($aAroundXf)){
+                            foreach($aAroundXf as $item){
+                                if(!empty($item["buildingID"])){
+                                $sUrl="/".$cityInfo["CityCode"]."/Newhouse/detail?unitid=".$item["buildingID"]."";
+                    ?>
+                                <dl>
+                                    <dt>
+                                        <a href="<?php echo $sUrl ?>" target="_blank">
+                                            <img src="<?php echo $item["image"] ?>" alt="">
+                                        </a>
+                                    </dt>
+                                    <dd>
+                                        <a href="<?php echo $sUrl ?>" target="_blank" title="<?php echo $item["name"] ?>">[<?php echo $item["regionName"] ?>]<?php echo $item["name"] ?></a>
+                                        <cite>
+                                            <span>开发商售价：</span>
+                                            <em><?php echo $item["price"] ?> 元/㎡</em>
+                                        </cite>
+                                    </dd>
+                                </dl>
+                            <?php }
+                            }
+                        }?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php include Yaf_G::getViewPath()."/Newhouse/interestxf.phtml"; ?>
+</section>

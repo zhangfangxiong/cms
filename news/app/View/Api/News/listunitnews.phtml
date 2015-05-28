@@ -1,0 +1,25 @@
+<?php
+    if (!empty($news['aList'])) {
+    foreach($news['aList'] as $k => $item) {
+        $cityCode = isset($cityInfo[$item['iCityID']]) ?$cityInfo[$item['iCityID']]['sFullPinyin']:$lpCityCode;
+        if (!empty($item['sImage'])) {
+            $imageUrl = strpos($item['sImage'], 'house.sina.com') > 0 ? $item['sImage'] : Util_Uri::getDFSViewURL($item['sImage'], 160, 120);
+        } else {
+            $imageUrl = 'http://'.$staticBaseUrl .'/img/news/not_exists.jpg';
+        }
+?>
+<dl class="best_rates_list clearfix info" style="">
+<dt>
+    <a href="<?php echo 'http://'.$newsBaseUrl.'/'.$cityCode .'/news/detail/' .$item['iNewsID']; ?>" target="_blank"><img src="<?php echo $imageUrl;?>" alt="<?php echo $item['sTitle']?>" style="width: 140px;height:110px;"></a>
+</dt>
+<dd>
+    <a href="<?php echo 'http://'.$newsBaseUrl.'/'.$cityCode .'/news/detail/' .$item['iNewsID']; ?>" target="_blank">
+        <b><?php echo $item['sTitle']?></b>
+        <span><?php echo $item['desc']?></span>
+    </a>
+</dd>
+</dl>
+<?php
+        }
+    }
+?>

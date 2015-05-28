@@ -1,0 +1,195 @@
+<?php include APP_PATH.'/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform">
+    <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+    <input type="hidden" name="iAutoID" value="<?php echo $wyCost['iAutoID'] ?>"/>
+    <div class="panel mt15">
+                    <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">分析师点评：</label>
+                            <div class="col-sm-9">
+                                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate" ><?php echo $wyCost['sComment']?></textarea>
+                                <span class="validate_checktip"></span>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">劣势：</label>
+                        <div class="col-sm-9">
+                            <?php
+                            foreach($badTags as $k => $v) {
+                                ?>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="sBadTag[]" <?php echo !empty($wyCost['sBadTag'])&&in_array($k,$wyCost['sBadTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                                </label>
+                            <?php
+                            }
+
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">*所属物业：</label>
+                         <div class="col-sm-4">
+                              <input type="text"name="sCompany" id="sCompany" value="<?php echo $wyCost['sCompany'] ?>" class="form-control flts" validate="!required:true" placeholder="填写所属物业">
+                              <span class="validate_checktip"></span>
+                         </div>
+                         <div class="col-sm-6 checkflag">
+                                <div class="checkbox">
+                                   <label>
+                                     <input type="checkbox"  value="1" name="sCompanyConfirm" id="sCompanyConfirm" <?php echo isset($wyCost['sCompanyConfirm'])&&($wyCost['sCompanyConfirm']==1) ? 'checked':'' ?>> 物业公司未确定
+                                   </label>
+                                </div>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">*资质：</label>
+                         <div class="col-sm-4">
+                             <input type="text" name="sQuality" id="sQuality" value="<?php echo $wyCost['sQuality'] ?>" validate="!required:true"  class="form-control flts"  placeholder="请填写资质">
+                              <span class="validate_checktip"></span>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">*物业费：</label>
+                         <div class="col-sm-5">
+                              <input type="text" name="sPrice" id="sPrice" value="<?php echo isset($wyCost['sPrice'])&&$wyCost['sPrice']!=0.00 ? $wyCost['sPrice'] :'' ?>" class="form-control flts" placeholder="物业费为数字" validate="!float:true">
+                              <span class="prfl"> 元/平方米.月</span>
+                             <span class="prfl validate_checktip"></span>
+                         </div>
+                         <div class="col-sm-4 checkflag">
+                                <div class="checkbox">
+                                   <label>
+                                     <input type="checkbox"value="1"  name="sPriceConfirm" id="sPriceConfirm" <?php echo isset($wyCost['sPriceConfirm'])&&($wyCost['sPriceConfirm']==1) ? 'checked':'' ?>> 物业费未确定
+                                   </label>
+                                </div>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                          <label for="" class="col-sm-2 control-label">其他点评：</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="3" name="sOtherComment" id="sOtherComment" placeholder="其他点评"><?php echo $wyCost['sOtherComment'] ?></textarea>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+                        <div class="col-sm-10">
+                            <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                                <div class="row" id="sImageQt" >
+                                    <?php
+                                    if (isset($qtImage)&&!empty($qtImage)) {
+                                        foreach($qtImage as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <button id="save" class="btn btn-primary">发布</button>
+                                <button id="sync" class="btn btn-info"  >同步</button>
+                                <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+                            </div>
+                    </div>
+       </div>
+</form>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+<script>
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Wyfw', a: 'cost', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+   $(WyfwinitPage)
+    function WyfwinitPage(){
+        index = 1;
+       wyfwformUrl="/evaluation/Wyfw/saveCost";
+     //  thepostUrl="/evaluation/Zxstandard/checkBlank";
+        if ($("#sCompanyConfirm").is(':checked')==true) {
+            $.data($('#myform')[0],'validator', '');
+            $("#sCompany").attr('validate',$("#sCompany").attr('validate').replace('!',''));
+            $("#sQuality").attr('validate',$("#sQuality").attr('validate').replace('!',''));
+            $("#sPrice").attr('validate',$("#sPrice").attr('validate').replace('!',''));
+            initForm(wyfwformUrl);
+        } else {
+            initForm(wyfwformUrl);
+        }
+         if ($("#sPriceConfirm").is(':checked')==true) {
+            $.data($('#myform')[0],'validator', '');
+            $("#sPrice").attr('validate',$("#sPrice").attr('validate').replace('!',''));
+            initForm(wyfwformUrl);
+        } else {
+            initForm(wyfwformUrl);
+        }
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+        // 移除边框
+        $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+        //鼠标移上显示大图
+        $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+        $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+        $("#sCompanyConfirm").on("click",allcheckitChecked);
+         $("#sPriceConfirm").on("click",checkitChecked);
+    }
+    
+    function allcheckitChecked(){
+            if ($(this).is(':checked')==true) {
+                $.data($('#myform')[0],'validator', '');
+                $("#sCompany").attr('validate',$("#sCompany").attr('validate').replace('!',''));
+                $("#sQuality").attr('validate',$("#sQuality").attr('validate').replace('!',''));
+                $("#sPrice").attr('validate',$("#sPrice").attr('validate').replace('!',''));
+                $("#sCompany").next().removeClass('validate_wrong').html('');
+                $("#sCompany").next().removeClass('validate_right').html('');
+                $("#sQuality").next().removeClass('validate_wrong').html('');
+                $("#sQuality").next().removeClass('validate_right').html('');
+                $("#sPrice").next().next().removeClass('validate_wrong').html('');
+                $("#sPrice").next().next().removeClass('validate_right').html('');
+                initForm(wyfwformUrl);
+            } else {
+                $.data($('#myform')[0],'validator', '');
+                $("#sCompany").attr('validate','!'+$("#sCompany").attr('validate'));
+                $("#sQuality").attr('validate','!'+$("#sQuality").attr('validate'));
+                if(!$("#sPriceConfirm").is(':checked')){
+                    $("#sPrice").attr('validate','!'+$("#sPrice").attr('validate'));
+                  }
+                initForm(wyfwformUrl);
+            }
+            //$.get(thepostUrl, {isblank:isblank},'json');
+    }
+     function checkitChecked(){
+            if ($(this).is(':checked')==true) {
+                $.data($('#myform')[0],'validator', '');
+                $("#sPrice").attr('validate',$("#sPrice").attr('validate').replace('!',''));
+                $("#sPrice").next().next().removeClass('validate_wrong').html('');
+                $("#sPrice").next().next().removeClass('validate_right').html('');
+                initForm(wyfwformUrl);
+            } else {
+                if(!$("#sCompanyConfirm").is(':checked')){
+                    $.data($('#myform')[0],'validator', '');
+                    $("#sPrice").attr('validate','!'+$("#sPrice").attr('validate'));
+                    initForm(wyfwformUrl);
+                }
+            }
+            //$.get(thepostUrl, {isblank:isblank},'json');
+    }
+</script>

@@ -1,0 +1,496 @@
+<!--公共部位开始-->
+<section class="viewport">
+    <!--公共部位内容开始-->
+    <section class="plan_wrap sqgg">
+        <section
+            class="analyze_wrap <?php if (empty($aHxfx['data']['sBadTag']) && empty($aHxfx['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+            <div class="floor_plan analyze_txt">
+                <h3>
+                    <span></span>
+                    分析师点评
+                </h3>
+
+                <p><?php echo $aHxfx['data']['sComment'] ?></p>
+            </div>
+        </section>
+        <section class="condition">
+            <?php
+            if (isset($aHxfx['data']['sGoodTag']) && $aHxfx['data']['sGoodTag']) {
+                ?>
+                <section class="advantage">
+                    <h3>优势</h3>
+
+                    <div class="advantage_con">
+                        <?php
+                        foreach ($aHxfx['data']['sGoodTag'] as $key => $value) {
+                            ?>
+                            <span><?php echo $value; ?></span>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </section>
+            <?php
+            }
+            ?>
+            <?php
+            if (isset($aHxfx['data']['sBadTag']) && $aHxfx['data']['sBadTag']) {
+                ?>
+                <section class="advantage disadvantaged">
+                    <h3>劣势</h3>
+
+                    <div class="advantage_con">
+                        <?php
+                        foreach ($aHxfx['data']['sBadTag'] as $key => $value) {
+                            ?>
+                            <span><?php echo $value; ?></span>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </section>
+            <?php
+            }
+            ?>
+        </section>
+        <?php
+        if ($aHxfx['data']['scdyImage'] || $aHxfx['data']['scmjImage'] || $aHxfx['data']['sScDymPp'] || $aHxfx['data']['scdjImage'] || $aHxfx['data']['scbxImage'] || $aHxfx['data']['scdzImage'] || $aHxfx['data']['scqmImage'] || $aHxfx['data']['sScDymCz'] || $aHxfx['data']['sScMjPp'] || $aHxfx['data']['sScMjPp'] || $aHxfx['data']['sScBxPp'] || $aHxfx['data']['sScBxCz'] || $aHxfx['data']['sScDzPp'] || $aHxfx['data']['sScDzCz'] || $aHxfx['data']['sScQmPp'] || $aHxfx['data']['sScQmCz']) {
+            ?>
+            <section class=" floor_plan brand_configuration">
+                <h3>
+                    <span></span>
+                    首层门厅
+                </h3>
+
+                <div class="Kitchen_system door">
+                    <?php
+                    if ((isset($aHxfx['data']['sScDymPp']) && $aHxfx['data']['sScDymPp']) || $aHxfx['data']['scdjImage'] || (isset($aHxfx['data']['sScDymCz']) && $aHxfx['data']['sScDymCz']) || (isset($aHxfx['data']['scdyImage']) && !empty($aHxfx['data']['scdyImage']))) {
+                        ?>
+                        <div>
+                            <ul  <?php if (!empty($aHxfx['data']['scdyImage'])) { ?> class="bord_ty" <?php } ?> >
+                                <li>单元门</li>
+                                <li><?php echo $aHxfx['data']['sScDymPp'] ?></li>
+                                <li><?php echo $aHxfx['data']['sScDymCz'] ?></li>
+                            </ul>
+                            <?php
+                            if (!empty($aHxfx['data']['scdyImage'])) {
+                                foreach ($aHxfx['data']['scdyImage'] as $value) {
+                                    ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                            <div class="house_pic">
+                                        <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                        <span class="pic_tip"></span>
+                                    </div>
+                                </a>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <?php
+                    if ((isset($aHxfx['data']['sScMjPp']) && $aHxfx['data']['sScMjPp']) || (isset($aHxfx['data']['scmjImage']) && !empty($aHxfx['data']['scmjImage']))) {
+                        ?>
+                        <div>
+                            <ul <?php if (!empty($aHxfx['data']['scmjImage'])) { ?> class="bord_ty" <?php } ?> >
+                                <li>门禁系统</li>
+                                <li><?php echo $aHxfx['data']['sScMjPp'] ?></li>
+                                <li>-</li>
+                            </ul>
+                            <?php
+                            if (!empty($aHxfx['data']['scmjImage'])) {
+                                foreach ($aHxfx['data']['scmjImage'] as $value) {
+                                    ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                            <div class="house_pic">
+                                        <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                        <span class="pic_tip"></span>
+                                    </div>
+                                </a>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <?php
+                    if ((isset($aHxfx['data']['sScDjPp']) && $aHxfx['data']['sScDjPp']) || (isset($aHxfx['data']['scdjImage']) && !empty($aHxfx['data']['scdjImage']))) {
+                        ?>
+                        <div>
+                            <ul <?php if (!empty($aHxfx['data']['scdjImage'])) { ?> class="bord_ty" <?php } ?> >
+                                <li>灯具</li>
+                                <li><?php echo $aHxfx['data']['sScDjPp'] ?></li>
+                                <li>-</li>
+                            </ul>
+                            <?php
+                            if (!empty($aHxfx['data']['scdjImage'])) {
+                                foreach ($aHxfx['data']['scdjImage'] as $value) {
+                                    ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                    <div class="house_pic">
+                                        <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                        <span class="pic_tip"></span>
+                                    </div>
+                                </a>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <?php
+                    if ((isset($aHxfx['data']['sScBxPp']) && $aHxfx['data']['sScBxPp']) || (isset($aHxfx['data']['sScBxCz']) && $aHxfx['data']['sScBxCz']) || (isset($aHxfx['data']['scbxImage']) && !empty($aHxfx['data']['scbxImage']))) {
+                        ?>
+                        <div>
+                            <ul <?php if (!empty($aHxfx['data']['scbxImage'])) { ?> class="bord_ty" <?php } ?> >
+                                <li>报箱</li>
+                                <li><?php echo $aHxfx['data']['sScBxPp'] ?></li>
+                                <li><?php echo $aHxfx['data']['sScBxCz'] ?></li>
+                            </ul>
+                            <?php
+                            if (!empty($aHxfx['data']['scbxImage'])) {
+                                foreach ($aHxfx['data']['scbxImage'] as $value) {
+                                    ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                    <div class="house_pic">
+                                        <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                        <span class="pic_tip"></span>
+                                    </div>
+                                </a>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <?php
+                    if ((isset($aHxfx['data']['sScDzPp']) && $aHxfx['data']['sScDzPp']) || (isset($aHxfx['data']['sScDzCz']) && $aHxfx['data']['sScDzCz']) || (isset($aHxfx['data']['scdzImage']) && !empty($aHxfx['data']['scdzImage']))) {
+                        ?>
+                        <div>
+                            <ul <?php if (!empty($aHxfx['data']['scdzImage'])) { ?> class="bord_ty" <?php } ?> >
+                                <li>地砖</li>
+                                <li><?php echo $aHxfx['data']['sScDzPp'] ?></li>
+                                <li><?php echo $aHxfx['data']['sScDzCz'] ?></li>
+                            </ul>
+                            <?php
+                            if (!empty($aHxfx['data']['scdzImage'])) {
+                                foreach ($aHxfx['data']['scdzImage'] as $value) {
+                                    ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                    <div class="house_pic">
+                                        <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                        <span class="pic_tip"></span>
+                                    </div>
+                                </a>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <?php
+                    if ((isset($aHxfx['data']['sScQmPp']) && $aHxfx['data']['sScQmPp']) || (isset($aHxfx['data']['sScQmCz']) && $aHxfx['data']['sScQmCz']) || (isset($aHxfx['data']['scqmImage']) && !empty($aHxfx['data']['scqmImage']))) {
+                        ?>
+                        <div>
+                            <ul <?php if (!empty($aHxfx['data']['scqmImage'])) { ?> class="bord_ty" <?php } ?> >
+                                <li>墙面</li>
+                                <li><?php echo $aHxfx['data']['sScQmPp'] ?></li>
+                                <li><?php echo $aHxfx['data']['sScQmCz'] ?></li>
+                            </ul>
+                            <?php
+                            if (!empty($aHxfx['data']['scqmImage'])) {
+                                foreach ($aHxfx['data']['scqmImage'] as $value) {
+                                    ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                    <div class="house_pic">
+                                        <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                        <span class="pic_tip"></span>
+                                    </div>
+                                </a>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </section>
+        <?php
+        }
+        ?>
+        <?php
+        if ($aHxfx['data']['dtqmImage'] || $aHxfx['data']['dtdzImage']||$aHxfx['data']['dtdjImage'] || $aHxfx['data']['dtqmImage'] || $aHxfx['data']['dtImage'] || $aHxfx['data']['sDtDtPp'] || $aHxfx['data']['sDtDjPp'] || $aHxfx['data']['sDtDzPp'] || $aHxfx['data']['sDtDzCz'] || $aHxfx['data']['sDtQmPp'] || $aHxfx['data']['sDtQmCz']) {
+        ?>
+        <section class=" floor_plan brand_configuration">
+            <h3>
+                <span></span>
+                电梯厅
+            </h3>
+
+            <div class="Kitchen_system door">
+                <?php
+                if ((isset($aHxfx['data']['sDtDtPp']) && $aHxfx['data']['sDtDtPp']) || (isset($aHxfx['data']['dtImage']) && !empty($aHxfx['data']['dtImage']))) {
+                    ?>
+                    <div>
+                        <ul <?php if (!empty($aHxfx['data']['dtImage'])) { ?> class="bord_ty" <?php } ?> >
+                            <li>电梯</li>
+                            <li><?php echo $aHxfx['data']['sDtDtPp'] ?></li>
+                            <li>-</li>
+                        </ul>
+                        <?php
+                        if (!empty($aHxfx['data']['dtImage'])) {
+                            foreach ($aHxfx['data']['dtImage'] as $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="house_pic">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                </div>
+                            </a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+                <?php
+                if ((isset($aHxfx['data']['sDtDjPp']) && $aHxfx['data']['sDtDjPp']) || (isset($aHxfx['data']['dtdjImage']) && !empty($aHxfx['data']['dtdjImage']))) {
+                    ?>
+                    <div>
+                        <ul <?php if (!empty($aHxfx['data']['dtdjImage'])) { ?> class="bord_ty" <?php } ?> >
+                            <li>灯具</li>
+                            <li><?php echo $aHxfx['data']['sDtDjPp'] ?></li>
+                            <li>-</li>
+                        </ul>
+                        <?php
+                        if (!empty($aHxfx['data']['dtdjImage'])) {
+                            foreach ($aHxfx['data']['dtdjImage'] as $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="house_pic">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                </div>
+                            </a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+                <?php
+                if ((isset($aHxfx['data']['sDtDzPp']) && $aHxfx['data']['sDtDzPp']) || (isset($aHxfx['data']['sDtDzCz']) && $aHxfx['data']['sDtDzCz']) || (isset($aHxfx['data']['dtdzImage']) && !empty($aHxfx['data']['dtdzImage']))) {
+                    ?>
+                    <div>
+                        <ul <?php if (!empty($aHxfx['data']['dtdzImage'])) { ?> class="bord_ty" <?php } ?> >
+                            <li>地砖</li>
+                            <li><?php echo $aHxfx['data']['sDtDzPp'] ?></li>
+                            <li><?php echo $aHxfx['data']['sDtDzCz'] ?></li>
+                        </ul>
+                        <?php
+                        if (!empty($aHxfx['data']['dtdzImage'])) {
+                            foreach ($aHxfx['data']['dtdzImage'] as $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="house_pic">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                </div>
+                            </a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+                <?php
+                if ((isset($aHxfx['data']['sDtQmPp']) && $aHxfx['data']['sDtQmPp']) || (isset($aHxfx['data']['sDtQmCz']) && $aHxfx['data']['sDtQmCz']) || (isset($aHxfx['data']['dtqmImage']) && !empty($aHxfx['data']['dtqmImage']))) {
+                    ?>
+                    <div>
+                        <ul <?php if (!empty($aHxfx['data']['dtqmImage'])) { ?> class="bord_ty" <?php } ?> >
+                            <li>墙面</li>
+                            <li><?php echo $aHxfx['data']['sDtQmPp'] ?></li>
+                            <li><?php echo $aHxfx['data']['sDtQmCz'] ?></li>
+                        </ul>
+                        <?php
+                        if (!empty($aHxfx['data']['dtqmImage'])) {
+                            foreach ($aHxfx['data']['dtqmImage'] as $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="house_pic">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                </div>
+                            </a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </section>
+        <?php
+        }
+        ?>
+        <?php
+        if ($aHxfx['data']['zlqmImage'] || $aHxfx['data']['zldzImage'] || $aHxfx['data']['zldjImage'] || $aHxfx['data']['sZlDjPp'] || $aHxfx['data']['sZlDzPp'] || $aHxfx['data']['sZlDzCz'] || $aHxfx['data']['sZlQmPp'] || $aHxfx['data']['sZlQmCz']) {
+            ?>
+        <section class=" floor_plan brand_configuration">
+            <h3>
+                <span></span>
+                走廊
+            </h3>
+
+            <div class="Kitchen_system door">
+                <?php
+                if ((isset($aHxfx['data']['sZlDjPp']) && $aHxfx['data']['sZlDjPp']) || (isset($aHxfx['data']['zldjImage']) && !empty($aHxfx['data']['zldjImage']))) {
+                    ?>
+                    <div>
+                        <ul <?php if (!empty($aHxfx['data']['zldjImage'])) { ?> class="bord_ty" <?php } ?> >
+                            <li>灯具</li>
+                            <li><?php echo $aHxfx['data']['sZlDjPp'] ?></li>
+                            <li>-</li>
+                        </ul>
+                        <?php
+                        if (!empty($aHxfx['data']['zldjImage'])) {
+                            foreach ($aHxfx['data']['zldjImage'] as $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="house_pic">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                </div>
+                            </a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+                <?php
+                if ((isset($aHxfx['data']['sZlDzPp']) && $aHxfx['data']['sZlDzPp']) || (isset($aHxfx['data']['sZlDzCz']) && $aHxfx['data']['sZlDzCz']) || (isset($aHxfx['data']['zldzImage']) && !empty($aHxfx['data']['zldzImage']))) {
+                    ?>
+                    <div>
+                        <ul <?php if (!empty($aHxfx['data']['zldzImage'])) { ?> class="bord_ty" <?php } ?> >
+                            <li>地砖</li>
+                            <li><?php echo $aHxfx['data']['sZlDzPp'] ?></li>
+                            <li><?php echo $aHxfx['data']['sZlDzCz'] ?></li>
+                        </ul>
+                        <?php
+                        if (!empty($aHxfx['data']['zldzImage'])) {
+                            foreach ($aHxfx['data']['zldzImage'] as $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="house_pic">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                </div>
+                            </a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+                <?php
+                if ((isset($aHxfx['data']['sZlQmPp']) && $aHxfx['data']['sZlQmPp']) || (isset($aHxfx['data']['sZlQmCz']) && $aHxfx['data']['sZlQmCz']) || (isset($aHxfx['data']['zlqmImage']) && !empty($aHxfx['data']['zlqmImage']))) {
+                    ?>
+                    <div>
+                        <ul <?php if (!empty($aHxfx['data']['zlqmImage'])) { ?> class="bord_ty" <?php } ?> >
+                            <li>墙面</li>
+                            <li><?php echo $aHxfx['data']['sZlQmPp'] ?></li>
+                            <li><?php echo $aHxfx['data']['sZlQmCz'] ?></li>
+                        </ul>
+                        <?php
+                        if (!empty($aHxfx['data']['zlqmImage'])) {
+                            foreach ($aHxfx['data']['zlqmImage'] as $value) {
+                                ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="house_pic">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                </div>
+                            </a>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </section>
+        <?php
+        }
+        ?>
+        <?php if (isset($aHxfx['data']['ggqtImage']) && !empty($aHxfx['data']['ggqtImage'])) {
+            ?>
+            <section class=" floor_plan">
+                <h3>
+                    <span></span>
+                    其他图片
+                </h3>
+
+                <div class="floor_plan_pic">
+                    <?php
+                    foreach ($aHxfx['data']['ggqtImage'] as $key => $value) {
+                        ?>
+                    <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                        <div class="floor_plan_pic01 ggbw_pic">
+                            <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                            <span class="pic_tip"></span>
+                            <p class="pic_name"><?php echo $value['sTitle'] ?></p>
+
+                            <p class="pic_description"><?php echo $value['sDesc'] ?></p>
+                        </div>
+                        </a>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </section>
+        <?php
+        }
+        ?>
+        <?php
+        if (isset($aHxfx['data']['sOtherComment']) && $aHxfx['data']['sOtherComment']) {
+            ?>
+            <section class="floor_plan plan_description evaluation_description">
+                <h3>
+                    <span></span>
+                    点评
+                </h3>
+
+                <p><?php echo $aHxfx['data']['sOtherComment'] ?></p>
+            </section>
+        <?php
+        }
+        ?>
+    </section>
+</section>

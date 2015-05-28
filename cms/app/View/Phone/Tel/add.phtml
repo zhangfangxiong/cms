@@ -1,0 +1,90 @@
+<style>
+    .tubiao {
+        font-weight: bold;
+        color: red;
+        padding-right: 2px;
+    }
+    .publish-div {
+        margin-bottom: 20px;
+    }
+</style>
+<div class="pheader clearfix"><?php echo isset($aDetail['iAutoID']) ? '编辑' : '增加' ?>400热线</div>
+<div class="pbody clearfix">
+    <div id="myform" class="form-horizontal" role="form" method="post" action="/phone/tel/save">
+        <input id="aId" name="id" type="hidden" value="<?php echo isset($aDetail['iAutoID']) ? $aDetail['iAutoID'] : '' ?>">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="tubiao">*</span> 热线服务ID：</label>
+
+            <div class="col-sm-10">
+                <input id="servid" name="servid" validate="!clength:5-22" type="text"
+                       value="<?php echo isset($aDetail['sServID']) ? $aDetail['sServID'] : '' ?>"
+                       class="form-control input-validate" >
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label "><span class="tubiao">*</span> 热线服务类型：</label>
+
+            <div class="col-sm-10">
+                <input id="servtype" name="servtype" validate="*clength:5-15" type="text"
+                       value="<?php echo isset($aDetail['iSevType']) ? $aDetail['iSevType'] : '' ?>"
+                       class="form-control input-validate" >
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span class="tubiao">*</span> 真实号码：</label>
+
+            <div class="col-sm-10">
+                <input id="tel" name="tel" validate="!function:authorCheck" type="text"
+                       value="<?php echo isset($aDetail['sTel']) ? htmlentities($aDetail['sTel']) : '' ?>"
+                       class="form-control input-validate" >
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+    
+        <div class="form-group">
+            <label class="col-sm-2 control-label "><span class="tubiao">*</span> 分机号：</label>
+
+            <div class="col-sm-10">
+                <input id="ext" name="ext" validate="*clength:5-15" type="text"
+                       value="<?php echo isset($aDetail['iExt']) ?  htmlentities($aDetail['iExt']) : '' ?>"
+                       class="form-control input-validate" >
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+       
+        <div class="btn-toolbar text-center col-sm-9 publish-div">
+            <button id="save" class="btn btn-primary">保存</button>
+            <button id="cancel" class="btn" onclick="location.href='<?=$sListUrl?>';return false;">取消</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $("#save").click(function(){
+            $.ajax({
+                url: '/phone/tel/save',
+                type: 'post',
+                data:{
+                    id          : $('#aId').val(),
+                    servid      : $('#servid').val(),
+                    servtype    : $('#servtype').val(),
+                    tel         : $('#tel').val(),
+                    ext         : $('#ext').val(),
+                },
+                dataType: 'json',
+                success: function(result){
+                    alert(result.data.sMsg);
+                    if(result.status) {
+                        location.href='<?=$sListUrl?>';
+                        return false;
+                    }
+                }
+            });
+        })
+    })
+</script>
+

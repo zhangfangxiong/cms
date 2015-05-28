@@ -1,0 +1,233 @@
+<?php include APP_PATH . '/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform">
+    <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+
+    <div class="panel mt15">
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+
+            <div class="col-sm-9">
+                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate"
+                          validate="!clength:1-255"><?php echo isset($blInSideInfo['sComment'])?$blInSideInfo['sComment']:'' ?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">劣势：</label>
+
+            <div class="col-sm-9">
+                <?php
+                foreach ($badTags as $k => $v) {
+                    ?>
+                    <label class="checkbox-inline">
+                        <input type="checkbox"
+                               name="sBadTag[]" <?php echo !empty($blInSideInfo['sBadTag']) && in_array($k, $blInSideInfo['sBadTag']) ? 'checked' : '' ?>
+                               value="<?php echo $k ?>"> <?php echo $v ?>
+                    </label>
+                <?php
+                }
+
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">*社区不利因素分布图：</label>
+
+            <div class="col-sm-9">
+                <input type="button" value="选择图片" class="plupload fl hxupload" data-error-msg="请上传社区不利因素分布图" data-target="sBlImage"
+                       data-img="#sImageShow" data-callback="showImg" data-limit="1" data-dec="0">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group mtf">
+            <div class="col-md-offset-2 col-md-9">
+                <div class="eHxImgDiv"
+                     style="display: <?php echo isset($blImage) && !empty($blImage) ? '' : 'none' ?>;">
+                    <div class="row" id="sImageShow">
+                        <?php
+                        if (isset($blImage) && !empty($blImage)) {
+                            foreach ($blImage as $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers" src="<?php echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>"
+                                         data-content-id="<?php echo $item['iAutoID'] ?>">
+                                    <?php if($evaluationSwitch == 0){ ?>
+                                    <a href="javascript:void(0);" title="删除" class="action  icon-trash"></a>
+                                    <?php } ?>
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+        foreach ($blys as $k => $item) {
+            ?>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-2 clearpadmar">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="ysyCheck[<?php echo $k ?>]"
+                                   value="1" <?php echo $blInSideInfo['sGdblys'][$k]['checked'] == 1 ? 'checked' : '' ?>>
+                            影响源：
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-2 pdl0">
+                    <div class="mt5"><?php echo $item[1] ?></div>
+                </div>
+                <div class="col-sm-1 clearpadmar">
+                    <div class="mt5">影响因素：</div>
+                </div>
+                <div class="col-sm-2 pdl0">
+                    <div class="mt5"><?php echo $item[2] ?></div>
+                </div>
+                <div class="col-sm-1 clearpadmar">
+                    <div class="mt5">影响楼栋：</div>
+                </div>
+                <div class="col-sm-2 pdl0">
+                    <input type="text" class="form-control" name="yslDesc[<?php echo $k ?>]" placeholder="如：5、6号楼3层以下住户"
+                           value="<?php echo $blInSideInfo['sGdblys'][$k]['ysl'] ?>"/>
+                </div>
+            </div>
+        <?php
+        }
+        ?>
+        <div class="form-group">
+            <?php if($evaluationSwitch == 0){ ?>
+            <label for="" class="col-sm-offset-1 col-sm-2 control-label"><a href="javascript:void(0);"
+                                                                            id="addOtherfactors"><span
+                        class="glyphicon glyphicon-plus"></span>添加其他影响源</a></label>
+            <?php } ?>
+
+            <div class="col-sm-9"></div>
+        </div>
+        <div class="otherFactors">
+            <?php
+              if(!empty($blInSideInfo['sDtblys'])) {
+                foreach($blInSideInfo['sDtblys'] as $k => $item) {
+            ?>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-2" style="text-align:right;">*影响源：</div>
+                <div class="col-sm-2 pdl0">
+                    <input type="text" class="form-control fl" style="width:80%" validate="!required: " placeholder="" value="<?php echo $item['ysy']?>"
+                           name="aYsy[]">
+                    <span class="validate_checktip fl"></span>
+                </div>
+                <div class="col-sm-1 clearpadmar">
+                    <div class="mt5">影响因素：</div>
+                </div>
+                <div class="col-sm-2 pdl0">
+                    <input type="text" class="form-control" placeholder="影响因素" name="aBlys[]" value="<?php echo $item['blys'] ?>"></div>
+                <div class="col-sm-1 clearpadmar">
+                    <div class="mt5">影响楼栋：</div>
+                </div>
+                <div class="col-sm-2 pdl0">
+                    <input type="text" class="form-control fl" style="width:75%" placeholder="如：5、6号楼3层以下住户"
+                           name="aYsl[]" value="<?php echo $item['ysl'] ?>">
+                    <a href="javascript:void(0)" class="fl deleteBadfactors">删除</a></div>
+            </div>
+            <?php
+                }
+              }
+            ?>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">总结点评：</label>
+
+            <div class="col-sm-9">
+                <textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control"
+                          placeholder="总结点评"><?php echo isset($blInSideInfo['sOtherComment'])?$blInSideInfo['sOtherComment']:'' ?></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+            <div class="col-sm-10">
+                <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                    <div class="row" id="sImageQt" >
+                        <?php
+                        if (isset($qtImage)&&!empty($qtImage)) {
+                            foreach($qtImage as $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                    <?php if($evaluationSwitch == 0){ ?>
+                                    <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                    <?php } ?>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                    </div>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                    </div>
+                                    <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <button id="save" class="btn btn-primary">发布</button>
+                <button id="sync" class="btn btn-info"  >同步</button>
+                <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/evaluation.js"></script>
+<script>
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Badfactor', a: 'inSide', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    $(OutFactorInitpage);
+    function OutFactorInitpage() {
+        index = 1;
+        OutFactorformUrl = "/evaluation/Badfactor/saveInSide";
+        $("#myform").on('click', '.action', deleteUploadimg);
+        initPublickForm(OutFactorformUrl);
+        $("#addOtherfactors").on("click", addOtherfactorsFn)
+        $(".otherFactors").on("click", ".deleteBadfactors", deleteBadfactor)
+   //鼠标移上显示大图
+    $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+     $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    }
+
+    function addOtherfactorsFn() {
+        var html = '<div class="form-group">' +
+            '<div class="col-sm-offset-1 col-sm-2" style="text-align:right;">*影响源：</div>' +
+            '<div class="col-sm-2 pdl0"> <input type="text" class="form-control fl" style="width:80%" validate="!required: " placeholder="影响源"  name="aYsy[]" ><span class="validate_checktip fl"></span></div>' +
+            '<div class="col-sm-1 clearpadmar"><div class="mt5">影响因素：</div></div>' +
+            '<div class="col-sm-2 pdl0"><input type="text" class="form-control" placeholder="影响因素"   name="aBlys[]"> </div>' +
+            '<div class="col-sm-1 clearpadmar"><div class="mt5">影响楼栋： </div></div>' +
+            ' <div class="col-sm-2 pdl0"><input type="text" class="form-control fl" value="" style="width:75%" placeholder="如：5、6号楼3层以下住户" name="aYsl[]"/><a href="javascript:void(0)" class="fl deleteBadfactors">删除</a></div>' +
+            '</div>';
+        $(this).parents(".form-group").next().append(html);
+        $.data($('#myform')[0], 'validator', '');
+        initPublickForm(OutFactorformUrl);
+    }
+
+    function deleteBadfactor() {
+        if (window.confirm("确定要删除该影响源吗？")) {
+            $(this).parents(".form-group").remove();
+        }
+    }
+
+
+</script>

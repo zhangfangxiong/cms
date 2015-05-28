@@ -1,0 +1,51 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*css重置*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; vertical-align: baseline; background: transparent; list-style:none; } 
+body { line-height: 1; } 
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } 
+:focus { outline: 0; } 
+ins { text-decoration: none; } 
+del { text-decoration: line-through; } 
+table { border-collapse: collapse; border-spacing: 0; }
+address, caption, cite, code, dfn, em, var {font-style: normal;font-weight: normal}
+
+a{ color:#999999; text-decoration:none;}
+a:hover{ color:#fff; text-decoration:none;}
+html{height:100%;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:transparent;font-size:62.5%;}
+body{font-family:Microsoft Yahei, Hiragino Sans GB,Arial,Helvetica,"微软雅黑","宋体",sans-serif;font-size:1.2rem;background-color:#333333;-webkit-touch-callout:none;-webkit-user-select:none; color:#fff;}
+div.bottom-nav{position: fixed;bottom: 0;height:50px;border-top:1px solid #ebebeb; z-index: 9999;width: 100%;background:#333333;}
+.navli{line-height: 50px;text-align: center;}
+.navli a{width:100%;display: block;height:50px;}
+.topinfo{height:30px; width:100%;position:absolute;top: 0px;left:0; text-align: center;font-size:1.6rem;line-height: 30px;padding-top:10px;z-index: 10000;background:#333333; }
+.rightclose{position: relative;right:10px;top:0;font-size: 1.8rem;display: block;float: right;width:30px;height:30px; background: url("../images/close.png") no-repeat center center; background-size: 23px auto;}
+.bottom-nav .current{color:#fff;}
+.photoli canvas { width: 100%; }
+.allphotos{height:100%;}
+.heigitbody{height:100%;}
+ #xiaoguoUrl,  #huxingUrl, #shijingUrl, #zongpingUrl, #zhoubianUrl{width: 100%;height: 100%;}
+ #huxingUrl, #shijingUrl, #zongpingUrl, #zhoubianUrl{display: none}
+ #bottomnavli .noclick {
+      color : #444;     
+ }
+#bottomnavli .noclick:hover{
+      color : #444;
+ }
+ .photoli{text-align: center;}
+ .photoli img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      -ms-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+    }
+

@@ -1,0 +1,414 @@
+<!--新房列表开始-->
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/swiper.min.css">
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l">
+                <a href="javascript:history.go(-1);"></a>
+            </div>
+            <div class="seach_wrap index_seach">
+                <a class="search_txt">
+                    <?php
+                    if (empty($where["keyword"])) {
+                        echo "请输入楼盘名或地址";
+                    } else {
+                        echo $where["keyword"];
+                    }
+                    ?>
+                    <s></s>
+                </a>
+            </div>
+            <a href="/h5/mapsearch" class="map_search_icon is_app_no"></a>
+        </div>
+    </header>
+    <!--头部开始-->
+    <nav class="newHosue_nav border_bottom">
+        <ul class="pt12 pb12">
+            <?php if (!empty($regionCur) && intval($regionCur["iCodeID"]) > 0) { ?>
+                <li data-classes="region" id="region">
+                    <a href="#"><?php echo $regionCur["sName"] ?></a>
+                <s class="down" ></s>
+                </li>
+            <?php } else { ?>
+                <li data-classes="region" id="region"><a href="#">区域</a><s class="down"></s></li>
+            <?php } ?>
+            <?php if (!empty($priceCur) && $priceCur["iCodeID"] > 0) { ?>
+                <li data-classes="price" id="price">
+                    <a href="#"><?php echo $priceCur["sName"] ?></a>
+                <s class="down"></s>
+                </li>
+            <?php } else { ?>
+                <li data-classes="price" id="price"><a href="#">价格</a><s class="down"></s></li>
+            <?php } ?>
+            <?php if (!empty($layoutCur) && $layoutCur["iCodeID"] > 0) { ?>
+                <li data-classes="family" id="family">
+                    <a href="#"><?php echo $layoutCur["sName"] ?></a>
+                <s class="down"></s>
+                </li>
+            <?php } else { ?>
+                <li data-classes="family" id="family"><a href="#">户型</a><s class="down"></s></li>
+            <?php } ?>
+        </ul>
+    </nav>
+    <!--选项切换开始-->
+    <section class="choice_wrap">
+        <ul class="bgf choice_item region" data-flag="region">
+            <?php foreach ($region as $item) { ?>
+                <?php
+                if (isset($item) && isset($item["sName"])) {
+                    $sClassName = $item["iCodeID"] == $where["regionID"] ? "current" : "";
+                    ?>
+                    <li regionId="<?php echo $item["iCodeID"] ?>" class="<?php echo $sClassName ?>"><a href="#" class="<?php echo $sClassName ?>"><?php echo $item["sName"] ?></a></li>
+                <?php } ?>
+            <?php } ?>
+        </ul>
+        <ul class="bgf choice_item price" data-flag="price">
+            <?php foreach ($price as $item) { ?>
+                <?php
+                if (isset($item) && isset($item["sName"])) {
+                    $sClassName = $item["iCodeID"] == $where["priceID"] ? "current" : "";
+                    ?>
+                    <li priceId="<?php echo $item["iCodeID"] ?>" class="<?php echo $sClassName ?>"><a href="#" class="<?php echo $sClassName ?>"><?php echo $item["sName"] ?></a></li>
+                <?php } ?>
+            <?php } ?>
+        </ul>
+        <ul class="bgf choice_item family" data-flag="family">
+            <?php foreach ($layout as $item) { ?>
+                <?php
+                if (isset($item) && isset($item["sName"])) {
+                    $sClassName = $item["iCodeID"] == $where["layoutID"] ? "current" : "";
+                    ?>
+                    <li layoutId="<?php echo $item["iCodeID"] ?>" class="<?php echo $sClassName ?>"><a href="#" class="<?php echo $sClassName ?>"><?php echo $item["sName"] ?></a></li>
+                <?php } ?>
+            <?php } ?>
+        </ul>
+    </section>
+    <!--选项切换结束-->
+    <!-- Swiper开始 -->
+    <section class="newHosue_swiper bgf border_bottom">
+        <div class="swiper-container pr12"  id="newhouseswip">
+            <div class="swiper-wrapper">
+                <?php foreach ($features as $item) { ?>
+                    <?php
+                    if (isset($item) && isset($item["sName"])) {
+                        $sClassName = $item["sCode"] == $where["featureID"] ? "current" : "";
+                        ?>
+                        <div featureid="<?php echo $item["sCode"] ?>" class="swiper-slide <?php echo $sClassName ?>"><?php echo $item["sName"] ?></div>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+        </div>
+    </section>
+    <input type="hidden" value="1" id="overnotload" />
+    <!-- Swiper结束 -->
+    <?php if (!empty($list["data"]["list"])) { ?>
+        <!--新房列表项开始-->
+        <section class="newHosue_list bgf border_bottom <?php
+        if ($where["featureID"]) {
+            echo 'hotHouse_list';
+        }
+        ?>" id="mainsection">
+                 <?php
+                 $index = 0;
+                 foreach ($list["data"]["list"] as $item) {
+                     $index++;
+                     $stopClass = $index > 3 ? "" : "top" . $index;
+                     ?>
+                     <?php if (isset($item) && isset($item["sName"])) { ?>
+                    <a href="/h5/xf/xfdetail?id=<?php echo $item["iBuildingID"] ?>" class="item pl12">
+                        <div class="cnt p12 border_bottom">
+                            <div class="pic mr12">
+                                <canvas data-src="<?php echo $item["sImgUrl"] ?>"></canvas>
+                                <?php if (!empty($item["iFlagType"])) { ?>
+                                    <s class="<?php echo $aEva[$item["iFlagType"]]["class"] ?>"></s>
+                                <?php } ?>
+                            </div>
+                            <div class="wrap">
+                                <div class="house_name">
+                                    <span class="name"><?php echo $item["sName"] ?></span>
+                                    <?php if (!empty($item["sRate"])) { ?>
+                                        <?php if ($where["featureID"] && $index < 4) { ?>
+                                            <span class="grade ml5 <?php
+                                            if (!empty($item["sRate"])) {
+                                                echo $stopClass;
+                                            }
+                                            ?>"></span>
+                                              <?php } else { ?>
+                                            <span class="grade ml5"><?php echo $item["sRate"] ?></span>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                                <div class="house_txt"><?php echo $item["sRegion"] ?></div>
+                                <div class="house_txt house_txt1">
+                                    <?php foreach (explode(";", $item["sAdvantages"]) as $sAdv) { ?>
+                                        <?php if (!empty($sAdv)) { ?>
+                                            <span class="mr5"><?php echo $sAdv ?></span>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                                <div class="house_txt house_txt2">
+                                    <span class="key_txt"><?php echo $item["sPrice"] ?></span>
+                                    <?php echo $item["sUnit"] ?>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <?php } ?>
+            <?php } ?>
+        </section>
+        <section class="loaddiv"></section>
+        <!--新房列表项结束-->
+    <?php } else { ?>
+        <!--无搜索内容开始-->
+        <section class="search_result index_search_result" style="display: block">
+            <div class="search_result_tip">
+                <div class="tip1">没找到您要的结果</div>
+                <div class="tip2"><a href="/h5/search/xfsearchindex">换个条件</a>试试吧</div>
+            </div>
+        </section>
+        <!--无搜索内容结束-->
+    <?php } ?>
+    <!--返回顶部开始-->
+    <div class="return_top" id="backtop">
+        <div class="return_top_bg"></div>
+    </div>
+    <!--返回顶部结束-->
+</div>
+<!--新房列表结束-->
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script type="text/javascript">
+
+    requirejs.config({
+        baseUrl: '<?php echo $sStaticRoot ?>/touchweb/lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'webtouchcommon': 'js/webtouchcommon',
+            'swiper': 'plugs/swiper.min'
+        }
+    })
+
+    require(["jquery", "swiper", "webtouchcommon"], function () {
+        pageIndex = 1;
+
+        //回退
+        $(".uc_return_l").bind("click", function () {
+            history.go(-1);
+        });
+        $(".cnt:last").removeClass("border_bottom");
+
+        //顶部搜索
+        $(".search_txt").bind("click", function () {
+            window.location = "/h5/search/unitsearch.html";
+        });
+
+        $(window).scroll(initScroll);
+
+        //窗口滚动处理
+        function initScroll() {
+            backTop();
+            var pageH = $(document).height()
+            var scrollT = $(window).scrollTop(); //滚动条top
+            var aa = pageH - $(window).height() - scrollT;
+            if (aa < 1) {
+                if ($("#overnotload").val() == "1") {
+                    pageIndex++;
+                    getData()
+                } else {
+                    return
+                }
+            }
+        }
+
+        //返回顶部
+        function backTop() {
+            var screenheight = $(window).height();
+            if ($(window).scrollTop() > screenheight) {
+                $('#backtop').fadeIn();
+            } else {
+                $('#backtop').fadeOut();
+            }
+        }
+
+        var aEva = eval({
+            "1": {"class": "rushou", "name": "\u5c3d\u5feb\u5165\u624b"},
+            "2": {"class": "tuijian", "name": "\u63a8\u8350\u8d2d\u4e70"},
+            "3": {"class": "jinshen", "name": "\u8c28\u614e\u8d2d\u4e70"},
+            "4": {"class": "guanwang", "name": "\u6301\u5e01\u89c2\u671b"}
+        });
+
+        //加载下一页数据
+        function getData() {
+            $(".loaddiv").show();
+            var iRegionID = $.trim($(".choice_wrap .region li.current").attr("regionid")) || 0;
+            var iPriceID = $.trim($(".choice_wrap .price li.current").attr("priceid")) || 0;
+            var iLayoutID = $.trim($(".choice_wrap .price li.family").attr("layoutid")) || 0;
+            var iFeatureID = $.trim($(".swiper-slide.current").attr("featureid")) || 0;
+            var sKeyword = $.trim($(".search_txt").text().replace("请输入楼盘名或地址", "")) || "";
+
+            if (iFeatureID) {
+                iRegionID = 0;
+                iPriceID = 0;
+                iLayoutID = 0;
+            }
+
+
+            $.post('/h5/search/xfSearchList',
+                    {
+                        iPage: pageIndex,
+                        iRegionID: iRegionID,
+                        iPriceID: iPriceID,
+                        iLayoutID: iLayoutID,
+                        iFeatureID: iFeatureID,
+                        sKeyword: sKeyword
+                    }, function (res) {
+                $(".loaddiv").hide();
+                res = eval("(" + res + ")");
+                if (res.data.data.list.length > 0) {
+                    var html = "";
+                    for (var i = 0; i < res.data.data.list.length; i++) {
+                        var advHtml = "";
+                        if (res.data.data.list[i].sAdvantages) {
+                            var advArr = res.data.data.list[i].sAdvantages.split(';');
+                            for (var k = 0; k < advArr.length; k++) {
+                                if (advArr[k]) {
+                                    advHtml += "<span class=\"mr5\">" + advArr[k] + "</span>";
+                                }
+                            }
+                        }
+
+                        var gradeHtml = "";
+                        if (iFeatureID && i < 3 && res.data.data.list[i].sRate * 1 > 0) {
+                            gradeHtml = "";
+                        }
+                        else if (res.data.data.list[i].sRate * 1 > 0) {
+                            gradeHtml = "<span class=\"grade ml5\">" + res.data.data.list[i].sRate + "</span>";
+                        }
+
+                        var flayTypeHtml = "";
+                        if (res.data.data.list[i].sRate * 1 > 0) {
+                            flayTypeHtml = "<s class=\"" + aEva[res.data.data.list[i].iFlagType * 1].class + "\"></s>";
+                        }
+
+                        html += "<a href=\"/h5/xf/xfdetail?id=" + res.data.data.list[i].iBuildingID + "\" class=\"item pl12\">" +
+                                "<div class=\"cnt p12 border_bottom\">" +
+                                "<div class=\"pic mr12\">" +
+                                "<canvas data-src=\"" + res.data.data.list[i].sImgUrl + "\"></canvas>" +
+                                flayTypeHtml +
+                                "</div>" +
+                                "<div class=\"wrap\">" +
+                                "<div class=\"house_name\">" +
+                                "<span class=\"name\">" + res.data.data.list[i].sName + "</span>" +
+                                gradeHtml +
+                                "</div>" +
+                                "<div class=\"house_txt\">" + res.data.data.list[i].sRegion + "</div>" +
+                                "<div class=\"house_txt house_txt1\">" + advHtml + "</div>" +
+                                "<div class=\"house_txt house_txt2\">" +
+                                "<span class=\"key_txt\">" + res.data.data.list[i].sPrice + "</span>" + res.data.data.list[i].sUnit + "" +
+                                "</div>" +
+                                "</div>" +
+                                "</div>" +
+                                "</div>" +
+                                "</a>";
+
+                    }
+                    $("#mainsection").append(html);
+                    //canvas加载
+                    webtouchObj.canvasload();
+                } else {
+                    $("#overnotload").val("0");
+                }
+            });
+        }
+
+        //canvas加载
+        webtouchObj.canvasload();
+
+        //回到顶部
+        $('#backtop').on("click", webtouchObj.backtoTopdh);
+
+
+        var dwnum = parseInt($('#newhouseswip').find(".current").index());
+        if (dwnum < 2) {
+            dwnum = 0
+        }
+
+        //左右切换
+        var swiper = new Swiper('#newhouseswip', {
+            slidesPerView: 2.5,
+            paginationClickable: true,
+            spaceBetween: 12,
+            initialSlide: dwnum,
+            freeMode: true
+        });
+
+        $(".newHosue_nav").on("click", "ul li", webtouchObj.topSelect);
+        $(".choice_wrap").on("click", webtouchObj.cancelSelect);
+        $(".choice_wrap").on("click", "ul li", fliterSelect);
+        $(".choice_wrap ul").bind("touchmove", function (e) {
+            var ulheight = $(this).height();
+            var scrollTop = $(this).scrollTop();
+            var scrollheight = $(this)[0].scrollHeight;
+                $(".choice_wrap").bind("touchstart", function (events) {
+                    startX = events.originalEvent.changedTouches[0].pageX,
+                    startY = events.originalEvent.changedTouches[0].pageY;
+                });
+            if (ulheight + scrollTop + 20 >= scrollheight) {
+                $(".choice_wrap").bind("touchmove", function (event) {
+                    moveEndX = event.originalEvent.changedTouches[0].pageX,
+                            moveEndY = event.originalEvent.changedTouches[0].pageY,
+                            theX = moveEndX - startX,
+                            theY = moveEndY - startY;
+                    if ( Math.abs(theY) > Math.abs(theX) && theY > 0) {
+                         $(".choice_wrap").unbind("touchmove");
+                    }
+                    if (Math.abs(theY) > Math.abs(theX) &&theY < 0) {
+                         event.preventDefault();
+                      
+                    }
+                })
+            }
+        });
+
+        $(".swiper-slide").on("click", function () {
+
+            $(".swiper-slide").siblings().removeClass("current");
+            $(this).addClass("current");
+            loadData();
+        });
+
+        //过滤回填及ajax执行
+        function fliterSelect() {
+            var htname = $(this).children().eq(0).html();
+            var changeid = $(this).parent().data("flag");
+            $("#" + changeid).children().eq(0).html(htname);
+            //$("#" + changeid).children().eq(1).hide();
+            $(this).addClass("current").siblings().removeClass("current");
+            $(this).children().eq(0).addClass("current");
+            $(this).siblings().each(function () {
+                $(this).children().eq(0).removeClass("current");
+            })
+
+            $(".swiper-slide").siblings().removeClass("current");
+            loadData();
+        }
+
+        function loadData() {
+            var iRegionID = $.trim($(".choice_wrap .region li.current").attr("regionid")) || 0;
+            var iPriceID = $.trim($(".choice_wrap .price li.current").attr("priceid")) || 0;
+            var iLayoutID = $.trim($(".choice_wrap .family li.current").attr("layoutid")) || 0;
+            var iFeatureID = $.trim($(".swiper-slide.current").attr("featureid")) || "";
+            var sKeyword = $.trim($(".search_txt").text().replace("请输入楼盘名或地址", "")) || "";
+
+            if (iFeatureID) {
+                iRegionID = 0;
+                iPriceID = 0;
+                iLayoutID = 0;
+            }
+
+            window.location = "/h5/search/xfsearchindex?iRegionID=" + iRegionID + "&iPriceID=" + iPriceID + "&iLayoutID=" + iLayoutID + "&sKeyword=" + sKeyword + "&iFeatureID=" + iFeatureID;
+        }
+    });
+
+</script>

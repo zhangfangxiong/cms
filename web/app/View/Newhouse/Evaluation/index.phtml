@@ -1,0 +1,280 @@
+﻿<?php include Yaf_G::getViewPath()."/Newhouse/header.phtml"; ?>
+<section class=" clearfix">
+    <script src="http://res.fangjia.cric.com/scripts/crossdomain.js" type="text/javascript"></script>
+    <section class="new_row_cont">
+
+        ﻿<div class="new_evaul_cont clearfix">
+            <div class="new_evaul_left">
+                <div class="new_e_l_cont">
+                    <div class="n_e_title clearfix">
+                        <h2><?php echo $unit['UnitName']?>-详细评测报告</h2>
+                    </div>
+                    <ul class="n_e_nav clearfix" id="evaluation_menu">
+                        <?php
+                            foreach($chapterData['parentMenu'] as $item) {
+                                $url = '';
+                                $liStyle = '';
+                                if ($item['ParentId'] == 7) {
+                                    $liStyle = "style=\"margin-right:0;\"";
+                                }
+                                $itemCss = '';
+                                if ($item['ParentId'] == $curPage) {
+                                    $itemCss = 'cur';
+                                }
+                                if ($item['Status'] != 1) {
+                                    $itemCss = 'defut';
+                                }
+                                if ($item['Status'] == 1) {
+                                    $url = Model_Util::getDetailUrl($unit['ID'],1,'Evaluation').'&p='.$item['ParentId'];
+                                } else {
+                                    $url = 'javascript:void(0);';
+                                }
+                        ?>
+                        <li  <?php echo $liStyle ?>class="<?php echo $itemCss?>">
+                            <a href="<?php echo $url?>">
+                                <s class="s_<?php echo $item['ParentId']?>"></s>
+                                <?php echo $item['ParentName']?>
+                            </a>
+                            <?php
+                                if ($item['ParentId']==2) {
+                                   echo  '<cite>本案为毛坯交付，无装修标准的相关评测信息</cite>';
+                                }
+                            ?>
+
+                        </li>
+                        <?php
+                            }
+                        ?>
+                    </ul>
+
+                    <div class="n_e_min">
+                        <div class="n_e_min_t" id="subChapter_1">
+                            <cite>1.1</cite>
+                            <b>户型分析-整体评价</b>
+                        </div>
+                        <div class="n_e_min_c">
+                            <h2>分析师点评</h2>
+                            <p class="com_text">仁恒的房子口碑一直很好，盛名之下，其户型自然做的不错。不过仁恒的户型通常是以舒适性为主，落在仁恒西郊花园这个楼盘上，就变成了户型越大做的越好。同时由于仁恒做惯了舒适型户型，因此在小户型的收纳上不能和万科等开发商比。</p>
+                            <div class="yls_com">
+                                <cite class="ys_ct">
+                                    <b>优势</b>
+                                                <span>
+                                                    <em>品牌开发商</em>
+                                                        <i>|</i>
+                                                    <em>户型尺度舒适</em>
+
+                                                </span>
+                                </cite>
+
+                            </div>
+
+                            <table>
+                                <tr>
+                                    <th>户型</th>
+                                    <th>面积</th>
+                                    <th>梯户比</th>
+                                    <th>层高</th>
+                                    <th>客厅面宽</th>
+                                    <th>主卧面宽</th>
+                                    <th>主卧朝向</th>
+                                    <th>次卧朝向</th>
+                                    <th>南北通透</th>
+                                    <th>得房率</th>
+                                </tr>
+                                <tr>
+                                    <td><b>三房</b></td>
+                                    <td>147.46㎡</td>
+                                    <td>-:-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>否</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><b>二房</b></td>
+                                    <td>92.54㎡</td>
+                                    <td>-:-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>否</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><b>三房</b></td>
+                                    <td>126.78㎡</td>
+                                    <td>-:-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>否</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><b>四房</b></td>
+                                    <td>161.30㎡</td>
+                                    <td>-:-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>否</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><b>四房</b></td>
+                                    <td>175.45㎡</td>
+                                    <td>-:-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>否</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><b>四房</b></td>
+                                    <td>186.76㎡</td>
+                                    <td>-:-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>否</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><b>四房</b></td>
+                                    <td>221.65㎡</td>
+                                    <td>-:-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>否</td>
+                                    <td>-</td>
+                                </tr>
+                            </table>
+                            <h3>户型整体描述</h3>
+                            <p>最小的户型A2是标准的凸前套，虽然三开间朝南，但是缺少北向通风，其次是A3户型，127的三房之做到了两开间朝南显然不能算好。再往上的户型基本就是拉大客厅尺寸和加房间的游戏了。</p>
+                        </div>
+                        <div class="n_e_min_t" id="subChapter_2">
+                            <cite>1.2</cite>
+                            <b>户型分析-户型分析</b>
+                        </div>
+                        <div class="n_e_min_c">
+                            <h2>分析师点评</h2>
+                            <p class="com_text">仁恒的户型一直是做的不错的，不过可能由于做舒适型户型做多了，因此这次的大户型做的相当不错，小户型做的不是很出彩，虽然不能说有多差，但总还是有点瑕疵。</p>
+                            <div class="yls_com">
+                                <cite class="ys_ct">
+                                    <b>优势</b>
+                                                <span>
+                                                    <em>客厅方正大气</em>
+                                                        <i>|</i>
+                                                    <em>厨房设计合理</em>
+                                                        <i>|</i>
+                                                    <em>房间全明</em>
+                                                        <i>|</i>
+                                                    <em>动静分离</em>
+
+                                                </span>
+                                </cite>
+
+                            </div>
+
+                            <h3>三房 A1</h3>
+                            <div class="pore_cont">
+                                <img src="http://get.file2.dc.cric.com/CRIC88cdd643fed4830545aa372083844ab1_600X1_19_4_0.jpg" alt="">
+                                <b>户型图-A1户型</b>
+                                <p>不错的三房户型，餐客厅南北通透，南北双景观阳台外还配置了一个工作阳台。厨房采用U型设计，户型多处预留了收纳空间，整体来看是个不错的户型。</p>
+                            </div>
+                            <h3>二房 A2</h3>
+                            <div class="pore_cont">
+                                <img src="http://get.file11.dc.cric.com/CRIC10db3ede8fcf0c2e6a8efdf702788fba_600X1_19_4_0.jpg" alt="">
+                                <b>户型图-A2户型</b>
+                                <p>常见的中间套户型，虽然两房三开间朝南，但是无北向通风采光，而且次卧的采光也不是最好。</p>
+                            </div>
+                            <h3>三房 A3</h3>
+                            <div class="pore_cont">
+                                <img src="http://get.file14.dc.cric.com/CRICbba499541dc015580540d095859ac3ed_600X1_19_4_0.jpg" alt="">
+                                <b>户型图-A3户型</b>
+                                <p>项目第二小的户型，在这次的产品中属于比较实在的三房，但做的一般，虽然也做了套间，但是127平的三房只有两开间朝南绝对不能算好。</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="new_e_page" id="paging">
+                    <a href="" class="prev"><s></s><em>上一章</em><var>装修标准</var></a>
+                    <a href="" class="next"><em>下一章</em><var>装修标准</var><s></s></a>
+
+                </div>
+            </div>
+
+            <div class="new_evaul_right">
+                <div class="compre_ass">
+                    <div class="compre_ass_t">
+                        <b>综合评定：</b>
+                <span class="middle-start">
+                                <i class="o"></i>
+                                <i class="o"></i>
+                                <i class="o"></i>
+                                <i class="o"></i>
+                                <i class="c"></i>
+
+                </span>
+                        <em>4.14分</em>
+                    </div>
+                    <div class="compre_ass_m">
+                        <cite>
+                            <span>户型</span>
+                            <em><i style="width:90%"></i></em>
+                            <var>4.5分</var>
+                        </cite>
+                        <cite>
+                            <span>装修</span>
+                            <em><i style="width:80%"></i></em>
+                            <var>4.0分</var>
+                        </cite>
+                        <cite>
+                            <span>物业</span>
+                            <em><i style="width:90%"></i></em>
+                            <var>4.5分</var>
+                        </cite>
+                        <cite>
+                            <span>
+                                车位
+                            </span>
+                            <em><i style="width:88%"></i></em>
+                            <var>4.4分</var>
+                        </cite>
+                        <cite>
+                            <span>区位</span>
+                            <em><i style="width:70%"></i></em>
+                            <var>3.5分</var>
+                        </cite>
+                        <cite class="last">
+                            <span>性价比</span>
+                            <em><i style="width:22%"></i></em>
+                            <var>1.1分</var>
+                        </cite>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

@@ -1,0 +1,59 @@
+html
+{
+	border:0;
+	margin:0;
+	padding:0;
+}
+
+body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,code,b,del,dfn,em,img,q,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,article,aside,dialog,figure,footer,header,hgroup,nav,section
+{
+	border:0;
+	font-size:100%;
+	font:inherit;
+	vertical-align:baseline;
+	margin:0;
+	padding:0;
+}
+
+html,body
+{
+	height:100%;
+}
+
+body
+{
+	font-size:12px;
+	font-family:"Microsoft YaHei",微软雅黑,SimSun,宋体,Verdana,Arial,Helvetica,sans-serif;
+}
+
+img
+{
+	border:0;
+}
+
+li
+{
+	list-style-type:none;
+}
+
+a
+{
+	text-decoration:none;
+	color:#333;
+}
+
+.clearfix:after
+{
+	clear:both;
+	content:" ";
+	display:block;
+	height:0;
+	overflow:hidden;
+	visibility:hidden;
+}
+
+.clearfix
+{
+	/*clear:both;*/
+	overflow:visible;
+}

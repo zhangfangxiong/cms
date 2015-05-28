@@ -1,0 +1,82 @@
+<style>
+    .sousuo_now {
+        margin: 10px 0px 10px 0px;
+    }
+
+    .list-caozuo {
+        margin-bottom: 10px;
+    }
+</style>
+<div class="pheader clearfix">400电话列表</div>
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="<?php echo $sShowUrl ?>">
+        <div class="row sousuo_now">
+            <div class="form-group .col-xs-2">
+                发布开始时间：
+                <input name="iSTime" autocomplete="off" class="laydatetime form-control" validate="" type="text"
+                       value="<?php echo (isset($aParam['iSTime']) && $aParam['iSTime']) ? date('Y-m-d H:i:s',
+                           $aParam['iSTime']) : '' ?>" class="form-control">
+            </div>
+            <div class="form-group .col-xs-2">
+                发布结束时间：
+                <input name="iETime"  autocomplete="off" class="laydatetime form-control" validate="" type="text"
+                       value="<?php echo (isset($aParam['iETime']) && $aParam['iETime']) ? date('Y-m-d H:i:s',
+                           $aParam['iETime']) : '' ?>" class="form-control">
+            </div>
+            <div class="form-group .col-xs-2">
+                <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+            </div>
+            <div class="form-group .col-xs-2">
+                <input type="button" id="formbtn1" class="btn btn-default btn-sm" value="导出">(导出搜索区间内的最新1000条)
+            </div>
+        </div>
+    </form>
+    <hr>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="col-sm-1 text-center">ID</th>
+            <th>分机号</th>
+            <th class="text-center">被叫号码</th>
+            <th class="text-center">主叫号码</th>
+            <th class="text-center">通话开始时间</th>
+            <th class="text-center">通话时长</th>
+            <th class="text-center">状态</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">更新时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        if (!empty($aList['aList'])) {
+            foreach ($aList['aList'] as $key => $value) {
+                ?>
+                <tr>
+                    <td><?php echo  $value['iAutoID'] ?></td>
+                    <td><?php echo  $value['iExt'] ?></td>
+                    <td><?php echo $value['sTel'] ?></td>
+                    <td><?php echo $value['sCaller'] ?></td>
+                    <td><?php echo $value['sCallTime'] ?></td>
+                    <td><?php echo $value['iCallLen'] ?></td>
+                    <td><?php echo $value['iStatus'] ?></td>
+                    <td><?php echo date('Y-m-d H:i:s',$value['iCreateTime']) ?></td>
+                    <td><?php echo date('Y-m-d H:is',$value['iUpdateTime']) ?></td>
+                </tr>
+        <?php
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+    <?php echo $aList['aPager'] ?>
+</div>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<script type="text/javascript">
+    var lastPath = '<?php echo $sShowUrl; ?>';
+    var path = '<?php echo $sExplodeLogUrl; ?>';
+    $('#formbtn1').click(function(){
+        $('#myform').attr("action", path).submit();
+        $('#myform').attr("action", lastPath);
+    })
+</script>
+

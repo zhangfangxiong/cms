@@ -1,0 +1,78 @@
+﻿<div class="clearfix n_cont_warp mb30">
+    <div class="n_cont_warp_m">
+        <h2>
+            <b>
+                <s></s>楼盘相册
+            </b>
+            <a href="@(unit.DetailUrl)#detail_pic_menu" target="_blank">更多<s></s></a>
+        </h2>
+        <div class="property_album">
+            <ul class="clearfix">
+                <?php
+
+                if (isset($cricUnitPictures['sjt']) &&  sizeof($cricUnitPictures['sjt']) > 0)
+                {
+                   $cricImages = Model_UnitPictures::formatUnitImageInfo($cricUnitPictures['sjt']);
+
+                ?>
+                <li>
+                    <a href="javascript:void(0);" onclick="Index.loadUnitPicture(<?php echo $cricImages['imageUrls']?>,'1');">
+                        <img src="<?php echo $cricImages['firstImg'] ?>">
+                        <cite>
+                            <b>社区实景</b>
+                            <em><?php echo sizeof($cricUnitPictures['sjt']); ?>张</em>
+                        </cite>
+                    </a>
+                </li>
+                <?php
+                }
+                if (isset($cricUnitPictures['xgt']) && sizeof($cricUnitPictures['xgt'])> 0)
+                {
+                    $cricImages = Model_UnitPictures::formatUnitImageInfo($cricUnitPictures['xgt']);
+                ?>
+                <li>
+                    <a href="javascript:void(0);" onclick="Index.loadUnitPicture(<?php echo $cricImages['imageUrls']?> ,'2');">
+                        <img src="<?php echo $cricImages['firstImg']?>">
+                        <cite>
+                            <b>效果图</b>
+                            <em><?php echo sizeof($cricUnitPictures['xgt']); ?>张</em>
+                        </cite>
+                    </a>
+                </li>
+                <?php
+                }
+                if (isset($cricUnitPictures['zpt']) && sizeof($cricUnitPictures['zpt'])> 0)
+                {
+                    $cricImages = Model_UnitPictures::formatUnitImageInfo($cricUnitPictures['zpt']);
+                ?>
+                <li>
+                    <a href="javascript:void(0);" onclick="Index.loadUnitPicture(<?php echo $cricImages['imageUrls']?> ,'3');">
+                        <img src="<?php echo $cricImages['firstImg']?>">
+                        <cite>
+                            <b>总平图</b>
+                            <em><?php echo sizeof($cricUnitPictures['zpt']); ?>张</em>
+                        </cite>
+                    </a>
+                </li>
+                <?php
+                }
+                if (isset($cricUnitPictures['ybft']) && sizeof($cricUnitPictures['ybft'])> 0)
+                {
+                    $cricImages = Model_UnitPictures::formatUnitImageInfo($cricUnitPictures['ybft']);
+                ?>
+                <li>
+                    <a href="javascript:void(0);" onclick="Index.loadUnitPicture(<?php echo $cricImages['imageUrls']?> ,'4');">
+                        <img src="<?php echo $cricImages['firstImg']?>">
+                        <cite>
+                            <b>楼盘周边</b>
+                            <em><?php echo sizeof($cricUnitPictures['ybft']); ?>张</em>
+                        </cite>
+                    </a>
+                </li>
+                <?php
+                }
+                ?>
+            </ul>
+        </div>
+    </div>
+</div>

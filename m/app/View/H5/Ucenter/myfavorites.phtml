@@ -1,0 +1,206 @@
+<!--我的收藏开始-->
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l" onclick="window.history.back()">
+            </div>
+            <div class="uc_return_c">我收藏的新房</div>
+            <?php
+            if (!empty($aData['data']['list'])) {
+                ?>
+                <div class="finish" id="edit"><a href="javascript:void(0)">编辑</a></div>
+            <?php
+            }
+            ?>
+        </div>
+    </header>
+    <!--头部开始-->
+    <!--新房列表开始-->
+    <?php
+    if (!empty($aData['data']['list'])) {
+        ?>
+        <section class="newHosue_list bgf border_bottom" id="mainsection">
+            <?php
+            foreach ($aData['data']['list'] as $key => $value) {
+                ?>
+                    <div class="cnt p12 border_bottom">
+                        <a href="<?php echo $sTouchwebRoot; ?>/h5/xf/xfdetail?id=<?php echo $value['iBuildingID']?>" data-url="<?php echo $sTouchwebRoot; ?>/h5/xf/xfdetail?id=<?php echo $value['iBuildingID']?>" class="fangurl item pl12">
+                            <div class="pic mr12">
+                                <canvas data-src="<?php echo $value['sImgUrl'] ?>"></canvas>
+                                <s class="<?php echo $aEva[$value["iFlagID"]]["class"] ?>"></s>
+                            </div>
+                        </a>   
+                        <div class="wrap">
+                            <div class="house_name">
+                                <span class="name"><?php echo $value['sName'] ?></span>
+                                <span class="grade ml5"><?php echo $value['sRate'] ?></span>
+                            </div>
+                            <div class="house_txt"><?php echo $value['sRegion'] ?></div>
+                            <div class="house_txt house_txt1">
+                                <?php
+                                if (!empty($value['sAdvantages'])) {
+                                    $aAdvantages = explode(';', $value['sAdvantages']);
+                                    foreach ($aAdvantages as $k => $v) {
+                                        if ($k == 2) {
+                                            break;
+                                        }
+                                        ?>
+                                        <span class="mr5"><?php echo $v ?></span>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="house_txt house_txt2">
+                                <span class="key_txt"><?php echo $value['sPrice'] ?></span>
+                                元/平
+                            </div>
+                            <div id="LouID_<?php echo $value['iBuildingID'] ?>"
+                                 data-id="<?php echo $value['iBuildingID'] ?>"
+                                 class="finish_icon finish_icon_gray"></div>
+                        </div>
+                    </div>
+                <?php
+            }
+            ?>
+            <div class="del">
+                <ul class="clearfix">
+                    <li><a href="javascript:;" id="all_delete">全部删除</a></li>
+                    <li><a href="javascript:;" id="select_delete">删除选中</a></li>
+                </ul>
+            </div>
+        </section>
+        <!--新房列表结束-->
+        <?php
+    } else {
+        ?>
+        <!--暂无收藏记录开始-->
+        <div id="browse_history">
+            <div class="no_collect_con">
+                <img src="<?php echo $sStaticRoot ?>/touchweb/resource/images/no_collect.png"/>
+
+                <div class="newhouse_no_collect_txt">您暂无收藏记录</div>
+            </div>
+        </div>
+        <!--暂无收藏记录结束-->
+        <?php
+    }
+    ?>
+    <section class="tip_dialog" id="tip_dialog"></section>
+    <!--返回顶部开始-->
+    <div class="return_top" id="backtop">
+        <div class="return_top_bg"></div>
+    </div>
+    <!--返回顶部结束-->
+</div>
+<!--我的收藏结束-->
+<input type="hidden" value="1" id="overnotload" />
+<script type="text/javascript">
+    var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+    var ifLoad = true;
+</script>
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script type="text/javascript">
+    requirejs.config({
+        baseUrl: '<?php echo $sStaticRoot ?>/touchweb/lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'usercenter': 'js/usercenter',
+            'webtouchcommon': 'js/webtouchcommon'
+        }
+    })
+
+    require(["jquery", "usercenter", "webtouchcommon"],function () {
+        pageIndex = 1;
+
+        $(window).scroll(initScroll);
+
+        //回到顶部
+        $('#backtop').on("click", webtouchObj.backtoTopdh);
+
+        //窗口滚动处理
+        function initScroll() {
+            backTop();
+            var pageH = $(document).height()
+            var scrollT = $(window).scrollTop(); //滚动条top
+            var aa = pageH - $(window).height() - scrollT;
+            if (aa < 1) {
+                if ($("#overnotload").val() == "1") {
+                    pageIndex++;
+                    if (ifLoad) {
+                        loadData();
+                    }
+                } else {
+                    return
+                }
+            }
+        }
+
+        //返回顶部
+        function backTop() {
+            var screenheight = $(window).height();
+            if ($(window).scrollTop() > screenheight) {
+                $('#backtop').fadeIn();
+            } else {
+                $('#backtop').fadeOut();
+            }
+        }
+
+        function loadData(){
+            $.post('/h5/ucenter/myfavoriteslist',{iPage: pageIndex}, function (res) {
+                res = eval("(" + res + ")");
+                var html="";
+                if(res.data.data.list.length > 0){
+                    var list=res.data.data.list;
+                    for(var i=0;i<list.length;i++){
+                        var item=list[i];
+                        if(res.data.aFlagType[item.iFlagID]){
+                            var flagClass=res.data.aFlagType[item.iFlagID].class;
+                        }
+                        var advantageHtml="";
+                        var advArr=item.sAdvantages.split(";");
+                        if(advArr){
+                            for(var k=0;k<advArr.length;k++){
+                                var adv=advArr[k];
+                                if(adv&&k<2){
+                                    advantageHtml+="<span class=\"mr5\">"+adv+"</span>";
+                                }
+                            }
+                        }
+
+                        html+="<div class=\"cnt p12 border_bottom\">" +
+                                    "<a href=\"/h5/xf/xfdetail?id="+item.iBuildingID+"\" class=\"item pl12\">" +
+                                        "<div class=\"pic mr12\">" +
+                                            "<canvas data-src=\""+item.sImgUrl+"\"></canvas>" +
+                                            "<s class=\""+flagClass+"\"></s>" +
+                                        "</div>" +
+                                    "</a>" +
+                                    "<div class=\"wrap\">" +
+                                        "<div class=\"house_name\">" +
+                                            "<span class=\"name\">"+item.sName+"</span>" +
+                                            "<span class=\"grade ml5\">"+item.sRate+"</span>" +
+                                        "</div>" +
+                                        "<div class=\"house_txt\">"+item.sRegion+"</div>" +
+                                        "<div class=\"house_txt house_txt1\">"+
+                                            advantageHtml+
+                                        "</div>" +
+                                        "<div class=\"house_txt house_txt2\">" +
+                                            "<span class=\"key_txt\">"+item.sPrice+"</span>"+item.sUnit+
+                                        "</div>" +
+                                        "<div id=\"LouID_"+item.iBuildingID+" data-id="+item.iBuildingID+" class=\"finish_icon finish_icon_gray\"></div>" +
+                                    "</div>" +
+                                "</div>";
+                    }
+                    $("#mainsection").append(html);
+                    //canvas加载
+                    webtouchObj.canvasload();
+                }
+                else{
+                    $("#overnotload").val("0");
+                }
+            })
+        }
+    })
+</script>

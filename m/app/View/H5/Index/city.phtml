@@ -1,0 +1,36 @@
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+    <!--城市切换开始-->
+    <div class="viewport">
+        <!--头部开始-->
+        <header class="UserCenter_head outborder">
+            <div class="uc_return">
+                <div class="uc_return_l" id="return_back">
+                    <a href="javascript:history.go(-1);"></a>
+                </div>
+                <div class="uc_return_c">切换城市</div>
+            </div>
+        </header>
+        <!--头部开始-->
+		<!--城市列表列表开始-->
+        <section class="city_list">
+			<div class="current_city pl12 mb10 bgf border_bottom">
+            	当前选择城市：<span><?php echo $aCurrCity['sName'] ?></span>
+            </div>
+            <ul class="pl12 bgf border_top">
+                <?php
+                foreach($aCityList as $key => $value) {
+                    ?>
+                    <li><a href="<?php echo $sTouchwebRoot ?>/h5/index/?cityID=<?php echo $key; ?>"><?php echo $value['sName']; ?></a></li>
+                <?php
+                }
+                ?>
+            </ul>
+        </section>     
+        <!--城市列表结束-->
+    </div>
+    <!--城市切换结束-->
+    <script>
+        $('#return_back').click(function(){
+            history.go(-1);
+        })
+    </script>

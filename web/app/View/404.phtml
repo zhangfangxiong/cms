@@ -1,0 +1,84 @@
+<?php $sCurrCityCode = !empty($sCurrCityCode) ? $sCurrCityCode : 'shanghai'?>
+<doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>404</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo 'http://'.Yaf_G::getConf('static', 'domain');?>/css/news/404.css">
+    <script type="text/javascript" src="<?php echo 'http://'.Yaf_G::getConf('static', 'domain');?>/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo 'http://'.Yaf_G::getConf('static', 'domain');?>/js/search.js"></script>
+</head>
+
+<body>
+<!--头部开始-->
+<div class="header_wrap">
+    <div class="header">
+        <div class="header_l">
+            <h1 class="logo">
+                <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/" title="房价点评网">房价点评网</a>
+            </h1>
+            <ul>
+                <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/">首页</a></li>
+                <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/<?=$sCurrCityCode?>/advanced/search">新房</a></li>
+                <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/<?=$sCurrCityCode?>/esf/advanced/search">二手房</a></li>
+                <li class="current"><a href="http://<?=Yaf_G::getConf('news', 'domain')?>/<?=$sCurrCityCode?>/news/index/">资讯</a></li>
+            </ul>
+        </div>
+        <div class="header_r">
+            <input type="text" class="seach_text" placeholder="地图找房帮你查">
+            <div class="seach_btn" id="map_search"></div>
+        </div>
+    </div>
+</div>
+<div class="error_wrap">
+    <div class="error">
+        <div class="error_con">
+            <dl>
+                <dt><img src="<?php echo 'http://'.Yaf_G::getConf('static', 'domain');?>/img/news/error_state2.jpg" width="484" height="197"></dt>
+                <dd>
+                    <h6>抱歉！网络拥堵，链接超时...</h6>
+                    <p class="p_txt">您所访问的页面，暂时无法显示！</p>
+                    <div>
+                        <p>请点击 <a href="javascript:window.history.go(-1)" title="返回上一页">返回上一页</a> 重新访问！</p>
+                        <p>或前往 <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/" title="首页">首页</a> | <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/<?=$sCurrCityCode?>" title="地图搜索">地图搜索</a></p>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<!--footer开始-->
+<div class="footer_wrap">
+    <div class="footer">
+        <div class="footer_l">
+            <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/" target="_blank" title="房价点评网" class="footer_logo"><b>房价点评网</b></a>
+            <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/help/about" target="_blank">关于我们</a>
+            <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/help/contact" target="_blank">联系我们</a>
+            <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/help/declare" target="_blank">网络服务协议</a>
+            <a href="http://<?=Yaf_G::getConf('mfangjiadp', 'domain')?>/" target="_blank" class="phone">
+                <s></s>
+                手机版
+            </a>
+        </div>
+        <div class="footer_r">
+            <dl>
+                <dt><img src="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/Content/images/weixin/<?=$sCurrCityCode?>.jpg" width="430" height="430"></dt>
+                <dd>
+                    <p>微信扫一扫</p>
+                    <p>房价点评，精彩发布</p>
+                </dd>
+            </dl>
+            <dl>
+                <dt><img src="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/Content/images/weibo/<?=$sCurrCityCode?>.png" width="430" height="430" class="erwei_code"></dt>
+                <dd>
+                    <p>关注微博</p>
+                    <p>成为粉丝，立享即时资讯</p>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<!--footer结束-->
+</body>
+</html>

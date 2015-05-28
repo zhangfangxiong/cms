@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>房价点评</title>
+    <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="../resource/css/analysis_zs.css">
+</head>
+<body>
+    <!--户型详情开始-->
+    <div class="viewport">
+        <!--头部开始-->
+         <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="goback"></a>
+                <div class="inner_title">户型详情</div>
+            </div>
+        </header>
+        <!--头部开始-->
+		<!--户型列表开始-->
+        <section class="main_section hxinfo" id="mainsection">
+            <section class="upshow clearfix">
+                <div class="imgshow showborder">
+                    <canvas data-src="../resource/images/testlou.jpg"></canvas>
+                </div>
+                <div class="hxcode clearfix">
+                    <div class="title fl">A2户型编号</div>
+                    <a class="selectfang fl" href="#">在线选房</a>
+                </div>
+
+                <div class="oneblock">
+                    <div class="l_title">户型：</div>
+                    <div class="l_content">三室两厅两卫</div>
+                </div>
+                <div class="oneblock">
+                    <div class="l_title">面积：</div>
+                    <div class="l_content">102m2</div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="oneblock">
+                    <div class="l_title">价格：</div>
+                    <div class="l_content">72-82万</div>
+                </div>
+            </section>
+
+            <section class="downdesc clearfix">
+                <div class="l_title">户型描述</div>
+                <p>A2户型作为93平三房两厅，空间挤压较大，每
+                    一个房间都会比较小，而且可以储物的地方只有
+                    三个中型衣柜，很难有其他的储物空间。适合低
+                    预算，但是需要较多独立空间的家庭</p>
+            </section>
+        </section>
+        <!--户型列表结束-->
+    </div>
+    <!--户型详情结束-->
+    <script src="../lib/requirejs/require.js" ></script>
+    <script>
+    require(["../lib/jquery/jquery.min","../lib/js/webtouchcommon"],function(){
+		webtouchObj.canvasload();
+
+		})
+    
+    </script>
+</body>
+</html>

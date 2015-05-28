@@ -1,0 +1,133 @@
+<div class="pheader clearfix">回答列表</div>
+
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/question/index/myanswer">
+        <div class="row sousuo_now">
+            <div class="form-group .col-xs-2">
+                发布状态：
+                <select class="form-control input-sm" name="status">
+                    <option value="0" <?php if($status == 0){?> selected = "selected"<?php }?> >全部</option>
+                    <option value="1" <?php if($status == 1){?> selected = "selected"<?php }?> >已成功</option>
+                    <option value="2" <?php if($status == 2){?> selected = "selected"<?php }?> >未成功</option>
+                </select>
+            </div>
+
+            <div class="form-group .col-xs-2">
+                回答时间：
+                <input name="sAnswerTime" autocomplete="off" class="laydate form-control" validate="" type="text"
+                       value="<?php echo (isset($start)) ? date('Y-m-d',$start) : '' ?>" onclick="laydate({format: 'YYYY-MM-DD'});">
+            </div>
+            <div class="form-group .col-xs-2">
+                至
+                <input name="eAnswerTime"  autocomplete="off" class="laydate form-control" validate="" type="text"
+                       value="<?php echo (isset($end)) ? date('Y-m-d', $end) : '' ?>" onclick="laydate({format: 'YYYY-MM-DD'});">
+            </div>
+
+            <div class="form-group .col-xs-2">
+                回答内容：
+                <input name="content" class="form-control" validate="" type="text" class="form-control">
+            </div>
+
+            <div class="form-group .col-xs-2">
+                <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+            </div>
+        </div>
+
+    </form>
+    <hr>
+
+
+    <div>
+        <span>回答列表</span>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">用户名</th>
+            <th class="text-center">回复内容</th>
+            <th class="text-center">回复日期</th>
+            <th class="text-center">状态</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if(!empty($replys['aList']))?>
+        <?php foreach ($replys['aList'] as $reply) { ?>
+            <?php $title = $reply['qTitle'];$qcontent = $reply['qContent'];$content = $reply['sContent'];?>
+            <tr>
+                <td class="text-center"><?php echo $reply['sAppUName'];?></td>
+                <td class="text-center"><?php echo $reply['sContent'];?></td>
+                <td class="text-center"><?php echo date('Y-m-d', $reply['iCreateTime']);?></td>
+                <td class="text-center"><?php echo empty($reply['iStatus']) ? '未成功' : '已成功';?></td>
+                <td class="text-center">
+                    <?php if(empty($reply['iStatus'])) {?>
+                    <a href="javascript:answer('<?php echo $reply['sQuestionID'];?>', '<?php echo htmlspecialchars($title) ?>', '<?php echo htmlspecialchars($qcontent) ?>', '<?php echo htmlspecialchars($content) ?>')">发布</a>
+                    <?php }?>
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <?php echo $replys['aPager']; ?>
+</div>
+
+<div class="modal fade" id="answerFormBox" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="metroModalLabel">回答</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="answerForm" action="/question/api/reply">
+                    <input type="hidden" name="app_uname" value="<?php echo $userName;?>" autocomplete="off">
+                    <input type="hidden" name="app_uid" value="<?php echo $userID;?>" autocomplete="off">
+                    <input type="hidden" name="question_id" value="" id="questionID" autocomplete="off">
+                    <input type="hidden" name="key" value="<?php echo $key;?>" autocomplete="off">
+                    <input type="hidden" name="token" value="<?php echo $token;?>" autocomplete="off">
+                    <p id="title"></p>
+                    <p id="qcontent"></p>
+                    <textarea name="content" autocomplete="off" cols="135" rows="6" id="answer">
+
+                    </textarea>
+                    <div>
+                        <button type="cancle" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<script type="text/javascript">
+    function answer(questionID, title, qcontent, content){
+        $('#questionID').val(questionID);
+        $('#title').text(title);
+        $('#qcontent').text(qcontent);
+        $('#answer').text(content);
+
+        $('#answerFormBox').modal().css({
+            "margin-top": function () {return ($(window).height() / 2 - 200);}
+        }).modal('show');
+
+        $("#answerForm").validate({submitHandler: function(form) {
+            $.post(form.action, $(form).serialize(), function(ret){
+                if (ret.status) {
+                    alert('回答成功!');
+                    $('#answerFormBox').modal('hide');
+                    location.reload();
+                }else {
+                    if(ret.data){
+                        alert(ret.data.msg);
+                    }else {
+                        alert(ret.errmsg);
+                    }
+                    $('#answerFormBox').modal('hide');
+                }
+            }, 'json');
+            return false;
+        }});
+    }
+</script>

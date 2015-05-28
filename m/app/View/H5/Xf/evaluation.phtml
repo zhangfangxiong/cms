@@ -1,0 +1,321 @@
+<!--评测列表开始-->
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<input id="pagenumlength" type="hidden" value="1" />
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l">
+                <a href="javascript:history.go(-1)"></a>
+            </div>
+            <div class="uc_return_c">评测</div>
+        </div>
+    </header>
+    <!--头部开始-->
+    <!--评测tab栏开始-->
+    <nav class="evaluation_tab border_bottom">
+        <ul class="pt12 pb12">
+            <li data-classes="region" id="region"><a href="#">区域</a><s class="down"></s></li>
+            <li data-classes="price" id="price"><a href="#">价格</a><s class="down"></s></li>
+        </ul>
+
+    </nav>
+    <!--评测tab栏结束-->
+    <!--选项切换开始-->
+    <?php
+    if (isset($aList['filter'])) {
+        echo '  <section class="choice_wrap">
+                        <ul class="bgf choice_item region" data-flag="region">';
+        foreach ($aList['filter']['region']['list'] as $key => $value) {
+            echo '<li data-id="' . $value['iCodeID'] . '"><a href="#">' . $value['sName'] . '</a></li>';
+        }
+        echo '  </ul>';
+
+        echo '  <ul class="bgf choice_item price" data-flag="price">';
+        foreach ($aList['filter']['price']['list'] as $key => $value) {
+            echo '<li data-id="' . $value['iCodeID'] . '"><a href="#">' . $value['sName'] . '</a></li>';
+        }
+        echo '  </ul>';
+        echo '</section>';
+    }
+    ?>
+
+    <!--选项切换结束-->
+
+    <?php
+    if (isset($aList['evaluation']) && 0 < $aList['evaluation']['iTotalNum']) {
+        echo ' <input type="hidden" id="hiddenregion" value="0">
+                    <input type="hidden" id="hiddenprice" value="0"> <section class="bgf collect_evaluation_list" id="mainsection">
+                    ';
+        foreach ($aList['evaluation']['list'] as $key => $value) {
+            echo '  <div class="item pl12 pr12">
+                            <div class="cnt mt12 mb12 border">
+                                <div class="pic">
+                                    <a href="xfdetail?id='.$value['iBuildingID'].'">
+										<div class="pic_height">
+                                        	<canvas data-src="' . $value['sImgUrl'] . '"></canvas>
+										</div>
+                                        <div class="pic_txt">
+                                            <div class="pic_name">
+                                                <span>' . $value['sName'] . '</span>
+                                                <span>|</span>
+                                                <span>[' . $value['sRegion'] . ']</span>
+                                            </div>
+                                            <div class="hose_price_wrap">
+                                                <span class="house_price">' . $value['sPrice'] . '</span>
+                                                <span>' . $value['sUnit'] . '</span>
+                                            </div>
+                                        </div>
+                                        <div class="analyst_wrap">
+                                            <img src="' . $value['sAnylistAvatarImgUrl'] . '">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="wrap p12">
+                                    <div class="pd_star border_bottom">
+                                        <span class="star star' . ceil(2 * $value['sRate'] + 1) . '"></span>
+                                        <span class="pd_num">' . $value['sRate'] . '</span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul>';
+            foreach ($value['chapter'] as $k => $v) {
+                if ($v['iEnable'] == 0) {
+                    $class = $aEva[$v['sChapterCode']]['pre'] . 'noData';
+                    $href = '';
+                } else {
+                    $class = $aEva[$v['sChapterCode']]['class'];
+                    $href = 'href="'.$v['sPageUrl'].'"';
+                }
+                echo '  <li class="' . $class . '">
+                            <a '.$href.'>'. $aEva[$v['sChapterCode']]['name'] . '</a>
+                        </li>';
+            }
+            echo '</ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  ';
+        }
+        echo '</section>';
+    }else {
+        echo '<section class="search_result index_search_result" style="display: block">
+            <div class="search_result_tip">
+                <div class="tip1">没找到您要的结果</div>
+            </div>
+        </section>';
+    }
+    ?>
+
+    <!--评测收藏列表开始-->
+
+    <!--评测收藏列表结束-->
+    <!--返回顶部开始-->
+    <div class="return_top" id="backtop">
+        <div class="return_top_bg"></div>
+    </div>    
+    <!--返回顶部结束-->      
+</div>
+<!--评测列表结束-->
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script type="text/javascript">
+    requirejs.config({
+        baseUrl: '<?php echo $sStaticRoot ?>/touchweb/lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'webtouchcommon': 'js/webtouchcommon'
+        }
+    })
+
+    require(["jquery", "webtouchcommon"], function () {
+//canvas加载
+        webtouchObj.canvasload();
+//回到顶部
+        $(window).scroll(initScroll);
+        $('#backtop').on("click", webtouchObj.backtoTopdh);
+
+        $(".evaluation_tab").on("click", "ul li", webtouchObj.topSelect);
+        $(".choice_wrap").on("click", webtouchObj.cancelSelect);
+        $(".choice_wrap").on("click", "ul li", fliterSelect);
+        $(".choice_wrap ul").bind("touchmove", function (e) {
+            var ulheight = $(this).height();
+            var scrollTop = $(this).scrollTop();
+            var scrollheight = $(this)[0].scrollHeight;
+                $(".choice_wrap").bind("touchstart", function (events) {
+                    startX = events.originalEvent.changedTouches[0].pageX,
+                    startY = events.originalEvent.changedTouches[0].pageY;
+                });
+            if (ulheight + scrollTop + 20 >= scrollheight) {
+                $(".choice_wrap").bind("touchmove", function (event) {
+                    moveEndX = event.originalEvent.changedTouches[0].pageX,
+                            moveEndY = event.originalEvent.changedTouches[0].pageY,
+                            theX = moveEndX - startX,
+                            theY = moveEndY - startY;
+                    if ( Math.abs(theY) > Math.abs(theX) && theY > 0) {
+                         $(".choice_wrap").unbind("touchmove");
+                    }
+                    if ( Math.abs(theY) > Math.abs(theX) && theY < 0) {
+                         event.preventDefault();
+                      
+                    }
+                })
+            }
+        });
+
+        hasRun = 0;
+//过滤回填及ajax执行
+        function fliterSelect() {
+            $("#pagenumlength").val("1");
+            var htname = $(this).children().eq(0).html();
+            var changeid = $(this).parent().data("flag");
+            $("#" + changeid).children().eq(0).html(htname);
+            $("#hidden" + changeid).val($(this).data('id'));
+
+           // $("#" + changeid).children().eq(1).hide();
+            $(this).addClass("current").siblings().removeClass("current");
+            $(this).children().eq(0).addClass("current");
+            $(this).siblings().each(function () {
+                $(this).children().eq(0).removeClass("current");
+            })
+
+            /**
+             * this有问题                
+             */
+            var regionId = $('#hiddenregion').val();
+            var priceId = $('#hiddenprice').val();
+
+            //下面执行ajax过滤
+            if(!hasRun) {
+                loadData(regionId, priceId, 1);
+            }
+        }
+        pageIndex = 1;
+        function loadData(regionId, priceId, type) {
+            hasRun = 1;
+            type = type || 1;
+            if (type === 1) {
+                $("#mainsection").html('');
+                pageIndex = 1;
+            }
+            
+            $.ajax({
+                type: "get",
+                url: "/Ajax/Xf/evaluation",
+                data: {
+                    regionId: regionId,
+                    priceId: priceId,
+                    row: 5,
+                    page: pageIndex
+                },
+                dataType: "json",
+                success: function (data) {  
+                    hasRun = 0;                     
+                    if (data.status) {
+                        var html = "";
+                        if(data.data.evaluation.length > 0){
+                            for (var i = 0; i < data.data.evaluation.length; i++) {
+                                var categoryHtml = "";
+                                for (var j = 0; j < data.data.evaluation[i].chapter.length; j++) {
+                                    if (data.data.aEva[data.data.evaluation[i].chapter[j].sChapterCode]) {
+                                        var li_class = ' ';
+                                        if (data.data.evaluation[i].chapter[j].iEnable === 0) {
+                                            li_class = data.data.aEva[data.data.evaluation[i].chapter[j].sChapterCode].pre + 'noData';
+                                            href = '';
+                                        } else {
+                                            li_class = data.data.aEva[data.data.evaluation[i].chapter[j].sChapterCode].class;
+                                            href = "href='" + data.data.evaluation[i].chapter[j].sPageUrl + "'";
+
+                                        }
+                                        categoryHtml += "<li class=\"" + li_class + "\"><a "+ href +">" + data.data.aEva[data.data.evaluation[i].chapter[j].sChapterCode].name + "</a></li>"
+                                    }
+                                }
+
+
+                                html += "<div class=\"item pl12 pr12\">" +
+                                        "<div class=\"cnt mt12 mb12 border\">" +
+                                        "<div class=\"pic\">" +
+                                        "<a href=xfdetail?id=" + data.data.evaluation[i].iBuildingID + ">" +
+										"<div class=\"pic_height\">" +"<canvas data-src=\"" + data.data.evaluation[i].sImgUrl + "\" width=\"600\" height=\"338\" style=\"background-image: none;\"></canvas>  " +
+										"</div>" + 
+                                        "<div class=\"pic_txt\">" +
+                                        "<div class=\"pic_name\">" +
+                                        "<span>" + data.data.evaluation[i].sName + "</span>" +
+                                        "<span>|</span>" +
+                                        "<span>" + data.data.evaluation[i].sRegion + "</span>" +
+                                        "</div>" +
+                                        "<div class=\"hose_price_wrap\">" +
+                                        "<span class=\"house_price\">" + data.data.evaluation[i].sPrice + "</span>" +
+                                        "<span>" + data.data.evaluation[i].sUnit + "</span>" +
+                                        "</div>" +
+                                        "</div>  " +
+                                        "<div class=\"analyst_wrap\">" +
+                                        "<img src=\"" + data.data.evaluation[i].sAnylistAvatarImgUrl + "\" width=\"120\" height=\"120\" style=\"background-image: none;\">" +
+                                        "</div>" +
+                                        "</a>" +
+                                        "</div>  " +
+                                        "<div class=\"wrap p12\">" +
+                                        "<div class=\"pd_star border_bottom\">" +
+                                        "<span class='star star" + Math.ceil(2 * data.data.evaluation[i].sRate + 1) + "'>" +
+                                        "</span>" +
+                                        "<span class=\"pd_num\">" + data.data.evaluation[i].sRate + "</span>" +
+                                        "</div>" +
+                                        "<div class=\"evaluation_title\">" +
+                                        "<ul>" + categoryHtml + "</ul>" +
+                                        "</div>" +
+                                        "</div>      " +
+                                        "</div>" +
+                                        "</div>";
+                            }
+                        }else {
+                            if (type === 1) {
+                                html += '<section class="search_result index_search_result" style="display: block"><div class="search_result_tip"><div class="tip1">暂无相关评测</div></div></section>';
+                            }
+                            $("#pagenumlength").val("0");
+                        }
+                        html += '<input type="hidden" id="hiddenRegion" value="' + regionId + '">' +
+                                '<input type="hidden" id="hiddenPrice" value="' + priceId + '">';
+                        $("#mainsection").append(html);
+                        //canvas加载
+                        webtouchObj.canvasload();
+                    } else {
+
+                    }
+                },
+                error: function (result) {
+
+                }
+            });            
+            
+        }
+
+        function initScroll() {
+            backTop();
+            var pageH = $(document).height()
+            var scrollT = $(window).scrollTop(); //滚动条top
+            var aa = pageH - $(window).height() - scrollT;
+            var regionId = $("#hiddenRegion").val();
+            var priceId = $("#hiddenPrice").val();
+            if (aa < 1) {
+                if($("#pagenumlength").val()=="1"){
+                    if(!hasRun) {
+                        pageIndex++;
+                        loadData(regionId, priceId, 2);
+                    }    
+                }else {
+                    return ;
+                }
+                            
+            }
+        }
+
+        function backTop() {
+            var screenheight = $(window).height();
+            if ($(window).scrollTop() > screenheight) {
+                $('#backtop').fadeIn();
+            } else {
+                $('#backtop').fadeOut();
+            }
+        }
+
+    });
+</script>
+

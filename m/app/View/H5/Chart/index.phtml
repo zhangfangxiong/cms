@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <title>价格趋势</title>
+        <script type="text/javascript" src="<?php echo $sStaticRoot ?>/js/jquery-1.11.1.min.js"></script>
+        <script src="<?php echo $sStaticRoot ?>/touchweb/lib/plugs/highcharts.src.js"  type="text/javascript"></script>
+        <script src="<?php echo $sStaticRoot ?>/touchweb/lib/plugs/highcharts.ext.js"  type="text/javascript"></script>
+        <style>
+            html, body, div, span { margin: 0; padding: 0; border: 0; outline: 0; vertical-align: baseline; background: transparent; list-style:none; }
+            html{height:100%;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:transparent;font-size:62.5%;}
+            .clearfix{*zoom:1}
+            .clearfix:after{display:block;visibility:hidden;clear:both;height:0;content:'.';font-size:0}
+            body{font-family:Microsoft Yahei, Hiragino Sans GB,Arial,Helvetica,"微软雅黑","宋体",sans-serif;font-size:1.2rem;width:100%;background-color:#fff;-webkit-touch-callout:none;-webkit-user-select:none; color:#333;}
+            .charts_outcontent{padding:0.5rem 1rem 0.2rem;}
+            .charts_title {font-size:1.4rem;color:#999;line-height: 1.5;padding-bottom: 0.5rem;}
+            .borderline{border-bottom:1px solid #e5e5e5;}
+            .zst_info{padding-bottom:10px; position:absolute; width:263px; height:81px; background:url(<?php echo $sStaticRoot ?>/touchweb/buildinfo/images/zst_info_bg.png) no-repeat 0 0; padding:15px 0;}
+            .zst_info span{display:block; margin-bottom:15px; overflow:hidden;}
+            .zst_info span b{float:left; width:95px; text-align:right; color:#333}
+            .zst_info span em{float:left; font-family:microsoft yahei; color:#999;}
+            .zst_info span em var{font:500 18px/14px verdana; margin:0 3px;}
+            .zst_info span em var.r_cor{color:#e8382b;}
+            .zst_info span em var.g_cor{color:#666;}
+            .zst_info span em.em_jy{color:#fff; height:18px; line-height:18px; width:60px; text-align:center; border-radius:5px;}
+            .zst_info span em.jkrs_em{background-color:#e8382b;}
+            .zst_info span em.tjgm_em{background-color:#f9ab2a;}
+            .zst_info span em.jsgm_em{background-color:#3e8fc8;}
+            .zst_info span em.cbgw_em{background-color:#b1a18b;}
+            .chartinfo{margin:0.6rem auto;}
+            .prc_left_t s{background: url(<?php echo $sStaticRoot ?>/touchweb/buildinfo/images/icon.png) no-repeat;background-size: 35px;display: block;width: 30px;height: 15px;float: left;margin-top:3px;}
+            .prc_left_t em{float: left;color: #a0a0a0;margin-right: 15px;font-style:normal;}
+            .prc_left_t em span{float:left;}
+            .prc_left_t s.i_icon_1{background-position: 0 -28px;}
+            .prc_left_t s.i_icon_2{background-position: 0 0px;}
+            .prc_left_t s.i_icon_2{background-position: 0 -14px;}
+            .prc_left_t{margin-left:40px;}
+            .toptitle{font-size:1.5rem;text-align: center;margin:1rem 0 0.3rem 0;}
+            .toptitle span{color:#e8382b;font-weight:bold;}
+            .toptitle s{text-decoration:none;}
+        </style>
+    </head>
+
+    <body class="clearfix">
+
+        <section class="charts_outcontent clearfix">
+            <div class="charts_title borderline">价格趋势</div>
+
+            <div class="toptitle">本月楼盘价格<span><s id="mothprice">36000</s>元/平</span> 对比上月<s id="price_status">持平</s></div>
+
+            <div id="spContainer" style="min-width: 310px; height: 130px;" class="chartinfo">
+
+            </div>
+
+            <div class="prc_left_t clearfix">
+                <em><span>区域均价</span><s class="i_icon_1"></s></em>
+                <em><span>住宅</span><s class="i_icon_3"></s></em>
+                <em><span>别墅</span><s class="i_icon_2"></s></em>
+            </div>
+
+
+        </section>
+
+        <script type="text/javascript">
+            $(initPage);
+            function initPage() {
+                var region = new Array(<?php echo $data['priceTrendRegion'][0]; ?>,<?php echo $data['priceTrendRegion'][1]; ?>, <?php echo $data['priceTrendRegion'][2]; ?>, <?php echo $data['priceTrendRegion'][3]; ?>, <?php echo $data['priceTrendRegion'][4]; ?>, <?php echo $data['priceTrendRegion'][5]; ?>, <?php echo $data['priceTrendRegion'][6]; ?>);
+                var house = new Array(<?php echo $data['priceTrendHouse'][0]; ?>,<?php echo $data['priceTrendHouse'][1]; ?>, <?php echo $data['priceTrendHouse'][2]; ?>, <?php echo $data['priceTrendHouse'][3]; ?>, <?php echo $data['priceTrendHouse'][4]; ?>, <?php echo $data['priceTrendHouse'][5]; ?>, <?php echo $data['priceTrendHouse'][6]; ?>);
+                var cottage = new Array(<?php echo $data['priceTrendCottage'][0]; ?>,<?php echo $data['priceTrendCottage'][1]; ?>, <?php echo $data['priceTrendCottage'][2]; ?>, <?php echo $data['priceTrendCottage'][3]; ?>, <?php echo $data['priceTrendCottage'][4]; ?>, <?php echo $data['priceTrendCottage'][5]; ?>, <?php echo $data['priceTrendCottage'][6]; ?>);
+
+                var dataParam = [
+                    {"type": "area", "name": "区域", "color": "#E9A248", "data": region},
+                    {"type": "line", "name": "普通住宅", "color": "#F4352B", "data": house},
+                    {"type": "line", "name": "别墅", "color": "#B6D244", "data": cottage}];
+
+                DrawMixtureChart("spContainer", "100%", 130, dataParam, "<?php echo $data['year']; ?>", "<?php echo $data['month']; ?>", 22);
+
+                var tmpChart = $('#spContainer').highcharts();
+                var options = tmpChart.options;
+
+                var tooltip = {
+                    enabled: false
+                };
+
+                var plotOptions = {
+                    area: {
+                        fillOpacity: 0.3
+                    },
+                    series: {
+                        marker: {
+                            radius: 5, //曲线点半径，默认是4
+                            symbol: 'circle', //曲线点类型："circle", "square", "diamond", "triangle","triangle-down"，默认是"circle"
+                            states: {
+                                hover: {
+                                    enabled: false
+                                }
+                            }
+                        }
+                    }
+                };
+
+                options.tooltip = tooltip;
+                options.plotOptions = plotOptions;
+                new Highcharts.Chart(options);
+                var numprice = $("#mothprice").html();
+                $("#mothprice").html(formatPrice(numprice));
+            }
+
+            function formatPrice(n) {
+                var t = parseInt(n), i, r;
+                for (t = t.toString().replace(/^(\d*)$/, "$1."), t = (t + "00").replace(/(\d*\.\d\d)\d*/, "$1"), t = t.replace(".", ","), i = /(\d)(\d{3},)/; i.test(t); )
+                    t = t.replace(i, "$1,$2");
+                return t = t.replace(/,(\d\d)$/, ".$1"), r = t.split("."), r[1] == "00" && (t = r[0]), t
+            }
+        </script>
+    </body>
+</html>

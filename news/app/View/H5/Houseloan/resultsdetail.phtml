@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name='apple-touch-fullscreen' content='yes'>
+    <meta name="full-screen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="address=no">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport">
+    <title>房贷计算神器</title>
+<script type="text/javascript" src="<?php echo $sStaticRoot ?>/js/jquery-1.11.1.min.js"></script>
+<script src="<?php echo $sStaticRoot ?>/js/calculator.js"></script>
+<script src="<?php echo $sStaticRoot ?>/js/dataHelper.js"></script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/css/weixin.css" type="text/css" media="screen"/>
+</head>
+
+<body>
+    <section class="kf_tpar">
+        <div>房屋总价300万，贷款总额278万;</div>
+        <div>等额本金还款，按揭20年，组合贷款;</div>
+        <div><a href="#"><<返回重新计算</a></div>
+    </section>
+    <section class="mw_slide nf_item">
+        <ul class="mw_slide_ul padding_top">
+            <li>
+                第1期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第2期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+            <li>
+                第3期<span class="kf_pan">28942.20元</span>
+            </li>
+        </ul>
+    </section>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".m_nav_tip").click(function () {
+                var $this = $(this);
+                if (!$this.hasClass("on")) {
+                    $(this).addClass("on");
+                    $(".mk_options").addClass("on");
+                } else {
+                    $(document).click();
+                }
+                return false;
+            });
+            $(document).on("click", function () {
+                $(".m_nav_tip").removeClass("on")
+                $(".mk_options").removeClass("on");
+            });
+        })
+        function GetRequest() {
+
+            var url = location.search; //获取url中"?"符后的字串
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+        //精确小数点
+        function round(v, e) {
+            var t = 1;
+            for (; e > 0; t *= 10, e--);
+            for (; e < 0; t /= 10, e++);
+            return Math.round(v * t) / t;
+
+        }
+        var arrylist1 = "";
+        var arrylist2 = "";
+        function GetCapitalArrylist(SumMoney, Interest, month) {
+            //debugger;
+            var a = Interest / 12;
+            var Money;
+            var Money1 = (SumMoney / month);
+            var SumInterest = "";
+            var monthInterest;
+            for (var i = 0; i < month ; i++) {
+                if (i == 0) {
+                    //SumInterest += "<li>第" + parseInt(i + 1) + "期";
+                    SumInterest +=  round((Money1 + SumMoney * a), 2)+",";
+                    //SumInterest += "</li>";
+                }
+                if (i < month && i != 0) {
+                    //monthInterest = round(((SumMoney - Money1 * (i)) * a), 2);
+                    //SumInterest += monthInterest;
+                    //SumInterest += "<li>第" + parseInt(i + 1) + "期";
+                    SumInterest +=  round(Money1 + ((SumMoney - Money1 * (i)) * a), 2)+",";
+                    //SumInterest += "</li>";
+                }
+            }
+            SumInterest = SumInterest.substring(0, SumInterest.length-1);
+            return SumInterest;
+        }
+        //等额本金利息Html
+        //function GetCapitalHtml(SumMoney, Interest, month) {
+        //debugger;
+        function GetCapitalHtml(SumMoney, Interest, month) {
+            //debugger;
+            var a = Interest / 12;
+            var Money;
+            var Money1 = (SumMoney / month);
+            var SumInterest = "<ul class='mw_slide_ul padding_top'>";
+            var monthInterest;
+            for (var i = 0; i < month ; i++) {
+                if (i == 0) {
+                    SumInterest += "<li>第" + parseInt(i + 1) + "期";
+                    SumInterest += "<span class='kf_pan'>" + round((Money1 + SumMoney * a), 2) + "元</span>";
+                    SumInterest += "</li>";
+                }
+                if (i < month && i != 0) {
+                    //monthInterest = round(((SumMoney - Money1 * (i)) * a), 2);
+                    //SumInterest += monthInterest;
+                    SumInterest += "<li>第" + parseInt(i + 1) + "期";
+                    SumInterest += "<span class='kf_pan'>" + round(Money1 + ((SumMoney - Money1 * (i)) * a), 2) + "元</span>";
+                    SumInterest += "</li>";
+                }
+            }
+            SumInterest += "</ul>";
+            return SumInterest;
+        }
+        function GetCapitalHtmlS1(arrylist1, arrylist2) {
+            //debugger;
+            var list1 = arrylist1.split(',');
+            var list2 = arrylist2.split(',');
+            var SumInterest = "<ul class='mw_slide_ul'>";
+            var monthInterest;
+            var a = 0;
+            var b = 0;
+            for (var i = 0; i < list1.length ; i++) {
+                if (i == 0) {
+                    a = list1[i];
+                    b = list2[i];
+                    c = round(parseFloat(a) + parseFloat(b), 2);
+                    SumInterest += "<li>第" + parseInt(i + 1) + "期";
+                    SumInterest += "<span class='kf_pan'>" + c + "元</span>";
+                    SumInterest += "</li>";
+                }
+                if (i < list1.length && i != 0) {
+                    //monthInterest = round(((SumMoney - Money1 * (i)) * a), 2);
+                    //SumInterest += monthInterest;
+                    a = list1[i];
+                    b = list2[i];
+                    c = round(parseFloat(a) + parseFloat(b), 2);
+                    SumInterest += "<li>第" + parseInt(i + 1) + "期";
+                    SumInterest += "<span class='kf_pan'>" + c + "元</span>";
+                    SumInterest += "</li>";
+                }
+            }
+            SumInterest += "</ul>";
+            return SumInterest;
+        }
+        var Request = new Object();
+        Request = GetRequest();
+        var Type = Request["Type"];
+        var Load = Request["Load"];
+        var arr = Load.split(',');
+
+        if (Type == "C1") {
+            $(".kf_tpar").html("<div>贷款总额" + arr[0] + "万，等额本金;</div><div>按揭" + arr[1] + "年，商业贷款;</div><div><a href='/h5/houseloan/start'><<返回重新计算</a></div>");
+            var html = GetCapitalHtml(arr[2], arr[3], arr[4]);
+            $(".mw_slide").html(html);
+        }
+        if (Type == "C2") {
+            $(".kf_tpar").html("<div>房屋总价" + arr[0] + "万，贷款总额" + arr[1] + "万;</div><div>等额本金还款，按揭" + arr[2] + "年，商业贷款;</div><div><a href='/h5/houseloan/ComputeStartS'><<返回重新计算</a></div>");
+            var html = GetCapitalHtml(arr[3], arr[4], arr[5]);
+            $(".mw_slide").html(html);
+        }
+        if (Type == "F1") {
+            $(".kf_tpar").html("<div>贷款总额" + arr[0] + "万，等额本金;</div><div>按揭" + arr[1] + "年，公积金贷款;</div><div><a href='/h5/houseloan/start'><<返回重新计算</a></div>");
+            var html = GetCapitalHtml(arr[2], arr[3], arr[4]);
+            $(".mw_slide").html(html);
+        }
+        if (Type == "F2") {
+            $(".kf_tpar").html("<div>房屋总价" + arr[0] + "万，贷款总额" + arr[1] + "万;</div><div>等额本金还款，按揭" + arr[2] + "年，公积金贷款;</div><div><a href='/h5/houseloan/start'><<返回重新计算</a></div>");
+            var html = GetCapitalHtml(arr[3], arr[4], arr[5]);
+            $(".mw_slide").html(html);
+        }
+        if (Type == "S1") {
+            //debugger;
+            $(".kf_tpar").html("<div>贷款总额" + (parseFloat(arr[1]) + parseFloat(arr[2])) + "万，等额本金;</div><div>按揭" + parseFloat(arr[3]) / 12 + "年，组合贷款;</div><div><a href='/h5/houseloan/start'><<返回重新计算</a></div>");
+            //SumMoney, Interest, month
+            //Load=S_refundType_AC,100,100,240,6.15,4.25
+            var arrylist1 = GetCapitalArrylist(arr[1]*10000, arr[4]/100, arr[3]);
+            var arrylist2 = GetCapitalArrylist(arr[2]*10000, arr[5]/100, arr[3]);
+            var Html=GetCapitalHtmlS1(arrylist1, arrylist2);
+            $(".mw_slide").html(Html);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<div class="pheader clearfix"><?php echo isset($aProject['iProjectID'])?'编辑':'增加'?>项目</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <input name="iProjectID" type="hidden" value="<?php echo isset($aProject['iProjectID'])?$aProject['iProjectID']:''?>">
+		<div class="form-group">
+			<label for="sProjectName" class="col-sm-2 control-label"><strong style="color:red;">*</strong> 项目名称：</label>
+			<div class="col-sm-10">
+				<input name="sProjectName" validate="!length:2-20" type="text" value="<?php echo isset($aProject['sProjectName'])?$aProject['sProjectName']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="sPassword" class="col-sm-2 control-label">项目描述：</label>
+			<div class="col-sm-10">
+			    <textarea name="sDesc" validate="length:5-255" class="form-control input-validate"><?php echo isset($aProject['sDesc'])?$aProject['sDesc']:''?></textarea>
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="sPassword" class="col-sm-2 control-label"><strong style="color:red;">*</strong> 项目URL：</label>
+			<div class="col-sm-10">
+			    <input name="sUrl" validate="!length:5-255" type="text" value="<?php echo isset($aProject['sUrl'])?$aProject['sUrl']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="sPassword" class="col-sm-2 control-label">权限导入API：</label>
+			<div class="col-sm-10">
+			    <input name="sPermissionApi" validate="length:5-255" type="text" value="<?php echo isset($aProject['sPermissionApi'])?$aProject['sPermissionApi']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+    	<div class="btn-toolbar text-center">
+        	<button id="save" class="btn btn-primary">保存</button>
+        	<button id="cancel"class="btn" onclick="location.href='/project/list/';return false;">取消</button>
+        </div>
+	</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	$("#myform").validate({submitHandler: function(form) {
+	    $.post(form.action, $(form).serialize(), function(ret){
+	        alert(ret.data);
+	        if (ret.status) {
+	            location.href = '/project/list/';
+	        }
+	    }, 'json');
+	}});
+});
+</script>

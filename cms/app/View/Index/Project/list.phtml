@@ -1,0 +1,50 @@
+<div class="pheader clearfix">项目列表</div>
+<div class="pbody clearfix">
+    <div class="btn-toolbar list-toolbar">
+    	<button class="btn btn-primary" id="project_add">
+    		<i class="icon-plus"></i> 增加项目
+    	</button>
+    </div>
+    <table class="table table-bordered table-hover">
+    	<thead>
+    		<tr>
+    			<th class="col-sm-1 text-center">#</th>
+    			<th>项目名称</th>
+    			<th>项目描述</th>
+    			<th>URL</th>
+    			<th class="text-center">操作</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+        <?php foreach ($aList['aList'] as $v) {?>
+            <tr>
+    			<td class="col-sm-1 text-center"><?php echo $v['iProjectID']?></td>
+    			<td><a href="<?php echo $v['sUrl']?>"><?php echo $v['sProjectName']?></a></td>
+    			<td><?php echo $v['sDesc']?></td>
+    			<td><?php echo $v['sUrl']?></td>
+    			<td class="text-center">
+    			    <a href="/project/edit?id=<?php echo $v['iProjectID']?>" title="编辑"><i class="icon-pencil icon-large"></i></a>
+    			    <a class="project_delete" href="/project/del?id=<?php echo $v['iProjectID']?>" role="button" data-toggle="modal" title="删除"><i class="icon-trash icon-large"></i></a>
+    			</td>
+    		</tr>
+        <?php }?>
+    	</tbody>
+    </table>
+    <?php echo $aList['aPager']?>
+</div>
+<script>
+$('.project_delete').click(function() {
+	if (confirm("您确认要删除该项目吗？")) {
+		$.get(this.href, function(ret){
+			alert(ret.data);
+		    if (ret.status) {
+			    location.reload();
+		    }
+		}, 'json');
+	}
+	return false;
+});
+$('#project_add').click(function(){
+	location.href = '/project/add';
+});
+</script>

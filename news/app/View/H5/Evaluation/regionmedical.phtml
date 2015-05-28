@@ -1,0 +1,145 @@
+<!--教育资源导航结束-->
+<!--教育资源内容开始-->
+<section class="plan_wrap">
+<section class="analyze_wrap <?php if (empty($aMedical['data']['sBadTag']) && empty($aMedical['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+    <div class="analyze_txt floor_plan">
+        <h3>
+            <span></span>
+            分析师点评
+        </h3>
+        <p><?php echo isset($aMedical['data']['sComment']) ? $aMedical['data']['sComment'] : ''; ?></p>
+    </div>
+</section>
+
+<section class="condition">
+    <?php 
+        if(isset($aMedical['data']['sGoodTag']) && !empty($aMedical['data']['sGoodTag'])){
+            echo '<section class="advantage">
+                    <h3>优势</h3>
+                    <div class="advantage_con">';
+            foreach ($aMedical['data']['sGoodTag'] as $key => $value) {
+                echo '<span>'.$value.'</span>';
+            }
+            echo '</div></section>';
+        }
+        if(isset($aMedical['data']['sBadTag']) && !empty($aMedical['data']['sBadTag'])){
+            echo '<section class="advantage disadvantaged">
+                <h3>劣势</h3>
+                <div class="advantage_con">';
+            foreach ($aMedical['data']['sBadTag'] as $key => $value) {
+                echo '<span>'.$value.'</span>';
+            }
+            echo '</div></section>';
+        }
+    ?>
+</section>
+
+<?php
+    if(!empty($aMedical['data']['sHospital'])){
+        echo '<section class=" floor_plan">
+            <h3>
+                <span></span>
+                周边医院
+            </h3>
+            <div class="kindergarten_wrap">';
+        foreach ($aMedical['data']['sHospital'] as $key => $value) {
+            echo '<div class="kindergarten">';
+            echo '<div class="kindergarten_title hospital_name">';
+            echo '<h4>'.$value['name'].'</h4>';
+            echo '</div>';
+            echo '<div class="hospital_pic">';
+            echo '<p>'.$value['dp'].'</p>';
+            if(!empty($value['images'])){
+                foreach ($value['images'] as $k => $val) {
+                    echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+                }
+            }                                    
+            echo '</div>';
+            echo '</div>';
+        }
+        echo '</div></section>';
+    }
+
+    if(!empty($aMedical['data']['sClinic'])){
+        echo '<section class=" floor_plan">
+            <h3>
+                <span></span>
+                周边诊所
+            </h3>
+            <div class="kindergarten_wrap">';
+        foreach ($aMedical['data']['sClinic'] as $key => $value) {
+            echo '<div class="kindergarten">';
+            echo '<div class="kindergarten_title">';
+            echo '<span>'.$value['type'].'</span><h4>'.$value['name'].'</h4>';
+            echo '</div>';
+            echo '<div class="hospital_pic">';
+            echo '<p>'.$value['dp'].'</p>';
+            if(!empty($value['images'])){
+                foreach ($value['images'] as $k => $val) {
+                    echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+                }
+            }                                    
+            echo '</div>';
+            echo '</div>';
+        }
+        echo '</div></section>';
+    }
+    
+    if(!empty($aMedical['data']['sPharmacy'])){
+        echo '<section class=" floor_plan have_bottom_border">
+            <h3>
+                <span></span>
+                周边药店
+            </h3>
+            <div class="kindergarten_wrap">';
+        foreach ($aMedical['data']['sPharmacy'] as $key => $value) {
+            echo '<div class="kindergarten">';
+            echo '<div class="kindergarten_title hospital_name medicamentarius">';
+            echo '<h4>'.$value['name'].'</h4>';
+            if(!empty($value['ts'])){
+                foreach ($value['ts'] as $k => $val) {
+                    echo '<span>'.$val.'</span>';
+                }                                        
+            }
+            echo '</div>';
+            echo '<div class="hospital_pic">';
+            echo '<p>'.$value['dp'].'</p>';
+            if(!empty($value['images'])){
+                foreach ($value['images'] as $k => $val) {
+                    echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+                }
+            }                                    
+            echo '</div>';
+            echo '</div>';
+        }
+        echo '</div></section>';
+    }
+
+    if(!empty($aMedical['data']['ylqtImage'])){
+        echo '<section class=" floor_plan">';
+        echo '<h3><span></span>其他图片</h3>';
+        echo '<div class="floor_plan_pic">';
+        foreach ($aMedical['data']['ylqtImage'] as $key => $val) {
+            echo '<div class="floor_plan_pic01">';
+            echo '<canvas data-src="'.$val['sImage'].'"></canvas>';
+            echo '<p class="pic_name">'.$val['sTitle'].'</p>';
+            echo '<p class="pic_description">'.$val['sDesc'].'</p>';
+            echo '</div>';  
+        }
+        echo '</div>';
+        echo '</section>';
+    }
+
+    if(isset($aMedical['data']['sOtherComment']) && !empty($aMedical['data']['sOtherComment'])){
+        echo '<section class="floor_plan plan_description evaluation_description">
+            <h3>
+                <span></span>
+                点评
+            </h3>';
+        echo '<p>'.$aMedical['data']['sOtherComment'].'</p>';
+        echo '</section>';
+    }
+?>
+
+</section>
+

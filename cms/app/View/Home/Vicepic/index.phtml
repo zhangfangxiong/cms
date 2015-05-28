@@ -1,0 +1,70 @@
+<div class="pheader clearfix">首页副图</div>
+<div class="pbody clearfix">
+    <div class="form-group"><a class="btn btn-primary" href="<?php echo $sAddUrl?>" id="carousel_add"><i class="icon-plus"></i> 添加首页副图广告</a></div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">序号</th>
+            <th class="text-center">缩略图</th>
+            <th class="text-center">创建人</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">状态</th>
+            <th class="text-center">操作项</th>
+        </tr>
+        </thead>
+        <tbody class="carousellength">
+        <?php
+        if (isset($aList)) {
+            foreach ($aList as $key => $value) {
+                ?>
+                <tr>
+                    <td class="text-center"><?php echo $value['iAutoID'] ?></td>
+                    <td class="text-center theimg"><a href="<?=Util_Uri::getDFSViewURL($value['sImage'])?>" target="_blank"><img src="<?=Util_Uri::getDFSViewURL($value['sImage'],120, 90)?>" /></a></td>
+                    <td class="text-center"><?php echo $value['sPublishUserName'] ?></td>
+                    <td class="text-center"><?php echo date('Y-m-d H:i:s',$value['iCreateTime']) ?></td>
+                    <td class="text-center"><?php echo $value['iPublishStatus'] ? '上线' : '下线' ?></td>
+                    <td class="text-center"><a class="btnSxj" data-id="<?php echo $value['iAutoID'] ?>" data-url="<?php echo $value['iPublishStatus'] ? $sOfflineUrl : $sOnlineUrl ?>" href="javascript:void(0)" ><?php // echo $value['iPublishStatus'] ? '下架' : '发布' ?></a>&nbsp;&nbsp;&nbsp; <a href="<?php echo $sEditUrl ?>?id=<?php echo $value['iAutoID'];?>">修改</a></td>
+                </tr>
+            <?php }
+        }
+        ?>
+
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(initpage)
+    function initpage (){
+        btnGray();
+        $("#carousel_add").on("click",btnGray);
+        $(".btnSxj").on("click",getAjax);
+
+    }
+    function btnGray(){
+        if($(".carousellength").children().length>=3){
+            $("#carousel_add").addClass("getGray");
+            $("#carousel_add").removeAttr("href");
+        }else{
+            $("#carousel_add").removeClass("getGray");
+        }
+    }
+    function getAjax(){
+        var url=$(this).data("url");
+        var id=$(this).data("id");
+        $.ajax({
+            'url':url,
+            'type':'get',
+            'data':{'id':id},
+            'success':function(data){
+                alert(data.data);
+                location.reload();
+            }
+        })
+    }
+</script>
+<style type="text/css">
+    .theimg img{width:100px; border: 0;}
+    .table > tbody > tr > th,.table > thead > tr > td, .table > tbody > tr > td{vertical-align: middle; }
+    #carousel_add.getGray, #carousel_add.getGray:hover{color: #666;background-color: #ddd;border-color: #ccc;cursor: default;}
+</style>

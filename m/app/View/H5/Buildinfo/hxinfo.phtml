@@ -1,0 +1,48 @@
+
+        <script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"  data-main="<?php echo $sStaticRoot ?>/touchweb/lib/js/buildinfo.js"></script>
+        <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/buildinfo/css/style.css">
+        <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="uc_return_l goback"></a>
+                <div class="inner_title">户型详情</div>
+            </div>
+        </header>
+        <section class="main_section">
+            <section class="upshow clearfix">
+                <div class="imgshow showborder">
+                    <?php echo '<canvas data-src="' . $aHxInfo['Image'] . '"></canvas>'; ?>
+                </div>
+                <div class="hxcode clearfix">
+                    <div class="title fl">A2户型编号</div>
+                    <a class="selectfang fl" href="#">在线选房</a>
+                </div>
+
+                <div class="oneblock">
+                    <div class="l_title">户型：</div>
+                    <?php echo '<div class="l_content">' . $aHxInfo['TypeName'] . '</div>'; ?>
+                </div>
+                <div class="oneblock">
+                    <div class="l_title">面积：</div>
+                    <?php echo '<div class="l_content">' . $aHxInfo['MinArea'] . '㎡-' . $aHxInfo['MinArea'] . '㎡</div>'; ?>
+                </div>
+                <div class="clearfix"></div>
+                <div class="oneblock">
+                    <div class="l_title">价格：</div>
+                    <?php echo '<div class="l_content">' . $aHxInfo['MinTotalPrice'] . '-' . $aHxInfo['MaxTotalPrice'] . '万</div>'; ?>
+                </div>
+            </section>
+
+            <?php
+            if (!empty($aHxInfo['Desc'])) {
+                echo '<section class="downdesc clearfix">
+                        <div class="l_title">户型描述</div>';
+                echo '<p>' . $aHxInfo['Desc'] . '</p>';
+                echo '</section>';
+            }
+            ?>
+        </section>
+
+    <script>
+        var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+    </script>
+

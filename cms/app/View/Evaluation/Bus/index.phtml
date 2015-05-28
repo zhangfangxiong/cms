@@ -1,0 +1,115 @@
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/evaluation/bus">
+        <div class="form-group">
+            线路名称：
+            <input type="text" value="<?php echo isset($aParam['sBusName'])?$aParam['sBusName']:''?>" class="form-control input-sm" name="sBusName">
+        </div>
+        <div class="form-group">
+            线路类型:
+            <select class="form-control input-sm" name="iType">
+                <option value="-1">全部</option>
+                <?php foreach($aType as $key => $value):?>
+                <option value="<?=$key?>" <?php echo isset($aParam['iType'])&&$aParam['iType']==$key?'selected':''?>><?=$value?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div class="form-group">
+            状态:
+            <select class="form-control input-sm" name="iStatus">
+                <option value="-1">全部</option>
+                <?php foreach($aStatus as $key => $value):?>
+                    <option value="<?=$key?>" <?php echo isset($aParam['iStatus'])&&$aParam['iStatus']==$key?'selected':''?>><?=$value?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+        <input type="hidden" id="fOrder" name="sOrder" value="<?php echo isset($aParam['sOrder'])?$aParam['sOrder']:''?>">
+    </form>
+    <hr>
+    <div class="btn-toolbar list-toolbar">
+        <a class="btn btn-primary" id="bus_add"><i class="icon-plus"></i> 增加公交线路</a>
+        <div style="float:right">
+            <label> 排序方式：</label>
+            <select class="input-sm" id="sOrder">
+                <option value="iBusID ASC">按创建时间正序</option>
+                <option value="iBusID DESC" <?php echo isset($aParam['sOrder'])&&'iBusID DESC'==$aParam['sOrder']?'selected':''?>>按创建时间倒序</option>
+            </select>
+        </div>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>线路名称</th>
+            <th class="text-center">线路类型</th>
+            <th class="text-center">首班车时间</th>
+            <th class="text-center">末班车时间</th>
+            <th class="text-center">创建时间</th>
+            <th class="text-center">最后修改时间</th>
+            <th class="text-center">最后修改人</th>
+            <th class="text-center">状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if($aList['aList']):?>
+            <?php foreach ($aList['aList'] as $v) {?>
+                <tr>
+                    <td class="col-sm-1 text-center"><?=$v['sBusName']?></td>
+                    <td class="col-sm-1 text-center"><?php if(isset($aType[$v['iType']])) { echo $aType[$v['iType']];}?></td>
+                    <td class="col-sm-1 text-center"><?=$v['sFRunTime']?></td>
+                    <td class="col-sm-1 text-center"><?=$v['sLRunTime']?></td>
+                    <td class="col-sm-1 text-center"><?php echo date("Y-m-d H:i:s",$v['iCreateTime']);?></td>
+                    <td class="col-sm-2 text-center"><?php echo date("Y-m-d H:i:s",$v['iUpdateTime']);?></td>
+                    <td class="col-sm-2 text-center"><?=$v['sOperator']?></td>
+                    <td class="col-sm-2 text-center"><?php if(isset($aStatus[$v['iStatus']])) { echo $aStatus[$v['iStatus']];}?></td>
+                    <td class="col-sm-1 text-center">
+                        <a href="/evaluation/bus/edit?id=<?php echo $v['iBusID']?>" title="编辑线路">编辑线路</a>
+                        <a class="bus_stations" href="/evaluation/bus/stations?id=<?php echo $v['iBusID']?>" role="button" data-toggle="modal" title="删除">编辑站点</a>
+                        <a class="bus_change" href="/evaluation/bus/changeStatus?id=<?php echo $v['iBusID']?>" role="button" data-toggle="modal" title="编辑站点"><?php if($v['iStatus']){echo '设为禁用';}else{ echo '设为启用';} ?></a>
+                    </td>
+                </tr>
+            <?php }?>
+        <?php else:?>
+            <tr><td colspan="10" align="center">该条件下暂未找到数据</td></tr>
+        <?php endif;?>
+        </tbody>
+    </table>
+    <?php echo $aList['aPager']?>
+</div>
+<script>
+    $('#formbtn').click(function(){
+        $('#fOrder').val($('#sOrder').val());
+    });
+
+    $('#sOrder').change(function(){
+        $('#fOrder').val($('#sOrder').val());
+        $('#myform').submit();
+    });
+
+    $('.bus_delete').click(function() {
+        if (confirm("您确认要删除该医院吗？")) {
+            $.get(this.href, function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+        }
+        return false;
+    });
+
+    $('.bus_change').click(function() {
+        $.get(this.href, function(ret){
+            alert(ret.data);
+            if (ret.status) {
+                location.reload();
+            }
+        }, 'json');
+        return false;
+    });
+
+    $('#bus_add').click(function(){
+        location.href = '/evaluation/bus/add';
+    });
+
+</script>

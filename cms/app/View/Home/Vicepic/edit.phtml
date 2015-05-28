@@ -1,0 +1,83 @@
+<div class="pheader clearfix"><?php echo isset($aBanner['iAutoID']) ? '编辑' : '添加' ?>图片</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <input name="iAutoID" type="hidden" value="<?php echo isset($aBanner['iAutoID']) ? $aBanner['iAutoID'] : '' ?>">
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 上传图片：</label>
+            <div class="col-sm-10">
+                <input type="hidden" id="sImage" name="sImage" validate="!required:请上传图片" value="<?php echo isset($aBanner['sImage']) ? $aBanner['sImage'] : '' ?>">
+                <img id="sImageShow" style="width:120px;height:90px;" src="<?php echo isset($aBanner['sImage']) ? Util_Uri::getDFSViewURL($aBanner['sImage']) : '' ?>">
+                <input type="button" value="选择" class="plupload" data-target="#sImage" data-img="#sImageShow">
+                <span class="text-muted">请上传尺寸为 222*210，格式为 gng、jpg的图片</span>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">图片位置：</label>
+            <div class="col-sm-10 mt5"><?php echo $aType[1]['sTitle'] ?></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><strong style="color:red;">*</strong>图片描述：</label>
+            <div class="col-sm-10">
+                <input name="sDesc" type="text" validate="*clength:1-9" placeholder="图片描述不能超过18个字符" value="<?php echo isset($aBanner['sDesc']) ? $aBanner['sDesc'] : '' ?>" class="form-control input-validate">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><strong style="color:red;">*</strong>图片链接：</label>
+            <div class="col-sm-10">
+                <input name="sUrl" type="text" validate="!url:true" placeholder="图片跳转的目标URL" value="<?php echo isset($aBanner['sUrl']) ? $aBanner['sUrl'] : '' ?>" class="form-control input-validate">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <input type="hidden" name="iOptype" id="iOptype" value="">
+                <button id="publish" onclick="$(this.form).attr('must', 1);
+                    $('#iOptype').val(1)" class="btn btn-danger">发布</button>
+                <button id="cancel" class="btn" onclick="location.href = '<?= $sListUrl ?>';
+                    return false;">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('bannerupload', 'url') ?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url') ?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/upload.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#sImageShow').click(function () {
+            var sImage = $('#sImage').val();
+            window.open(getDFSViewURL(sImage, 0, 0, '', 'banner'));
+        });
+
+        //提交表单
+        $("#myform").validate({submitHandler: function (form) {
+            if ($('#iOptype').val() == '') {
+                form.action = 'http://<?= (Yaf_G::getConf('news', 'domain')); ?>/<?= $sCityCode ?>/news/index/previewcarousel/';
+                form.target = '_blank';
+                form.submit();
+                return false;
+            }
+            form.action = '';
+
+            $.post(form.action, $(form).serialize(), function (ret) {
+                alert(ret.data);
+                if (ret.status) {
+                    location.href = '<?= $sListUrl ?>';
+                }
+            }, 'json');
+            return false;
+        }});
+    });
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<style type="text/css">
+    .mt5{margin-top:5px;}
+</style>

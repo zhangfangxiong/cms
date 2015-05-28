@@ -1,0 +1,118 @@
+<div class="pheader clearfix">标签列表</div>
+<div class="pbody clearfix">
+	<form class="form-inline search-form" role="form" method="post" id="myform">
+		<div class="form-group">
+			章节:
+			<select class="form-control input-sm" name="iCatID" id="iCatID">
+				<option value="0">请选择</option>
+				<?php
+					if (isset($chapter['parent'])&&!empty($chapter['parent'])) {
+						foreach ($chapter['parent'] as $k => $v) {
+							?>
+							<option
+								value="<?php echo $k?>" <?php echo isset($aParam['iCatID'])&&$aParam['iCatID']==$k ? 'selected':'' ?>><?php echo $v?></option>
+						<?php }
+					}
+				?>
+			</select>
+		</div>
+		<div class="form-group">
+			子章节:
+			<select class="form-control input-sm" name="iSubCatID" id="iSubCatID">
+				<option value="0">请选择</option>
+				<?php
+				if (isset($aParam['iSubCatID'])) {
+					foreach($chapter['child'][$aParam['iCatID']] as $k=>$v) {
+						?>
+						<option
+							value="<?php echo $k?>"  <?php echo $aParam['iSubCatID']==$k ? 'selected':'' ?>><?php echo $v?></option>
+					<?php
+					}
+				}
+				?>
+			</select>
+		</div>
+		<div class="form-group">
+			优劣势:
+			<select class="form-control input-sm" name="sType">
+				<option value="0">请选择</option>
+				<?php
+				if (isset($yls)&&!empty($yls)) {
+					foreach ($yls as $k => $v) {
+						?>
+						<option
+							value="<?php echo $k?>" <?php echo isset($aParam['sType'])&&$aParam['sType']==$k ? 'selected':'' ?>><?php echo $v?></option>
+					<?php }
+				}
+				?>
+			</select>
+		</div>
+		<div class="form-group">
+			关键字：
+			<input type="text" value="<?php echo isset($aParam['keywords']) ? $aParam['keywords']:'' ?>" class="form-control input-sm" name="keywords">
+		</div>
+		<input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+	</form>
+	<hr>
+    <div class="btn-toolbar list-toolbar">
+    	<button class="btn btn-primary" id="tag_add">
+    		<i class="icon-plus"></i> 增加标签
+    	</button>
+    </div>
+    <table class="table table-bordered table-hover">
+    	<thead>
+    		<tr>
+    			<th class="col-sm-1 text-center">#</th>
+    			<th class="text-center">章节</th>
+    			<th class="text-center">子章节</th>
+				<th class="text-center">类型</th>
+				<th class="text-center">标签</th>
+				<th class="text-center">适用楼盘</th>
+				<th class="text-center">操作</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+        <?php
+		if (isset($aList['aList'])&&!empty($aList['aList'])) {
+			foreach ($aList['aList'] as $v) {
+				?>
+            <tr>
+    			<td class="col-sm-1 text-center"><?php echo $v['iTagID']?></td>
+    			<td><?php echo !empty($v['iCatID']) ? $chapter['parent'][$v['iCatID']]:''?></td>
+				<td><?php echo !empty($v['iSubCatID']) ? $chapter['child'][$v['iCatID']][$v['iSubCatID']]:'' ?></td>
+    			<td><?php echo $v['sType']?></td>
+				<td><?php echo $v['sName']?></td>
+				<td><?php echo $v['sDesc']?></td>
+    			<td class="text-center">
+					<a href="/evaluation/tag/edit?id=<?php echo $v['iTagID']?>" title="编辑"><i class="icon-pencil icon-large"></i></a>
+					<a class="tag_delete" href="/evaluation/tag/del?id=<?php echo $v['iTagID']?>" role="button" data-toggle="modal" title="删除"><i class="icon-trash icon-large"></i></a>
+    			</td>
+    		</tr>
+        <?php
+			}
+		}
+		?>
+    	</tbody>
+    </table>
+    <?php echo isset($aList['aPager']) ? $aList['aPager']:''?>
+</div>
+<script>
+var chapterChild = '<?php echo isset($childChapterJson)&&!empty($childChapterJson)? $childChapterJson:''?>';
+$(function() {
+	$('.tag_delete').click(function() {
+		if (confirm("您确认要删除该标签吗？")) {
+			$.get(this.href, function(ret){
+				alert(ret.data);
+				if (ret.status) {
+					location.reload();
+				}
+			}, 'json');
+		}
+		return false;
+	});
+	$('#tag_add').click(function(){
+		location.href = '/evaluation/tag/add';
+	});
+})
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>

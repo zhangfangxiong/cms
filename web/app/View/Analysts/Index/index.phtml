@@ -1,0 +1,285 @@
+<link type="text/css" href="<?php echo $sStaticRoot?>/web/css/welcome.css" rel="stylesheet" />
+<link type="text/css" href="<?php echo $sStaticRoot?>/web/css/newhouse.css" rel="stylesheet" />
+
+<section class="wrap_con clearfix">
+
+<style>
+    #Footer .footer{background-color:#fff;}
+    .bg_f8{background: #f1f1f1;}
+</style>
+
+<section id="breadcrumb_nav">
+	<nav class="breadcrumb_nav new_row_cont">
+			<a href="/">房价点评首页</a>
+			<span>&gt;</span>
+			<a href=""><?php echo $aCity['name'] ?></a>
+			<span>&gt;</span>
+		分析师
+	</nav>
+</section>
+
+
+<section class="row">
+    <div class="analytsts_ban">
+        <img src="<?php echo $sStaticRoot;?>/web/images/fxsbanner/fxs-<?php echo $aCity['code'];?>.jpg" alt="<?php echo $aCity['name'];?>" />
+        <div class="ban_content">
+            <h2>房价点评分析师</h2>
+            <div class="cfwrap clearfix">
+                <div class="fg_left clearfix">
+                    <i class="ico_phone"></i>
+                    <div class="cfpan">
+                        <span>分析师热线</span>
+                        <cite id="analystHotLine"><?php echo $aTel;?></cite>
+                    </div>
+                </div>
+                <div class="fg_right">
+                    <span>服务时间</span>
+                    <cite>周一至周五 9:30-17:00</cite>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <?php 
+        if($aList) { 
+    ?>
+    <div class="analytsts_cont">
+        <h2 class="analytsts_t">分析师团队</h2>
+        <ul class="clearfix analytsts_l" id="analystsList">
+        <?php        
+            foreach ($aList as $key => $value) { ?>
+            <li>
+                <dl>
+                    <dt>
+                        <img src="<?php echo Util_Uri::getCricViewURL($value['AnalystHead'], 80, 117)?>" />
+                    </dt>
+                    <dd>
+                        <cite>
+                            <b><?php echo $value['AnalystsName'];?><s></s></b>
+                            <em><?php echo $value['AnalystLevel'];?></em>
+                            
+                            <a href="javascript:showMsgBgNew(<?php echo $value['ID'];?>);">
+                                <span><s></s></span>咨询
+                            </a>
+                        </cite>
+                        <p><?php echo $value['BriefIntroduction'];?></p>
+                    </dd>
+                </dl>
+                <i><img src="<?php echo Util_Uri::getCricViewURL($value['Weixin'], 86, 86)?>" class="qrcode_pic" 
+                        style="height: 20px; width: 20px; right: 0px; top: 0px; opacity: 0; overflow: hidden;"/></i>
+            </li>        
+        <?php } 
+        ?>
+        </ul>
+    </div>
+    <?php }?>
+  
+    <?php 
+        if($aDynamic){
+            $class = 'first';
+    ?>
+    <div class="analytsts_feed">
+        <h2 class="analytsts_t">分析师动态</h2>
+        <div class="feed_gird clearfix">
+            <ul class="feed_t clearfix" id="opinionMemo">
+            <?php 
+                foreach ($aDynamic as $key => $value) {
+            ?>
+            <li>
+                <cite>
+                    <em><?php echo $value['AnalystsName']?></em>点评了
+                    <a href="" target="_blank">
+                    [<?php echo $value['DistrictName']?>] <?php echo $value['UnitName']?>
+                    </a>
+                </cite>
+            </li>
+            <?php } ?>
+            </ul>
+            <ul class="feed_c clearfix" id="opinionInfo">
+            <?php 
+                foreach ($aDynamic as $key => $value) {
+            ?>
+            <li class="<?php echo $class?>">
+                <div class="m_in_top">
+                    <i class="ico_top"></i>
+                    <i class="ico_tip"></i>
+                    <div class="m_in_title clearfix">
+                        <span></span>
+                        <cite><a href="" target="_blank"><?php echo $value['OpinionSummary']?></a></cite>
+                    </div>
+                    <div class="m_c">
+                        <?php echo mb_substr($value['Opinion'], 0, 100)?>
+                        <a href="" target="_blank" style="margin-left: 5px;">更多<s></s>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <?php
+                $class = '';
+            }?>
+            </ul>
+        </div>
+    </div>
+    <?php }?>
+
+    <div id="showMessageNew" class="mes_box shadow1 clearfix" style="visibility: hidden">
+        <h5>
+            <b>留言</b><a onclick="closeBg('showMessageNew')" href="javascript:void(0);" title="关闭"
+                        class="close_btn">X</a>
+        </h5>
+        <div id="hideMessageNew" class="mes_con clearfix">
+            <div class="clearfix">
+                <dl class="fl mr20 clearfix">
+                    <dt>名字：</dt>
+                    <dd>
+                        <input id="tUserNameNew" type="text" class="ipt_txt" style="width: 110px" />
+                        <input id="AnysIDNew" type="hidden" />
+                    </dd>
+                </dl>
+            </div>
+            <dl class="clearfix">
+                <dt>手机：</dt>
+                <dd>
+                    <input id="txtUserPhoneNew" type="text" class="ipt_txt" style="width: 344px" />
+                </dd>
+            </dl>
+            <p>
+                <textarea id="remarkNew" class="tarea_mes"></textarea>
+            </p>
+            <div class="btn_cons">
+                <a href="javascript:submitAnalystsListAddNew();">提交留言</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<script type="text/javascript">
+    $(function () {
+        BindHoverAction();
+    });
+
+    function BindHoverAction() {
+        $w = 20;
+        $h = 20;
+        $w2 = $w + 80;
+        $h2 = $h + 80;
+        $(".analytsts_l li i").hover(function () {
+            $(this).find("img").stop().animate({ height: $h2, width: $w2, right: "-40px", top: "-40px", opacity: '1' }, 500);
+        }, function () {
+            $(this).find("img").stop().animate({ height: $h, width: $w, right: "0px", top: "0px", opacity: '0' }, 500);
+        });
+    }
+
+
+    function showMsgBgNew(ansyid){
+        $("#AnysIDNew").val(ansyid);
+        var bH = $(document).height();
+        $("#fullBg").css({ height: bH, display: "block" });
+        $("#showMessageNew").css("visibility", "visible");
+    }
+
+    function submitAnalystsListAddNew() {
+        var s = $("#hideMessageNew").html();
+        var userPhone = $("#txtUserPhoneNew").val();
+        var userName = $("#tUserNameNew").val();
+        var remarkNew = $("#remarkNew").val();
+        var ansyid = $("#AnysIDNew").val();
+        if ($.trim(remarkNew).length == 0 || $.trim(userName).length == 0 || $.trim(userPhone).length == 0) {
+            alert("请输入完整信息！");
+            return;
+        }
+        var regPhone = /^1[34568]\d{9}$/;
+        if (!regPhone.test(userPhone)) {
+            alert("手机号码格式不正确，请重新输入，谢谢！");
+            return;
+        }
+        
+        var request_url = '/ajax/analyst/sendQuestion';
+        $.ajax({
+            type: 'POST',
+            url: request_url,
+            dateType: 'json',
+            data: {
+                id: ansyid, 
+                content: remarkNew, 
+                username: userName, 
+                mobile: userPhone,                 
+            },
+            success: function (result) {
+                var json = eval('(' + result + ')');
+                if(json.status) {
+                    $("#hideMessageNew").html(" ");
+                    showBg('submitSuccess');
+
+                    var timeOut = setTimeout(function () {
+                        $("#showMessageNew").css("visibility", "hidden");
+                        $("#fullBg").hide();
+                    }, 1000);
+                    
+                    timeOut = setTimeout(function () {
+                        closeBg('submitSuccess');
+                        $("#hideMessageNew").html(s);
+                        if (timeOut) {
+                            clearTimeout(timeOut);
+                        }
+                    }, 1000);
+                    
+                    $("#txtUserPhoneNew").val("");
+                    $("#tUserNameNew").val("");
+                    $("#remarkNew").val("");
+                }else {
+                    $("#showMessageNew").css("visibility", "hidden");
+                    alert("提交失败！");
+                    $("#fullBg").hide();
+                }
+            }
+        });
+
+    }
+</script>
+    </section>
+    
+
+<div id="fullBg"></div>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=4bfffe2dca93bbf875de0181774419c4"></script>
+<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=3741325988" type="text/javascript"
+        charset="utf-8"></script>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js"
+        data-appid="101144060" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/ga.js"></script>
+<script type="text/javascript">
+    window["_BFD"] = window["_BFD"] || {};
+    _BFD.client_id = "Ctest_leju_keerrui";
+    _BFD.script = document.createElement("script");
+    _BFD.script.type = "text/javascript";
+    _BFD.script.async = true;
+    _BFD.script.charset = "utf-8";
+    _BFD.script.src = (('https:' == document.location.protocol ? 'https://ssl-static1' : 'http://static1') + '.baifendian.com/service/leju_keerrui/test_leju_keerrui.js');
+    document.getElementsByTagName("head")[0].appendChild(_BFD.script);
+</script>
+
+<div class="tool_box">
+    <div class="box_center">
+        <dl class="tool_list clearfix">                
+            <style type="text/css">
+                .tool_box .tool_list dd .add_acc { background-color:#e8382b;}
+            </style>
+            <dd class="top_dd" id="funTop" style="display: none">
+                <a onclick="goTop(); return false;" href="#" class="tool_link">
+                    <i class="top_arrow">
+                    </i><span>顶部</span>
+                </a>
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div id="submitSuccess" class="mes_tipbox shadow1 clearfix" style="visibility: hidden;">
+	<i class="ok_ico"></i><span>提交成功</span>
+</div>
+
+
+    <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+</body>

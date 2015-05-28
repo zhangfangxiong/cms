@@ -1,0 +1,116 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<!--个人中心开始已登录-->
+<div class="viewport">
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l" onclick="window.history.back()">
+            </div>
+            <div class="uc_return_c">个人中心</div>
+        </div>
+    </header>
+    <section class="uc_content">
+        <div class="uc_login">
+            <div class="uc_login_in">
+                <ul class="outborder">
+                    <li class="p12">
+                        <div class="login_wrap" id="skip_login_page">
+                            <div class=" logged_l">
+                                <s class="uc_head"></s>
+                                <span
+                                    class="user_phone"><?php echo isset($userInfo) ? substr_replace($userInfo['data']['sUserName'], '****', 3, 4) : '您尚未登录' ?></span>
+                            </div>
+                            <div class="logged_r">
+                                <span class="on_m_l font14">
+                                    <a href="<?php echo $sTouchwebRoot;
+echo isset($userInfo) ? '/h5/Ucenter/pamend' : '/h5/Ucenter/pLogin'
+?>"><?php echo isset($userInfo) ? '修改密码' : '点击登录' ?></a>
+                                </span>
+                                <span class="uc_return_gray"></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="My pl12 bgf outborder">
+            <ul>
+                <li class="border_bottom" id="my_colle">
+                    <s class="My_collect"></s>
+                    <span><a href="javascript:;">我收藏的新房</a></span>
+                    <span class="uc_return_gray"></span>
+                </li>
+                <li id="my_history">
+                    <s class="My_skim"></s>
+                    <span><a href="javascript:;">我收藏的评测</a></span>
+                    <span class="uc_return_gray"></span>
+                </li>
+            </ul>
+        </div>
+
+        <?php
+        if (isset($userInfo)) {
+            ?>
+            <div class="exit" id="exit_userName">退出当前账号</div>
+            <?php
+        }
+        ?>
+    </section>
+    <section class="tip_dialog" id="tip_dialog"></section>
+</div>
+<!--个人中心结束已登录-->
+<script type="text/javascript">
+    $(function () {
+        //注册
+        $("#exit_userName").on("click", function () {
+            //zfx新加
+            var url = '<?php echo $sTouchwebRoot ?>/h5/Ucenter/logout';
+            var locationUrl = '<?php echo $sTouchwebRoot ?>/h5/Ucenter/more';
+            $.get(url, function (ret) {
+                ret = eval('(' + ret + ')');
+                console.log(ret.data);
+                if (ret.status) {
+                    //alert('退出成功');
+                    //location.href = locationUrl;
+                    $('#tip_dialog').html('退出成功').show();
+                    setTimeout(function () {
+                        $("#tip_dialog").hide(200);
+                        location.href = locationUrl;
+                    }, 2000)
+                } else {
+                    alert(ret.data);
+                }
+                return false;
+            });
+        });
+		
+		//未登录时跳到收藏的新房
+		var usrinfo='<?php echo isset($userInfo) ? $userInfo['data']['sUserName'] : 'notlong' ?>';
+		$('#my_colle').on('click',function(){
+			var locationUrl = '<?php echo $sTouchwebRoot ?>/h5/Ucenter/pLogin';
+			var url = '<?php echo $sTouchwebRoot ?>/h5/Ucenter/myfavorites';
+			if(usrinfo == "notlong"){
+				$('#tip_dialog').html("您未登录，请登录").show();
+				setTimeout(function () {
+					$("#tip_dialog").hide(200);
+					location.href = locationUrl;
+				}, 2000)
+			}else{
+				location.href = url;
+			}
+		})
+		//未登录时跳到收藏的评测
+		$('#my_history').on('click',function(){
+			var locationUrl = '<?php echo $sTouchwebRoot ?>/h5/Ucenter/pLogin';
+			var url = '<?php echo $sTouchwebRoot ?>/h5/Ucenter/myevaluation';
+			if(usrinfo == "notlong"){
+				$('#tip_dialog').html("您未登录，请登录").show();
+				setTimeout(function () {
+					$("#tip_dialog").hide(200);
+					location.href = locationUrl;
+				}, 2000)
+			}else{
+				location.href = url;
+			}
+		})
+    })
+</script>

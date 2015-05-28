@@ -1,0 +1,893 @@
+﻿
+<section class="nav_cont">
+    <div class="new_row_cont clearfix">
+        <cite class="kszf_txt">快速找房</cite>
+        <ul class="nav_list clearfix">
+            <li><a href="/" title="首页" class="current">首页</a><em>|</em></li>
+            <li><a target="_blank" href="/<?php echo $sCurrCityCode?>/Newhouse/index/" title="新房">新房</a><em>|</em></li>
+            <li>
+                <a target="_blank" href="/<?php echo $sCurrCityCode?>/esf/advanced/search" title="二手房">二手房</a><em>|</em>
+            </li>
+            <li>
+                <a class="" target="_blank" href="<?php echo $newsUrl;?>/<?php echo $sCurrCityCode?>/news/index" title="资讯">资讯</a>
+            </li>
+
+        </ul>
+    </div>
+</section>
+<section class="main_cont">
+    <div class="new_row_cont clearfix">
+        <div class="left_bar clearfix">
+            <div class="select_box clearfix">
+                <dl class="clearfix" id="byArea">
+                    <dt><s class="aqy_ico"></s>按区域<i class="go_ico"></i></dt>
+                    <dd id="dd_regions">
+
+                    </dd>
+                </dl>
+                <div class="xx_line"></div>
+                <dl class="clearfix" id="byPrice">
+                    <dt><s class="ajg_ico"></s>按价格<i class="go_ico"></i></dt>
+                    <dd>
+                        <?php  if(!empty($priceList['slicePriceSection'])) { ?>
+                        <?php for($i = 0; $i<= count($priceList['slicePriceSection']); $i++) { ?>
+                        <a href="<?php echo Model_Util::getShortSearchUrl(array('prev'=>  $priceList['slicePriceSection'][$i] )) ?>" target="_blank" title="<?php echo $priceList['slicePriceSection'][$i] ?>"><?php echo $priceList['slicePriceSection'][$i] ?></a>
+                        <?php }} ?>
+                    </dd>
+                </dl>
+                <div class="xx_line"></div>
+                <dl class="clearfix" id="byHouseType">
+                    <dt><s class="ahx_ico"></s>按户型<i class="go_ico"></i></dt>
+                    <dd>
+                        <?php  if(!empty($room)) { ?>
+                        <?php  foreach($room as $key=>$value) { ?>
+                        <a href="<?php echo Model_Util::getShortSearchUrl(array('rt'=>  $value )) ?>" target="_blank"><?php echo $value ?></a>
+                        <?php }} ?>
+                    </dd>
+                </dl>
+                <div class="xx_line"></div>
+                <dl class="clearfix" id="priceSuggest">
+                    <dt><s class="fjjy_ico"></s>房价建议<i class="go_ico"></i></dt>
+                    <dd>
+                        <?php  if(!empty($suggest)) { ?>
+                        <?php  foreach(array_slice($suggest,0,3) as $key=>$value) { ?>
+                        <a href="<?php echo Model_Util::getShortSearchUrl(array('s'=>  $value )) ?>" target="_blank"><?php echo $value ?></a>
+                        <?php }} ?>
+                    </dd>
+                </dl>
+            </div>
+            <div class="all_select clearfix" id="allArea">
+                <dl class="clearfix">
+                    <dt><a href="/shanghai/advanced/search" target="_blank" title="全部区域">全部区域</a></dt>
+                    <dd>
+                        <div class="select_link clearfix" id="div_allregions">
+
+                        </div><div class="clearfix"></div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="all_select clearfix" id="allPrice">
+                <div class="yy_line"></div>
+                <dl class="clearfix">
+                    <dt><a href="/shanghai/advanced/search" target="_blank" title="全部售价">全部售价</a></dt>
+                    <dd>
+                        <div class="select_link clearfix">
+                            <?php  if(!empty($priceList['section'])) { ?>
+                            <?php for($i = 0; $i<= count($priceList['section']); $i++) {
+                                    if(empty($priceList['section'][$i])){
+                                        continue;
+                                    }
+                                    if($priceList['section'][$i] == '1万'){
+                                        $priceList['section'][$i] = '1万以下';
+                                    }
+                                    if($priceList['section'][$i] == '8万'){
+                                        $priceList['section'][$i] = '8万以上';
+                                    }
+                            ?>
+                            <a href="<?php echo Model_Util::getShortSearchUrl(array('p'=>  $priceList['section'][$i] )) ?>" title="<?php echo $priceList['section'][$i] ?>" target="_blank"><?php echo $priceList['section'][$i] ?><em></em></a>
+                            <?php }} ?>
+
+                            <a href="/shanghai/advanced/search?p=-" title="售价待定" target="_blank">售价待定<em></em></a>
+                        </div><div class="clearfix"></div>
+                    </dd>
+                </dl>
+                <div class="xx_line"></div>
+                <dl class="clearfix">
+                    <dt><a href="/shanghai/advanced/search" target="_blank" title="全部预算">全部预算</a></dt>
+                    <dd>
+                        <div class="select_link clearfix">
+                            <?php  if(!empty($priceList['PriceSection'])) { ?>
+                                <?php for($i = 0; $i<= count($priceList['PriceSection']); $i++) {
+                                    if(empty($priceList['PriceSection'][$i])){
+                                        continue;
+                                    }
+                                ?>
+                                    <a href="<?php echo Model_Util::getShortSearchUrl(array('prev'=>  $priceList['PriceSection'][$i] )) ?>" title="<?php echo $priceList['PriceSection'][$i] ?>" target="_blank"><?php echo $priceList['PriceSection'][$i] ?><em></em></a>
+                            <?php }} ?>
+                        </div><div class="clearfix"></div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="all_select clearfix" id="allHouseType">
+                <dl class="clearfix">
+                    <dt><a href="/shanghai/advanced/search" target="_blank" title="全部户型">全部户型</a></dt>
+                    <dd>
+                        <div class="select_link clearfix">
+                            <p>
+                                <?php  if(!empty($roomtwo)) { ?>
+                                <?php  foreach(array_slice($roomtwo,0,5) as $key=>$value) { ?>
+                                <a href="<?php echo Model_Util::getShortSearchUrl(array('rt'=>  $value )) ?>" target="_blank"><?php echo $value ?><em></em></a>
+                                <?php }} ?>
+                            </p>
+                            <p>
+                                <?php  if(!empty($roomtwo)) { ?>
+                                <?php  foreach(array_slice($roomtwo,6,10) as $key=>$value) { ?>
+                                <a href="<?php echo Model_Util::getShortSearchUrl(array('rt'=>  $value )) ?>" target="_blank"><?php echo $value ?><em></em></a>
+                                <?php }} ?>
+                            </p>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="all_select clearfix" id="buySuggest">
+                <dl class="clearfix">
+                    <dt><a href="/shanghai/advanced/search" target="_blank" title="购房建议">全部建议</a></dt>
+                    <dd>
+                        <div class="select_link clearfix">
+                            <p>
+                                <?php  if(!empty($suggest)) { ?>
+                                <?php  foreach($suggest as $key=>$value) { ?>
+                                    <a href="<?php echo Model_Util::getShortSearchUrl(array('s'=>  $value )) ?>" title="<?php echo $value ?>" target="_blank"><?php echo $value ?></a>
+                                <?php }} ?>
+                            </p>
+                            <p>
+                                <?php  if(!empty($orderType)) { ?>
+                                <?php  foreach($orderType as $key=>$value) { ?>
+                                    <a href="<?php echo Model_Util::getShortSearchUrl(array('st'=>  $value )) ?>" title="<?php echo $value ?>" target="_blank"><?php echo $value ?></a>
+                                <?php }} ?>
+                            </p>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="center_bar clearfix">
+            <div class="pic_slider clearfix">
+                    <?php echo $lunbo ?>
+                <!--<ul class="triggers">
+                    <li class="current">1</li>
+                    <li>2</li>
+                    <li>3</li>
+                </ul>-->
+                <div class="button">
+                    <a class="float_l disabled" id="prev" href="#"><s></s></a>
+                    <a class="float_r" id="next" href="#"><s></s></a>
+                </div>
+            </div>
+            <div class="thems_con clearfix">
+                <dl class="fxs_dl clearfix" onclick="window.open('/<?php echo $sCurrCityCode ?>/analysts','_blank');" title="房价分析师">
+                    <dt>房价分析师</dt>
+                    <dd>
+                        <?php $position = ''; if(!empty($citylist['data']['list'])) { ?>
+                        <?php foreach($citylist['data']['list'] as $k=>$v) {
+                            if($v['sName'] == $sCurrCityName){
+                                $position = "艾莉" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "杨胜坤" . " " . "高级分析师";
+                            } elseif($v['sName'] == $sCurrCityName){
+                                $position = "吕鹏辉" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "李昱欣" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "芦剑英" . " " . "分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "严婧" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "揭晓君" . " " . "分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "高超" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "王佳" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "林光游" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "沈政" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "韩翠翠" . " " . "分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "芶敏菲" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "周颖" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "巴茜" . " " . "分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "周静姣" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "郭轶凡" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "康强" . " " . "分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "马声岳" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "惠晓通" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "刘洪" . " " . "分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "张立华" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "刘烨" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "吴洋" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "徐亚林" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "王宸" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "潘旭尉" . " " . "首席分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "陈静" . " " . "高级分析师";
+                            }elseif($v['sName'] == $sCurrCityName){
+                                $position = "刘婧" . " " . "首席分析师";
+                            }
+
+                        }
+                        ?>
+                        <?php } ?>
+                        <h6><img src="<?php echo $sStaticRoot?>/web/images/fxs/shanghai.jpg" /></h6>
+                        <p><?php echo $position ?></p>
+                    </dd>
+                </dl>
+                <dl class="lxj_dl clearfix" title="理想家" onclick="showBg('idealBox');">
+                    <dt>理想家</dt>
+                    <dd>
+                        <h6><img src="<?php echo $sStaticRoot?>/web/images/lxj_pic.jpg" /></h6>
+                        <p>加入会员拿底价</p>
+                    </dd>
+                </dl>
+                <dl class="xf_dl clearfix" onclick="window.open('/shanghai/advanced/search/?pr=1','_blank');" title="在线选房">
+                    <dt>在线选房</dt>
+                    <dd>
+                        <h6><img src="<?php echo $sStaticRoot?>/web/images/xf_pic.jpg" /></h6>
+                        <p><?php echo $cityInfo['data']['RoomTotal'] ?>套房源</p>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="right_bar clearfix">
+            <div class="gray_box clearfix">
+                <cite class="price">本月新房均价：<span><em><?php echo number_format($cityInfo['data']['Price']) ?></em>元/㎡</span></cite>
+
+                <cite class="percent">
+                    环比上月：<span>
+                            <?php $des = ''; switch($baifen['Result'])
+                            {
+                                case 1:
+                                    $des = "+";
+                                    break;
+                                case -1:
+                                    $des = "-";
+                                    break;
+                            };  echo $des.$baifen['realRate']; if(!empty($baifen['realRate'])) {echo '%';} ?>
+                        </span>
+                </cite>
+            </div>
+            <dl class="app_down clearfix">
+                <dt>APP找房更轻松</dt>
+                <dd>
+                    <h6><a href="/help/index/appindex" target="_blank" title="前往下载">前往下载<s></s></a></h6>
+                    <p><a href="/help/index/appindex" target="_blank" title="前往下载"><img src="<?php echo $sStaticRoot?>/web/images/app_down.jpg" /></a></p>
+                </dd>
+            </dl>
+            <div class="txt_con clearfix">
+                <dl class="clearfix">
+                    <dt><s class="dp_ico"></s></dt>
+                    <dd>
+                        <h6>地产业权威点评</h6>
+                        <p>给您最靠谱的购房指导</p>
+                    </dd>
+                </dl>
+                <dl class="clearfix">
+                    <dt><s class="pj_ico"></s></dt>
+                    <dd>
+                        <h6>楼盘综合评测</h6>
+                        <p>5174份专业报告帮您决策</p>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var regions = { "shanghai": ["嘉定", "浦东", "松江", "闵行", "青浦", "金山", "南汇", "宝山", "奉贤", "杨浦", "普陀", "徐汇", "闸北", "长宁", "崇明", "黄浦", "静安", "卢湾", "虹口", "上海周边"], "beijing": ["房山", "大兴", "通州", "昌平", "朝阳", "海淀", "顺义", "丰台", "平谷", "密云", "怀柔", "宣武", "延庆", "崇文", "门头沟"], "changzhou": ["中心城区", "武进", "新北"], "chengdu": ["双流", "城东", "新都", "城西", "城南", "温江", "郫县", "龙泉", "城北", "城中"], "dalian": ["甘井子", "西岗", "旅顺口", "中山", "沙河口", "金州", "开发区"], "fuzhou": ["闽侯县", "仓山", "晋安", "马尾", "鼓楼", "台江"], "guangzhou": ["花都", "番禺", "南沙", "黄埔", "从化", "白云", "海珠", "天河", "荔湾", "越秀", "增城"], "guiyang": ["云岩", "南明", "金阳新区", "乌当", "白云", "小河", "花溪"], "hangzhou": ["余杭", "拱墅", "江干", "萧山", "滨江", "下城", "西湖", "下沙", "上城", "之江开发区"], "hefei": ["滨湖", "包河", "高新区", "经济区", "庐阳", "肥西县", "蜀山", "长丰县", "瑶海", "新站", "政务"], "jinan": ["槐荫", "历下", "历城", "高新", "市中", "长清", "天桥"], "nanjing": ["江宁", "浦口", "六合", "建邺", "栖霞", "秦淮", "雨花台", "玄武", "鼓楼", "溧水"], "nanning": ["青秀", "西乡塘", "良庆", "江南", "兴宁", "邕宁"], "ningbo": ["鄞州", "江北", "江东", "镇海", "北仑", "海曙", "科技园"], "qingdao": ["黄岛", "城阳", "四方", "胶南市", "胶州市", "即墨市", "李沧", "市北", "崂山", "市南", "高新区", "莱西市", "平度市"], "xiamen": ["集美", "同安", "湖里", "海沧", "翔安", "思明"], "shenzhen": ["龙岗", "宝安", "南山", "福田", "盐田", "罗湖"], "shenyang": ["于洪", "浑南新区", "铁西", "皇姑", "和平", "苏家屯", "东陵", "沈河", "沈北新区", "大东"], "suzhou": ["吴中", "园区", "新区", "相城", "沧浪", "平江", "金阊"], "tianjin": ["塘沽", "武清", "西青", "东丽", "津南", "南开", "北辰", "宝坻", "河西", "河北", "河东", "蓟县", "和平", "汉沽", "开发区", "汉沽", "静海", "红桥", "宁河"], "wuxi": ["滨湖", "锡山", "新区", "惠山", "南长", "北塘", "崇安"], "wuhan": ["东湖高新", "洪山", "汉阳", "江岸", "武昌", "东西湖", "江夏", "黄陂", "经济技术开发区", "江汉", "青山", "硚口", "蔡甸"], "xian": ["城东", "城南", "城北", "长安", "高新区", "西咸新区", "城西"], "changchun": ["净月", "南关", "宽城", "经开", "高新南", "高新北", "二道", "绿园", "汽贸", "经开北", "奢岭镇", "朝阳"], "changsha": ["岳麓", "雨花", "天心", "望城", "开福", "芙蓉", "宁乡", "浏阳", "长沙县"], "zhengzhou": ["金水", "中原", "惠济", "二七", "管城回族自治区", "郑东新区", "经济技术开发区", "高新技术开发区", "新郑市", "荥阳市", "中牟县", "航空港", "新乡市"], "chongqing": ["渝北", "南岸", "九龙坡", "大渡口", "沙坪坝", "北碚", "江北", "巴南", "渝中"], "kunming": ["盘龙", "五华", "西山", "官渡", "呈贡", "安宁市"], "haikou": ["龙华", "美兰", "琼山", "秀英"], "haerbin": ["道里", "道外", "呼兰", "南岗", "平房", "松北", "香坊"] };
+    var ddregions = { "shanghai": ["嘉定", "浦东", "松江", "闵行", "青浦", "金山", "南汇", "宝山", "奉贤", "杨浦"], "beijing": ["房山", "大兴", "通州", "昌平", "朝阳", "海淀", "顺义", "丰台", "平谷", "密云"], "changzhou": ["中心城区", "武进", "新北"], "chengdu": ["双流", "城东", "新都", "城西", "城南", "温江", "郫县", "龙泉", "城北", "城中"], "dalian": ["甘井子", "西岗", "旅顺口", "中山", "沙河口", "金州", "开发区"], "fuzhou": ["闽侯县", "仓山", "晋安", "马尾", "鼓楼", "台江"], "guangzhou": ["花都", "番禺", "南沙", "黄埔", "从化", "白云", "海珠", "天河", "荔湾", "越秀"], "guiyang": ["云岩", "南明", "金阳新区", "乌当", "白云", "小河", "花溪"], "hangzhou": ["余杭", "拱墅", "江干", "萧山", "滨江", "下城", "西湖", "下沙", "上城"], "hefei": ["滨湖", "包河", "高新区", "经济区", "庐阳", "肥西县", "蜀山", "长丰县"], "jinan": ["槐荫", "历下", "历城", "高新", "市中", "长清", "天桥"], "nanjing": ["江宁", "浦口", "六合", "建邺", "栖霞", "秦淮", "玄武", "鼓楼", "溧水"], "nanning": ["青秀", "西乡塘", "良庆", "江南", "兴宁", "邕宁"], "ningbo": ["鄞州", "江北", "江东", "镇海", "北仑", "海曙", "科技园"], "qingdao": ["黄岛", "城阳", "四方", "胶南市", "胶州市", "即墨市", "李沧", "市北"], "xiamen": ["集美", "同安", "湖里", "海沧", "翔安", "思明"], "shenzhen": ["龙岗", "宝安", "南山", "福田", "盐田", "罗湖"], "shenyang": ["于洪", "浑南新区", "铁西", "皇姑", "和平", "苏家屯", "东陵", "沈河"], "suzhou": ["吴中", "园区", "新区", "相城", "沧浪", "平江", "金阊"], "tianjin": ["塘沽", "武清", "西青", "东丽", "津南", "南开", "北辰", "宝坻", "河西", "河北"], "wuxi": ["滨湖", "锡山", "新区", "惠山", "南长", "北塘", "崇安"], "wuhan": ["东湖高新", "洪山", "汉阳", "江岸", "武昌", "江夏", "黄陂", "江汉", "青山"], "xian": ["城东", "城南", "城北", "长安", "城西", "高新区", "西咸新区"], "changchun": ["净月", "南关", "宽城", "经开", "二道", "高新南", "高新北", "绿园", "汽贸"], "changsha": ["岳麓", "雨花", "天心", "望城", "开福", "芙蓉", "宁乡", "浏阳", "长沙县"], "zhengzhou": ["金水", "中原", "惠济", "郑东新区", "二七", "经济技术开发区"], "chongqing": ["渝北", "南岸", "九龙坡", "大渡口", "沙坪坝", "江北", "巴南", "渝中"], "kunming": ["盘龙", "五华", "西山", "官渡", "呈贡", "安宁市"], "haikou": ["龙华", "美兰", "琼山", "秀英"], "haerbin": ["道里", "道外", "呼兰", "南岗", "平房", "松北", "香坊"] };
+    var currentRegions = regions["<?php echo $sCurrCityCode ?>"];
+
+    if (currentRegions) {
+        for (var i = 0, item; i < currentRegions.length, item = currentRegions[i]; i++) {
+            $("#div_allregions").append("<a href=\"/<?php echo $sCurrCityCode ?>/Newhouse/index?r=" + encodeURI(item) + "\" target='_blank' title=" + item + ">" + item + "<em></em></a>");
+
+        }
+    }
+    var ddRegions = ddregions["<?php echo $sCurrCityCode ?>"];
+    if (ddRegions) {
+        for (var i = 0, item; i < ddRegions.length, item = ddRegions[i]; i++) {
+            $("#dd_regions").append("<a href=\"/<?php echo $sCurrCityCode ?>/Newhouse/index?r=" + encodeURI(item) + "\" target='_blank' title=" + item + ">" + item + "<em></em></a>");
+        }
+    }
+</script>
+
+<section class="recomend_wrap">
+    <div class="wrap_con clearfix">
+        <div class="recomend_con clearfix">
+            <div class="recomend_left" title="了解详情" onclick="window.open('/zhuanti/20150401/ybd', '_blank');">
+                <dl class="clearfix">
+                    <dt>2015/<?php echo $xinkaipan['date'] ?>月<br />性价比测评榜</dt>
+                    <dd>了解详情</dd>
+                </dl>
+            </div>
+            <div class="recomend_center">
+                <!--预开盘推荐-->
+                <?php $rank = 1;  if(!empty($yukaipan)) {   ?>
+                <div class="house_box">
+                    <div class="common_title">预开盘推荐</div>
+                    <ul class="house_list clearfix">
+                        <?php foreach($yukaipan as $key=>$value)  { ?>
+                        <li>
+                            <a href="<?php echo Model_Util::getDetailUrl($value['sMapUnitID'],2) ?>" class="img_link" target="_blank">
+                                <img src="" data-src="<?php echo $value['sZongPinPicImg'] ?>" alt="" /><s class="tm_bg"></s>
+                                    <span>
+                                        <b title="<?php echo $value['sName'] ?>"><?php echo $value['sName'] ?></b>
+                                            <em title="<?php echo $value['sRegionName'] ?>"><?php echo $value['sRegionName'] ?></em>
+                                    </span>
+                            </a>
+                            <p>
+                                <span>第<?php echo $rank ?>名</span>
+                                <cite>
+                                    <?php if($value['iBidingPrice'] > 0){ ?>
+                                    <em><?php echo $value['iBidingPrice'] ?></em>元/㎡
+                                    <?php }else { ?>
+                                    <em class="gay">售价待定</em>
+                                    <?php } ?>
+                                </cite>
+                            </p>
+                        </li>
+                        <?php $rank++; } ?>
+                    </ul>
+                </div>
+                <?php  } ?>
+
+                <!--新开盘推荐-->
+                <div class="house_box">
+                    <div class="common_title"><?php echo $xinkaipan['date'] ?>月新开盘推荐</div>
+                    <ul class="house_list clearfix">
+                        <?php foreach($xinkaipan as $key=>$value)  { ?>
+                        <li>
+                            <a href="<?php echo Model_Util::getDetailUrl($value['sMapUnitID'],2) ?>" class="img_link" target="_blank">
+                                <img src="" data-src="<?php echo $value['sZongPinPicImg'] ?>" alt="" /><s class="tm_bg"></s>
+                                <span>
+                                    <b title="<?php echo $value['sName'] ?>"><?php echo $value['sName'] ?></b>
+                                        <em title="<?php echo $value['sRegionName'] ?>"><?php echo $value['sRegionName'] ?></em>
+                                </span>
+                            </a>
+                            <p>
+                                <span>第<?php echo $rank ?>名</span>
+                                <cite>
+                                    <?php if($value['iBidingPrice'] > 0){ ?>
+                                        <em><?php echo $value['iBidingPrice'] ?></em>元/㎡
+                                    <?php }else { ?>
+                                        <em class="gay">售价待定</em>
+                                    <?php } ?>
+                                </cite>
+                            </p>
+                        </li>
+                        <?php $rank++; } ?>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="recomend_right">
+                <ul class="pj_tab clearfix">
+                    <?php
+                        $result = ''; if (count($shangtiao) >= 3)
+                        {
+                            echo '<li><a href="javascript:void(0)" title="评级上调">评级上调</a></li>';
+                        }
+                        else if (Count($zhixiao) >= 3)
+                        {
+                            $result = $zhixiao;
+                            echo '<li><a href="javascript:void(0)" title="滞销榜">滞销榜</a></li>';
+                        }
+                        else
+                        {
+                            $result = $rexiao;
+                            echo '<li><a href="javascript:void(0)" title="热销榜">热销榜</a></li>';
+                        }
+                    ?>
+                    <li class="last_li"><a href="javascript:void(0)" title="评级下调">评级下调</a></li>
+                </ul>
+                <div class="tab_content clearfix">
+                    <div class="tab_con">
+                        <?php $i=1; if (count($shangtiao) >= 3){
+                            foreach ($shangtiao as $item)
+                            {
+                                $ejScore = "";
+                                switch ($item['EJScore'])
+                                {
+                                    case "AAA":
+                                        $ejScore = "<span class='jkrs_txt'><b>尽快入手</b></span>";
+                                    break;
+                                    case "A+":
+                                        $ejScore = "<span class='tjgm_txt'><b>推荐购买</b></span>";
+                                    break;
+                                    case "BBB+":
+                                        $ejScore = "<span class='jsgm_txt'><b>谨慎购买</b></span>";
+                                    break;
+                                    case "C":
+                                        $ejScore = "<span class='cbgw_txt'><b>持币观望</b></span>";
+                                    break;
+                                }
+                        ?>
+                        <dl class="clearfix">
+                            <dt><a href="<?php echo Model_Util::getDetailUrl($item['ID']) ?>" title="<?php echo $item['UnitName'] ?>" target="_blank"><img data-src="<?php echo $item['ZongPingPic'] ?>" src="" alt="" /></a></dt>
+                            <dd>
+                                <h6><a href="<?php echo Model_Util::getDetailUrl($item['ID']) ?>" title="<?php echo $item['UnitName'] ?>" target="_blank"><?php echo $item['UnitName'] ?></a></h6>
+                                <p>
+                                    <?php if(!empty($item['BidingPrice'])){ ?>
+                                    <em><?php echo $item['BidingPrice'] ?>元/㎡</em>
+                                    <?php }else{
+                                        echo  '<em class="gay">售价待定</em>';
+                                    } ?>
+                                    <?php echo $ejScore ?>
+                                </p>
+                            </dd>
+                        </dl>
+                        <?php $i++;}} ?>
+                        <?php $i=1; if (!empty($result)){
+                            foreach ($result as $item)
+                                {
+                                    $ejScore = "";
+                                    switch ($item['EJScore'])
+                                    {
+                                        case "AAA":
+                                            $ejScore = "<span class='jkrs_txt'><b>尽快入手</b></span>";
+                                            break;
+                                        case "A+":
+                                            $ejScore = "<span class='tjgm_txt'><b>推荐购买</b></span>";
+                                            break;
+                                        case "BBB+":
+                                            $ejScore = "<span class='jsgm_txt'><b>谨慎购买</b></span>";
+                                            break;
+                                        case "C":
+                                            $ejScore = "<span class='cbgw_txt'><b>持币观望</b></span>";
+                                            break;
+                                    }
+                        ?>
+                                    <dl class="clearfix">
+                                        <dt><a href="<?php echo Model_Util::getDetailUrl($item['ID']) ?>" title="<?php echo $item['UnitName'] ?>" target="_blank"><img data-src="<?php echo $item['ZongPingPic'] ?>" src="" alt="" /></a></dt>
+                                        <dd>
+                                            <h6><a href="<?php echo Model_Util::getDetailUrl($item['ID']) ?>" title="<?php echo $item['UnitName'] ?>" target="_blank"><?php echo $item['UnitName'] ?></a></h6>
+                                            <p>
+                                                <?php if(!empty($item['BidingPrice'])){ ?>
+                                                    <em><?php echo $item['BidingPrice'] ?>元/㎡</em>
+                                                <?php }else{
+                                                    echo  '<em class="gay">售价待定</em>';
+                                                } ?>
+                                                <?php echo $ejScore ?>
+                                            </p>
+                                        </dd>
+                                    </dl>;
+
+                        <?php $i++; }} ?>
+                    </div>
+                </div>
+
+                <div class="tab_content clearfix">
+                    <div class="tab_con">
+                        <?php $i=1; if (count($xiatiao) >= 3){
+                        foreach ($xiatiao as $item)
+                        {
+                            $ejScore = "";
+                            switch ($item['EJScore'])
+                            {
+                                case "AAA":
+                                    $ejScore = "<span class='jkrs_txt'><b>尽快入手</b></span>";
+                                    break;
+                                case "A+":
+                                    $ejScore = "<span class='tjgm_txt'><b>推荐购买</b></span>";
+                                    break;
+                                case "BBB+":
+                                    $ejScore = "<span class='jsgm_txt'><b>谨慎购买</b></span>";
+                                    break;
+                                case "C":
+                                    $ejScore = "<span class='cbgw_txt'><b>持币观望</b></span>";
+                                    break;
+                            }
+                        ?>
+                        <dl class="clearfix">
+                            <dt><a href="<?php echo Model_Util::getDetailUrl($item['ID']) ?>" title="<?php echo $item['UnitName'] ?>" target="_blank"><img data-src="<?php echo $item['ZongPingPic'] ?>" src="" alt="" /></a></dt>
+                            <dd>
+                                <h6><a href="<?php echo Model_Util::getDetailUrl($item['ID']) ?>" title="<?php echo $item['UnitName'] ?>" target="_blank"><?php echo $item['UnitName'] ?></a></h6>
+                                <p>
+                                    <?php if(!empty($item['BidingPrice'])){ ?>
+                                        <em><?php echo $item['BidingPrice'] ?>元/㎡</em>
+                                    <?php }else{
+                                        echo  '<em class="gay">售价待定</em>';
+                                    } ?>
+                                    <?php echo $ejScore ?>
+                                </p>
+                            </dd>
+                        </dl>
+                        <?php $i++; }} ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="list_wrap">
+    <div class="wrap_con clearfix">
+        <dl class="list_tab clearfix">
+            <dt><s class="red_line"></s>楼盘性价比测评榜</dt>
+            <dd>
+                <?php if(!empty($bangdan)){ ?>
+                <?php foreach($bangdan as $key=>$value){ ?>
+                    <a href="javascript:void(0);" title="<?php echo $value['sName'] ?>"><?php echo $value['sName'] ?><s></s></a>
+                <?php }} ?>
+            </dd>
+        </dl>
+        <?php  foreach($bangdan as $key=>$value){ ?>
+        <div class="list_con clearfix">
+            <ul class="clearfix">
+                <?php $i=1; foreach(array_slice($value['unitList'],0,10) as $k=>$v){ ?>
+                <li>
+                    <a href="<?php echo Model_Util::getDetailUrl(isset($v['sMapUnitID'])?$v['sMapUnitID']:0,2) ?>" title="<?php echo isset($v['sName'])?$v['sName']:''; ?>" class="img_link" target="_blank">
+                        <img src="" data-src="<?php echo $v['sZongPinimg'] ?>" alt="" />
+                    </a>
+                    <p>
+                        <a href="<?php echo Model_Util::getDetailUrl(isset($v['sMapUnitID'])?$v['sMapUnitID']:0,2) ?>" title="<?php echo isset($v['sName'])?$v['sName']:''; ?>" target="_blank"><?php echo isset($v['sName'])?$v['sName']:''; ?></a>
+                        <cite title="[<?php echo isset($v['sRegionName'])?$v['sRegionName']:'' ?>]">[<?php echo isset($v['sRegionName'])?$v['sRegionName']:'' ?>]</cite>
+                    </p>
+                    <span>
+                        <b>第<?php echo $i ?>名</b>
+                        <cite>
+                            <?php if(!empty($v['iBidingPrice'])){ ?>
+                            <em><?php echo $v['iBidingPrice'] ?></em>元/㎡
+                            <?php }else{
+                                echo '<em class="gay">售价待定</em>';
+                            } ?>
+                        </cite>
+                    </span>
+                </li>
+                <?php $i++; } ?>
+            </ul><div class="clearfix"></div>
+        </div>
+        <?php } ?>
+    </div>
+</section>
+
+<section class="evaluate_wrap">
+    <div class="wrap_con bd_box clearfix">
+
+        <div class="common_con clearfix">
+            <div class="con_left clearfix">
+                <div class="common_title"><s class="red_line"></s>评测报告<a href="/<?php echo $sCurrCityCode?>/Newhouse/index/" class="more_link" target="_blank">更多<s></s></a></div>
+                <div class="report_con clearfix" id="evaluteUnits">
+
+                </div>
+            </div>
+            <div class="con_right clearfix">
+                <div class="common_title"><s class="red_line"></s>评级推荐</div>
+                <ul class="tj_tab clearfix">
+                    <li><a href="javascript:void(0)" tile="最佳户型">最佳户型</a></li>
+                    <li><a href="javascript:void(0)" tile="车位充足">车位充足</a></li>
+                    <li><a href="javascript:void(0)" tile="社区无忧">社区无忧</a></li>
+                </ul>
+                <div id="zjhxUnits" class="tj_con clearfix"></div>
+                <div id="cwczUnits" class="tj_con clearfix"></div>
+                <div id="sqwyUnits" class="tj_con clearfix"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    /*
+    $.post("/index/index/getEvaluation", null, function (data) {
+    */
+     $.get("/index/index/getEvaluation", function(data){
+
+        var evaluteUnits = data.data.EvaluationUnitList;
+        var zjhxUnits = data.data.zjhx;
+        var cwczUnits = data.data.cwcz;
+        var sqwyUnits = data.data.sqwy;
+
+        var evaluteHtml = "";
+        var zjhxHtml = "";
+        var cwczHtml = "";
+        var sqwyHtml = "";
+
+        for (var i = 0; i < evaluteUnits.length; i++) {
+            var starHtml = "";
+            var totalScore = evaluteUnits[i].TotalScore;
+
+            for (var j = 1; j <= 5; j++) {
+                var diffValue = totalScore - j;
+                scoreLevelCss = "";
+
+                if (diffValue <= -1) {
+                    scoreLevelCss = "";
+                }
+                else if (diffValue > -1 && diffValue < 0) {
+                    scoreLevelCss = "c";
+                }
+                if (diffValue >= 0) {
+                    scoreLevelCss = "o";
+                }
+                starHtml = starHtml + '<i class="' + scoreLevelCss + '"></i>';
+            }
+
+            var arrAdvantage = new Array();
+            if (evaluteUnits[i].AdvantageLabel) {
+                arrAdvantage = evaluteUnits[i].AdvantageLabel.split(';');
+            }
+
+            var arrRisk = new Array();
+            if (evaluteUnits[i].RiskLabel) {
+                arrRisk = evaluteUnits[i].RiskLabel.split(';');
+            }
+
+            var advantage = "";
+            var risk = "";
+
+            for (var j = 0 ; j < arrAdvantage.length; j++) {
+                if (arrAdvantage[j] != "") {
+                    advantage = advantage + "<em>" + arrAdvantage[j] + "</em>";
+                }
+            }
+
+            for (var j = 0 ; j < arrRisk.length; j++) {
+                if (arrRisk[j] != "") {
+                    risk = risk + "<em>" + arrRisk[j] + "</em>";
+                }
+            }
+
+            evaluteHtml = evaluteHtml + '<dl class="clearfix">'
+            + ' <dt><a href="/Newhouse/detail?unitid=' + evaluteUnits[i].ID + '" title="' + evaluteUnits[i].UnitName + '" target="_blank"><img src="' + evaluteUnits[i].ZongPingXQ + '" /></a><s class="s_bg"></s><span><b title="' + evaluteUnits[i].UnitName + '">' + evaluteUnits[i].UnitName + '</b><em title="[' + evaluteUnits[i].RegionName + ']">[' + evaluteUnits[i].RegionName + ']</em></span></dt>'
+            + '<dd>'
+            + '<div class="title_bar clearfix">'
+            + '<cite><s>综合评定：</s><em>' + evaluteUnits[i].TotalScore + '</em><span class="middle-start">' + starHtml + '</span></cite>'
+            + '</div>'
+            + '<p class="good_key"><cite>优势</cite>' + advantage + '</p>'
+            + '<p class="bad_key"><cite>不足</cite>' + risk + '</p>'
+            + '</dd>'
+            + '</dl>';
+        }
+
+        $("#evaluteUnits").html(evaluteHtml);
+
+        //最佳户型
+        for (var i = 0; i < zjhxUnits.length; i++) {
+
+            if (i == 0) {
+                zjhxHtml = zjhxHtml + '<dl class="txt_style clearfix pic_style">'
+            }
+            else {
+                zjhxHtml = zjhxHtml + '<dl class="txt_style clearfix">'
+            }
+
+            zjhxHtml = zjhxHtml
+            + '<dt><a href="/Newhouse/detail?unitid=' + zjhxUnits[i].ID + '" title="' + zjhxUnits[i].UnitName + '" target = "_blank"><img src="' + zjhxUnits[i].ZongPingXQ + '" /></a></dt>'
+            + '<dd>'
+            + '<h6><a href="/Newhouse/detail?unitid=' + zjhxUnits[i].ID + '" title="' + zjhxUnits[i].UnitName + '" target = "_blank">' + zjhxUnits[i].UnitName + '</a><em title=\"' + zjhxUnits[i].RegionName + '\">[' + zjhxUnits[i].RegionName + ']</em></h6>'
+            + '<p>' + zjhxUnits[i].BidingPrice + ' 元/㎡</p>'
+            + '</dd>'
+            + '</dl>';
+
+        }
+        $("#zjhxUnits").html(zjhxHtml);
+
+        //车位充足
+        for (var i = 0; i < cwczUnits.length; i++) {
+
+            if (i == 0) {
+                cwczHtml = cwczHtml + '<dl class="txt_style clearfix pic_style">'
+            }
+            else {
+                cwczHtml = cwczHtml + '<dl class="txt_style clearfix">'
+            }
+
+            cwczHtml = cwczHtml
+            + '<dt><a href="/Newhouse/detail?unitid=' + cwczUnits[i].ID + '" title="' + cwczUnits[i].UnitName + '" target = "_blank"><img src="' + cwczUnits[i].ZongPingXQ + '" /></a></dt>'
+            + '<dd>'
+            + '<h6><a href="/Newhouse/detail?unitid=' + cwczUnits[i].ID + '" title="' + cwczUnits[i].UnitName + '" target = "_blank">' + cwczUnits[i].UnitName + '</a><em title=\"' + cwczUnits[i].RegionName + '\">[' + cwczUnits[i].RegionName + ']</em></h6>'
+            + '<p>' + cwczUnits[i].BidingPrice + ' 元/㎡</p>'
+            + '</dd>'
+            + '</dl>';
+
+        }
+        $("#cwczUnits").html(cwczHtml);
+
+        //社区无忧
+        for (var i = 0; i < sqwyUnits.length; i++) {
+            if (i == 0) {
+                sqwyHtml = sqwyHtml + '<dl class="txt_style clearfix pic_style">'
+            }
+            else {
+                sqwyHtml = sqwyHtml + '<dl class="txt_style clearfix">'
+            }
+
+            sqwyHtml = sqwyHtml
+            + '<dt><a href="/Newhouse/detail?unitid=' + sqwyUnits[i].ID + '" title="' + sqwyUnits[i].UnitName + '" target = "_blank"><img src="' + sqwyUnits[i].ZongPingXQ + '" /></a></dt>'
+            + '<dd>'
+            + '<h6><a href="/Newhouse/detail?unitid=' + sqwyUnits[i].ID + '" title="' + sqwyUnits[i].UnitName + '" target = "_blank">' + sqwyUnits[i].UnitName + '</a><em title=\"' + sqwyUnits[i].RegionName + '\">[' + sqwyUnits[i].RegionName + ']</em></h6>'
+            + '<p>' + sqwyUnits[i].BidingPrice + ' 元/㎡</p>'
+            + '</dd>'
+            + '</dl>';
+
+        }
+        $("#sqwyUnits").html(sqwyHtml);
+
+    },'json');
+
+</script>
+<!--中间广告图-->
+<?php echo $middle ?>
+<section class="news_wrap">
+    <div class="wrap_con bd_box clearfix">
+
+        <div class="common_con clearfix">
+            <div class="con_left clearfix">
+                <div class="common_title"><s class="red_line"></s>楼盘资讯<a href="http://news.fangjiadp.com/<?php echo $sCurrCityCode ?>/news/index" class="more_link" target="_blank">更多<s></s></a></div>
+                <div class="dynamic_property_l">
+                    <?php echo $news ?>
+                </div>
+            </div>
+
+            <div class="con_right clearfix">
+                <div class="common_title"><s class="red_line"></s>最新开盘<cite class="qh_btn"><a class="prev_btn" href="javascript:void(0)"></a><a class="next_btn" href="javascript:void(0)"></a></cite></div>
+                <div class="new_kp clearfix">
+                    <div class="new_cons cleafix">
+                        <?php $count=0; if(!empty($newOpen)){ ?>
+                        <?php foreach($newOpen as $key=>$value){ ?>
+                        <dl class="xkp_dl clearfix">
+                            <dt class="<?php if($count == 0) { echo 'current';}else{ echo '';} ?>"><?php echo $key ?></dt>
+                            <?php foreach($value as $k=>$v){ ?>
+                            <dd><cite><a href="<?php echo Model_Util::getDetailUrl(isset($v['sMapUnitID'])?$v['sMapUnitID']:0,2) ?>" title="<?php echo $v['sName'] ?>" target="_blank"><?php echo $v['sName'] ?></a></cite><em title="[<?php echo $v['sRegionName'] ?>-<?php echo $v['sZoneName'] ?>]">[<?php echo $v['sRegionName'] ?>-<?php echo $v['sZoneName'] ?>]</em></dd>
+                            <?php } ?>
+                        </dl>
+                        <?php $count++; }} ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="analyst_wrap">
+    <div class="wrap_con bd_box clearfix">
+
+        <div class="common_con clearfix">
+            <div class="con_left clearfix">
+                <div class="common_title"><s class="red_line"></s>分析师<a href="/<?php echo sCurrCityCode ?>/analysts" class="more_link" target="_blank">更多<s></s></a></div>
+                <div class="new_fxs_wrap clearfix">
+                    <ul class="clearfix">
+                        <?php if(!empty($analyst)) { ?>
+                        <?php foreach($analyst as $key=>$value) { ?>
+                        <li class="clearfix">
+                            <div class="fxs_left">
+                                <dl class="clearfix">
+                                    <dt>
+                                        <img data-src="<?php echo $value['AnalystHead'] ?>" src="" alt="">
+                                    </dt>
+                                    <dd>
+                                        <div class="clearfix">
+                                            <h6><?php echo $value['AnalystsName'] ?></h6><i></i>
+                                            <span><?php echo $value['AnalystLevel'] ?></span>
+                                            <a href="javascript:;">
+                                                <em>
+                                                    <s class="index_good_count" analy_id="<?php echo $value['AnalystsID'] ?>"></s>
+                                                    <b><?php echo $value['GoodCount'] ?></b>
+                                                </em>
+                                            </a>
+                                        </div>
+                                        <p>
+                                            <?php echo $value['BriefIntroduction'] ?>
+                                        </p>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="fxs_right">
+                                <dl class="clearfix">
+                                    <dt>
+                                        <cite>最新点评</cite>
+                                    </dt>
+                                    <dd class="fxs_vill_box">
+                                        <?php foreach($value['children'] as $k=>$v){ ?>
+                                        <a target="_blank" href="<?php echo Model_Util::getDetailUrl(isset($v['unitid'])?$v['unitid']:0,2) ?>"><img data-src="<?php echo $v['ZongPingXQ'] ?>" src="" /><span><?php echo $v['UnitName'] ?></span></a>
+                                        <?php } ?>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </li>
+                        <?php }} ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="con_right clearfix">
+                <div class="common_title"><s class="red_line"></s>热门点评</div>
+
+                <div class="yh_list">
+                    <dl class="yh_dp clearfix" id="home_comment_list"></dl>
+                </div>
+                <div id="home_comment_template" style="display: none;">
+                    <dd><a href="$Url" target="_blank" title="[$RegionName] $UnitName">[$RegionName] $UnitName</a><em>$CommentCount位用户点评</em></dd>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="analyst_opinion_template" style="display: none;">
+        <dl class="fxs_dp clearfix">
+            <dt><span>分析师</span><em>$AnalystsName</em><span>点评</span><a href="$Url" title="$UnitName" target="_blank">$UnitName</a></dt>
+            <dd>
+                <s class="sj_ico"></s>
+                <span>$Opinion</span>
+            </dd>
+        </dl>
+    </div>
+</section>
+<!--首页底部广告-->
+<?php echo $bottom ?>
+<script type="text/javascript">
+    $.post("/index/index/getAnalystDianPin", { cityName: "<?php echo $sCurrCityCode ?>" }, function (result) {
+
+        var ao = result.data;
+        for (var i = 0, item; i < ao.length, item = ao[i]; i++) {
+            $("#home_comment_list").parent().before(BuildJS.buildHtml(item, $("#analyst_opinion_template").html()));
+        }
+    },'json');
+    /*
+    $.post("/" + "shanghai" + "/region/hotcomment/xf", {
+        cityCode: "shanghai", regionName: "", size: 3
+    }, function (result) {
+        if (result.dataCode == 0) {
+            for (var i = 0, item; i < result.units.length, item = result.units[i]; i++) {
+                $("#home_comment_list").append(BuildJS.buildHtml(item, $("#home_comment_template").html()));
+            }
+        }
+    });*/
+</script>
+<section class="wrap_con" id="Footlink" style="margin-top:40px;">
+    <?php include('FriendlyLink.phtml') ?>
+</section>
+<!--理想家弹窗-->
+<div class="ideal_box cleafix" id="idealBox">
+    <div class="box_con cleafix">
+        <a href="javascript:void(0);" onclick="closeBg('idealBox');" title="关闭" class="close_x"></a>
+        <dl class="cleafix">
+            <dt><s class="lxj_txt"></s><s class="fw_txt"></s></dt>
+            <dd>
+                <p><s class="u_name"></s><span><input id="txt_username" type="text" value="请输入您的姓名" onfocus="if (this.value == '请输入您的姓名') { this.value = '';this.style.color = '#333'; }" onblur="    if (this.value == '') { this.value = '请输入您的姓名'; this.style.color = '#ccc'; }" autocomplete="off" /></span></p>
+                <p><s class="h_name"></s><span><input type="text" id="txt_unitname" value="请输入楼盘名称" onfocus="if (this.value == '请输入楼盘名称') { this.value = ''; this.style.color = '#333'; }" onblur="    if (this.value == '') { this.value = '请输入楼盘名称'; this.style.color = '#ccc'; }" autocomplete="off" /></span></p>
+                <p><s class="u_tel"></s><span><input type="text" id="txt_phone" onkeyup="clearNoNumNew(this)" value="请输入您的手机号码" onfocus="if (this.value == '请输入您的手机号码') { this.value = ''; this.style.color = '#333'; }" onblur="    if (this.value == '') { this.value = '请输入您的手机号码'; this.style.color = '#ccc'; }" autocomplete="off" /></span></p>
+                <p class="p_last"><s class="h_price"></s><span><input type="text" id="txt_miniprice" value="告诉我们你想要的最低价" onfocus="if (this.value == '告诉我们你想要的最低价') { this.value = ''; this.style.color = '#333'; }" onblur="    if (this.value == '') { this.value = '告诉我们你想要的最低价'; this.style.color = '#ccc'; }" autocomplete="off" /></span></p>
+                <div class="submit_bt"><a href="javascript:void(0)" onclick="saveLiXiangJia()" title="立即加入">立即加入</a></div>
+            </dd>
+        </dl>
+    </div>
+</div>
+<!--提交成功状态-->
+<div class="ideal_box ideal_box_ok cleafix" id="idealBoxOk">
+    <div class="box_con cleafix">
+        <a href="javascript:void(0);" onclick="closeBg('idealBoxOk');" title="关闭" class="close_x"></a>
+        <dl class="cleafix">
+            <dt><s class="lxj_txt"></s><s class="fw_txt"></s></dt>
+            <dd>
+                <div class="submit_ok cleafix">
+                    <cite><s class="tjcg_ico"></s><em>提交成功！</em></cite>
+                    <span>我们的分析师会尽快和您取得联系，请耐心等待！</span>
+                </div>
+                <h6><span id="span_time">3</span>秒后自动关闭窗口</h6>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div id="fullBg"></div>

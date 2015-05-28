@@ -1,0 +1,85 @@
+<!--区位简介内容开始-->
+<section class="plan_wrap">
+    <section class="analyze_wrap <?php if (empty($aRegion['data']['sBadTag']) && empty($aRegion['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+        <div class="analyze_txt floor_plan">
+            <h3>
+                <span></span>
+                分析师点评
+            </h3>
+            <p><?php echo isset($aRegion['data']['sComment']) ? $aRegion['data']['sComment'] : ''; ?></p>
+        </div>
+    </section>
+    
+    <section class="condition">
+        <?php 
+            if(isset($aRegion['data']['sGoodTag']) && !empty($aRegion['data']['sGoodTag'])){
+                echo '<section class="advantage">
+                        <h3>优势</h3>
+                        <div class="advantage_con">';
+                foreach ($aRegion['data']['sGoodTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section>';
+            }
+            if(isset($aRegion['data']['sBadTag']) && !empty($aRegion['data']['sBadTag'])){
+                echo '<section class="advantage disadvantaged">
+                    <h3>劣势</h3>
+                    <div class="advantage_con">';
+                foreach ($aRegion['data']['sBadTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section>';
+            }
+        ?>
+    </section>
+    
+    <?php 
+        if(!empty($aRegion['data']['qytpImage'])){
+            echo '<section class=" floor_plan">
+                    <h3>
+                        <span></span>
+                        社区区位图
+                    </h3>
+                    <div class="floor_plan_pic">';
+            foreach ($aRegion['data']['qytpImage'] as $key => $value) {
+                echo '<div class="floor_plan_pic01">';
+                echo '<canvas data-src='.$value['sImage'].'></canvas>';
+                echo '<p class="pic_name">'.$value['sTitle'].'</p>';
+                echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+                echo '</div>';
+            }
+            echo '</div></section>';
+        }
+
+        if(!empty($aRegion['data']['qwqtImage'])){
+            echo '<section class=" floor_plan">
+                <h3>
+                    <span></span>
+                    其他图片
+                </h3>
+                <div class="floor_plan_pic">';
+            foreach ($aRegion['data']['qwqtImage'] as $key => $value) {
+                echo '<div class="floor_plan_pic01">';
+                echo '<canvas data-src='.$value['sImage'].'></canvas>';
+                echo '<p class="pic_name">'.$value['sTitle'].'</p>';
+                echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+                echo '</div>';
+            }
+            echo '</div></section>';
+        }
+        
+        if(isset($aRegion['data']['sOtherComment']) && !empty($aRegion['data']['sOtherComment'])){
+            echo '<section class="floor_plan plan_description evaluation_description">
+                <h3>
+                    <span></span>
+                    点评
+                </h3>';
+            echo '<p>'.$aRegion['data']['sOtherComment'].'</p>';
+            echo '</section>';
+        }
+
+    ?>
+</section>
+        <!--区位简介内容结束-->
+           
+

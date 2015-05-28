@@ -1,0 +1,595 @@
+<?php include APP_PATH.'/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+   <form id="myform" class="form-horizontal" role="form" method="post" action="">
+            <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+       <div class="panel mt15 pcContent">
+            <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label">*分析师点评：</label>
+                    <div class="col-sm-10">
+                        <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate" validate="!clength:1-255"><?php echo $sqPublic['sComment']?></textarea>
+                        <span class="validate_checktip"></span>
+                    </div>
+            </div>
+            <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label">优势：</label>
+                <div class="col-sm-9">
+                    <?php
+
+                    if (isset($goodTags) && !empty($goodTags)) {
+                        foreach($goodTags as $k => $v) {
+                            ?>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="sGoodTag[]" <?php echo !empty($sqPublic['sGoodTag'])&&in_array($k,$sqPublic['sGoodTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                            </label>
+                        <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label">劣势：</label>
+                <div class="col-sm-9">
+                    <?php
+                    foreach($badTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sBadTag[]" <?php echo !empty($sqPublic['sBadTag'])&&in_array($k,$sqPublic['sBadTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                    <?php
+                    }
+
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label">首层门厅：</label>
+                    <div class="col-sm-9 mt5">
+                        <label class="w100">
+                           单元门
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sScDymPp" name="sScDymPp" value="<?php echo $sqPublic['sScDymPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sScDymCz" name="sScDymCz" value="<?php echo $sqPublic['sScDymCz']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['scdy']?>]" data-img="#sImageShow1" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['scdy']])&&!empty($zxImages[$imgTypeConfig['scdy']])? '':'none'?>;">
+                            <div class="row" id="sImageShow1" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['scdy']])&&!empty($zxImages[$imgTypeConfig['scdy']])) {
+                                    foreach($zxImages[$imgTypeConfig['scdy']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           门禁系统
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sScMjPp" name="sScMjPp" value="<?php echo $sqPublic['sScMjPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['scmj']?>]" data-img="#sImageShow2" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['scmj']])&&!empty($zxImages[$imgTypeConfig['scmj']])? '':'none'?>;">
+                            <div class="row" id="sImageShow2" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['scmj']])&&!empty($zxImages[$imgTypeConfig['scmj']])) {
+                                    foreach($zxImages[$imgTypeConfig['scmj']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           灯具
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sScDjPp" name="sScDjPp" value="<?php echo $sqPublic['sScDjPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['scdj']?>]" data-img="#sImageShow3" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['scdj']])&&!empty($zxImages[$imgTypeConfig['scdj']])? '':'none'?>;">
+                            <div class="row" id="sImageShow3" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['scdj']])&&!empty($zxImages[$imgTypeConfig['scdj']])) {
+                                    foreach($zxImages[$imgTypeConfig['scdj']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           报箱
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sScBxPp" name="sScBxPp" value="<?php echo $sqPublic['sScBxPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sScBxCz" name="sScBxCz" value="<?php echo $sqPublic['sScBxCz']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['scbx']?>]" data-img="#sImageShow4" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['scbx']])&&!empty($zxImages[$imgTypeConfig['scbx']])? '':'none'?>;">
+                            <div class="row" id="sImageShow4" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['scbx']])&&!empty($zxImages[$imgTypeConfig['scbx']])) {
+                                    foreach($zxImages[$imgTypeConfig['scbx']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           地砖
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sScDzPp" name="sScDzPp" value="<?php echo $sqPublic['sScDzPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sScDzCz" name="sScDzCz" value="<?php echo $sqPublic['sScDzCz']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['scdz']?>]" data-img="#sImageShow5" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['scdz']])&&!empty($zxImages[$imgTypeConfig['scdz']])? '':'none'?>;">
+                            <div class="row" id="sImageShow5" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['scdz']])&&!empty($zxImages[$imgTypeConfig['scdz']])) {
+                                    foreach($zxImages[$imgTypeConfig['scdz']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           墙面
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sScQmPp" name="sScQmPp" value="<?php echo $sqPublic['sScQmPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sScQmCz" name="sScQmCz" value="<?php echo $sqPublic['sScQmCz']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['scqm']?>]" data-img="#sImageShow6" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['scqm']])&&!empty($zxImages[$imgTypeConfig['scqm']])? '':'none'?>;">
+                            <div class="row" id="sImageShow6" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['scqm']])&&!empty($zxImages[$imgTypeConfig['scqm']])) {
+                                    foreach($zxImages[$imgTypeConfig['scqm']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+            </div> 
+            <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label">电梯厅：&nbsp;</label>
+                    <div class="col-sm-9 mt5">
+                        <label class="w100">
+                           电梯
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sDtDtPp" name="sDtDtPp" value="<?php echo $sqPublic['sDtDtPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['dt']?>]" data-img="#sImageShow7" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['dt']])&&!empty($zxImages[$imgTypeConfig['dt']])? '':'none'?>;">
+                            <div class="row" id="sImageShow7" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['dt']])&&!empty($zxImages[$imgTypeConfig['dt']])) {
+                                    foreach($zxImages[$imgTypeConfig['dt']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           灯具
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sDtDjPp" name="sDtDjPp" value="<?php echo $sqPublic['sDtDjPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['dtdj']?>]" data-img="#sImageShow8" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['dtdj']])&&!empty($zxImages[$imgTypeConfig['dtdj']])? '':'none'?>;">
+                            <div class="row" id="sImageShow8" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['dtdj']])&&!empty($zxImages[$imgTypeConfig['dtdj']])) {
+                                    foreach($zxImages[$imgTypeConfig['dtdj']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           地砖
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sDtDzPp" name="sDtDzPp" value="<?php echo $sqPublic['sDtDzPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sDtDzCz" name="sDtDzCz" value="<?php echo $sqPublic['sDtDzCz']; ?>">
+                        </label> 
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['dtdz']?>]" data-img="#sImageShow9" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['dtdz']])&&!empty($zxImages[$imgTypeConfig['dtdz']])? '':'none'?>;">
+                            <div class="row" id="sImageShow9" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['dtdz']])&&!empty($zxImages[$imgTypeConfig['dtdz']])) {
+                                    foreach($zxImages[$imgTypeConfig['dtdz']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           墙面
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sDtQmPp" name="sDtQmPp" value="<?php echo $sqPublic['sDtQmPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sDtQmCz" name="sDtQmCz" value="<?php echo $sqPublic['sDtQmCz']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['dtqm']?>]" data-img="#sImageShow10" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['dtqm']])&&!empty($zxImages[$imgTypeConfig['dtqm']])? '':'none'?>;">
+                            <div class="row" id="sImageShow10" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['dtqm']])&&!empty($zxImages[$imgTypeConfig['dtqm']])) {
+                                    foreach($zxImages[$imgTypeConfig['dtqm']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                             <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                </div>
+            </div> 
+            <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label">走廊：&nbsp;&nbsp;</label>
+                    <div class="col-sm-9 mt7">
+                        <label class="w100">
+                           灯具
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sZlDjPp" name="sZlDjPp" value="<?php echo $sqPublic['sZlDjPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['zldj']?>]" data-img="#sImageShow11" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['zldj']])&&!empty($zxImages[$imgTypeConfig['zldj']])? '':'none'?>;">
+                            <div class="row" id="sImageShow11" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['zldj']])&&!empty($zxImages[$imgTypeConfig['zldj']])) {
+                                    foreach($zxImages[$imgTypeConfig['zldj']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           地砖
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sZlDzPp" name="sZlDzPp" value="<?php echo $sqPublic['sZlDzPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sZlDzCz" name="sZlDzCz" value="<?php echo $sqPublic['sZlDzCz']; ?>">
+                        </label> 
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['zldz']?>]" data-img="#sImageShow12" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['zldz']])&&!empty($zxImages[$imgTypeConfig['zldz']])? '':'none'?>;">
+                            <div class="row" id="sImageShow12" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['zldz']])&&!empty($zxImages[$imgTypeConfig['zldz']])) {
+                                    foreach($zxImages[$imgTypeConfig['zldz']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <label class="w100">
+                           墙面
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">品牌：</span>
+                            <input type="text" class="pcText" id="sZlQmPp" name="sZlQmPp" value="<?php echo $sqPublic['sZlQmPp']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">材&nbsp;&nbsp;&nbsp;质：</span>
+                            <input type="text" class="pcText" id="sZlQmCz" name="sZlQmCz" value="<?php echo $sqPublic['sZlQmCz']; ?>">
+                        </label>
+                        <label class="w210">
+                            <span class="mt6">实拍图：</span>
+                            <input type="button" value="选择" class="plupload"  data-target="publicImage[<?php echo $imgTypeConfig['zlqm']?>]" data-img="#sImageShow13" data-callback="showImg" data-limit="10"/>
+                        </label>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($zxImages[$imgTypeConfig['zlqm']])&&!empty($zxImages[$imgTypeConfig['zlqm']])? '':'none'?>;">
+                            <div class="row" id="sImageShow13" >
+                                <?php
+                                if (isset($zxImages[$imgTypeConfig['zlqm']])&&!empty($zxImages[$imgTypeConfig['zlqm']])) {
+                                    foreach($zxImages[$imgTypeConfig['zlqm']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+             <div class="form-group">
+             	<label for="sTagName" class="col-sm-2 control-label">其他点评：</label>
+                <div class="col-sm-9">
+                	<textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control" ><?php echo $sqPublic['sOtherComment']; ?></textarea>
+                </div>
+             </div>
+           <div class="form-group">
+               <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+               <div class="col-sm-10">
+                   <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                   <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                       <div class="row" id="sImageQt" >
+                           <?php
+                           if (isset($qtImage)&&!empty($qtImage)) {
+                               foreach($qtImage as $item) {
+                                   ?>
+                                   <div class="image_list">
+                                       <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                        <?php if($evaluationSwitch == 0){ ?>
+                                       <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                       <?php } ?>
+                                       <div class="top-group">
+                                           <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                       </div>
+                                       <div class="top-group">
+                                           <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                       </div>
+                                       <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                   </div>
+                               <?php
+                               }
+                           }
+                           ?>
+                       </div>
+                   </div>
+               </div>
+           </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-9">
+                    <button id="save" class="btn btn-primary">发布</button>
+                    <button id="sync" class="btn btn-info"  >同步</button>
+                    <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+                  </div>
+            </div>
+         </div>
+       </form>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+<script>
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Sqpz', a: 'public', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    $(function() {
+        // 提交整体评价表单
+        $("#myform").validate({submitHandler: function(form) {
+            $.post("/evaluation/Sqpz/savePublic", $(form).serialize(), function(ret){
+                alert(ret.data);
+                 location.reload();
+            }, 'json');
+            return false;
+        }});
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+     //鼠标移上显示大图
+    $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+     $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    })
+</script>

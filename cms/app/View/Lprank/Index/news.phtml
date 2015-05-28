@@ -1,0 +1,117 @@
+<div class="pheader clearfix">榜单资讯设置</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 月份：</label>
+			<div class="col-sm-10">
+				<select name="sMonth" onchange="location.href='?sMonth=' + this.value">
+				<?php 
+				$iMonthTime = strtotime('2015-03-01');
+				$iNextMonth = strtotime('+1 month');
+				while(true) {
+				?>
+				    <option value="<?php echo date('Ym', $iMonthTime)?>" <?php echo ($sMonth==date('Ym',$iMonthTime))?'selected':''?>><?php echo date('Y年m月', $iMonthTime)?></option>
+				<?php
+				    $iMonthTime = strtotime('+1 month', $iMonthTime);
+				    if ($iMonthTime > $iNextMonth) {
+                        break;
+                    }
+				}?>
+				</select>
+			</div>
+		</div>
+		
+        <div class="pheader clearfix" style="margin-bottom:20px">季榜资讯设置</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 主资讯：</label>
+			<div class="col-sm-10">
+				<input name="aQNewsID[]" validate="!digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aQNewsID'][0])?$aData['aQNewsID'][0]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aQNews'][0])?$aData['aQNews'][0]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 副资讯一：</label>
+			<div class="col-sm-10">
+				<input name="aQNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aQNewsID'][1])?$aData['aQNewsID'][1]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aQNews'][1])?$aData['aQNews'][1]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 副资讯二：</label>
+			<div class="col-sm-10">
+				<input name="aQNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aQNewsID'][2])?$aData['aQNewsID'][2]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aQNews'][2])?$aData['aQNews'][2]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 副资讯三：</label>
+			<div class="col-sm-10">
+				<input name="aQNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aQNewsID'][3])?$aData['aQNewsID'][3]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aQNews'][3])?$aData['aQNews'][3]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		
+		
+        <div class="pheader clearfix" style="margin-bottom:20px">月榜资讯设置</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 主资讯：</label>
+			<div class="col-sm-10">
+				<input name="aMNewsID[]" validate="!digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aMNewsID'][0])?$aData['aMNewsID'][0]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aMNews'][0])?$aData['aMNews'][0]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 副资讯一：</label>
+			<div class="col-sm-10">
+				<input name="aMNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aMNewsID'][1])?$aData['aMNewsID'][1]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aMNews'][1])?$aData['aMNews'][1]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 副资讯二：</label>
+			<div class="col-sm-10">
+				<input name="aMNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aMNewsID'][2])?$aData['aMNewsID'][2]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aMNews'][2])?$aData['aMNews'][2]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 副资讯三：</label>
+			<div class="col-sm-10">
+				<input name="aMNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aMNewsID'][3])?$aData['aMNewsID'][3]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aMNews'][3])?$aData['aMNews'][3]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 新开盘榜资讯：</label>
+			<div class="col-sm-10">
+				<input name="aMNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aMNewsID'][4])?$aData['aMNewsID'][4]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aMNews'][4])?$aData['aMNews'][4]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"> 预开盘榜资讯：</label>
+			<div class="col-sm-10">
+				<input name="aMNewsID[]" validate="digit:true" style="width: 80px" type="text" value="<?php echo isset($aData['aMNewsID'][5])?$aData['aMNewsID'][5]:''?>" class="form-control input-validate">
+				<input style="width: 400px" type="text" readonly value="<?php echo isset($aData['aMNews'][5])?$aData['aMNews'][5]['sTitle']:''?>" class="form-control">
+			</div>
+		</div>
+		
+    	<div class="btn-toolbar text-center">
+        	<button id="save" class="btn btn-primary">保存</button>
+        	<button id="cancel"class="btn" onclick="location.href='/lprank/news.html';return false;">取消</button>
+        </div>
+	</form>
+</div>
+<script type="text/javascript">
+$(function() {
+	$("#myform").validate({submitHandler: function(form) {
+	    $.post(form.action, $(form).serialize(), function(ret){
+	        alert(ret.data);
+	        if (ret.status) {
+	            location.href = '/lprank/news/';
+	        }
+	    }, 'json');
+		return false;
+	}});
+});
+</script>

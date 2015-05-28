@@ -1,0 +1,207 @@
+﻿<link href="<?php echo $sStaticRoot?>/web/css/jquery-datepicker.css" rel="stylesheet"/>
+<link href="<?php echo $sStaticRoot?>/web/css/jquery-autocomplete.css" rel="stylesheet"/>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/jquery.ui.core.js"></script>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/jquery.ui.datepicker.js"></script>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/jquery.ui.datepicker-zh-CN.js"></script>
+<section class="loginMinbox">
+    <div class="clearfix">
+        <div class="login_leftmenu">
+            <h2>
+                <s></s><b>个人设置</b>
+            </h2>
+            <dl>
+                <dt>
+                    <?php if (!empty($userInfo['HeadImg'])) { ?>
+                        <img src="<?php echo Model_Util::getFormatImag($userInfo['HeadImg'], 50,50,'','banner') ?>" />
+                    <?php } else { ?>
+                        <img src="<?php echo $sStaticRoot?>/web/images/person_img.png" />
+                    <?php } ?>
+                </dt>
+                <dd>
+                    <a href=""><?php echo $userInfo['UserName'] ?></a> <span>普通用户</span>
+                </dd>
+            </dl>
+            <ul>
+                <li class="<?php if(isset($userInfo['userinfo'])) {echo $userInfo['userinfo']; }?>">
+                    <a href="/user/index/userinfo"><s class="s_perinfo"></s>个人资料 </a>
+                </li>
+                <li class="<?php if(isset($userInfo['editavatar'])) {echo $userInfo['editavatar']; }?>">
+                    <a href="/user/index/editavatar"><s class="s_editavatar"></s>编辑头像</a>
+                </li>
+                <?php if(empty($userInfo['Phone'])){ ?>
+                    <li class="<?php if(isset($userInfo['bangding'])) {echo $userInfo['bangding']; }?>"><a href="/user/index/bindingphone"><s
+                                class="s_binphone"></s>绑定手机</a></li>
+                <?php } ?>
+                <li class="<?php if(isset($userInfo['changepassword'])) {echo $userInfo['changepassword']; }?>">
+                    <a href="/user/index/changepassword"><s class="s_changepassword"></s>修改密码 </a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="login_rightinfo">
+            <h2>
+                个人资料
+            </h2>
+            <div class="per_information">
+                <div class="change_pic">
+                    <a href="/user/editavatar">
+                        <?php if (!empty($userInfo['HeadImg'])) { ?>
+
+                            <img src="<?php echo Model_Util::getFormatImag($userInfo['HeadImg'], 50,50,'','banner') ?>" />
+                        <?php } else { ?>
+                            <img src="<?php echo $sStaticRoot?>/web/images/person_img_2.png" />
+                        <?php } ?>
+                        <em>编辑头像</em>
+                    </a>
+                </div>
+                <div class="per_info_box">
+                    <div class="per_info_list">
+                        <dl>
+                            <dt>用户名：</dt>
+                            <dd><?php echo $userInfo['UserName'] ?></dd>
+                        </dl>
+                        <dl>
+                            <dt>手机：</dt>
+                            <?php if (!empty($userInfo['Phone'])) { ?>
+                                <dd><?php echo $userInfo['Phone'] ?><span>[已绑定]</span></dd>
+                            <?php }else{ ?>
+                                <dd>
+                                    <em>未绑定</em> <a href="/user/index/bindingphone">[绑定手机]</a>
+                                </dd>
+                            <?php } ?>
+                        </dl>
+                        <dl>
+                            <dt>密码：</dt>
+                            <dd>
+                                *********** <a href="/user/index/changepassword">[修改]</a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="per_info_list_add">
+                        <p>
+                            选填以下信息，让我们更了解你
+                        </p>
+                        <form id="userInfoform">
+                            <dl class="dl_person_info">
+                                <dt>真实姓名：</dt>
+                                <dd>
+                                    <cite>
+                                        <input type="text" id="realName" name="realName" maxlength="200" value="<?php echo $userInfo['RealName'] ?>" />
+                                    </cite>
+                                    <span></span>
+                                </dd>
+                            </dl>
+                            <dl class="dl_person_info">
+                                <dt>性别：</dt>
+                                <dd style="line-height: 30px;">
+                                    <input type="radio" class="radio_put" name="sex" value="M" checked="checked" />男<input type="radio" class="radio_put" name="sex" value="F" />女
+                                </dd>
+                            </dl>
+                            <dl class="dl_person_info">
+                                <dt>生日：</dt>
+                                <dd>
+                                    <cite style="float: left; border:none; padding:0; width:auto;">
+                                        <input type="text" id="txt_datepicker" value="<?php echo $userInfo['Birth'] ?>" maxlength="20" style="border:1px solid #d2d2d2; border-radius:3px; padding:0 5px; width:187px; margin-right:5px; float:left; height:28px; line-height:28px;" readonly="readonly" />
+                                    </cite>
+                                </dd>
+                            </dl>
+                            <dl class="dl_person_info">
+                                <dt>购房预算：</dt>
+                                <dd>
+                                    <cite>
+                                        <input type="text" id="budget" name="budget" value="<?php echo $userInfo['HouseBudget'] ?>" maxlength="200" />
+                                    </cite>
+                                    <span></span>
+                                </dd>
+                            </dl>
+                            <dl class="dl_person_info">
+                                <dt>购房意向：</dt>
+                                <dd>
+                                    <textarea id="buyInfo" maxlength="3500"></textarea>
+                                    <div>
+                                        <span style="collapse: "></span>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </form>
+                        <dl class="dl_person_info">
+                            <dt>&nbsp;</dt>
+                            <dd>
+                                <div class="loginBtn">
+                                    <input type="button" id="subsave" value="保存" />
+                                </div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+		$(function () {
+			$("#txt_datepicker").datepicker({
+				showOn: "both",
+				buttonImage: "<?php echo $sStaticRoot?>/web/images/datepicker.png",
+				buttonImageOnly: true,
+				dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"],
+				dateFormat: "yy-mm-dd",
+				changeMonth: true,
+				changeYear: true,
+				monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+				showButtonPanel: true,
+				yearRange:"-80:+5"
+			});
+			$( "#txt_datepicker" ).datepicker( $.datepicker.regional[ "zh-CN" ] );
+			$("#buyInfo").val("<?php echo $userInfo['BuyInfo'] ?>");
+			var sex = <?php echo isset($userInfo['Sex'])?$userInfo['Sex']:0 ?>;
+			if (sex == 1) {
+				$("input[value=F]").attr("checked", true);
+			} else {
+				$("input[value=M]").attr("checked", true);
+			}
+			$("#realName,#budget").focus(function() {
+				$(this).parents("dd").removeClass("dd_error");
+				$(this).parent().next().html("");
+			});
+			$("#realName,#budget").blur(function() {
+				var value =$.trim($(this).val());
+				if (value.length > 20) {
+					$(this).parents("dd").addClass("dd_error");
+					$(this).parent().next().html("<s></s>长度不能超过20字节，一个汉字两个字节");
+				}
+			});
+			$("#buyInfo").focus(function() {
+				$(this).parent().removeClass("dd_error");
+				$(this).next().children("span").html("");
+			});
+			$("#buyInfo").blur(function() {
+				var value =$.trim($(this).val());
+				if (value.length > 350) {
+					$(this).parent().addClass("dd_error");
+					$(this).next().children("span").html("<s></s>长度不能超过350字节，一个汉字两个字节");
+				}
+			});
+
+            $("#subsave").click(function(){
+                var name = $.trim($("#realName").val());
+                var s = $('input[name="sex"]:checked').val();
+                var bud = $.trim($("#budget").val());
+                var buyinf = $.trim($("#buyInfo").val());
+                var birthday = $("#txt_datepicker").val();
+                if (name.length > 20 || bud.length > 20 || buyinf.length > 350) {
+                    return;
+                }
+
+                $.post("/user/index/saveuserinfo", {realName: name, sex: s, budget: bud, buyInfo: buyinf,birthday:birthday }, function(data) {
+                    if (data.data == 1) {
+                        //window.location = "/user/index/userinfo";
+                        location.reload();
+                    }else{
+                        alert('服务器繁忙，请稍后重试');
+                    }
+                },"json");
+            })
+
+		});
+    </script>
+</section>

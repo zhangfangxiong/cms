@@ -1,0 +1,75 @@
+<div class="pheader clearfix"><?php echo isset($aHospital['iHospitalID'])?'编辑':'增加'?>公交</div>
+<div class="pbody clearfix">
+
+    <form id="myform" class="form-horizontal" role="form" method="post">
+        <input name="iBusID" type="hidden" value="<?php echo isset($aBus['iBusID'])?$aBus['iBusID']:''?>">
+        <input name="iStatus" type="hidden" value="<?php echo isset($aBus['iStatus'])?$aBus['iStatus']:1?>">
+        <input name="iCreateTime" type="hidden" value="<?php echo isset($aBus['iCreateTime'])?$aBus['iCreateTime']:''?>">
+        <input name="iCityID" type="hidden" value="<?php echo isset($aBus['iCityID'])?$aBus['iCityID']:''?>">
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><span style="color:red;">*</span> 线路名称：</label>
+			<div class="col-sm-10">
+				<input name="sBusName" id="sBusName" validate="!length:2-50" type="text" value="<?php echo isset($aBus['sBusName'])?$aBus['sBusName']:''?>" class="form-control input-validate" placeholder="请输入2到50位任意字符" autocomplete="off">
+                <span class="validate_checktip"></span>
+			</div>
+		</div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span style="color:red;">*</span>类型：</label>
+            <div class="col-sm-10">
+                <select class="form-control input-validate" name="iType" autocomplete="off">
+                    <?php foreach($aType as $key => $value):?>
+                        <option value="<?=$key?>" <?php if (isset($aBus['iType']) && $value == $aBus['iType']){echo 'selected="selected"';}?>><?=$value?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span style="color:red;">*</span>首班车：</label>
+            <div class="col-sm-10">
+                <input name="sFRunTime" id="sFRunTime" validate="!required:请输入首班车时间" type="text" value="<?php echo isset($aBus['sFRunTime'])?$aBus['sFRunTime']:''?>" class="form-control input-validate" autocomplete="off">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><span style="color:red;">*</span>末班车：</label>
+            <div class="col-sm-10">
+                <input name="sLRunTime" id="sLRunTime" validate="!required:请输入末班车时间" type="text" value="<?php echo isset($aBus['sLRunTime'])?$aBus['sLRunTime']:''?>" class="form-control input-validate" autocomplete="off">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+
+    	<div class="btn-toolbar text-center">
+        	<button class="btn btn-primary">保存</button>
+        	<button id="cancel"class="btn" onclick="location.href='/evaluation/bus.html';return false;">取消</button>
+        </div>
+	</form>
+</div>
+
+<script type="text/javascript">
+
+$(function() {
+    //提交表单
+    $("#myform").validate({submitHandler: function(form) {
+        $.post(form.action, $(form).serialize(), function(ret){
+            alert(ret.data);
+            if (ret.status) {
+                location.href = '/evaluation/bus.html';
+            }
+        }, 'json');
+        return false;
+    }/**, errorPlacement: function(error, element) {
+        var className = element.parent()[0].className;
+        if (className == 'col-sm-10') {
+            error.appendTo(element.parent());
+        } else {
+            error[0].className = 'error radio-inline';
+            error.appendTo(element.parent().parent());
+        }
+    }*/});
+});
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>

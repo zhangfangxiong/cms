@@ -1,0 +1,103 @@
+<!--公共资源内容开始-->
+<section class="plan_wrap">
+<section class="analyze_wrap <?php if (empty($aPublic['data']['sBadTag']) && empty($aPublic['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+    <div class="analyze_txt floor_plan">
+    	<h3>
+        	<span></span>
+            分析师点评
+        </h3>
+        <p><?php echo isset($aPublic['data']['sComment']) ? $aPublic['data']['sComment'] : ''; ?></p>
+    </div>
+</section>
+    <section class="condition">
+        <?php
+        if ( isset($aPublic['data']['sGoodTag'] )) {
+            ?>
+            <section class="advantage">
+                <h3>优势</h3>
+                <div class="advantage_con">
+                    <?php
+                    foreach ($aPublic['data']['sGoodTag'] as $key => $value) {
+                        ?>
+                        <span><?php echo $value; ?></span>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </section>
+        <?php
+        }
+        ?>
+        <?php
+        if ( isset($aPublic['data']['sBadTag'] )) {
+            ?>
+            <section class="advantage disadvantaged">
+                <h3>劣势</h3>
+                <div class="advantage_con">
+                    <?php
+                    foreach ($aPublic['data']['sBadTag'] as $key => $value) {
+                        ?>
+                        <span><?php echo $value; ?></span>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </section>
+        <?php
+        }
+        ?>
+    </section>
+
+<section class=" floor_plan">
+    <h3>
+        <span></span>
+        景观实拍图
+    </h3>
+    <?php
+        if(!empty($aPublic['data']['qyjgImage'])){
+            echo '<div class="floor_plan_pic">';
+            foreach ($aPublic['data']['qyjgImage'] as $key => $value) {
+                echo '<div class="floor_plan_pic01">';
+                echo '<canvas data-src="'.$value['sImage'].'"></canvas>';
+                echo '<p class="pic_name">'.@$value['iTypeImage'].'-'.$value['sTitle'].'</p>';
+                echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+                echo '</div>';
+            }
+            echo '</div>';
+        }
+    ?>
+</section>
+
+<?php
+    if(!empty($aPublic['data']['zyqtImage'])){
+        echo '<section class=" floor_plan house_analysis">
+            <h3>
+                <span></span>
+               其他图片 
+            </h3>';
+        echo '<div class="floor_plan_pic">';
+        foreach ($aPublic['data']['zyqtImage'] as $key => $value) {
+            echo '<div class="floor_plan_pic01">';
+            echo '<canvas data-src="'.$value['sImage'].'"></canvas>';
+            echo '<p class="pic_name">'.$value['sTitle'].'</p>';
+            echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+            echo '</div>';
+        }
+        echo '</div>';
+        echo '</section>';
+    }
+
+    if(isset($aPublic['data']['sOtherComment']) && !empty($aPublic['data']['sOtherComment'])){
+        echo '<section class="floor_plan plan_description evaluation_description">
+            <h3>
+                <span></span>
+                点评
+            </h3>';
+        echo '<p>'.$aPublic['data']['sOtherComment'].'</p>';        
+        echo '</section>';
+    }
+?>
+
+</section>
+
+

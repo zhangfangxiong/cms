@@ -1,0 +1,149 @@
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/photo.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/swiper.min.css">
+
+    <body class="heigitbody">
+        <div class="topinfo">
+            <a href="javascript:history.go(-1)" class="rightclose"></a>
+            <span id="nowSelectnum">4</span>/<span id="fenLeiallnum">10</span>
+        </div>
+
+        <div class="allphotos" id="mainsection">
+            <?php
+                if($aImage) {
+                    unset($aImage['msg']);
+                    foreach ($aImage as $key => $value) {
+                        echo '  <div class="swiper-container"  id="'.$key.'">
+                                    <div class="swiper-wrapper phoneul">';
+                        if(!empty($value)) {
+                            foreach ($value as $k => $v) {
+                                echo '  <div class="swiper-slide photoli">
+                                            <img data-src="'.$v.'" class="swiper-lazy">
+                                            <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                                        </div>';
+                            }
+                        }                        
+                        echo '      </div>
+                                </div>     ';
+                    }
+                    
+                }
+            ?>
+                   
+        </div>
+        <div class="bottom-nav swiper-container">
+            <div class="swiper-wrapper navul" id="bottomnavli">
+                <?php 
+                    $i = 0;
+                    foreach ($aImage as $key => $value) { 
+                        switch ($key) {
+                           case 'xiaoguoUrl':
+                               $name = '效果图';
+                               break;
+                           case 'huxingUrl':
+                               $name = '户型图';
+                               break;
+                            case 'shijingUrl':
+                               $name = '实景图';
+                               break;
+                            case 'zongpingUrl':
+                               $name = '总平图';
+                               break;
+                            case 'zhoubianUrl':
+                               $name = '项目周边图';
+                               break;
+                           default:
+                               $name = '效果图';
+                               break;
+                       }                   
+                        $i++; 
+                        $class1 = '';
+                        $class2 = 'noclick';                     
+                        if($value) {
+                            if(1 == $i)  $class1 = 'current';
+                            echo '<div class="swiper-slide navli"><a data-id="'.$key.'" class="'.$class1.'">'.$name.'</a></div>';
+                        }else {
+                            // echo '<div class="swiper-slide navli"><a data-id="'.$key.'" class="'.$class2.'">'.$name.'</a></div>';
+                        }
+                    }
+                ?>
+            </div>
+        </div>
+
+
+        <script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+        <script type="text/javascript">
+        var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+        </script>
+        <script>
+            requirejs.config({
+                baseUrl: localPath + 'lib',
+                paths: {
+                    'jquery': 'jquery/jquery.min',
+                    'swiper': 'plugs/swiper.min'
+                }
+            });
+            require(["jquery", "swiper"], function () {
+                //默认选中，获取数据去除URL,传来数据后台去除URL
+                var initbk = "xiaoguoUrl";
+                var initnum = 0;
+                var fenleiallNum = $('#' + initbk).find(".photoli").length;
+                $("#fenLeiallnum").html(fenleiallNum);
+                $("#nowSelectnum").html(parseInt(initnum) + 1);
+
+                var bottomswipe = new Swiper('.bottom-nav', {
+                    slidesPerView: 4.5,
+                    freeMode: true,
+                    spaceBetween: 12,
+                    freeModeMomentum: false
+                });
+              var photowipe = new Swiper('#' + initbk, {
+                        initialSlide: initnum,
+                        preloadImages: false,
+                        lazyLoading: true,
+                        runCallbacksOnInit: false,
+                        onSlideChangeEnd: function () {
+                            var nownum = photowipe.activeIndex + 1;
+                            $("#nowSelectnum").html(nownum);
+                        }
+                   });
+
+
+
+                $("#bottomnavli .navli").on("click", function () {
+                    if(!$(this).children().hasClass('noclick')) {
+                        $(this).children().eq(0).addClass("current");
+                        $(this).siblings().each(function(){
+                            $(this).children().eq(0).removeClass("current");
+                        })
+                        var initbkid = $(this).children().data("id");
+                        $("#" + initbkid).show();
+                        $("#" + initbkid).siblings().hide();
+                         var initnums=0;
+                        loadPic(initbkid,initnums);
+                       var fenleiallNums = $('#' + initbkid).find(".photoli").length;
+                      $("#fenLeiallnum").html(fenleiallNums);
+                      $("#nowSelectnum").html(parseInt(initnums) + 1);
+                      photowipe.slideTo(0, 500, false);
+                    }                    
+                })
+
+
+                function loadPic(id, num) {
+                    num = num || 0;
+                    var photowipe = new Swiper('#' + id, {
+                        initialSlide: num,
+                        preloadImages: false,
+                        lazyLoading: true,
+                        runCallbacksOnInit: false,
+                        onSlideChangeEnd: function () {
+                            var nownum = photowipe.activeIndex + 1;
+                            $("#nowSelectnum").html(nownum);
+                        }
+                    });
+                }
+
+
+            });
+        </script>
+    </body>
+

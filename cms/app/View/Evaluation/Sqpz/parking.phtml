@@ -1,0 +1,311 @@
+<?php include APP_PATH.'/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+    <div class="panel mt15 pcContent">
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label">*分析师点评：</label>
+                <div class="col-sm-10">
+                    <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate" validate="!clength:1-255"><?php echo $sqParking['sComment']?></textarea>
+                    <span class="validate_checktip"></span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">优势：</label>
+            <div class="col-sm-9">
+                <?php
+
+                if (isset($goodTags) && !empty($goodTags)) {
+                    foreach($goodTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sGoodTag[]" <?php echo !empty($sqParking['sGoodTag']) && in_array($k,$sqParking['sGoodTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                    <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">劣势：</label>
+            <div class="col-sm-9">
+                <?php
+                foreach($badTags as $k => $v) {
+                    ?>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="sBadTag[]" <?php echo !empty($sqParking['sBadTag']) && in_array($k,$sqParking['sBadTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                    </label>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label stLabel">*车 位 数 量：</label>
+                <div class="col-sm-10 mt7">
+                    <span class="parkSpan">共 &nbsp;</span>
+                    <input type="text" class="price pcText" name="iTotalNum"  id="iTotalNum" value="<?php echo $sqParking['iTotalNum']?>" validate="!digit:true">
+                    <span class="parkSpan">个</span>
+                    &nbsp;  &nbsp;  &nbsp;
+                    <span class="parkSpan">固定车位</span>
+                    <input type="text" class="price pcText" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" name="iFixedNum" id="iFixedNum" value="<?php echo $sqParking['iFixedNum']?>" >
+                    <span class="parkSpan">个</span>
+                      &nbsp;  &nbsp;  &nbsp;
+                    <span class="parkSpan">临时车位</span>
+                    <input type="text" class="price pcText" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" name="iTempNum" id="iTempNum" value="<?php echo $sqParking['iTempNum']?>" >
+                    <span class="parkSpan">个</span>
+                    <span class="validate_checktip"></span>
+                </div>
+        </div>
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label stLabel">*车 位 配 比：</label>
+                <div class="col-sm-10 mt7">
+                    <span class="parkSpan" style="margin-right: 0px;">1：</span>
+                    <input type="text" class="price pcText" name="iRate" id="iRate" value="<?php echo $sqParking['iRate']?>" style="width: 120px" validate="!float:true">
+                    <span class="parkSpan addPicTip ">车位配比数在0.5-2之间</span>
+                    <span class="validate_checktip"></span>
+                </div>
+        </div>
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label stLabel">车 位 售 价：</label>
+                <div class="col-sm-10 mt7">
+                    <input type="text" class="price pcText" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" name="iSellPrice" id="iSellPrice" value="<?php echo $sqParking['iSellPrice']?>">
+                    <span class="parkSpan">万元</span>
+                </div>
+        </div>
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label stLabel">车 位 租 金：</label>
+                <div class="col-sm-10 mt7">
+                    <input type="text" class="price pcText" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" name="iRentPrice" id="iRentPrice" value="<?php echo $sqParking['iRentPrice']?>">
+                    <span class="parkSpan">元</span>
+                </div>
+        </div>
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label stLabel">临时停车费：</label>
+                <div class="col-sm-10 mt7">
+                    <input type="text" class="price pcText" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" name="iTempPrice" id="iTempPrice" value="<?php echo $sqParking['iTempPrice']?>">
+                    <span class="parkSpan">元/天</span>
+                </div>
+        </div>
+        <div class="form-group">
+                <label for="sTagName" class="col-sm-2 control-label stLabel">车 位 分 布：</label>
+                <div class="col-sm-10 mt7">
+                    <span class="parkSpan">地上车位</span>
+                    <input type="text" class="price pcText" name="iUndergroundNum" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" id="iUndergroundNum" value="<?php echo $sqParking['iUndergroundNum']?>">
+                    <span class="parkSpan">个</span>
+                      &nbsp;  &nbsp;  &nbsp;
+                    <span class="parkSpan">地下车位</span>
+                    <input type="text" class="price pcText" name="iOvergroundNum" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')"  id="iOvergroundNum" value="<?php echo $sqParking['iOvergroundNum']?>">
+                    <span class="parkSpan">个</span>
+                </div>
+        </div>
+            <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label">地下车位平面图：</label>
+                    <div class="col-sm-9 mt5">
+                        <input type="button" value="请选择" data-placeholder-name="图片名称" data-placeholder-dec="请针对地下车位平面图进行描述" class="plupload"  data-target="sqPkImage[<?php echo $imgTypeConfig['cwpm']?>]" data-img="#sImageShow1" data-callback="showImg" data-limit="10" data-callback="clearUploadtips" data-dec="1"/>
+                        <span class="validate_checktip"></span>
+                        <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($sqParkingImages[$imgTypeConfig['cwpm']])&&!empty($sqParkingImages[$imgTypeConfig['cwpm']])? '':'none' ?>;">
+                            <div class="row" id="sImageShow1" >
+                                <?php
+                                if (isset($sqParkingImages[$imgTypeConfig['cwpm']])&&!empty($sqParkingImages[$imgTypeConfig['cwpm']])) {
+                                    foreach($sqParkingImages[$imgTypeConfig['cwpm']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                            <div class="top-group">
+                                                <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="sqPkImageTitle[<?php echo $imgTypeConfig['cwpm']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                            </div>
+                                            <div class="top-group">
+                                                <div class="col-sm-12 duiq"> <textarea class="form-control" maxlength="300" rows="2" name="sqPkImageDesc[<?php echo $imgTypeConfig['cwpm']?>][]" placeholder="请针对地下车位平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                            </div>
+                                            <input type="hidden" name="sqPkUpImageId[<?php echo $imgTypeConfig['cwpm']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+            </div>
+        </div>
+        <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label stLabel">车位实景图：</label>
+                    <div class="col-sm-9 mt5">
+                        <input type="button" value="请选择"  data-placeholder-name="图片名称" data-placeholder-dec="请针对车位实景图进行描述"  class="plupload"  data-target="sqPkImage[<?php echo $imgTypeConfig['cwsj']?>]" data-img="#sImageShow2" data-callback="showImg" data-limit="10" data-callback="clearUploadtips" data-dec="1"/>
+                        <span class="validate_checktip"></span>
+                        <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($sqParkingImages[$imgTypeConfig['cwsj']])&&!empty($sqParkingImages[$imgTypeConfig['cwsj']])? '':'none' ?>;">
+                            <div class="row" id="sImageShow2" >
+                                <?php
+                                if (isset($sqParkingImages[$imgTypeConfig['cwsj']])&&!empty($sqParkingImages[$imgTypeConfig['cwsj']])) {
+                                    foreach($sqParkingImages[$imgTypeConfig['cwsj']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                            <div class="top-group">
+                                                <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="sqPkImageTitle[<?php echo $imgTypeConfig['cwsj']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                            </div>
+                                            <div class="top-group">
+                                                <div class="col-sm-12 duiq"> <textarea class="form-control" maxlength="300" rows="2" name="sqPkImageDesc[<?php echo $imgTypeConfig['cwsj']?>][]" placeholder="请针对车位实景图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                            </div>
+                                            <input type="hidden" name="sqPkUpImageId[<?php echo $imgTypeConfig['cwsj']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                        </div>
+            </div>
+        </div>
+        <div class="form-group">
+                    <label for="sTagName" class="col-sm-2 control-label stLabel">*行车路线及出入口分布：</label>
+                    <div class="col-sm-9 mt5">
+                        <input type="button" value="请选择" data-placeholder-name="图片名称" data-placeholder-dec="请针行车路线及出入口分布进行描述"   class="plupload"  data-target="sqPkImage[<?php echo $imgTypeConfig['xclx']?>]" data-img="#sImageShow3" data-callback="showImg" data-limit="10" data-callback="clearUploadtips" data-dec="1"/>
+                        <span class="validate_checktip"></span>
+                        <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                        <div class="eHxImgDiv" style="display: <?php echo isset($sqParkingImages[$imgTypeConfig['xclx']])&&!empty($sqParkingImages[$imgTypeConfig['xclx']])? '':'none' ?>;">
+                            <div class="row" id="sImageShow3" >
+                                <?php
+                                if (isset($sqParkingImages[$imgTypeConfig['xclx']])&&!empty($sqParkingImages[$imgTypeConfig['xclx']])) {
+                                    foreach($sqParkingImages[$imgTypeConfig['xclx']] as $item) {
+                                        ?>
+                                        <div class="image_list">
+                                            <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                            <?php if($evaluationSwitch == 0){ ?>
+                                            <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            <?php } ?>
+                                            <div class="top-group">
+                                                <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="sqPkImageTitle[<?php echo $imgTypeConfig['xclx']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                            </div>
+                                            <div class="top-group">
+                                                <div class="col-sm-12 duiq"> <textarea class="form-control" maxlength="300" rows="2" name="sqPkImageDesc[<?php echo $imgTypeConfig['xclx']?>][]" placeholder="请针行车路线及出入口分布进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                            </div>
+                                            <input type="hidden" name="sqPkUpImageId[<?php echo $imgTypeConfig['xclx']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                        </div>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">描述：</label>
+            <div class="col-sm-9">
+                <textarea name="sPakingDesc" rows="3" id="sPakingDesc" class="form-control"></textarea>
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">其 他 点 评：</label>
+            <div class="col-sm-9">
+                <textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control"><?php echo $sqParking['sOtherComment']?></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+            <div class="col-sm-10">
+                <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                    <div class="row" id="sImageQt" >
+                        <?php
+                        if (isset($qtImage)&&!empty($qtImage)) {
+                            foreach($qtImage as $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                    <?php if($evaluationSwitch == 0){ ?>
+                                    <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                    <?php } ?>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                    </div>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                    </div>
+                                    <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <button id="save" class="btn btn-primary">发布</button>
+                <button id="sync" class="btn btn-info"  >同步</button>
+                <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+            </div>
+         </div>
+    </div>
+    </form>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+<script>
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Sqpz', a: 'parking', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    $(function() {
+        // 提交整体评价表单
+        $("#myform").validate({submitHandler: function(form) {
+            var flag=0;
+            if (!Starempty()) {
+                flag = 1;
+            }
+           if (!imageNamenotBlank()) {
+                   flag = 1;
+               }
+            if (flag) {
+                return false;
+            } 
+            var rate=parseFloat($("#iRate").val());
+            if(parseFloat(1/rate)<0.5 || parseFloat(1/rate)>2){
+                if(confirm("您当前所填写车位配比不在0.5~2之间，是否仍要保存当前数字？")){
+                    $.post("/evaluation/Sqpz/saveParking", $(form).serialize(), function(ret){
+                        alert(ret.data);
+                        location.reload();
+                    }, 'json');
+                    return false;
+                }else{
+                  $("#iRate").focus();
+                  return false;   
+                }
+            }else{
+                $.post("/evaluation/Sqpz/saveParking", $(form).serialize(), function(ret){
+                    alert(ret.data);
+                    location.reload();
+                }, 'json');
+                return false;
+            }
+            
+
+        }});
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+     // 移除边框
+    $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+       //鼠标移上显示大图
+    $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+     $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    })
+</script>

@@ -1,0 +1,152 @@
+
+<!--整体评价开始-->
+<section class="viewport">
+    <!--整体评价内容开始-->
+    <section class="plan_wrap hxIndex">
+        <section class="analyze_wrap <?php if (empty($aHxfx['data']['sBadTag']) && empty($aHxfx['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+            <div class="analyze_txt floor_plan">
+                <h3>
+                    <span></span>
+                    分析师点评
+                </h3>
+
+                <p><?php echo $aHxfx['data']['sComment'] ?></div>
+        </section>
+        <section class="condition">
+            <?php
+            if (isset($aHxfx['data']['sGoodTag']) && $aHxfx['data']['sGoodTag']) {
+                ?>
+                <section class="advantage">
+                    <h3>优势</h3>
+
+                    <div class="advantage_con">
+                        <?php
+                        foreach ($aHxfx['data']['sGoodTag'] as $key => $value) {
+                            ?>
+                            <span><?php echo $value; ?></span>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </section>
+            <?php
+            }
+            ?>
+            <?php
+            if (isset($aHxfx['data']['sBadTag']) && $aHxfx['data']['sBadTag']) {
+                ?>
+                <section class="advantage disadvantaged">
+                    <h3>劣势</h3>
+
+                    <div class="advantage_con">
+                        <?php
+                        foreach ($aHxfx['data']['sBadTag'] as $key => $value) {
+                            ?>
+                            <span><?php echo $value; ?></span>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </section>
+            <?php
+            }
+            ?>
+        </section>
+        <section class=" floor_plan brand_configuration general_evaluation">
+            <div class="evaluation_house_type">
+                <h3>
+                    <span></span>
+                    户型
+                </h3>
+
+                <div class="more" id="SlideTips">
+                    滑动查看更多
+                    <span></span>
+                </div>
+            </div>
+            <div class="house_type">
+                <ul class="house_type_left">
+                    <li>户型编号</li>
+                    <li>房型</li>
+                    <li>面积</li>
+                    <li>梯户比</li>
+                    <li>层高</li>
+                    <li>客厅面宽</li>
+                    <li>主卧面宽</li>
+                    <li>主卧朝向</li>
+                    <li>次卧朝向</li>
+                    <li>南北通透</li>
+                    <li>得房率%</li>
+                </ul>
+                <div class="house_type_allright">
+                    <?php
+                    foreach ($aHxfx['data']['InfoList'] as $key => $value) {
+                        ?>
+                        <ul class="house_type_right_child">
+                            <li><?php echo $value['sHuXingID'] ?></li>
+                            <li><?php echo $value['iRoomNum'] . $value['iHallNum'] . $value['iToiletNum'] ?></li>
+                            <li><?php echo $value['iAreaNum'] . '-' . $value['iMaxAreaNum'] ?></li>
+                            <li><?php echo isset($aNumToWord[$value['iStairsNum']]) ? $aNumToWord[$value['iStairsNum']] : $value['iStairsNum'];?>梯
+                                <?php echo isset($aNumToWord[$value['iDoorNum']]) ?  $aNumToWord[$value['iDoorNum']] : $value['iDoorNum'];?>户
+                            </li>
+                            <li><?php echo $value['iFloorNum'] == '-' ? '-' : $value['iFloorNum'].'m'; ?></li>
+                            <li><?php echo $value['iHallWidth'] == '-' ? '-' : $value['iHallWidth'].'m'; ?></li>
+                            <li><?php echo $value['iMasterRoomWidth'] == '-'  ? '-' : $value['iMasterRoomWidth'].'m'; ?></li>
+                            <li><?php echo $value['iMasterRoomToward'] ? $value['iMasterRoomToward'] : '无'; ?></li>
+                            <li><?php echo $value['iSecondRoomToward'] ? $value['iSecondRoomToward'] : '无'; ?></li>
+                            <li><?php echo $value['iIsNorthSouth']; ?></li>
+                            <li><?php echo empty($value['iAreaRate']) ? : '-' ; $value['iAreaRate'];?></li>
+                        </ul>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </div>
+        </section>
+        <?php
+        if (isset($aHxfx['data']['ztqtImage']) && !empty($aHxfx['data']['ztqtImage'])) {
+            ?>
+
+            <section class=" floor_plan">
+                <h3>
+                    <span></span>
+                    其他图片
+                </h3>
+
+                <div class="floor_plan_pic">
+                    <?php
+                    foreach ($aHxfx['data']['ztqtImage'] as $key => $value) {
+                        ?>
+                    <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                    <div class="floor_plan_pic01">
+                            <canvas data-src="<?php echo $value['sImage']; ?>"></canvas>
+                            <span class="pic_tip"></span>
+                            <p class="pic_name"><?php echo $value['sTitle']; ?></p>
+
+                            <p class="pic_description"><?php echo $value['sDesc']; ?></p>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+                </a>
+            </section>
+        <?php
+        }
+        ?>
+        <?php
+        if (isset($aHxfx['data']['sOtherComment'])) {
+            ?>
+            <section class="floor_plan plan_description evaluation_description">
+                <h3>
+                    <span></span>
+                    户型整体描述
+                </h3>
+
+                <p><?php echo $aHxfx['data']['sOtherComment'] ?></p>
+            </section>
+        <?php
+        }
+        ?>
+    </section>
+</section>

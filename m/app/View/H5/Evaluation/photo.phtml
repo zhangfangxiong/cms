@@ -1,0 +1,101 @@
+
+        <!--相册开始-->
+        <section class="viewport photo_wrap">
+
+            <nav class="photo_nav">
+                <?php if (!$noHeader) { ?>
+
+                    <div class="uc_return_l photo_return" onclick="javascript:history.go(-1)"></div>
+                <?php } ?>
+
+                <div class="num"><span class="pic_nowing"><?php echo $iSelect + 1; ?></span>/<span class="pic_sum"></span></div>
+                <!--                <div class="photo_nav_r">
+                                    <span class="collect"></span>
+                                    <span class="share"></span>
+                                </div>-->
+            </nav>
+
+            <!-- Swiper -->
+            <div class="swiper-container photo_swiper">
+                <div class="swiper-wrapper">
+                    <?php
+                    foreach ($aEvalImage as $key => $value) {
+                        echo '  <div class="swiper-slide slide_nums">
+                                    <img data-src="' . $value['sImage'] . '" class="swiper-lazy" data-name="' . $value['sTitle'] . '" data-dec="' . $value['sDesc'] . '">
+                                    <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                                </div>';
+                    }
+                    ?>
+
+                </div>
+            </div>
+            <div class="dec">
+                <p class="pic_name" id="pic_name"><?php echo $aEvalImage[$iSelect]['sTitle'] ?></p>
+                <?php if (!empty($aEvalImage[$iSelect]['sDesc'])) { ?>
+                    <p class="pic_dec" id="pic_dec"><?php echo $aEvalImage[$iSelect]['sDesc'] ?></p><!--图片描述最多三行，超过的省略号代替-->
+<?php } ?>
+            </div>
+
+        </section>
+        <!--相册结束-->
+        <script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+        <script type="text/javascript">
+                    var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+        </script>
+        <script>
+            requirejs.config({
+                baseUrl: localPath + 'lib',
+                paths: {
+                    'jquery': 'jquery/jquery.min',
+                    'swiper': 'plugs/swiper.min',
+                    'webtouchcommon': 'js/webtouchcommon'
+                }
+            });
+            require(["jquery", "swiper"], function () {
+                $('body').addClass("bg");
+                if (isApp) {
+                    $(".uc_return_l").hide();
+                    $(".is_app_no").hide();
+                }
+                $(".photo_nav ").stop().animate({"top": "0"},"fast");
+
+                //默认选中图片
+                var initnum = <?php echo $iSelect; ?>;
+                var mySwiper = new Swiper('.photo_swiper', {
+                    preloadImages: false,
+                    initialSlide: initnum,
+                    // Enable lazy loading
+                    lazyLoading: true,
+                    runCallbacksOnInit: false,
+                    onSlideChangeEnd: function (swiper) {
+                        //当前图片的张数
+                        var nowing = mySwiper.activeIndex + 1;
+                        $('.pic_nowing').html(nowing);
+                        var imgObj = $(".slide_nums").eq(mySwiper.activeIndex).children().eq(0)
+                        var name = imgObj.data('name');
+                        var desc = imgObj.data('dec')
+                        if (name != "") {
+                            $('#pic_name').show();
+                            $('#pic_name').html(name);//这里的名称和描述是随着图片变化的
+                        } else {
+                            $('#pic_name').hide();
+                        }
+                        if (desc != "") {
+                            $('#pic_dec').show();
+                            $('#pic_dec').html(desc);
+                        } else {
+                            $('#pic_dec').hide();
+                        }
+
+
+                    }
+
+                });
+                //图片总数
+                var sum = $('.swiper-wrapper>div').length;
+                $('.pic_sum').html(sum);
+
+            });
+        </script>
+
+

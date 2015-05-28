@@ -1,0 +1,126 @@
+<div class="pheader clearfix">评测列表</div>
+<div class="pbody clearfix">
+	<form class="form-inline search-form" role="form" method="post" id="myform">
+		<div class="form-group">
+			楼盘名称：
+			<input type="text" value="<?php echo isset($aParam['lpName']) ? $aParam['lpName']:'' ?>" class="form-control input-sm" name="lpName">
+		</div>
+		<div class="form-group">
+			作者：
+			<input type="text" value="<?php echo isset($aParam['author']) ? $aParam['author']:'' ?>" class="form-control input-sm" name="author">
+		</div>
+		<div class="form-group">
+			创建时间：
+			<input type="text"   autocomplete="off" value="<?php echo isset($aParam['iCreateTime']) ? $aParam['iCreateTime']:'' ?>" class="laydatetime form-control input-sm" name="createTime" >
+		</div>
+		<div class="form-group">
+			编辑时间：
+			<input type="text"  autocomplete="off"  value="<?php echo isset($aParam['iUpdateTime']) ? $aParam['iUpdateTime']:'' ?>" class="laydatetime form-control input-sm" name="updateTime">
+		</div>
+		<input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+	</form>
+	<hr>
+    <table class="table table-bordered table-hover">
+    	<thead>
+    		<tr>
+    			<th class="col-sm-1 text-center">#</th>
+    			<th class="text-center">所属楼盘</th>
+    			<th class="text-center">最后编辑章节</th>
+				<th class="text-center">创建时间</th>
+				<th class="text-center">作者</th>
+				<th class="text-center">编辑时间</th>
+				<th class="text-center">编辑人</th>
+                <th class="text-center">查看展示</th>
+                <th class="text-center">同步时间</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+		<?php
+		if (isset($aList['aList'])&&!empty($aList['aList'])) {
+			foreach ($aList['aList'] as $v) {?>
+				<tr>
+					<td class="col-sm-1 text-center"><?php echo $v['iEvaluationID']?></td>
+					<td class="text-center"><a href="<?php echo $v['url']?>"><?php echo $v['sUnitName']?></a></td>
+					<td class="text-center"><?php echo isset($childChapter[$v['sLastEditChapter']]) ? "<a href=".$v['url'].">".$childChapter[$v['sLastEditChapter']]."</a>": ''?></td>
+					<td class="text-center"><?php echo date('Y-m-d H:i:s',$v['iCreateTime'])?></td>
+					<td class="text-center"><?php echo isset($createUserArr[$v['iCreateUserID']])?$createUserArr[$v['iCreateUserID']]:''?></td>
+					<td class="text-center"><?php echo date('Y-m-d H:i:s',$v['iUpdateTime'])?></td>
+					<td class="text-center"><?php echo isset($createUserArr[$v['iUpdateUserID']])?$createUserArr[$v['iUpdateUserID']]:''?></td>
+
+                    <td class="text-center"><a href="<?php echo $v['sFrontUrl'];?>" target="_blank">查看</a></td>
+					<td class="text-center"><?php echo !empty($v['iSyncTime']) ? date('Y-m-d H:i:s',$v['iSyncTime']): '' ?></td>
+				</tr>
+			<?php
+			}
+		}
+		?>
+    	</tbody>
+    </table>
+    <?php echo isset($aList['aPager']) ? $aList['aPager']:''?>
+</div>
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">新建评测报告</h4>
+			</div>
+			<div class="modal-body">
+				<form id="addform" class="form-horizontal">
+				<div class="form-group">
+					<input type="hidden" id="iLoupanID" value="">
+					<label for="sTagName" class="col-sm-2 control-label">楼盘：</label>
+					<div class="col-sm-10" >
+					<input name="sLoupanName" id="sLoupanName" type="text" value="" class="form-control input-validate"  validate="!required:请输入楼盘">
+					<span class="validate_checktip"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="sTagName" class="col-sm-2 control-label">分析师：</label>
+					<div class="col-sm-10" >
+						<select class="form-control input-validate"  name="sAnalystsID" id="sAnalystsID" validate="!required:请选择分析师">
+							<option value="">请选择分析师</option>
+							<?php
+							if (isset($analysts)&&!empty($analysts)) {
+								foreach ($analysts as $k => $v) {
+									?>
+									<option
+										value="<?php echo $v['ID']?>"><?php echo $v['AnalystsName']?></option>
+								<?php }
+							}
+							?>
+						</select>
+						<span class="validate_checktip"></span>
+					</div>
+				</div>
+					<div class="btn-toolbar text-center">
+						<button id="save" class="btn btn-primary">保存</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script>
+var sCityCode = "<?php echo $aCity['sFullPinyin']?>";
+$(function() {
+	// 保存评测报告
+	$("#addform").validate({submitHandler: function(form) {
+		$.post("/evaluation/draft/add",{lpID:$("#iLoupanID").val(),sAnalystsID:$("#sAnalystsID").val()},function(ret){
+			alert(ret.data);
+			if (ret.status) {
+				location.reload();
+			}
+		});
+		return false;
+	}});
+})
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/laydate/laydate.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/unit.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>

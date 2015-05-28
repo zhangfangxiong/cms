@@ -1,0 +1,186 @@
+
+<!--演示内容开始-->
+<style type="text/css">
+    /* dragfunction */
+    .dragfunction{margin:40px 0 0 0;}
+    .dragfunction dt{height:30px;font-weight:800;}
+    .dragfunction dd{line-height:22px;padding:0 0 20px 0;color:#5e5e5e;}
+    /* dragsort */
+
+    .dragsort{list-style-type:none;margin:0px; overflow:hidden; *zoom:1; margin-top:15px;}
+    .dragsort li{float:left;width:150px;margin-right: 10px;margin-bottom: 10px;}
+    .dragsort div{height:50px; background-color:#E0E0E0;text-align:center;padding-top:20px; border-radius:10px;}
+    .placeHolder div{background-color:white!important;border:dashed 1px gray!important;}
+	.addBtn{ padding-left:42px; margin-top:15px;}
+	.opertor{ display:none;}
+	.dragsort div.current{ background:#999;}
+	.dragsort div span a.current{ color:#00F;}
+</style>
+
+<div class="pheader clearfix">添加/编辑公交信息</div>
+
+<div style="padding:20px 0 0 15px;">
+    <span>线路名称：<?php echo $aBusName;?></span>
+    <br />
+    <span>站点：(上下左右拖动方块进行站点排序)</span>
+</div>
+<section class="wrap" style="overflow: hidden">
+    <ul data-listidx="0" class="dragsort" id="list1">
+        <?php if(!empty($aStations)){$index = 0;?>
+            <?php foreach($aStations as $station){?>
+                <li data-itemidx="<?php echo $index;?>" iStationId="<?php echo $station['iAutoID'];?>">
+                    <div style="cursor: pointer;">
+                        <span class="sname"><?php echo $station['sStation']?></span>
+                        <span class="opertor">
+                            <a href="javascript:editStation(<?php echo $station['iAutoID'];?>, '<?php echo $station['sStation'];?>')">编辑</a>|
+                            <a href="javascript:deleteStation(<?php echo $station['iAutoID'];?>)">删除</a>
+                        </span>
+                    </div>
+                </li>
+                <?php $index ++;?>
+            <?php } ?>
+        <?php }?>
+    </ul>
+</section>
+
+<div class="btn-toolbar list-toolbar addBtn">
+    <button class="btn btn-primary" id="station_add">
+        <i class="icon-plus"></i> 增加站点
+    </button>
+
+    <button id="save_stations" class="btn btn-primary">保存</button>
+</div>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加/编辑站点</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addform" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <input type="hidden" id="iBusID" value="<?php echo $iBusID;?>">
+                        <input type="hidden" id="opType" value="1">
+                        <input type="hidden" id="iStationID" value="">
+                        <label for="sStation" class="col-sm-2 control-label">站点名称:</label>
+                        <div class="col-sm-10" >
+                            <input name="sStation" id="sStation" type="text" value="" class="form-control input-validate"  validate="!required:请输入站点名称" autocomplete="off">
+                            <span class="validate_checktip"></span>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar text-center">
+                        <button id="save" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/jquery-list-dragsort.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#station_add').click(function(){
+            $('#sStation').val('');
+            $('#myModal').modal('show');
+        });
+
+        $("#list1").on('mouseenter','div',function(e){
+            $(this).toggleClass('current').parent().siblings().children('div').removeClass('current');
+            $(this).children('span:first').hide();
+            $(this).children('span:last').show();
+        });
+        $("#list1").on('mouseleave','div',function(e){
+            $(this).removeClass('current');
+            $(this).children('span:first').show();
+            $(this).children('span:last').hide();
+        });
+
+		$('.dragsort div span a').addClass('current');
+		
+        $("#list1").dragsort({
+            dragSelector: "div",
+            dragBetween: true,
+            dragEnd: saveOrder,
+            placeHolderTemplate: "<li class='placeHolder'><div></div></li>",
+            scrollSpeed: 5
+        })
+
+        $("#addform").validate({submitHandler: function(form) {
+            $.post("/evaluation/bus/addStation",{iBusID:$("#iBusID").val(),sStation:$("#sStation").val(), opType:$('#opType').val(), iAutoID:$('#iStationID').val() },function(ret){
+                alert(ret.data.msg);
+                if (ret.status) {
+                    opType = parseInt($('#opType').val());
+                    $('#myModal').modal('hide');
+                    $('#opType').val(1);
+
+                    index = intval($('#list1 li:last-child').attr('data-itemidx'));
+                    if($('#list1 li').length > 0){
+                        index += 1;
+                    }else{
+                        index = 0;
+                    }
+
+                    if(opType){
+                        $('#list1').append('<li data-itemidx=' + index  + ' iStationId=' +ret.data.iAutoID + '><div style="cursor: pointer;">' + '<span class="sname">' + ret.data.sStation + '</span>' + '<span class="opertor">' +
+                        '<a class="current" href="javascript:editStation(' + ret.data.iAutoID + ',\'' +  ret.data.sStation + '\')">编辑</a>|' +
+                        '<a class="current" href="javascript:deleteStation(' + ret.data.iAutoID + ')">删除</a>' +
+                        '</span> '+  '</div></li>');
+                    }else {
+                        $('#list1 li[istationid='+ ret.data.iAutoID + '] .sname').html(ret.data.sStation);
+                    }
+                }
+            });
+            return false;
+        }});
+
+        $('#save_stations').click(function(){
+            var ids = '';
+            var orders = '';
+            $('#list1 li').each(function(){
+                ids += ',' + $(this).attr('istationid');
+                orders += ',' + $(this).attr('data-itemidx');
+            });
+
+            ids = ids.substr(1);
+            orders = orders.substr(1);
+            $.post("/evaluation/bus/saveStations",{ids:ids,orders:orders},function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            });
+            return false;
+        });
+    });
+    function saveOrder() {
+        var data = $("#list1 li").map(function(){
+            return
+            $(this).children().html();
+        }).get();
+        $("input[name=list1SortOrder]").val(data.join("|"));
+    };
+
+    function editStation(id, name) {
+        $('#iStationID').val(id);
+        $('#sStation').val(name);
+        $('#opType').val(0);
+        $('#myModal').modal('show');
+    }
+    function deleteStation(id) {
+        if(confirm("删除后将无法恢复,是否确定要删除？"))
+        {
+            $.post("/evaluation/bus/deleteStation",{id:id},function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            });
+        }
+    }
+</script>
+

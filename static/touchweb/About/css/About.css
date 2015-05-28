@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td { margin:0; padding:0; }
+html{height:100%;-webkit-text-size-adjust:none;-webkit-tap-highlight-color:transparent;}
+body {font-family:Microsoft Yahei, Hiragino Sans GB,Arial,Helvetica,"微软雅黑","宋体",sans-serif;background-color:#fff;-webkit-touch-callout:none;-webkit-user-select:none; color:#666; font-size:14px;}
+fieldset, img { border:0; display:block;}
+ol, ul { list-style:none; }
+h1, h2, h3, h4, h5, h6{ font-size:100%; }
+em { font-style:normal; }
+input, button, select, textarea { outline:none; }/*控制google浏览器取消发光边框*/ 
+textarea { resize:none; }
+a { color:#6C6C6C; text-decoration:none; }
+a:hover { color: #f40; text-decoration:none; }
+
+
+
+.agreement{ padding:15px 12px; border-top:1px solid #cfcfcf; line-height:22px;}
+.agreement h3{}
+.agreement p{ margin-bottom:20px;}
+

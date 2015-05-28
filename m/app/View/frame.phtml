@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><?php echo isset($aMeta['title'])?$aMeta['title']:''?></title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="keywords" content="<?php echo isset($aMeta['keywords'])?$aMeta['keywords']:''?>">
+    <meta name="description" content="<?php echo isset($aMeta['description'])?$aMeta['description']:''?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot?>/css/newscommen.css">
+
+    <script type="text/javascript" src="<?php echo $sStaticRoot?>/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo $sStaticRoot?>/js/search.js"></script>
+
+    <script type="text/javascript">
+    	$(function(){
+    		$(window).scroll(function(e) {
+                var sH = $(window).scrollTop();
+				var wH = $(window).height();
+				if(sH>wH){
+            		$('.footer_r .btn').show();
+				}else{
+            		$('.footer_r .btn').hide();
+				}
+            });
+		})
+    </script>
+    <!--[if lt IE 9]>
+    <script src="<?php echo $sStaticRoot?>/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!--顶部导航开始-->
+<div class="top_wrap">
+    <div class="top">
+        <div class="logo_wrap">
+            <h1 class="logo">
+                <a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/" title="房价点评网">房价点评网</a>
+            </h1>
+        </div>
+        <ul class="nav">
+            <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/">首页</a></li>
+            <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/<?=$sCurrCityCode?>/advanced/search">新房</a></li>
+            <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/<?=$sCurrCityCode?>/esf/advanced/search">二手房</a></li>
+            <li class="current"><a href="/<?=$sCurrCityCode?>/news/index/">资讯</a></li>
+        </ul>
+        <div class="seach">
+            <input type="text" class="seach_text" placeholder="输入楼盘名，查看评测报告" />
+            <div class="seach_btn" id="map_search" cityCode="<?php echo $sCurrCityCode; ?>"></div>
+        </div>
+    </div>
+</div>
+<!--顶部导航结束-->
+<div class="main_wrap">
+    <!--版心开始-->
+    <div class="main">
+        <div class="message_title">
+            <p class="title">
+                <?php echo $sBreadcrumbs;?>
+            </p>
+        </div>
+        <div class="content" style="padding:0px"><?php include $_script;?></div>
+        <!--footer开始-->
+        <div class="footer">
+            <div class="footer_l">
+                <ul class="footer_nav">
+                    <li class="first_li">房价点评网</li>
+                    <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/help/about" target="_blank">关于我们</a></li>
+                    <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/help/contact" target="_blank">联系我们</a></li>
+                    <li><a href="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/help/declare" target="_blank">寻求评测</a></li>
+                    <li class="last_li"><a href="http://<?=Yaf_G::getConf('mfangjiadp', 'domain')?>/" target="_blank">手机版</a></li>
+                </ul>
+            </div>
+            <div class="footer_r">
+                <dl>
+                    <dt>
+                    	<img src="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/Content/images/weixin/<?=$sCurrCityCode?>.jpg" width="344" height="344">
+                    </dt>
+                    <dd>微信扫一扫<br>房价点评，精彩发布</dd>
+                </dl>
+                <dl class="no_m_l">
+                  	<dt><img src="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/Content/images/weibo/<?=$sCurrCityCode?>.png" width="508" height="508"></dt>
+                    <dd>关注微博<br>成为粉丝，立享即使资讯</dd>
+                </dl>
+                <?php if($switch_version === true):?>
+                <div class="btn">
+                   <input type="button" value="GA" <?php if(isset($fjdp_version) && 'ga' == $fjdp_version):?>class="current"<?php endif; ?> onclick="document.cookie = 'fjdp_version=ga; path=/'; location.reload()"/>
+                   <input type="button" value="Beta" <?php if(isset($fjdp_version) && 'beta' == $fjdp_version):?>class="current"<?php endif; ?> onclick="document.cookie = 'fjdp_version=beta; path=/';location.reload()"/>
+                </div>
+                <?php endif;?>
+            </div>
+        </div>
+        <!--footer结束-->
+        <!--copyright开始-->
+        <div class="copyright">
+            <p>Copyright©<?=date('Y')?> 房价点评网版权所有&nbsp;&nbsp;&nbsp;&nbsp;沪ICP备10210785号-9</p>
+        </div>
+        <!--copyright结束-->
+    </div>
+    <!--版心结束-->
+</div>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/phpjs.min.js"></script>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/common.js"></script>
+<div style="display: none">
+<script type="text/javascript" src="http://<?php echo Yaf_G::getConf('fangjiadp', 'domain')?>/Scripts/ga.js"></script>
+</div>
+<script type="text/javascript"><?php echo @$__showDebugInfo__?></script>
+</body>
+</html>

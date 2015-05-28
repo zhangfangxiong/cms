@@ -1,0 +1,873 @@
+﻿<?php include Yaf_G::getViewPath()."/Newhouse/header.phtml"; ?>
+<link href="<?php echo $sStaticRoot?>/web/css/newhouse.css" rel="stylesheet"/>
+<script src="<?php echo $sStaticRoot?>/js/web/highcharts/highcharts.4.4.js"></script>
+<script src="<?php echo $sStaticRoot?>/js/web/highcharts/highcharts.ext.js"></script>
+<section class="new_row_cont">
+    <div class="clearfix mb30">
+        <div class="pricelist_left">
+            <?php if(!empty($romm['data'])){ ?>
+                <div class="n_cont_warp mb30">
+                    <div class="n_cont_warp_m">
+                        <h2>
+                            <b>
+                                <s></s>房价指导
+                            </b>
+                            <em class="em_left">选择参数查看房价，让你知道买房到底要花多少钱！</em>
+                        </h2>
+                        <div class="prc_list_info clearfix">
+                            <div class="prc_info_left">
+                                <ul>
+                                    <li>
+                                        <span>户型</span>
+                                        <select id="selRoomType">
+                                            <option value="">请选择房间户型</option>
+                                            <?php if(isset($roomTypeGroup) && !empty($roomTypeGroup)){ ?>
+                                             <?php foreach ($roomTypeGroup as $key=>$item) { ?>
+                                                    <option value="<?php echo $key ?>"><?php echo $key ?></option>
+                                            <?php }} ?>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <span>面积</span>
+                                        <select id="selRoomArea">
+                                            <option value="">请选择房间面积</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <span>楼栋-单元</span>
+                                        <select id="selBlock">
+                                            <option value="">请选择房间楼层</option>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <span>房间</span>
+                                        <select id="selRoom">
+                                            <option value="">请选择房间室号</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                                <div class="check_fj">
+                                    <a href="javascript:void(0);" onclick="roomPriceSearch();"><s></s>查看房价</a>
+                                </div>
+                                <s class="s_lt_bg"></s>
+                            </div>
+                            <div class="prc_info_right" style=" width:437px;">
+                                <cite class="no_gt_bg" id="noResult"></cite>
+                                <!--<div class="price_info_text">
+                                        <div class="price_info_t">
+                                            <b>申滨路1051弄72号楼1-102</b>
+                                        </div>
+                                        <div class="price_info_m">
+                                            <s></s>
+                                            <cite>指导总价：<em>4,244万</em></cite>
+                                            <i></i>
+                                            <span>
+                                                <b><var>按揭：</var><em>7成</em></b>
+                                                <b><var>首付：</var><em>1,273万</em></b>
+                                                <b><var>月付：</var><em>9,069 元</em></b>
+                                            </span>
+                                        </div>
+                                        <ul class="price_info_f">
+                                            <li>
+                                                <span>楼栋：</span>
+                                                <em>72号（1/13层）</em>
+                                            </li>
+                                            <li>
+                                                <span>建筑形态：</span>
+                                                <em>高层</em>
+                                            </li>
+                                            <li>
+                                                <span>户型：</span>
+                                                <em>二房</em>
+                                            </li>
+                                            <li>
+                                                <span>面积：</span>
+                                                <em>80m2</em>
+                                            </li>
+                                        </ul>
+                                    </div>-->
+                            </div>
+
+                            <script type="text/javascript">
+                                var areaJson = <?php echo json_encode($roomType['data']) ?>;
+                                var blockExtensionJson = <?php echo json_encode($blockExtension['data']) ?>;
+                                var roomsJson = <?php echo json_encode($romm['data']) ?>;
+                                var roomType = "<?php echo $roomTypeStr ?>";
+                                var roomAreaRange = "<?php echo $areaRangeStr ?>";
+                                var blockId = "<?php echo $blockIdStr ?>";
+                                var roomId = "<?php echo $roomIdStr ?>";
+
+                                $(function(){
+                                    $("#selRoomType").change(function(){
+                                        roomType = $(this).val();
+                                        filterRoomArea(roomType);
+                                        $("#selBlock").html("<option value=\"\">请选择房间楼栋</option>");
+                                        $("#selRoom").html("<option value=\"\">请选择房间室号</option>");
+                                    });
+                                    $("#selRoomArea").change(function(){
+                                        roomAreaRange = $(this).val();
+                                        filterBlock(roomType,roomAreaRange);
+                                        $("#selRoom").html("<option value=\"\">请选择房间室号</option>");
+                                    });
+                                    $("#selBlock").change(function(){
+                                        blockId = $(this).val();
+                                        fillterRoom(roomType,roomAreaRange,blockId);
+                                    });
+                                    init();
+                                })
+
+                                function init(){
+                                    $("#selRoomType").val(roomType);
+                                    $("#selRoomType").change();
+                                    $("#selRoomArea").val(roomAreaRange);
+                                    $("#selRoomArea").change();
+                                    $("#selBlock").val(blockId);
+                                    $("#selBlock").change();
+                                    $("#selRoom").val(roomId);
+
+                                    if($("#selRoom").val())
+                                        roomPriceSearch();
+                                }
+
+                                function filterRoomArea(roomType){
+                                    var html = "<option value=\"\">请选择房间面积</option>";
+
+                                    if(roomType.length > 0){
+                                        for(var i = 0; i< areaJson.length; i++){
+                                            if(areaJson[i].TypeName == roomType)
+                                                html = html + "<option value=\"" + areaJson[i].MinArea + "-" + areaJson[i].MaxArea + "\">" + areaJson[i].MinArea + "-" + areaJson[i].MaxArea + "㎡</option>";
+                                        }
+                                    }
+
+                                    $("#selRoomArea").html(html);
+                                }
+
+                                function filterBlock(roomType, areaRange){
+                                    var html = "<option value=\"\">请选择房间楼栋</option>";
+
+                                    if(roomType.length > 0){
+                                        var arr = areaRange.split("-");
+                                        var minArea = arr[0]=="" ? 0 : parseFloat(arr[0]);
+                                        var maxArea = arr[1]=="" ? 99999 : parseFloat(arr[1]);
+                                        var blockStr = "";
+
+                                        if(arr.length == 2){
+                                            for(var i = 0 ; i< roomsJson.length; i++) {
+                                                var roomArea = roomsJson[i].Area == "" ? 0 : parseFloat(roomsJson[i].Area);
+
+                                                if(roomsJson[i].TypeName.indexOf(roomType) > -1
+                                                    && ( roomArea >= minArea && roomArea < ( maxArea + 1 ))
+                                                    && blockStr.indexOf(roomsJson[i].BlockID) < 0){
+                                                    for(var j =0; j<blockExtensionJson.length; j++ ) {
+                                                        if(blockExtensionJson[j].BlockID == roomsJson[i].BlockID) {
+                                                            html = html + "<option value=\"" +  blockExtensionJson[j].BlockID + "\">" + blockExtensionJson[j].BlockNumber + "</option>";
+                                                            blockStr = blockStr + "," + blockExtensionJson[j].BlockID;
+                                                            break;
+                                                        }
+                                                    }
+                                                
+                                                }
+                                        
+                                            }
+                                        }
+                                    }
+
+                                    $("#selBlock").html(html);
+
+                                }
+
+                                function fillterRoom(roomType, areaRange, blockId){
+                                    var html = "<option value=\"\">请选择房间室号</option>";
+
+                                    if(roomType.length > 0){
+                                        var arr = areaRange.split("-");
+                                        var minArea = arr[0]=="" ? 0 : parseFloat(arr[0]);
+                                        var maxArea = arr[1]=="" ? 99999 : parseFloat(arr[1]);
+
+                                        if(arr.length == 2){
+                                            for(var i =0 ; i < roomsJson.length; i++){
+                                                var roomArea = roomsJson[i].Area == "" ? 0 :parseFloat(roomsJson[i].Area);
+
+                                                if(roomsJson[i].TypeName.indexOf(roomType) > -1
+                                                    && ( roomArea >= minArea && roomArea < ( maxArea + 1 ) )
+                                                    && roomsJson[i].BlockID == blockId){
+                                                    html = html + "<option value=\"" +  roomsJson[i].RoomID + "\">" + roomsJson[i].RoomNumber + "</option>";
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    $("#selRoom").html(html);
+                                }
+
+                                function roomPriceSearch(){
+                                    var roomId = $("#selRoom").val();
+                                    if(roomId == ""){
+                                        alert('请选择具体的房间');
+                                        return;
+                                    }
+
+                                    $.post("/Newhouse/price/getRoomPrice?unitid=<?php echo $unitID ?>",{ BlockId: blockId, RoomID: roomId,unitID:<?php echo $unitID ?> },function(data){
+                                        if( data.data.RoomData != '' && data.data.Fangdai != ''){
+                                            var roomData = data.data.RoomData;
+                                            var fangdaiData = data.data.Fangdai;
+                                            //console.log(fangdaiData);return;
+                                            var totalPrice = formatPrice(fangdaiData.sTotalPrice);
+                                            var shoufu = formatPrice(fangdaiData.iFirstPay);
+                                            var daikuan = formatPrice(fangdaiData.iTotalLoan);
+                                            var lixi = formatPrice(fangdaiData.iInterest);
+                                            var huankuan = fangdaiData.iTotalLoan+fangdaiData.iInterest;
+                                            var yuejunhuankuan = formatPrice(fangdaiData.sMonthPay);
+                                            var houseType = "--";
+                                            if(roomData.BlockType ){
+                                                houseType = roomData.BlockType;
+                                            }
+
+                                            var html = "<div class=\"price_info_text\">"
+                                                       +"  <div class=\"price_info_t\">"
+                                                       +"     <b>" + roomData.BlockNumber  + roomData.RoomNumber + "</b>"
+                                                       +"  </div>"
+                                                       +"  <div class=\"price_info_m\">"
+                                                       +"     <s></s>"
+                                                       +"     <cite>指导总价：<em>" + totalPrice + "万</em></cite>"
+                                                       +"     <i></i>"
+                                                       +"     <span>"
+                                                       +"         <b><var>按揭：</var><em>7成</em></b>"
+                                                       +"         <b><var>首付：</var><em>" + shoufu + "万</em></b>"
+                                                       +"         <b><var>月付：</var><em>" + yuejunhuankuan + " 元<em style='color:#e8382b'>（20年）</em></em></b>"
+                                                       +"     </span>"
+                                                       +" </div>"
+                                                       +" <ul class=\"price_info_f\">"
+                                                       +"     <li>"
+                                                       +"         <span>楼栋：</span>"
+                                                       +"         <em>" + roomData.BlockNumber + "</em>"
+                                                       +"     </li>"
+                                                       +"     <li>"
+                                                       +"         <span>建筑形态：</span>"
+                                                       +"         <em>" + houseType + "</em>"
+                                                       +"     </li>"
+                                                       +"     <li>"
+                                                       +"         <span>户型：</span>"
+                                                       +"         <em>" + roomData.TypeName + "</em>"
+                                                       +"     </li>"
+                                                       +"     <li>"
+                                                       +"         <span>面积：</span>"
+                                                       +"         <em>" + roomData.Area + "㎡</em>"
+                                                       +"     </li>"
+                                                       +" </ul>"
+                                                       +" </div>"
+
+                                            $(".prc_info_right").html(html);
+
+                                            var dataArray = [["首期付款",fangdaiData.Shoufu],["支付利息",fangdaiData.iInterest],["贷款总额",fangdaiData.iTotalLoan]];
+                                            //图的大小有图的外层容器的大小决定
+                                            DrawLoanPieCircle("container",dataArray);
+                                        }
+                                        else{
+                                            alert(data.Message);
+                                            return ;
+                                        }
+                                    },'json');
+                                }
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="n_cont_warp mb30" id="SalesHouse">
+                <div class="n_cont_warp_m">
+                    <h2>
+                        <b>
+                            <s></s>在售房源
+                        </b>
+                        <em class="em_left">点击楼栋图标快速进入房间列表，查询您中意房间的指导价</em>
+                    </h2>
+                    <div class="salelistings_box">
+                        <ul class="sale_menu clearfix">
+                            <li>
+                                <a href="" class="cur">普通住宅</a>
+                            </li>
+                            <!--<li>
+                                    <a href="">别墅</a>
+                                </li>-->
+                        </ul>
+                        <div class="sale_listings_info clearfix">
+                            <div class="sale_info_left" style="position:relative;">
+                                    <?php if (isset($blocks) && !empty($blocks))
+                                    {
+                                        $width = 0;
+                                        $height = 0;
+
+                                        $width = $blocks['WIDTH'];
+                                        $height = $blocks['HEIGHT'];
+
+                                        if(($blocks['X']>0 || $blocks['Y']>0) && !empty($unit['ZongPinAnchor']) && $width > 0 && $height > 0)
+                                        {
+                                            $picW = 0.0;
+                                            $rate = $height < 290 ? 290.0 / $height : $height /290.0;
+
+                                            $picW = $height < 290 ? $width*$rate : $width/$rate;
+
+                                            if ($picW > 410)
+                                            {
+                                                $picW = 410;
+                                            }
+
+                                            $pointsTop = (410 - $picW) / 2;
+                                            $left = 0.0;
+                                            $top = 0.0;
+
+                                    ?>
+                                            <span>
+                                                <img src="<?php echo Model_Util::getFormatImag($unit['ZongPinAnchor'],$picW,290) ?>">
+                                            </span>
+
+                                            <?php if (!Model_BatchTypes::isCottage($batchTypeList))
+                                            {
+                                            ?>
+                                                <div id="points" style="width: <?php echo $picW ?>px; height: 290px; top:0px; left: <?php echo $pointsTop ?>px; margin: 0px auto; position: absolute; z-index: 99;">
+
+                                                <?php foreach ($blockList as $k=>$b)
+                                                {
+                                                    $left = $b['X'] / ($width / $picW);
+                                                    $top = $b['Y'] / ($height / 290.0);
+                                                    $bNumber = str_replace(array('号',"号楼","楼"),'',$b['BlockNumber']);
+                                                ?>
+                                                    <div class="house_points" style="position: absolute; display: inline-block; width: auto; left: <?php echo $left- 12 ?>px; top: <?php echo $top- 40 ?>px;">
+                                                        <a href="javascript:void(0)" class="h_point" onmouseover="$(this).next().show()" onmouseout="$(this).next().hide();" onclick="showRooms('<?php echo $b['BlockID'] ?>')"><em><?php echo $b['BlockNumber']?></em></a>
+                                                        <div class="tooltip_area">
+                                                            <div class="tooltip_box bdr1 shadow2">
+                                                                <s class="zbt_tip"></s>
+                                                                <dl>
+                                                                    <dd>
+                                                                        <h6><a href="javascript:void(0)"><?php echo ($b['BlockAddress'].$b['BlockNumber']) ?></a></h6>
+                                                                    </dd>
+                                                                </dl>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                                </div>
+                                            <?php } ?>
+                               <?php } }?>
+                            </div>
+                            <div class="sale_info_right">
+                                <b><?php echo $unit['UnitName'] ?>户型列表</b>
+                                <ul>
+                                    <?php
+                                        if(isset($roomTypeGroup) && !empty($roomTypeGroup)){
+                                        $roomTypeListCnt = 0;
+                                        foreach ($roomTypeGroup as $key=>$group)
+                                        {
+                                            $sClassName = $roomTypeListCnt == 0 ? "s_dowm" : "s_plus";
+                                    ?>
+                                            <li>
+                                                <cite>
+                                                    <s class="<?php echo $sClassName ?>"></s>
+                                                    <span><?php echo $key ?>户型图</span>
+                                                    <em>（<?php echo count($group) ?>）</em>
+                                                </cite>
+                                                <table style="<?php if($roomTypeListCnt == 0){ echo 'display:table';}else{ echo 'display:none';} ?>">
+                                                    <tr>
+                                                        <td>户型</td>
+                                                        <!--@*<td>厅室</td>*@-->
+                                                        <td>面积</td>
+                                                        <td>价格</td>
+                                                    </tr>
+                                                    <?php
+                                                        $iCnt = 1;
+                                                        foreach ($group as $k=>$item)
+                                                        { ?>
+                                                            <tr class="<?php $iCnt == count($group) ? 'last':'' ?>">
+                                                                <td><?php echo $item['TypeCode'] ?>户型</td>
+                                                    <!--@*<td></td>*@-->
+                                                                <td><?php echo $item['MinArea'] ?>-<?php echo $item['MaxArea'] ?>㎡</td>
+                                                                <td><?php echo $item['MinPrice'] ?>-<?php echo $item['MaxPrice'] ?>万</td>
+                                                            </tr>
+                                                    <?php $iCnt++; } ?>
+                                                </table>
+                                            </li>
+                                    <?php $roomTypeListCnt++; }} ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if (isset($batchType) && count($batchType) > 0)
+                    { ?>
+                        <div class="sale_table">
+                            <table>
+                                <tr class="table_t">
+                                    <td>日期</td>
+                                    <td>在售楼栋</td>
+                                    <td>建筑形态</td>
+                                    <td>装修情况</td>
+                                    <td>开发商售价</td>
+                                    <!--<td>剩余房源</td>-->
+                                </tr>
+
+                                    <?php foreach ($batchType as $key=>$item)
+                                    {
+                                        $batchTypeCnt = 0;
+                                        if ($batchTypeCnt < 3)
+                                        {
+                                                $blockIdAndNumbers = Model_BatchTypes::getBlockIdAndNumbers($batchBlock,
+                                                    $item['BatchId']);
+                                                $bNumber = array();
+                                                $temBatchTypeNew = Model_BatchTypes::filterBatchTypeFullNews($batchTypeFullNews,
+                                                    $unit['HomeID'],
+                                                    $item['BatchId']);
+
+                                                foreach ($blockIdAndNumbers as $b) {
+                                                    $blo = Model_Block::filterBlocks($block, $b[1]);
+                                                    if (!empty($blo)) {
+                                                        //bNumber.Append("<a title = '" + (blo.BlockAddress + b[0]) + "' href ='" + unit.PriceTableUrl + "?block=" + blo.BlockID + "' target = '_blank' >" + b[0] + "</a> ");
+                                                        $bNumber[] = $b[0];
+                                                    }
+                                                }
+                                            ?>
+                                            <tr onclick="showOrHideDetail(this);" style="cursor:pointer;">
+                                                <td class="bor_dot">
+                                                    <?php echo Model_Util::getFormatDate($item['PushDate']) ?>
+                                                </td>
+                                                <td class="bor_dot">
+                                                    <em class="com_em"><?php echo implode('、', $bNumber) ?></em>
+                                                </td>
+                                                <td class="bor_dot">
+                                                    <?php echo $item['BatchTypeCode'] ?>
+                                                </td>
+                                                <td class="bor_dot">
+                                                    <?php echo $item['FitmentDesign'] ?>
+                                                </td>
+                                                <td class="bor_dot">
+                                                    <?php echo Model_Util::getFormatPrice($item['SalePrice']) ?>元/㎡
+                                                </td>
+                                                <!--<td class="bor_dot">
+                                                        @(temBatchTypeNew.RemainingRoomTotal.FormatExt())套
+                                                    </td>-->
+                                            </tr>
+                                   <?php $batchTypeCnt++; }} ?>
+
+                            </table>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+            <div class="n_cont_warp" id="price_trend">
+                <div class="n_cont_warp_m">
+                    <h2>
+                        <b>
+                            <s></s>房价走势
+                        </b>
+                    </h2>
+                    <div class="price_trend clearfix" style="overflow:visible; height:auto;">
+
+                        <?php if ($unitSale['SaleEndTime'] > date('Y-m-d H:i:s',time()))
+                        { ?>
+                            <h3><b><em>优惠折扣：</em><?php echo $unitSale['SaleType'] ?></b><a href="@(unit.Url + "_discount")" target="_blank">更多优惠>></a></h3>
+                        <?php } ?>
+
+                        <div class="price_trend_map">
+                            <b id="priceTrendLine">
+                                <!--<span><s class="s_lp"></s>住宅售价</span>
+                                <span><s class="s_bs"></s>别墅售价</span>
+                                <span><s class="s_qy"></s>区域均价</span>-->
+                            </b>
+                            <div class="charts_map">
+                                <div class="span_map" id="fangjiaContainer">
+
+                                </div>
+                                <cite class="jmb_zst" style="display:none">
+                                    
+                                </cite>
+                                <script type="text/javascript">
+                                    <?php
+
+                                    $batchTypeInfo = Model_BatchTypes::getBatchTypeInfo($newestBatchTypes);
+                                    $regionPrice = Model_City::getRegionPrice($regionInfo['PriceList']);
+                                     if (!empty($batchTypeInfo['salesPrice']) && sizeof($regionPrice) > sizeof($batchTypeInfo['salesPrice'])) {
+                                        array_splice($regionPrice,0,sizeof($regionPrice)-sizeof($batchTypeInfo['salesPrice']));
+                                    }
+                                    ?>
+                                    var userAgent = window.navigator.userAgent.toLowerCase();
+                                    $(function() {
+
+                                        var extraData = [];
+                                        extraData["区域"] = null;
+
+                                        var dataParam = [{"type":"area", "name":"区域","color":"#E9A345", "data":[<?php echo implode(',',$regionPrice) ?>]}];
+                                        //价格走势数据初始化
+                                        GetPriceTrend(dataParam,extraData);
+
+                                    });
+
+                                    function buildHtml(data, templateHtml) {
+                                        var html = templateHtml;
+
+                                        for(var p in data){
+                                            var reg = new RegExp("\\$" + p + "\\b", "gi");
+
+                                            if (p == "SalePrice") {
+                                                if (data[p]) {
+                                                    html = html.replace("$SalePrice", formatPrice(data[p]));
+                                                } else {
+                                                    html = html.replace(reg, data[p] || "-");
+                                                }
+                                            }
+                                            else if(p == "CricPrice"){
+                                                if (data[p]) {
+                                                    html = html.replace("$CricPrice", formatPrice(data[p]));
+                                                } else {
+                                                    html = html.replace(reg, data[p] || "-");
+                                                }
+                                            }
+                                        }
+
+                                        return html;
+                                    }
+                                    
+                                    function GetPriceTrend(dataParam,extraData){
+                                        $.ajax({
+                                            type:"post",
+                                            url:"/Newhouse/price/getPriceTrendData?unitid=<?php echo $unitID ?>",
+                                            data: { UnitID:"<?php echo $UnitID ?>" },
+                                            dataType: "json",
+                                            success:function(data){
+
+                                                var priceList = data.data.PriceList;
+                                                var extraDataList = data.data.ExtraData;
+                                                var isShowHousePrice = data.data.isShowHousePrice;
+                                                var isShowCottagePrice = data.data.isShowCottagePrice;
+                                                var isShowApartmentPrice = data.data.isShowApartmentPrice;
+
+                                                var html = "";
+                                                
+                                                //住宅走势数据
+                                                if(isShowHousePrice == 1){
+                                                    var houseSeriesData = {};
+                                                    houseSeriesData.type = "line";
+                                                    houseSeriesData.name = "住宅";
+                                                    houseSeriesData.color = "#F4352B";
+                                                    var priceStr = priceList["住宅"].split(",");
+                                                    var priceArr = new Array();
+
+                                                    for(var p in priceStr){
+                                                        if(priceStr[p] == "null")
+                                                            priceArr.push(null);
+                                                        else
+                                                            priceArr.push(parseInt(priceStr[p]));
+                                                    }
+                                                    houseSeriesData.data = priceArr;
+                                                    dataParam.push(houseSeriesData);
+                                                    extraData["住宅"] = extraDataList["住宅"]
+
+                                                    html += "<span><s class=\"s_lp\"></s>住宅均价</span>";
+                                                }
+                                                //别墅走势数据
+                                                if(isShowCottagePrice == 1){
+                                                    var cottageSeriesData = {};
+                                                    cottageSeriesData.type = "line";
+                                                    cottageSeriesData.name = "别墅";
+                                                    cottageSeriesData.color = "#B6D244";
+
+                                                    priceStr = priceList["别墅"].split(",");
+                                                    priceArr = new Array();
+
+                                                    for(var p in priceStr){
+                                                        if(priceStr[p] == "null")
+                                                            priceArr.push(null);
+                                                        else
+                                                            priceArr.push(parseInt(priceStr[p]));
+                                                    }
+                                                    cottageSeriesData.data = priceArr;
+                                                    dataParam.push(cottageSeriesData);
+                                                    extraData["别墅"] = extraDataList["别墅"];
+
+                                                    html += "<span><s class=\"s_bs\"></s>别墅均价</span>";
+                                                }
+
+                                                //酒店式公寓
+                                                if(isShowApartmentPrice == 1){
+                                                    var apartmentSeriesData = {};
+                                                    apartmentSeriesData.type = "line";
+                                                    apartmentSeriesData.name = "公寓";
+                                                    apartmentSeriesData.color = "#4283DB";
+
+                                                    priceStr = priceList["公寓"].split(",");
+                                                    priceArr = new Array();
+
+                                                    for(var p in priceStr){
+                                                        if(priceStr[p] == "null")
+                                                            priceArr.push(null);
+                                                        else
+                                                            priceArr.push(parseInt(priceStr[p]));
+                                                    }
+                                                    apartmentSeriesData.data = priceArr;
+                                                    dataParam.push(apartmentSeriesData);
+                                                    extraData["公寓"] = extraDataList["公寓"]
+
+                                                    html += "<span><s class=\"s_lpsj\"></s>酒店式公寓均价</span>";
+                                                }
+
+                                                html += "<span><s class=\"s_qy\"></s>区域均价</span>";
+                                                $("#priceTrendLine").html(html);
+                                                loadChart(dataParam,extraData);
+                                            }
+                                        });
+                                    }
+
+                                    function loadChart(dataParam,extraData){
+
+                                        DrawMixtureChart("fangjiaContainer", 770, 240, dataParam, <?php echo date('Y',time()) ?>,<?php echo date('m',time()) ?>,<?php echo date('d',time()) ?>);
+
+                                        var tmpChart = $('#fangjiaContainer').highcharts();
+                                        var options = tmpChart.options;
+                                        var templateHtml = $("#unitPriceTemplate").html();
+                                        var $tooltipbox = $(".jmb_zst");
+
+                                        var tooltip = {
+                                            formatter: function () {
+                                                var seriesName = this.series.name;
+
+                                                if(seriesName != "区域")
+                                                {
+                                                    return false;
+                                                }
+
+                                                return  this.x + "<br />" + seriesName + ": " + "<span style=\" font-weight:bold;\">" + formatPrice(this.y)+ "元/㎡</span>" ;
+                                            },
+                                            crosshairs: true,
+                                            backgroundColor: "#fff",
+                                            borderWidth: 2,
+                                            borderColor: "#EEEEEE",
+                                            shadow: true,
+                                            hideDelay:0
+                                        };
+
+                                        var plotOptions = {
+                                            area:{
+                                                fillOpacity: 0.1
+                                            },
+                                            series: {
+                                                marker: {
+                                                    radius: 5,  //曲线点半径，默认是4
+                                                    symbol: 'circle' //曲线点类型："circle", "square", "diamond", "triangle","triangle-down"，默认是"circle"
+                                                },
+                                                point: {
+                                                    events: {
+                                                        mouseOver: function(event) {
+                                                            //设置提示框的位置
+                                                            var yMax = event.target.series.yAxis.max;
+                                                            var yValue = event.target.y;
+                                                            var x = event.target.plotX - 151;
+                                                            var y = event.target.plotY - 83;
+
+                                                            if(yMax >= 100000){
+                                                                x = event.target.plotX - 145;
+                                                            }
+                                                            
+                                                            if(userAgent.indexOf("msie") > -1){
+                                                                x = event.target.plotX - 153;
+                                                            }
+
+                                                            $tooltipbox.css("left", x); 
+                                                            $tooltipbox.css("top", y);
+                                                            //设置数据提示的DIV显示
+                                                            //定义提示框的内容 可以根据个人喜好修改
+                                                            var seriesName = event.target.series.name;
+                                                            //console.log(seriesName);return;
+                                                            var index = event.target.index;
+                                                            if(extraData[seriesName])
+                                                            {
+                                                                $tooltipbox.html(buildHtml(extraData[seriesName][index], templateHtml)); 
+                                                                $tooltipbox.css("display","block");
+                                                            }
+                                                        },
+                                                        mouseOut:function(event){
+                                                            $tooltipbox.css("display","none");
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        };
+
+                                        options.tooltip = tooltip;
+                                        options.plotOptions = plotOptions;
+                                        new Highcharts.Chart(options);
+
+                                    }
+
+                            </script>
+                            </div>
+
+                            <div id="unitPriceTemplate" style="display:none;">
+                                <s></s>
+                                <span>
+                                    <i style="margin-top:3px;">新</i>
+                                    开发商售价：<em>$SalePrice</em>元/㎡
+                                </span>
+                                <span>
+                                    <i>新</i>
+                                    指导价：$CricPrice 元/㎡
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pricelist_right">
+            <div class="n_cont_warp mb30">
+                <div class="n_cont_warp_m turnover">
+                    <h2>
+                        <b>
+                            <s></s>成交情况
+                        </b>
+                    </h2>
+                    <div class="turnover_info">
+                        @{
+                            var temCss = "margin-top:10px;";
+                        }
+                        @if (unitDeal != null)
+                        {
+                            temCss = "";
+                            <cite>
+                                <span>销售排名<b>@(unitRank)</b></span>
+                                <em>共@(totalCount)个楼盘参与排名</em>
+                            </cite>
+                        }
+                        <div class="turnover_map" style="@temCss">
+                            <b>成交动态</b>
+                            <span id="dynamicContainer" style=" height:200px;">
+                                <!--<img src="http://placehold.it/233x140">-->
+                            </span>
+                            <script type="text/javascript">
+
+                                dataParam2 = [{"type":"column","yAxis": 1, "name":"套数","color":"#E14C4E", "data":[@(dynamicSalesCountList)]}, {"type":"line","name":"售价","color":"#CACACA","data":[@(Html.Raw(dynamicPriceList))]}];
+
+                                DrawMixtureChart2("dynamicContainer",233,200,dataParam2,@(showMonth.Year),@(showMonth.Month),@(showMonth.Day));
+
+                            </script>
+                        </div>
+                    </div>
+                    <?php
+
+                    if ($remainingRooms > 0) {
+                    ?>
+                        <div class="turnover_list">
+                            <cite>
+                                <b><var><?php echo $remainingRooms; ?></var>套剩余房源在售</b>
+                            </cite>
+                            <span class="span_t">
+                                <em>房型</em>
+                                <em>面积段</em>
+                                <em>剩余房源</em>
+                            </span>
+                            <?php
+                            $roomTypeCnt = 0;
+                            foreach ($roomTypeRemaining as $item) {
+                                if ($roomTypeCnt < 3) {
+                            ?>
+                                        <span class="span_c <?php $roomTypeCnt == 2 || $roomTypeCnt == (sizeof($roomTypeGroup) - 1) ? " last" : "" ?>">
+                                            <em><?php echo $item['HomeType'] ?></em>
+                                            <em><?php echo $item['HomeArea'] ?></em>
+                                            <em class="cor_1"><?php echo $item['HomeRemainingNum'] ?></em>
+                                        </span>
+                         <?php
+                                $roomTypeCnt++;
+                                }
+                            }
+                            ?>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+            <?php if(isset($news) && !empty($news)){ ?>
+            <div class="n_cont_warp mb30">
+                <div class="n_cont_warp_m">
+                    <h2 style="border:none;">
+                        <b>
+                            <s></s>楼盘资讯
+                        </b>
+                    </h2>
+                    <div class="dyn_pro_list">
+                        <ul id="cmsnews">
+                            <?php foreach($news as $key=>$value) { ?>
+                            <li>
+                                <a target="_blank" href="<?php echo $value['sJumpToUrl'] ?>"><?php echo $value['sText'] ?></a>
+                            </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+</section>
+<section class="new_row_cont">
+    @Html.Partial("PartialView/BFDUnit")
+</section>
+<script type="text/javascript">
+    $(function() {
+        var from = getQueryString("f");
+        if (from == "d") {
+            var top = $("#price_trend").offset().top;
+            $("html,body").animate({ scrollTop:top-100});
+        }
+        $(".sale_info_right ul li cite").click(function() {
+            var className = $(this).children("s").attr("class");
+
+
+            if(className == "s_plus"){
+                $(this).children("s").removeClass(className).addClass("s_dowm");
+                $(this).next().show();
+            }
+            else{
+                $(this).children("s").removeClass(className).addClass("s_plus");
+                $(this).next().hide();
+            }
+
+            $(this).parent().siblings().children("cite").children("s").removeClass("s_plus").removeClass("s_dowm").addClass("s_plus");
+            $(this).parent().siblings().children("table").hide();
+
+
+        });
+        var num = 4;
+        //楼盘动态及资讯
+//        $.post("/@(city.CityCode)/@(rPinYin)/xf/dynamic", {
+//            cityCode: "@(city.CityCode)", id: "@(unit.ID)", dynamicNum: num
+//        }, function (data) {
+//            if (data.dataCode == 1) {
+//                var newsInfo = data.unitInfo;
+//                if(newsInfo.total > 0 ){
+//                    for (var i = 0, item; i < newsInfo.data.length, item = newsInfo .data[i]; i++) {
+//                        $("#cmsnews").append("<li><a href=\"@(unit.InfoAndDynamicUrl)\" target='_blank'>" + item.title + "</a></li>");
+//                    }
+//                    $("#cmsnews").parent().parent().parent().show();
+//                }
+//            }
+//        }, "json");
+    });
+
+
+    //TODO
+    function showOrHideDetail(trObj){
+        var $em = $(trObj).children("td").children("em:eq(0)");
+
+        if($em.html().trim() == ""){
+            return;
+        }
+
+        if($em.attr("class").indexOf("em_up") > 0){
+            $em.removeClass("em_up");
+        }
+        else{
+            $em.addClass("em_up");
+        }
+
+    }
+
+</script>

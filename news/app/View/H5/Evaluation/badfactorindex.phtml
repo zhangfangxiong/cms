@@ -1,0 +1,115 @@
+    <!--整体评价内容开始-->
+    <section class="plan_wrap">
+        <section class="analyze_wrap <?php  if (empty($aBad['data']['sBadTag'])){  ?>analyze_txt_border<?php } ?>">
+            <div class="floor_plan analyze_txt">
+            	<h3>
+                	<span></span>
+                    分析师点评
+                </h3>
+                <p><?php echo isset($aBad['data']['sComment']) ? $aBad['data']['sComment'] : ''; ?></p>
+            </div>
+      	</section>
+
+        <?php
+            if(isset($aBad['data']['sBadTag']) && !empty($aBad['data']['sBadTag'])){
+                echo '<section class="condition"><section class="advantage disadvantaged">
+                    <h3>劣势</h3>
+                    <div class="advantage_con">';
+                foreach ($aBad['data']['sBadTag'] as $key => $value) {
+                    echo '<span>'.$value.'</span>';
+                }
+                echo '</div></section></section>';
+            }
+        ?>
+        
+        <section class=" floor_plan house_analysis">
+            <h3>
+                <span></span>
+               社区不利因素分布图 
+            </h3>
+            <?php
+                if(!empty($aBad['data']['blfbImage'])){
+                    echo '<div class="floor_plan_pic">';
+                    foreach ($aBad['data']['blfbImage'] as $key => $value) {
+                        echo '<div class="floor_plan_pic01">';
+                        echo '<canvas data-src="'.$value['sImage'].'"></canvas>';
+                        echo '</div>';
+                    }
+                    echo '</div>';
+                }
+            ?>
+        </section>
+    
+        <?php
+            $empty = true;
+            foreach ($aBad['data']['sGdblys'] as $key => $value) {
+                if($value['checked'] == 1){
+                    $empty = false;
+                    break;
+                }                
+            }
+            if( !$empty || (isset($aBad['data']['sDtblys']) && !empty($aBad['data']['sDtblys']))
+            ){
+                echo '<section class="badfactorTable">
+                        <table>
+                            <thead>
+                                <tr>
+                                  <th width="33%">影响源</th>
+                                  <th width="33%">影响因素</th>
+                                  <th width="34%">影响楼栋</th>
+                                </tr>
+                             </thead>
+                            <tbody>';
+
+                if(!empty($aBad['data']['sGdblys'])){
+                    foreach ($aBad['data']['sGdblys'] as $key => $value) {
+                        if(1 == $value['checked']){
+                            echo '<tr>';
+                            echo '<td>'.@$value['ysy'].'</td>';
+                            echo '<td>'.@$value['blys'].'</td>';
+                            echo '<td>'.@$value['ysl'].'</td>';
+                            echo '</tr>';
+                        }                                        
+                    }
+                }
+
+                if(!empty($aBad['data']['sDtblys'])){
+                    foreach ($aBad['data']['sDtblys'] as $key => $value) {
+                        echo '<tr>';
+                        echo '<td>'.@$value['ysy'].'</td>';
+                        echo '<td>'.@$value['blys'].'</td>';
+                        echo '<td>'.@$value['ysl'].'</td>';
+                        echo '</tr>';
+                    }                    
+                }
+                
+                echo '</tbody></table></section>';
+            }
+        
+            if(!empty($aBad['data']['nbqtImage'])){
+                echo '<section class=" floor_plan house_analysis"><h3>
+                        <span></span>
+                        其他图片
+                    </h3>
+                    <div class="floor_plan_pic">';
+                foreach ($aBad['data']['nbqtImage'] as $key => $value) {
+                    echo '<div class="floor_plan_pic01">';
+                    echo '<canvas src='.$value['sImage'].'></canvas>';
+                    echo '<p class="pic_name">'.$value['sTitle'].'</p>';
+                    echo '<p class="pic_description">'.$value['sDesc'].'</p>';
+                    echo '</div>';
+                }
+                echo '</div></section>';
+            }
+
+            if(isset($aBad['data']['sOtherComment']) && !empty($aBad['data']['sOtherComment'])){
+                echo '<section class="floor_plan plan_description evaluation_description">
+                    <h3>
+                        <span></span>
+                        点评
+                    </h3>';
+                echo '<p>'.$aBad['data']['sOtherComment'].'</p>';
+                echo '</section>';
+            }
+        ?>       
+    </section>

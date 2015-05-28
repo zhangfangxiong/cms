@@ -1,0 +1,770 @@
+﻿<script type="text/javascript">
+    sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    sStaticRoot = '<?php echo $sStaticRoot?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/loupan_v1.js"></script>
+<?php echo Model_Bundle::getSwitchableScripts();?>
+<section id="breadcrumb_nav">
+    <nav class="breadcrumb_nav new_row_cont">
+        <?php echo $sBreadcrumbs?>
+    </nav>
+</section>
+<?php
+    Model_Util::setCityCode($sCurrCityCode);
+    $isShowPriceTable = $unit['RoomTotal'] > 0 || sizeof($groupBatchType)> 1;
+?>
+<?php include Yaf_G::getViewPath()."/Newhouse/header.phtml"; ?>
+<section class=" clearfix">
+    <!--楼盘评测点击图片放大效果-->
+    <script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/jquery.fancybox.js"></script>
+    <link type="text/css" href="<?php echo $sStaticRoot?>/web/css/jquery.fancybox.css" rel="stylesheet" />
+    <div class="trybox" id="developerInfo" style="display:none;">
+        <div class="ml-overlay" id="developerOver"></div>
+        <div class="ml-box kb_nb_02">
+            <div class="ml-tit kb_tit">
+                <a href="javascript:hideDeveloperInfo();" class="close"><i></i></a>
+                <h2 class="unit_name">开发商说</h2>
+            </div>
+            <div class="kb_ctw clearfix">
+                <div class="j_dpan clearfix">
+                    <div class="j_dtit">开发商名称</div>
+                    <div class="j_dfl" style="position:relative;">
+                        <input type="text" class="j_put" id="txtDeveloperName" />
+                        <input type="button" class="uploadLogo j_btn j_upbtn" value="上传图标"  id="uploadLogo" name="uploadLogo" accept="image/*" /><em  id="logoMsg">建议图标尺寸为120px*40px</em>
+                        <div id="fileQueue" style="display: none;"></div>
+                    </div>
+                </div>
+                <div class="j_dpan clearfix">
+                    <div class="j_dtit">点评内容</div>
+                    <div class="j_dfl">
+                        <textarea class="j_feedback" id="txtCommnet"></textarea>
+                        <div class="j_fsam">您还可以输入:<em id="lessCharLen">70</em> 字</div>
+                    </div>
+                </div>
+                <div class="j_dpan clearfix">
+                    <div class="j_dtit">联系人</div>
+                    <div class="j_dfl"><input type="text" class="j_put j_ps2" id="txtContactName" /></div>
+                    <div class="j_dtit j_dt2">联系电话</div>
+                    <div class="j_dfl"><input type="text" class="j_put j_ps3" id="txtContactPhone" onkeyup="this.value=this.value.replace(/\D|-/g,'')" /></div>
+                </div>
+                <div class="j_dpan j_dokp clearfix">
+                    <input type="button" class="j_btn j_subbtn" value="提交" id="btnSubmitDeveloper" onclick="Index.addDeveloperInfo(<?php echo $unit['ID']?>,'');" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="trybox" style="display:none;" id="developerBox">
+        <div class="ml-overlay"></div>
+        <div class="ml-box kb_nb_03">
+            <div class="ml-tit kb_tit">
+                <a href="javascript:void(0);" onclick="Index.hideFloatWindow('developerBox');" class="close"><i></i></a>
+            </div>
+            <div class="kb_ctw clearfix">
+                <div class="h_par1">
+                    <span class="h_okimg"></span>提交成功
+                </div>
+                <div class="h_par2">
+                    开发商说提交后可能不会即时显示,请耐心等待审核与缓存更新,谢谢!
+                </div>
+                <div class="h_par3">
+                    <em id="emDeveloperTime">5</em>秒后自动关闭
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="new_row_cont new_r_c_t clearfix">
+
+        <div class="new_r_c_t_left">
+            <div class="swic_tab">
+                <cite id="Sidetab">
+                    <img item="CRIC47ab10832499306c5bb73db5e804b324" src="http://get.file15.dc.cric.com/CRIC47ab10832499306c5bb73db5e804b324_500X300_0_0_0.jpg" alt="">
+                    <img item="CRICa259d4fe6f14439eb5c4eeeffe2b1c1f" srcurl="http://get.file10.dc.cric.com/CRICa259d4fe6f14439eb5c4eeeffe2b1c1f_500X300_0_0_0.jpg" src="" alt="" />
+                    <img item="BHME4abc82a62bc1622ecb0db49ef9cd2011" srcurl="http://get.file5.dc.cric.com/BHME4abc82a62bc1622ecb0db49ef9cd2011_500X300_0_0_0.jpg" src="" alt="" />
+                    <img item="BHMEa41149e81b3e37cc36c70c9a6243f7f5" srcurl="http://get.file15.dc.cric.com/BHMEa41149e81b3e37cc36c70c9a6243f7f5_500X300_0_0_0.jpg" src="" alt="" />
+                    <img item="CRIC4ead30f9fa5644b9af237373bb6d98cf" srcurl="http://get.file16.dc.cric.com/CRIC4ead30f9fa5644b9af237373bb6d98cf_500X300_0_0_0.jpg" src="" alt="" />
+                </cite>
+            </div>
+            <ul class="ul_img clearfix" id="Trigges_img">
+                <li>
+                    <img src="http://get.file15.dc.cric.com/CRIC47ab10832499306c5bb73db5e804b324_97X70_0_0_0.jpg">
+                </li>
+                <li item="CRICa259d4fe6f14439eb5c4eeeffe2b1c1f"><img src="http://get.file10.dc.cric.com/CRICa259d4fe6f14439eb5c4eeeffe2b1c1f_97X70_0_0_0.jpg" alt="" /></li>
+                <li item="BHME4abc82a62bc1622ecb0db49ef9cd2011"><img src="http://get.file5.dc.cric.com/BHME4abc82a62bc1622ecb0db49ef9cd2011_97X70_0_0_0.jpg" alt="" /></li>
+                <li item="BHMEa41149e81b3e37cc36c70c9a6243f7f5"><img src="http://get.file15.dc.cric.com/BHMEa41149e81b3e37cc36c70c9a6243f7f5_97X70_0_0_0.jpg" alt="" /></li>
+                <li item="CRIC4ead30f9fa5644b9af237373bb6d98cf"><img src="http://get.file16.dc.cric.com/CRIC4ead30f9fa5644b9af237373bb6d98cf_97X70_0_0_0.jpg" alt="" /></li>
+
+            </ul>
+            <div id="mask"></div>
+        </div>
+        <script type="text/javascript">
+            var UnitPicture = function () {
+                $('#Sidetab').switchable({
+                    triggers: $('#Trigges_img').find('li'),
+                    effect: 'fade',
+                    speed: 15,
+                    autoplay: true,
+                    onSwitch: function (event, currentIndex) {
+                        var api = this,
+                            cfg = api.config;
+                        var item = $('#Trigges_img').find('li')[currentIndex].getAttribute("item");
+                        var img = $("#Sidetab img[item=" + item + "]");
+                        if (!img.attr("src")) {
+                            img.attr("src", img.attr("srcurl"));
+                            img.removeAttr("srcurl");
+                        }
+                        new $.switchable.Anim(
+                            $('#mask'),
+                            { left: 0 + 101 * currentIndex },
+                            cfg.duration,
+                            cfg.easing
+                        ).run();
+                    }
+                });
+
+            };
+            var up = new UnitPicture();
+        </script>
+        <?php
+            $isShowLabel = false;
+            $labelCss = '';
+            if (!empty($unit['AdvantageLabel']) || !empty($unit['RiskLabel'])) {
+                    $isShowLabel = true;
+            }
+            if ($isShowLabel == false)
+            {
+                $labelCss = "abv_none";
+            }
+        ?>
+        <div class="new_r_c_t_right <?php echo $labelCss ?>">
+            <?php
+                if ($isShowLabel) {
+            ?>
+            <div class="abv_dis_t clearfix">
+                <cite>
+                    <b>优势</b>
+                    <?php
+                        if (empty($unit['AdvantageLabel'])) {
+                            echo '<em>-</em>';
+                        } else {
+                            $tempArr = explode(';',$unit['AdvantageLabel']);
+                            foreach ($tempArr as $key => $item) {
+                                if ($key <3 ) {
+                                    echo '<em>'.$item.'</em>';
+                                }
+                            }
+                        }
+                    ?>
+
+                </cite>
+                <span>
+                    <b>不足</b>
+                    <?php
+                    if (empty($unit['riskLabel'])) {
+                        echo '<em>-</em>';
+                    } else {
+                        $tempArr = explode(';',$unit['riskLabel']);
+                        foreach ($tempArr as $key => $item) {
+                            if ($key <3 ) {
+                                echo '<em>'.$item.'</em>';
+                            }
+                        }
+                    }
+                    ?>
+
+                </span>
+            </div>
+            <?php
+                }
+            ?>
+            <div class="ratings_info">
+                <div class="price_in clearfix">
+                    <cite>
+                        <b>开发商售价：</b>
+                    <span>
+                        <?php echo $HomeType ?>
+                        <em><?php echo isset($newBatchType['SalePrice']) ? Model_Util::getFormatPrice($newBatchType['SalePrice']) : '-' ?></em>元/㎡
+                    </span>
+                    </cite>
+                    <cite>
+                        <b>指导价：</b>
+                        <span><?php echo $HomeType ?><em><?php echo isset($newBatchType['CricPrice']) ? Model_Util::getFormatPrice($newBatchType['CricPrice']):'-' ?></em>元/㎡</span>
+                    </cite>
+                    <a href="/shanghai/shanghaizhoubian/kunshan/280202_pricetable">更多价格<s></s></a>
+                </div>
+                <div class="rat_info clearfix">
+                    <cite>
+                        <b>评级：</b>
+                    <span>
+                            <?php
+                                $pjCount = sizeof($pingji);
+                                foreach($pingji as $key => $item) {
+                                    $levelCss = '';
+                                    if (isset($newBatchType['ManualLevelCode']) && $newBatchType['ManualLevelCode'] == $key) {
+                                        $levelCss ="cur_".($key+1);
+                                    }
+                                    $flag = '';
+                                    if ($key ==0) {
+                                        $flag = 'first';
+                                    }
+                                    if ($key == ($pjCount-1)) {
+                                        $flag = 'last';
+                                    }
+                            ?>
+                            <em class="<?php echo $flag.' '.$levelCss ?>"><?php echo $item ?></em>
+                            <?php
+                                }
+                            ?>
+                    </span>
+                    </cite>
+                    <cite>
+                                <?php
+                                    if (!empty($lastBatchType)) {
+                                        //
+                                        $level = Model_Util::ToCorrectLv($lastBatchType['ManualLevelCode']) - Model_Util::ToCorrectLv($lastBatchType['ManualLevelCode']);
+                                        $lastLevel = Model_Util::ToCorrectLv($lastBatchType['ManualLevelCode']);
+                                        if ($lastLevel != 0) {
+                                            if ($level == 0) {
+                                             ?>
+                                                <b>与上期相比：</b>
+                                                <var>
+                                                    持平<s class="s_cp"></s>
+                                                </var>
+                                            <?php
+                                             } else if ($level < 0)  {?>
+                                                <b>与上期相比：</b>
+                                                <var>
+                                                    下调-<?php echo $level?>级<s class="s_xt"></s>
+                                                </var>
+                                            <?php
+                                            } else if ($level > 0) {?>
+                                                <b>与上期相比：</b>
+                                                <var>
+                                                    上调<?php echo $level?>级<s class="s_st"></s>
+                                                </var>
+                                            <?php
+                                             }
+                                        }
+                                    }
+
+
+                                ?>
+                    </cite>
+                </div>
+            </div>
+
+            <?php
+                if (!empty($unit['HouseRemark'])) {
+                    $url = "javascript:void(0)";
+                    if ($unit['EvaluationFlag'] == 1)
+                    {
+                        $url = '';
+                    }
+                    ?>
+                    <dl class="com_r_info">
+                        <dt>
+                            <b>评价：</b>
+                        </dt>
+                        <dd>
+                            <a href="<?php echo  $url;?>" target="_blank" style="">
+                                <?php
+                                      if ($isShowLabel) {
+                                          echo  Model_Util::subString($unit['HouseRemark'],140);
+                                      } else {
+                                          echo  Model_Util::subString($unit['HouseRemark'],180);
+                                      }
+                                ?>
+
+                        </dd>
+                    </dl>
+              <?php
+                }
+              ?>
+            <div class="adress_info">
+                <cite>
+                    <b>地址：</b>
+                    <em><?php echo $unit['Address'] ?></em>
+                    <a href="javascript:moveToUnit('<?php echo $unit['UnitName']?>','<?php echo $unit['Address']?>','<?php echo $unit['X']?>','<?php echo $unit['Y']?>','<?php echo Model_Util::getDetailUrl($unit['ID'])?>')"><s class="s_adress"></s></a>
+                </cite>
+                <?php if($isShowPriceTable) {?>
+                <cite>
+                    <b>房源：</b>
+                    <em><?php echo $remainingRooms ?>套剩余房源在售</em>
+                    <a href="/shanghai/shanghaizhoubian/kunshan/280202_pricetable#SalesHouse" target="_blank"><s class="s_fy"></s></a>
+                </cite>
+                <?php } ?>
+                <div class="nb_span clearfix">
+                    <div class="nb_com_info">
+                        <a href="/shanghai/shanghaizhoubian/kunshan/280202_detail" target="_blank">
+                            <s class="s_kp"></s><em>开盘时间</em>
+                        </a>
+                        <div class="s_pop">
+                            <i></i>
+                            <div>
+                                <table style="width:100%" class="y_Cuc_table">
+                                    <thead class="pl5 pr5">
+                                    <tr>
+                                        <td style="width:68px;">开盘时间</td>
+                                        <td>开盘详情</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="tc">
+                                    <tr>
+                                        <td><?php echo Model_Util::getFormatDate($unit['OpenTime']); ?></td>
+                                        <td><?php echo $unit['OpenNotice'] ?></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nb_com_info">
+                        <a href="/shanghai/shanghaizhoubian/kunshan/280202_detail" target="_blank">
+                            <s class="s_jf"></s><em>交房时间</em>
+                        </a>
+                        <div class="s_pop">
+                            <i></i>
+                            <div>
+                                <table style="width:100%" class="y_Cuc_table">
+                                    <thead class="pl5 pr5">
+                                    <tr>
+                                        <td>交房时间</td>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody class="tc">
+                                    <tr>
+                                        <td><?php echo Model_Util::getFormatDate($unit['DeliverTime']);  ?></td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nb_com_info">
+                        <a href="/shanghai/shanghaizhoubian/kunshan/280202_detail#roomTypeArea" target="_blank">
+                            <s class="s_hh"></s><em>户型介绍</em>
+                        </a>
+                        <?php
+                            if (!empty($newRoomTypes)) {
+                        ?>
+                        <div class="s_pop">
+                            <i></i>
+                            <div>
+                                <table style="width:100%" class="y_Cuc_table">
+                                    <thead class="pl5 pr5">
+                                    <tr>
+                                        <td>房型</td>
+                                        <td>户型</td>
+                                        <td>面积</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="tc">
+                                    <?php
+                                        foreach ($newRoomTypes as $item) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $item['fx'] ?></td>
+                                        <td><?php echo $item['hx'] ?></td>
+                                        <td><?php echo $item['ar'] ?></td>
+                                    </tr>
+                                    <?php
+                                        }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <?php
+                            }
+                        ?>
+                    </div>
+
+                    <div class="nb_com_info">
+                        <a href="/shanghai/shanghaizhoubian/kunshan/280202_pricetable#price_trend" target="_blank">
+                            <s class="s_jg"></s><em>价格走势</em>
+                        </a>
+                        <?php
+                            if (!empty($newestBatchTypes)) {
+                         ?>
+                                <div class="s_pop">
+                                    <i></i>
+
+                                    <div>
+                                        <table style="width:100%" class="y_Cuc_table">
+                                            <thead class="pl5 pr5">
+                                            <tr>
+                                                <td>时间</td>
+                                                <td>开发商售价</td>
+                                                <td>指导价</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="tc">
+                                            <?php
+                                            foreach ($newestBatchTypes as $item) {
+                                            ?>
+                                            <tr>
+                                                <td><?php echo Model_Util::getFormatDate($item['MarketDate']);?></td>
+                                                <td><b><?php echo Model_Util::getFormatPrice($item['SalePrice'])?></b>元/㎡</td>
+                                                <td><?php echo Model_Util::getFormatPrice($item['CricPrice'])?>元/㎡</td>
+                                            </tr>
+                                            <?php
+                                            }
+                                            ?>
+                                            </tbody>
+                                        </table>
+                                        <?php
+                                            if ($isShowPriceTable) {
+                                                ?>
+                                                <a href="/shanghai/shanghaizhoubian/kunshan/280202_pricetable"
+                                                   target="_blank">更多</a>
+                                            <?php
+                                            }
+                                        ?>
+                                    </div>
+                                </div>
+                         <?php
+                            }
+                        ?>
+                    </div>
+
+                    <div class="nb_com_info">
+                        <a href="/shanghai/shanghaizhoubian/kunshan/280202_discount" target="_blank"><s class="s_yh"></s><em>优惠信息</em></a>
+
+                        <?php
+                            if (!empty($unitSales)) {
+                        ?>
+                        <div class="s_pop">
+                            <i></i>
+                            <div>
+                                <?php
+                                    foreach ($unitSales as $item) {
+                                ?>
+                                <em class="yh_info"><s></s><var><?php echo empty($item['SaleType']) ? $item['SaleName']: $item['SaleType']?></var></em>
+                                <?php
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                        <?php
+                            }
+                        ?>
+                    </div>
+
+
+                    <a href="/shanghai/shanghaizhoubian/kunshan/280202_detail" target="_blank" style="float:right; margin-right:5px;"><em>详细信息</em><s class="s_xx"></s></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="new_row_cont">
+        <!--楼盘评测st-->
+        <?php
+            if (!empty($unitEvaluation)) {
+                require 'newevaluationpartial.phtml';
+            } else {
+                require 'oldevaluationpartial.phtml';
+            }
+        ?>
+        <!--楼盘评测ed-->
+        <?php
+            // 价目表
+            require 'dpricetabel.phtml';
+            // 历史价格
+            require 'historyprice.phtml';
+            // 楼盘新闻
+            require 'unitnews.phtml';
+        ?>
+        <div class="clearfix n_cont_warp mb30">
+            <div class="n_cont_warp_m">
+                <h2>
+                    <b>
+                        <s></s>楼盘点评
+                    </b>
+                    <a href="/shanghai/shanghaizhoubian/kunshan/280202_comment" target="_blank">更多<s></s></a>
+                </h2>
+                <div class="clearfix pro_comment">
+                    <div class="pro_com_left">
+                        <div class="fsx_com">
+                            <h3>分析师点评</h3>
+                            <dl>
+                                <dt>
+                                    <img src="http://get.file12.dc.cric.com/CRIC2a40603dd3c0d484e8e2ab1485153b6c_38X68_0_0_0.jpg">
+                                </dt>
+                                <dd>
+                                    <cite class="ct_t">
+                                        <b>孔兆文</b>
+                                        <s></s>
+                                        <em>昆山首席分析师</em>
+                                    </cite>
+                                    <span class="sp_m"><a href="/shanghai/shanghaizhoubian/kunshan/280202_comment" target="_blank">凯德都会新峰作为距离上海最近的昆山项目，其优势不言而喻，项目是花桥为数不多的精装交付房源，在地域上更接近上海，在价格上又更贴近昆山。社区自身规模大，规划商业配套齐全，物业服务以及精装品质...</a></span>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="yh_com">
+                            <h3>
+                                <b>用户点评</b>
+                                <a href="/shanghai/shanghaizhoubian/kunshan/280202_tocomment" target="_blank" id="user_comment">我要说几句</a>
+                            </h3>
+
+
+                            <div class="yh_com_list" id="CommentList">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="pro_com_right">
+                        <div class="developers_say">
+                            <b>
+                                开发商说
+                            </b>
+                            <cite>
+                                <a href="javascript:showDeveloperInfo();" class="combg_btn">如果您是楼盘开发商，房价点评网邀您点评</a>
+                            </cite>
+                        </div>
+                        <div class="top_comments" style="display:none;">
+                            <b class="com_t">区域热门点评</b>
+                            <ul id="hotcomment_list"></ul>
+                        </div>
+                        <div id="hotCommentsTemplate" style="display:none;">
+                            <li>
+                                <a href="$url" target="_blank">
+                                    <img src="$PicUrl" alt="">
+                                    <cite>
+                                        <b>$UnitName</b>
+                                        <span>开发商售价$SalePrice元/㎡</span>
+                                        <em>$CommentCount人参与点评</em>
+                                    </cite>
+                                </a>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+            // 周边设施
+            require 'surroundingfacility.phtml';
+            // 楼盘相册
+            require 'unitpictures.phtml';
+            // 房贷计算器
+            require 'loancalculator.phtml';
+            // 推荐楼盘
+            require 'recommendedunit.phtml';
+        ?>
+
+    </section>
+
+    <div class="trybox" id="unitMapDialog" style="visibility:hidden">
+        <div class="ml-overlay"></div>
+        <div class="ml-box">
+            <div class="ml-tit">
+                <a href="javascript:;" onclick="$('.trybox').css('visibility','hidden');$('#unit_map .amap-toolbar').css('visibility','hidden');" class="close"><i></i></a>
+                <h2 class="unit_name"></h2>
+                <cite class="unit_address"></cite>
+            </div>
+            <div class="ml-map" style="background:#ddd;height:323px;" id="unit_map">
+
+            </div>
+        </div>
+    </div>
+    <div class="pro_album_list" id="Proalbumbox">
+        <h3>
+            <b id="unitPictureName"></b>
+            <a href="javascript:closeBg('Proalbumbox')">x</a>
+        </h3>
+        <div class="prc_box" id="Prcboxside">
+        </div>
+        <div class="pro_album_button">
+            <a class="prev_l" id="album_prev" href="javascript:void(0);" style="z-index:25;"><s></s></a>
+            <a class="next_r" id="album_next" href="javascript:void(0);" style="z-index:25;"><s></s></a>
+        </div>
+        <div class="album_sz"></div>
+    </div>
+    <ul id="eval_menu_template" style="display: none">
+        <li><a href="javascript:;" class="disb">户型分析</a></li>
+        <li><a href="javascript:;" class="disb">装修标准</a></li>
+        <li><a href="javascript:;" class="disb">社区品质</a></li>
+        <li><a href="javascript:;" class="disb">物业服务</a></li>
+        <li><a href="javascript:;" class="disb">生活配套</a></li>
+        <li><a href="javascript:;" class="disb">不利因素</a></li>
+    </ul>
+    <div class="up_pictures" style="display:none; z-index:10000;">
+        <img src="/Content/images/loading-large.gif" />
+        <em>图片上传中......</em>
+    </div>
+    <script type="text/javascript">
+        var unitMapConfig = {
+            mapObj: null,
+            mapElement: "unit_map",
+            level: 17,
+            minLevel: 13,
+            maxLevel: 19
+        };
+        var $mapContrain = $("#" + unitMapConfig.mapElement);
+
+        function moveToUnit(unitName, unitAddress, x, y, url) {
+            if (isNaN(x) || isNaN(y)) {
+                return;
+            }
+            $("#unitMapDialog .unit_name").html("<a href='" + url + "' target='_blank' >" + unitName + "</a>");
+            $("#unitMapDialog .unit_address").html("<span>地址:</span>" + unitAddress);
+            $("#unitMapDialog").css("visibility", "");
+            $("#unit_map .amap-toolbar").css("visibility", "");
+            if (unitMapConfig.mapObj == null) {
+                if ($mapContrain[0] != null) {
+                    unitMapConfig.mapObj = new window.AMap.Map(unitMapConfig.mapElement, { level: unitMapConfig.level, zooms: [unitMapConfig.minLevel, unitMapConfig.maxLevel] });
+                    unitMapConfig.mapObj.plugin(["AMap.ToolBar"], function () {
+                        var toolbar = new window.AMap.ToolBar();
+                        toolbar.autoPosition = true; //加载工具条
+                        unitMapConfig.mapObj.addControl(toolbar);
+
+                    });
+                }
+            } else {
+                unitMapConfig.mapObj.plugin(["AMap.ToolBar"], function () {
+                    var toolbar = new window.AMap.ToolBar();
+                    toolbar.autoPosition = true; //加载工具条
+                    unitMapConfig.mapObj.addControl(toolbar);
+
+                });
+            }
+            if (unitMapConfig.mapObj != null) {
+                var content = "<a class = \"tooltip_new_map\"  href = \"" + url + "\" target='_blank'></a>";
+                content += "<div class=\"tooltip_area\" style=\"display:block\" ><div style=\"display:block;\" class=\"tooltip_box bdr1 shadow2\" ><s class=\"zbt_tip\"></s><dl><dd><h6><a href=\"" + url + "\" target = '_blank'>" + unitName + "</a></h6></dd></dl></div></div>";
+                var marker = new window.AMap.Marker({
+                    position: new window.AMap.LngLat(x, y), //位置
+                    zIndex: 201,
+                    content: content
+                });
+                unitMapConfig.mapObj.clearMap();
+                marker.setMap(unitMapConfig.mapObj);
+                unitMapConfig.mapObj.setCenter(new AMap.LngLat(x, y));
+            }
+
+        };
+
+        function showDeveloperInfo(){
+            $("#developerInfo").show();
+        }
+
+        function hideDeveloperInfo(){
+            $("#developerInfo").hide();
+
+            //初始化值
+            $("#txtDeveloperName").val("");
+            $("#txtCommnet").val("");
+            $("#txtContactName").val("");
+            $("#txtContactPhone").val("");
+            $("#lessCharLen").html("70");
+            $("#logoMsg").html("建议图标尺寸为120px*40px");
+            Index.logoPic = "";
+        }
+
+        $(function(){
+            $(".j_feedback").keyup(function() {
+                Index.charCountCheck(this);
+            });
+
+            Index.init(sUploadUrl,sStaticRoot);
+            HotComment.LoadHotComment('shanghai','上海周边','shanghaizhoubian');
+            LPDP_UC.init("/shanghai/shanghaizhoubian/kunshan/280202_tocomment","1edf2004-0c78-74e7-78ef-5b28af85b50d","280202","shanghai","shanghaizhoubian","都会新峰","/shanghai/shanghaizhoubian/kunshan/280202_tocomment");
+            Dwrap.fixtool();
+
+            $(".nb_com_info").hover(function(){
+                $(this).children(".s_pop").show();
+            },function(){
+                $(this).children(".s_pop").hide();
+            });
+
+            $(".sale_listings_tab tr").hover(function(){
+                $(this).children(".bor_dot").css("background-color","#f1f7fc");
+            },function(){
+                $(this).children(".bor_dot").css("background-color","#fff");
+            });
+
+            $(".wg_right ul").hover(function(){
+                $(".wg_trgm").show();
+            }, function(){
+                $(".wg_trgm").hide();
+            });
+
+            //评测无内容占位图
+            var noHeight=$(".wgc_right").height();
+            $(".wgc_left .no_con").css("height",noHeight-10);
+        });
+
+        function loadEvaluationPic(container, extendData, url){
+            //楼盘测评图片放大
+            $("#" + container.id + " .fancybox-buttons").fancybox({
+                padding : 20,
+                loop : false,//播放不循环
+                openEffect  : 'none',
+                closeEffect : 'none',
+
+                prevEffect : 'none',
+                nextEffect : 'none',
+
+                helpers : {
+                    title: {
+                        type: 'inside',
+                        position: 'top'
+                    }
+                },
+                afterLoad : function() {
+                    //图片不可翻页时切换按钮状态
+                    if(this.index==0)
+                    {
+                        $(".fancybox-prev").hide();
+                    }
+                    else if(this.index==this.group.length-1)
+                    {
+                        $(".fancybox-next").hide();
+                    }
+
+                    //弹窗中描述性文字
+                    this.title='<span class="img_title">' + this.title + '</span>';
+                    var desc = "";
+                    if(extendData){
+                        desc = extendData[this.index]["sDesc"];
+                    }
+                    var imgTxt='<div class="f_txt_con"><span>' + desc + '</span><s></s></div>';
+                    var tipTxt='<div class="image_num"><span class="big_num"><em> ' + (this.index + 1) + '</em>' + '/' + this.group.length + '</span><cite>提示：支持键盘“← →”翻页</cite><a href="' + url + '" title="阅读本章" target="_blank">阅读本章<s></s></a></div>';
+                    $(".fancybox-inner").append(imgTxt);
+                    $(".fancybox-skin").append(tipTxt);
+                    $(".fancybox-inner").css("height","450");
+                    $(".fancybox-inner").css("width","600");
+
+                    //图片描述为空时，整个隐藏
+                    if(!$(".f_txt_con span").html())
+                    {
+                        $(".f_txt_con").remove();
+                    }
+
+                    //图片标题为空时，按钮的位置变动
+                    if(!$(this.title).html())
+                    {
+                        $(".fancybox-outer").css("margin-top","33px");
+                    }
+
+                    //切换按钮效果
+                    $(".fancybox-outer").hover(
+                        function(){
+                            $(".fancybox-nav").show();
+                            $(".f_txt_con").fadeIn();
+                        },
+                        function() {
+                            $(".fancybox-nav").hide();
+                            $(".f_txt_con").fadeOut();
+                        }
+                    );
+                }
+            });
+
+        }
+    </script>
+</section>

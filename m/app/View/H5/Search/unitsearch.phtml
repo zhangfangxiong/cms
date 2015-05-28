@@ -1,0 +1,37 @@
+<!--搜索开始-->
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l">
+                <a href="javascript:history.go(-1)"></a>
+            </div>
+            <div class="seach_wrap search_s">
+                <input class="search_txt search_start" id="searchfocus" autofocus="autofocus"  />
+            </div>
+            <div class="undo">确定</div>
+        </div>
+    </header>
+    <!--头部开始-->
+    <!--搜索结束开始-->
+    <section class="search_result bgf">
+
+    </section>
+    <!--搜索结果结束-->
+</div>
+<!--搜索结束-->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".undo").bind("click", function () {
+            var unitName = $(".search_txt").val() || "";
+            window.location = "/h5/search/xfsearchindex.html?sKeyword=" + unitName;
+        });
+        
+                setTimeout(function(){$("#searchfocus").focus();},1000);
+
+
+    })
+
+</script>

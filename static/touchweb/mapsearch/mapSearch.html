@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <title>地图找房</title>
+        <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+        <link rel="stylesheet" type="text/css" href="../resource/css/analysis_zs.css">
+        <script src="http://webapi.amap.com/maps?v=1.3&key=577a65ddaca22905a96eba25f4a0a94b" type="text/javascript"></script>
+        <script src="../lib/jquery/jquery.min.js" type="text/javascript"></script>
+    </head>
+
+    <body class="bdheight">
+        <header class="tophead slidePt">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="goback"></a>
+                <div class="inner_title">地图找房</div>
+                <a href="#" class="mapback"></a>
+            </div>
+        </header>
+        <section id="mapContainer" class="mapcontainer"></section>
+
+
+        <script type="text/javascript">
+
+            var L = {}
+            L.O = {},
+            L.D = {},
+            L.D.MAP,
+            L.D.J = [{
+                    "code": 0,
+                    "msg": "ok",
+                    "data": {
+                        "regionList":
+                                [{
+                                        "iCodeID": 1,
+                                        "sName": "虹口区",
+                                        "sPrice": "41428",
+                                        "iPriceTrend": 1,
+                                        "sPriceUnit": "元/平米",
+                                        "sLat": "121.49231",
+                                        "sLon": "31.26065",
+                                        "sNum": "12"
+                                    }, {
+                                        "iCodeID": 2,
+                                        "sName": "普陀区",
+                                        "sPrice": "41428",
+                                        "iPriceTrend": 2,
+                                        "sPriceUnit": "元/平米",
+                                        "sLat": "121.391716",
+                                        "sLon": "31.241572",
+                                        "sNum": "12"
+                                    }],
+                        "buildList":
+                                [{
+                                        "iCodeID": 11,
+                                        "sName": "小区1",
+                                        "sPrice": "66666",
+                                        "iPriceTrend": 1,
+                                        "sPriceUnit": "元/平米",
+                                        "sLat": "121.491494",
+                                        "sLon": "31.261421",
+                                        "sNum": "555"
+                                    }, {
+                                        "iCodeID": 22,
+                                        "sName": "小区2",
+                                        "sPrice": "66666",
+                                        "iPriceTrend": 2,
+                                        "sPriceUnit": "元/平米",
+                                        "sLat": "121.475744",
+                                        "sLon": "31.248911",
+                                        "sNum": "555"
+                                    }, {
+                                        "iCodeID": 22,
+                                        "sName": "小区3",
+                                        "sPrice": "66666",
+                                        "iPriceTrend": 0,
+                                        "sPriceUnit": "元/平米",
+                                        "sLat": "121.480894",
+                                        "sLon": "31.238894",
+                                        "sNum": "555"
+                                    }]
+                    }
+                }],
+            L.D.ZOOM = 13;
+
+            var GoMap = {
+                I: function () {
+                    var e = 3, t = 3;
+                    L.D.MAP = new AMap.Map("mapContainer", {
+                        view: new AMap.View2D({
+                            center: new AMap.LngLat(121.470337, 31.23394),
+                            zoom: 13
+                        })});
+                    L.D.MAP.plugin(["AMap.ToolBar"], function () {
+                        tb = new AMap.ToolBar();
+                        L.D.MAP.addControl(tb);
+                    });
+                    GoMap.J();
+                    var W = {
+                        male: new AMap.Pixel(-11, -17),
+                        female: new AMap.Pixel(-10, -27)
+                    }
+                    GoMap.B();
+                },
+                D: function () {
+                    navigator.geolocation && navigator.geolocation.getCurrentPosition(function (t) {
+                        console.log("success: getCurrentPosition"), k = 14, _ = t.coords, p = !0;
+                        var a = function () {
+                            if (h) {
+                                var e = new AMap.LngLat(_.longitude, _.latitude);
+                                h.setZoomAndCenter(14, e)
+                            }
+                        };
+                        e.ajax({
+                            url: "http://restapi.amap.com/v3/assistant/coordinate/convert?coordsys=gps&output=jsonp&locations=" + _.longitude + "," + _.latitude + "&key=" + o,
+                            dataType: "jsonp",
+                            timeout: 12e3,
+                            success: function (e) {
+                                if (1 == e.status) {
+                                    var t = e.locations.split(",");
+                                    _ = {
+                                        longitude: t[0],
+                                        latitude: t[1],
+                                    }
+                                }
+                                a()
+                            },
+                            error: a
+                        }), q.removeClass("disabled").addClass("located")
+                    }, function () {
+                        console.log("定位失败，请手动拖动地图进行定位！");
+                    }, {
+                        timeout: 15e3,
+                        maximumAge: 3e5,
+                        enableHighAccuracy: !1
+                    });
+
+                    navigator.geolocation && navigator.geolocation.getCurrentPosition(getPositionSuccess, getPositionError);
+
+                    function getPositionSuccess(position) {
+                        console.dir("qweqweqweqweww");
+                        $.ajax({
+                            url: "http://restapi.amap.com/v3/assistant/coordinate/convert?coordsys=gps&output=jsonp&locations=" + _.longitude + "," + _.latitude + "&key=" + o,
+                            dataType: "jsonp",
+                            timeout: 12e3,
+                            success: function (e) {
+                                if (1 == e.status) {
+                                    var t = e.locations.split(",");
+                                    _ = {
+                                        longitude: t[0],
+                                        latitude: t[1],
+                                    }
+                                }
+                                a()
+                            },
+                            error: a
+                        }), q.removeClass("disabled").addClass("located")
+                    }
+                    function getPositionError(error) {
+                        switch (error.code) {
+                            case error.TIMEOUT:
+                                break;
+                            case error.PERMISSION_DENIED:
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                break;
+                        }
+                    }
+                },
+                B: function () {
+                    AMap.event.addListener(L.D.MAP, "complete", function (e) {
+                        var t = e.regeocode;
+                    }), AMap.event.addListener(L.D.MAP, "zoomstart", function () {
+                    }), AMap.event.addListener(L.D.MAP, "zoomend", function () {
+                        GoMap.J();
+                    }),AMap.event.addListener(L.D.MAP, "dragend", function(){ GoMap.J();});
+                },
+                P: function (a, b, c, d, e, x, y) {
+                    var sclass = "";
+                    if (e == "1") {
+                        sclass = "up";
+                    }
+                    if (e == "0") {
+                        sclass = "down";
+                    }
+                    if (e == "2") {
+                        sclass = "no";
+                    }
+                    var c = "<div class='mp_div mbox_c" + e + "'>" +
+                            "<cite>" + a + "最新均价</cite>" +
+                            "<cite><b>" + b + "</b>" + d + "<i class='" + sclass + "'></i></cite>" +
+                            "<cite>本月新开" + c + "个楼盘</cite>" +
+                            "<s></s>" +
+                            "</div>"
+
+                    var m = new AMap.Marker({
+                        map: L.D.MAP,
+                        position: new AMap.LngLat(x, y),
+                        offset: new AMap.Pixel(-75, -110),
+                        content: c
+                    });
+
+                    m.setMap(L.D.MAP);
+                    AMap.event.addListener(m, "click", function () {
+                        L.D.MAP.setZoom(14)
+                        L.D.MAP.setCenter(new AMap.LngLat(x, y));
+                    });
+                },
+                C: function () {
+                    for (var i = 0; i < L.D.J[0].data.buildList.length; i++) {
+                        GoMap.M(L.D.J[0].data.buildList[i].sName, L.D.J[0].data.buildList[i].sPrice, L.D.J[0].data.buildList[i].sNum, L.D.J[0].data.buildList[i].sPriceUnit, L.D.J[0].data.buildList[i].iPriceTrend, L.D.J[0].data.buildList[i].sLat, L.D.J[0].data.buildList[i].sLon);
+                    }
+                },
+                E: function () {
+                    for (var i = 0; i < L.D.J[0].data.regionList.length; i++) {
+                        GoMap.P(L.D.J[0].data.regionList[i].sName, L.D.J[0].data.regionList[i].sPrice, L.D.J[0].data.regionList[i].sNum, L.D.J[0].data.regionList[i].sPriceUnit, L.D.J[0].data.regionList[i].iPriceTrend, L.D.J[0].data.regionList[i].sLat, L.D.J[0].data.regionList[i].sLon);
+                    }
+                },
+                J: function () {
+                    L.D.MAP.clearMap();
+                    if (L.D.MAP.getZoom() <= L.D.ZOOM) {
+                        GoMap.E();
+                    } else {
+                        GoMap.C();
+                    }
+                },
+                N: function () {
+                    var t, a, n, i, r = L.D.MAP.getBounds();
+                    a = r.getSouthWest(), i = r.getNorthEast(), t = a.getLng(), n = i.getLng(), a = a.getLat(), i = i.getLat(), 72.95 > t && (t = 72.95), n > 135.88 && (n = 135.88), i > 54.06 && (i = 54.06), 1.41 > a && (a = 1.41),
+                            u = GoMap.T.c + 'yuntuapi.amap.com/' + 'datasearch/' + 'polygon?output=jsonp&limit=100&tableid=' + GoMap.T.o + '&polygon=' + r.getSouthWest() + ';' + r.getNorthEast() + '&key=' + L.D.KEY;
+                    $.ajax({
+                        type: 'GET',
+                        url: u,
+                        async: false,
+                        dataType: "jsonp",
+                        success: function (e) {
+                            if (e.status) {
+                                var t = L.D.MAP.getZoom();
+                                console.log(e.datas);
+                                GoMap.Q(t, e.datas);
+                            }
+                        }
+                    });
+                },
+                M: function (a, b, c, d, e, x, y) {
+                    var sclass = "";
+                    if (e == "1") {
+                        sclass = "up";
+                    }
+                    if (e == "0") {
+                        sclass = "down";
+                    }
+                    if (e == "2") {
+                        sclass = "no";
+                    }
+                    var c = "<div class='mp_div mbox_c" + e + "'>" +
+                            "<cite>" + a + "</cite>" +
+                            "<cite><b>" + b + "</b>" + d + "<i class='" + sclass + "'></i></cite>" +
+                            "<cite>目前在售" + c + "套</cite>" +
+                            "<s></s>" +
+                            "</div>"
+                    var m = new AMap.Marker({
+                        map: L.D.MAP,
+                        position: new AMap.LngLat(x, y),
+                        offset: new AMap.Pixel(-75, -90),
+                        content: c
+                    });
+                    m.setMap(L.D.MAP);
+                }
+            }
+
+            $(document).ready(function () {
+                GoMap.I();
+            })
+
+        </script>
+
+
+
+    </body>
+</html>
+

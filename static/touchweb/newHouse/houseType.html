@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>房价点评</title>
+    <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="../resource/css/analysis_zs.css">
+    <script src="../lib/jquery/jquery-1.10.2.js"></script>
+</head>
+<body>
+    <!--选择户型开始-->
+    <div class="viewport">
+        <!--头部开始-->
+         <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="goback"></a>
+                <div class="inner_title">选择户型</div>
+            </div>
+        </header>
+        <!--头部开始-->
+		<!--户型列表开始-->
+        <section class="main_section pl12 house_type" id="mainsection">
+                <div class="zh_eval border_bottom clearfix">
+                    <div class="left_hx_img">
+                        <canvas data-src="../resource/images/testlou.jpg"></canvas>
+                    </div>
+                    <div class="right_hx_info">
+                        <p>户型：02/03/06/07户型</p>
+                        <p>房型：两房</p>
+                        <p>面积：113m2</p>
+                    </div>
+                </div>
+                <div class="zh_eval border_bottom clearfix">
+                    <div class="left_hx_img">
+                        <canvas data-src="../resource/images/testlou.jpg"></canvas>
+                    </div>
+                    <div class="right_hx_info">
+                        <p>户型：02/03/06/07户型</p>
+                        <p>房型：两房</p>
+                        <p>面积：113m2</p>
+                    </div>
+                </div>
+                <div class="zh_eval border_bottom clearfix">
+                    <div class="left_hx_img">
+                        <canvas data-src="../resource/images/testlou.jpg"></canvas>
+                    </div>
+                    <div class="right_hx_info">
+                        <p>户型：02/03/06/07户型</p>
+                        <p>房型：两房</p>
+                        <p>面积：113m2</p>
+                    </div>
+                </div>
+                <div class="zh_eval clearfix"><!--最后一个没有border_bottom类-->
+                    <div class="left_hx_img">
+                        <canvas data-src="../resource/images/testlou.jpg"></canvas>
+                    </div>
+                    <div class="right_hx_info">
+                        <p>户型：02/03/06/07户型</p>
+                        <p>房型：两房</p>
+                        <p>面积：113m2</p>
+                    </div>
+                </div>
+            </section>
+        <!--户型列表结束-->
+    </div>
+    <!--选择户型结束-->
+    <script src="../lib/requirejs/require.js" ></script>
+    <script>
+    require(["../lib/jquery/jquery.min","../lib/js/webtouchcommon"],function(){
+		webtouchObj.canvasload();
+
+		})
+    
+    </script>
+</body>
+</html>

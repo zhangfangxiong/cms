@@ -1,0 +1,23 @@
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">
+    <script src="<?php echo $sStaticRoot ?>/touchweb/lib/jquery/jquery.min.js"></script>
+<!--搜索开始-->
+<div class="viewport">
+    <!--头部开始-->
+        <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="uc_return_l goback"></a>
+                <div class="inner_title">二手房</div>
+            </div>
+        </header>
+    <section style="width:100%;height:100%;">
+        <iframe frameBorder="0"  width="100%" height="100%" id="secondFangiframe"  src="http://app.fangjiadp.com/LejuPages/EsfHouseList.html?cityName=<?php echo $aCurrCity['sName'] ?>&s=yd_sh"></iframe>
+    </section>
+    <style>
+        .viewport{height:100%;width:100%;min-width: 320px;}
+    </style>
+    <script type="text/javascript">
+        var windowheight=parseInt($(window).height())-52;
+        $("#secondFangiframe").height(windowheight);
+    </script>
+
+</div>

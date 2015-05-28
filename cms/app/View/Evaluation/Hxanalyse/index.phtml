@@ -1,0 +1,525 @@
+<?php include 'eHeader.phtml'; ?>
+<form id="myform" class="form-horizontal" role="form" method="post" action="">
+    <div class="panel mt15 pcContents">
+        <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+        <input type="hidden" name="IHxWholeID"
+               value="<?php echo isset($hxWhole['IHxWholeID']) ? $hxWhole['IHxWholeID'] : '' ?>"/>
+
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">*分析师点评：</label>
+
+            <div class="col-sm-10">
+                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate"
+                          validate="!clength:1-255"><?php echo $hxWhole['sComment'] ?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">优势：</label>
+
+            <div class="col-sm-10">
+                <?php
+                if (isset($goodTags) && !empty($goodTags)) {
+                    foreach ($goodTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox"
+                                   name="sGoodTag[]" <?php echo !empty($hxWhole['sGoodTag']) && in_array($k,
+                                $hxWhole['sGoodTag']) ? 'checked' : '' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                    <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">劣势：</label>
+
+            <div class="col-sm-10">
+                <?php
+                if (isset($badTags) && !empty($badTags)) {
+                    foreach ($badTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox"
+                                   name="sBadTag[]" <?php echo !empty($hxWhole['sBadTag']) && in_array($k,
+                                $hxWhole['sBadTag']) ? 'checked' : '' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                    <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <?php
+        //$index = 0;
+        //foreach($HxType as $item) {
+        ?>
+
+        <div class="form-group hxDiv">
+
+            <label for="sTagName" class="col-sm-2 control-label">*户型：</label>
+
+            <div class="col-sm-9" id="HxselectOrnot">
+                <select class="form-control pcSelect" name="">
+                    <option value="0">请选择</option>
+                    <?php
+                    if (isset($hxConifg['iRoom'])) {
+                        foreach ($hxConifg['iRoom'] as $k => $v) {
+                            ?>
+                            <option
+                                value="<?php echo $k ?>"><?php echo $v ?></option>
+                        <?php
+                        }
+                    }
+                    ?>
+                </select>
+
+                <select class="form-control pcSelect" name="">
+                    <option value="">请选择</option>
+                    <?php
+                    if (isset($hxConifg['iHall'])) {
+                        foreach ($hxConifg['iHall'] as $k => $v) {
+                            ?>
+                            <option
+                                value="<?php echo $k ?>"><?php echo $v ?></option>
+                        <?php
+                        }
+                    }
+                    ?>
+                </select>
+
+                <select class="form-control pcSelect" name="">
+                    <option value="">请选择</option>
+                    <?php
+                    if (isset($hxConifg['iToilet'])) {
+                        foreach ($hxConifg['iToilet'] as $k => $v) {
+                            ?>
+                            <option
+                                value="<?php echo $k ?>"><?php echo $v ?></option>
+                        <?php
+                        }
+                    }
+                    ?>
+                </select>
+                <span class="fl mt5">
+                <?php if ($evaluationSwitch == 0) { ?>
+                    <a href="" data-toggle="modal" class="addHxbH" data-target="#hxModal"
+                       data-content-id="<?php echo isset($item['iAutoID']) ? $item['iAutoID'] : '' ?>"> +添加户型编号</a>
+                <?php } ?>
+                    <!--<?php if ($index == 0) { ?><a href="" class="ml20" id="addHx"> +添加户型</a><?php } else { ?><a href="" class="delHx ml20">-</a><?php } ?>-->
+                </span>
+                <span class="validate_checktip"></span>
+
+                <div style="clear: both;"></div>
+                <div class="hxList" style="margin-top: 20px;display:<?php if (!$hxInfoHtml) {
+                    echo 'none';
+                } else {
+                    echo '';
+                } ?> ;">
+                    <?php echo $hxInfoHtml ?>
+                </div>
+
+            </div>
+        </div>
+        <?php
+        // $index++;
+        //}
+        ?>
+
+        <div class="form-group">
+
+            <label for="sTagName" class="col-sm-2 control-label">户型整体描述：</label>
+            <div class="col-sm-10">
+                <textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control input-validate" placeholder="请输入户型整体描述"><?php echo $hxWhole['sOtherComment']?></textarea>
+                <!--<span class="validate_checktip"></span>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+
+            <div class="col-sm-10">
+                <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"
+                       class="plupload" data-target="qtImage" data-img="#sImageQt" data-callback="showImg"
+                       data-limit="10" data-dec="1"/>
+
+                <div class="eHxImgDiv"
+                     style="display: <?php echo isset($qtImage) && !empty($qtImage) ? '' : 'none' ?>;">
+                    <div class="row" id="sImageQt">
+                        <?php
+                        if (isset($qtImage) && !empty($qtImage)) {
+                            foreach ($qtImage as $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers"
+                                         src="<?php echo Model_EvaluationImage::getImageUrl($item['iCricId'],
+                                             $item['sImage']) ?>" data-content-id="<?php echo $item['iAutoID'] ?>">
+                                    <?php if ($evaluationSwitch == 0) { ?>
+                                        <a href="javascript:void(0);" title="删除" class="action  icon-trash"></a>
+                                    <?php } ?>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"><input type="text" maxlength="50"
+                                                                           class="form-control" name="qtImageTitle[]"
+                                                                           placeholder="图片名称"
+                                                                           value="<?php echo $item['sTitle'] ?>"></div>
+                                    </div>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"><textarea class="form-control" rows="2"
+                                                                              maxlength="300" name="qtImageDesc[]"
+                                                                              placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc'] ?></textarea>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID'] ?>"/>
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <button id="save" class="btn btn-primary">发布</button>
+                <button id="sync" class="btn btn-info"  >同步</button>
+                <button id="cancel" class="btn" onclick="location.href='/evaluation/draft/';return false;">取消</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 添加户型开始 -->
+<div class="modal" id="hxModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabels"></h3>
+            </div>
+            <div class="modal-body">
+                <form id="hxform" class="form-horizontal" role="form" method="post" action="">
+                    <input type="hidden" name="action" id="action"/>
+                    <input type="hidden" name="iRoomNum" id="iRoomNum"/>
+                    <input type="hidden" name="iHallNum" id="iHallNum"/>
+                    <input type="hidden" name="iToiletNum" id="iToiletNum"/>
+                    <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+                    <input type="hidden" name="iHxInfoID" id="iHxInfoID"/>
+                    <input type="hidden" name="iAuID" id="iAuID"/>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">*户型编号：</label>
+
+                        <div class="col-sm-9">
+                            <input name="sHuXingID" id="sHuXingID" type="text" value="" maxlength="10"
+                                   onkeyup="value=value.replace(/[^\w\.\-\/]/ig,'')" validate="!required:请输入户型编号"
+                                   class="form-control input-sm input-validate-25">
+                            <span class="validate_checktip"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0 ">*面积：</label>
+
+                        <div class="col-sm-9">
+                            <input name="iAreaNum" id="iAreaNum" type="text" value="" validate="!float:true"
+                                   class="form-control input-sm input-validate-25">
+                            <span style="float: left;">&nbsp; -  &nbsp; </span>
+                            <input name="iMaxAreaNum" id="iMaxAreaNum" type="text" value="" validate="*float:true"
+                                   class="form-control input-sm input-validate-25">
+                            <span style="float: left;padding-top: 3px;padding-left: 8px;">平方米</span>
+                            <span class="validate_checktip"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">*梯户比：</label>
+
+                        <div class="col-sm-9">
+                            <input name="iStairsNum" id="iStairsNum" placeholder="梯数" type="text" value=""
+                                   validate="!digit:true" class="form-control input-sm input-validate-25">
+                            <span style="float: left;">&nbsp;：&nbsp; </span>
+                            <input name="iDoorNum" id="iDoorNum" placeholder="户数" type="text" value=""
+                                   validate="!digit:true" class="form-control input-sm input-validate-25">
+                            <span class="validate_checktip"></span>
+                            <span style="color:#ccc;float:left;font-size:10px;padding-top:5px;">一般是梯数小于户数</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0 ">层高：</label>
+
+                        <div class="col-sm-9">
+                            <input name="iFloorNum" id="iFloorNum" type="text" value=""
+                                   class="form-control input-sm input-validate-25">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">客厅面宽：</label>
+
+                        <div class="col-sm-9">
+                            <input name="iHallWidth" id="iHallWidth" type="text" value=""
+                                   class="form-control input-validate-25">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">主卧面宽：</label>
+
+                        <div class="col-sm-9">
+                            <input name="iMasterRoomWidth" id="iMasterRoomWidth" type="text" value=""
+                                   class="form-control input-sm input-validate-25">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">*主卧朝向：</label>
+
+                        <div class="col-sm-9">
+                            <select class="form-control input-sm input-validate-25" name="iMasterRoomToward"
+                                    id="iMasterRoomToward" validate="!required:请选择主卧朝向">
+                                <option value="">请选择</option>
+                                <?php
+                                if (isset($hxConifg['iRoomToward'])) {
+                                    foreach ($hxConifg['iRoomToward'] as $k => $v) {
+                                        ?>
+                                        <option
+                                            value="<?php echo $k ?>"><?php echo $v ?></option>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <span class="validate_checktip"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">*次主卧朝向：</label>
+
+                        <div class="col-sm-9">
+                            <select class="form-control input-sm input-validate-25" name="iSecondRoomToward"
+                                    id="iSecondRoomToward" validate="!required:请选择主卧朝向">
+                                <option value="">请选择</option>
+                                <?php
+                                if (isset($hxConifg['iRoomToward'])) {
+                                    foreach ($hxConifg['iRoomToward'] as $k => $v) {
+                                        ?>
+                                        <option
+                                            value="<?php echo $k ?>"><?php echo $v ?></option>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <span class="validate_checktip"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">明卫：</label>
+
+                        <div class="col-sm-9">
+                            <input name="iObviousToilet" id="iObviousToilet" type="text" value=""
+                                   class="form-control input-sm input-validate-25">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">暗卫：</label>
+
+                        <div class="col-sm-9">
+                            <input name="iHideToilet" id="iHideToilet" type="text" value=""
+                                   class="form-control input-sm input-validate-25">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0">*南北通透：</label>
+
+                        <div class="col-sm-3" validate="!radio:iIsNorthSouth:请选择南北通透">
+                            <label class="radio-inline">
+                                <input type="radio" name="iIsNorthSouth" value="1"> 是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="iIsNorthSouth" value="2"> 否
+                            </label>
+                        </div>
+                        <span class="col-sm-5 validate_checktip mt5"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label pr0 ">得房率：</label>
+
+                        <div class="col-sm-9 pr0">
+                            <input name="iAreaRate" id="iAreaRate" type="text" value=""
+                                   class="form-control input-sm input-validate-25">
+                            <span style="float: left;padding-top: 3px;padding-left: 8px;">% </span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:25px;">
+                        <div class="btn-toolbar text-center">
+                            <button id="save" class="btn btn-primary">保存</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加户型结束 -->
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/evaluation.js"></script>
+<script type="text/javascript">
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Hxanalyse', a: 'ztpj', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    $(Hxanalysefn);
+    function Hxanalysefn() {
+        currDiv = null;
+        // 添加户型编号
+        $("#myform").on("click", ".addHxbH", Hx.addHxbH);
+        // 修改户型编号
+        $("#myform").on("click", ".upHxbH", Hx.upHxbH)
+        //提交户型表单
+        $("#hxform").validate({
+            submitHandler: function (form) {
+                $.post("/evaluation/hxtype/" + $("#action").val(), $(form).serialize(), function (ret) {
+                    if (ret.status) {
+                        alert('数据保存成功');
+                        $(".hxList").show().html(ret.data);
+                        $("button[data-dismiss='modal']").trigger("click");
+                    } else {
+                        alert(ret.data);
+                    }
+
+                }, 'json');
+                return false;
+            }
+        });
+        // 添加户型
+        $("#addHx").on("click", Hx.addHx)
+        // 删除户型
+        $("#myform").on("click", ".delHx", Hx.delHx);
+        // 删除图片
+        $(".eHxImgDiv").on('click', '.action', deleteUploadimg);
+        // 移除边框
+        $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+
+        //鼠标移上显示大图
+        $("#myform").on("mouseover mouseout", "img.datahovers", hoverImgFn)
+        $("#myform").on("mouseover mouseout", ".showBigimg", bigimghover)
+        // 提交整体评价表单
+        var HxselectOrnot_flag = 0;
+        $("#myform").validate({
+            submitHandler: function (form) {
+                if (!imageNamenotBlank()) {
+                    return false;
+                }
+                var pcSelects = $("#HxselectOrnot").find("select.pcSelect");
+                for (var i = 0; i < pcSelects.length; i++) {
+                    if (pcSelects.eq(i).val() == 0 && $("#HxChildrenlength").children().length < 1) {
+                        HxselectOrnot_flag = 1;
+                        $("#HxselectOrnot").find(".validate_checktip").addClass("validate_wrong").html("请选择户型！");
+                        return false;
+                    } else {
+                        HxselectOrnot_flag = 0;
+                        $("#HxselectOrnot").find(".validate_checktip").removeClass("validate_wrong").html("");
+                    }
+                }
+                if (HxselectOrnot_flag) {
+                    return false;
+                }
+                $.post("/evaluation/Hxanalyse/add", $(form).serialize(), function (ret) {
+                    alert(ret.data);
+                    location.reload();
+
+                }, 'json');
+                return false;
+            }
+        });
+    }
+
+    var Hx = {
+        addHxbH: function () {
+            currDiv = $(this).parents(".form-group");
+            selectlist = $(this).parents(".form-group").find('select');
+            $("#hxform span[class='validate_checktip']").removeClass('validate_right');
+            if (selectlist.eq(0).val() == 0) {
+                alert("请选择户型");
+                return false;
+            }
+            $("#action").val('add');
+            $("#iRoomNum").val(selectlist.eq(0).val());
+            $("#iHallNum").val(selectlist.eq(1).val());
+            $("#iToiletNum").val(selectlist.eq(2).val());
+            $("#iAuID").val($(this).data('content-id'));
+            $("#myModalLabels").html("<h4>" + Hx.getSelectedText(selectlist) + "</h4>");
+            $('#hxform')[0].reset();
+        },
+        upHxbH: function () {
+            $("#iAuID").val($(this).data('content-id'));
+            $("#iHxInfoID").val($(this).data('info-id'));
+            $("#action").val('edit');
+            $.get("/evaluation/hxtype/getHx/", {'hxID': $(this).data('content-id')}, function (ret) {
+                if (ret.data != null) {
+                    $("#myModalLabels").html("<h4>" + ret.data.iRoom + ret.data.iHall + ret.data.iToilet + "</h4>");
+                    $("#sHuXingID").val(ret.data.sHuXingID);
+                    $("#iAreaNum").val(ret.data.iAreaNum);
+                    $("#iMaxAreaNum").val(ret.data.iMaxAreaNum);
+                    $("#iStairsNum").val(ret.data.iStairsNum);
+                    $("#iDoorNum").val(ret.data.iDoorNum);
+                    $("#iFloorNum").val(ret.data.iFloorNum);
+                    $("#iHallWidth").val(ret.data.iHallWidth);
+                    $("#iObviousToilet").val(ret.data.iObviousToilet);
+                    $("#iHideToilet").val(ret.data.iHideToilet);
+                    $("#iMasterRoomWidth").val(ret.data.iMasterRoomWidth);
+                    $("#iMasterRoomToward").val(ret.data.iMasterRoomToward);
+                    $("#iSecondRoomToward").val(ret.data.iSecondRoomToward);
+                    $("input[name='iIsNorthSouth'][value=" + ret.data.iIsNorthSouth + "]").attr("checked", true);
+                    $("#iAreaRate").val(ret.data.iAreaRate);
+                }
+            }, 'json');
+        },
+        /*
+         *  selectObj jquery 对象数组
+         **/
+        getSelectedText: function (selectlist) {
+            str = '';
+            selectlist.each(function (i) {
+                if ($(this).val() != 0 && $(this).val() != "") {
+                    str += $(this).find("option:selected").text();
+                }
+            })
+            return str;
+        },
+        addHx: function () {
+            $(".hxDiv:last").after("<div class=\"form-group hxDiv\">" +
+            $(this).parents(".form-group").html().replace(/selected=\"\"/g, '').replace($(this).parent().html(),
+                '<a href="" data-toggle="modal" class="addHxbH" data-target="#hxModal" data-content-id="0"> +添加户型编号</a><a href="" class="delHx ml20">-</a>')
+            + "</div>");
+            $(".hxDiv:last").find(".hxList").html('');
+            return false;
+        },
+        delHx: function () {
+            if (window.confirm("确定要删除吗？")) {
+                $.get("/evaluation/Hxtype/del/", {'hxID': $(this).siblings('a').data('content-id')}, 'json');
+                $(this).parents("tr").remove();
+                return false;
+            } else {
+                return false;
+            }
+        }
+    }
+
+
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/evaluation.js"></script>
+<script type="text/javascript" charset="utf-8"
+        src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>

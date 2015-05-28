@@ -1,0 +1,203 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">
+<script src="http://webapi.amap.com/maps?v=1.3&key=577a65ddaca22905a96eba25f4a0a94b" type="text/javascript"></script>
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/jquery/jquery.min.js" type="text/javascript"></script>
+
+<body class="bdheight">
+    <header class="tophead slidePt">
+        <div class="tophead_inner">
+            <a href="javascript:history.back()" class="uc_return_l goback"></a>
+            <div class="inner_title">地图找房</div>
+            <a href="/h5/search/xfsearchindex" class="mapback"></a>
+        </div>
+    </header>
+    <input type="hidden" value="1" id="notgetlocation" />
+    <input type="hidden" value="" id="latitudeid" />
+    <input type="hidden" value="" id="longitudeid" />
+    <section id="mapContainer" class="mapcontainer"></section>
+
+
+
+    <script type="text/javascript">
+        var getlocationobj = {
+            showLocation: function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                $("#longitudeid").val(longitude);
+                $("#latitudeid").val(latitude);
+
+            },
+            errorHandler: function (err) {
+                if (err.code == 1) {
+                    $("#notgetlocation").val("0");
+                    console.dir("拒绝访问当前位置!");
+                } else if (err.code == 2) {
+                    $("#notgetlocation").val("0");
+                    console.dir("您的位置获取不到!");
+                }
+            },
+            getLocation: function () {
+                if (navigator.geolocation) {
+                    // timeout at 60000 milliseconds (60 seconds)
+                    var options = {timeout: 60000};
+                    navigator.geolocation.getCurrentPosition(getlocationobj.showLocation, getlocationobj.errorHandler, options);
+                } else {
+                    $("#notgetlocation").val("0");
+                    alert("浏览器不支持定位!");
+                }
+            }
+        };
+        var L = {};
+        L.D = {};
+        L.D.ZOOM = 13;
+        var GoMap = {
+            I: function () {
+                if ($("#notgetlocation").val() == "0") {
+                    var lon = "<?php echo isset($aCurrCity['sLon']) ? $aCurrCity['sLon'] : '121.27' ?>";
+                    var sLat = "<?php echo isset($aCurrCity['sLat']) ? $aCurrCity['sLat'] : '31.15' ?>";
+                } else {
+                    var lon = $("#longitudeid").val();
+                    var sLat = $("#latitudeid").val();
+                    if (lon == "" && sLat == "") {
+                        lon = "<?php echo isset($aCurrCity['sLon']) ? $aCurrCity['sLon'] : '121.27' ?>";
+                        sLat = "<?php echo isset($aCurrCity['sLat']) ? $aCurrCity['sLat'] : '31.15' ?>";
+                    }
+                }
+                L.D.MAP = new AMap.Map("mapContainer", {
+                    resizeEnable: true,
+                    view: new AMap.View2D({
+                        center: new AMap.LngLat(lon, sLat),
+                        zoom: 13
+                    })});
+                L.D.MAP.plugin(["AMap.ToolBar"], function () {
+                    tb = new AMap.ToolBar();
+                    L.D.MAP.addControl(tb);
+                });
+                GoMap.J();
+                GoMap.B();
+            },
+            B: function () {
+                AMap.event.addListener(L.D.MAP, "complete", function (e) {
+                    var t = e.regeocode;
+                }), AMap.event.addListener(L.D.MAP, "zoomstart", function () {
+                    GoMap.J();
+                }), AMap.event.addListener(L.D.MAP, "zoomend", function () {
+                    GoMap.J();
+                }), AMap.event.addListener(L.D.MAP, "dragend", function () {
+                    GoMap.J();
+                });
+            },
+            P: function (a, b, c, d, e, x, y) {
+                var sclass = "";
+                if (e == "1") {
+                    sclass = "up";
+                }
+                if (e == "0") {
+                    sclass = "down";
+                }
+                if (e == "2") {
+                    sclass = "no";
+                }
+                var c = "<div class='mp_div mbox_c" + e + "'>" +
+                        "<cite>" + a + "最新均价</cite>" +
+                        "<cite><b>" + b + "</b>" + d + "<i class='" + sclass + "'></i></cite>" +
+                        "<cite>本月新开" + c + "个楼盘</cite>" +
+                        "<s></s>" +
+                        "</div>";
+
+                var m = new AMap.Marker({
+                    map: L.D.MAP,
+                    position: new AMap.LngLat(x, y),
+                    offset: new AMap.Pixel(-75, -110),
+                    content: c
+                });
+                m.setMap(L.D.MAP);
+                AMap.event.addListener(m, "click", function () {
+                    L.D.MAP.setZoom(14)
+                    L.D.MAP.setCenter(new AMap.LngLat(x, y));
+                    GoMap.J();
+                });
+            },
+            C: function () {
+                var zoomLevel = 3;
+                var arealeval = L.D.MAP.getBounds();
+                var maxLon = arealeval.getNorthEast().getLng();
+                var maxLat = arealeval.getNorthEast().getLat();
+                var minLon = arealeval.getSouthWest().getLng();
+                var minLat = arealeval.getSouthWest().getLat();
+                $.ajax({
+                    url: "/h5/mapsearch/mapajax",
+                    type: "GET",
+                    data: {zoomLevel: zoomLevel, maxLon: maxLon, maxLat: maxLat, minLon: minLon, minLat: minLat},
+                    datatype: "json",
+                    success: function (result) {
+                        var res = eval('(' + result + ')');
+                        // console.dir(res);
+                        for (var i = 0; i < res.data.data.buildList.length; i++) {
+                            GoMap.M(res.data.data.buildList[i].sName, res.data.data.buildList[i].sPrice, res.data.data.buildList[i].sNum, res.data.data.buildList[i].sPriceUnit, res.data.data.buildList[i].iPriceTrend, res.data.data.buildList[i].sLon, res.data.data.buildList[i].sLat);
+                        }
+                    }
+                })
+            },
+            E: function () {
+                var zoomLevel = L.D.MAP.getZoom();
+                var arealeval = L.D.MAP.getBounds();
+                var maxLon = arealeval.getNorthEast().getLng();
+                var maxLat = arealeval.getNorthEast().getLat();
+                var minLon = arealeval.getSouthWest().getLng();
+                var minLat = arealeval.getSouthWest().getLat();
+                $.ajax({
+                    url: "/h5/mapsearch/mapajax",
+                    type: "GET",
+                    data: {'zoomLevel': zoomLevel, 'maxLon': maxLon, 'maxLat': maxLat, 'minLon': minLon, 'minLat': minLat},
+                    datatype: "json",
+                    success: function (result) {
+                        var res = eval('(' + result + ')');
+                        // console.dir(res);
+                        for (var i = 0; i < res.data.data.regionList.length; i++) {
+                            GoMap.P(res.data.data.regionList[i].sName, res.data.data.regionList[i].sPrice, res.data.data.regionList[i].sNum, res.data.data.regionList[i].sPriceUnit, res.data.data.regionList[i].iPriceTrend, res.data.data.regionList[i].sLon, res.data.data.regionList[i].sLat);
+                        }
+                    }
+                })
+            },
+            J: function () {
+                L.D.MAP.clearMap();
+                if (L.D.MAP.getZoom() <= L.D.ZOOM) {
+                    GoMap.E();
+                } else {
+                    GoMap.C();
+                }
+            },
+            M: function (a, b, c, d, e, x, y) {
+                var sclass = "";
+                if (e == "1") {
+                    sclass = "up";
+                }
+                if (e == "0") {
+                    sclass = "down";
+                }
+                if (e == "2") {
+                    sclass = "no";
+                }
+                var c = "<div class='mp_div mbox_c" + e + "'>" +
+                        "<cite>" + a + "</cite>" +
+                        "<cite><b>" + b + "</b>" + d + "<i class='" + sclass + "'></i></cite>" +
+                        "<cite>目前在售" + c + "套</cite>" +
+                        "<s></s>" +
+                        "</div>";
+                var m = new AMap.Marker({
+                    map: L.D.MAP,
+                    position: new AMap.LngLat(x, y),
+                    offset: new AMap.Pixel(-75, -90),
+                    content: c
+                });
+                m.setMap(L.D.MAP);
+            }
+        }
+
+        $(document).ready(function () {
+            getlocationobj.getLocation();
+            GoMap.I();
+        })
+
+    </script>
+

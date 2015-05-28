@@ -1,0 +1,642 @@
+﻿<?php include Yaf_G::getViewPath() . "/Newhouse/header.phtml"; ?>
+
+<section class=" clearfix">
+
+    <section class="new_row_cont new_r_c_t clearfix">
+
+        <div class="new_r_c_t_left">
+            <div class="swic_tab">
+                <cite id="Sidetab">
+                    <img item="CRIC6cab9b06b4fa9e039034611642279d07"
+                         src="http://get.file3.dc.cric.com/CRIC6cab9b06b4fa9e039034611642279d07_500X300_0_0_0.jpg"
+                         alt="">
+                    <img item="CRICc7e180867b2c6d5ea8deae2e92df772c"
+                         srcurl="http://get.file4.dc.cric.com/CRICc7e180867b2c6d5ea8deae2e92df772c_500X300_0_0_0.jpg"
+                         src="" alt=""/>
+                    <img item="CRICcb5902575697f42d38447ce18638fc5d"
+                         srcurl="http://get.file7.dc.cric.com/CRICcb5902575697f42d38447ce18638fc5d_500X300_0_0_0.jpg"
+                         src="" alt=""/>
+                    <img item="CRIC1823e56c4d8188a15ed4ef7f28fbaf7e"
+                         srcurl="http://get.file14.dc.cric.com/CRIC1823e56c4d8188a15ed4ef7f28fbaf7e_500X300_0_0_0.jpg"
+                         src="" alt=""/>
+                    <img item="CRIC66cc328540dd4c8dc72382cb7d35501e"
+                         srcurl="http://get.file2.dc.cric.com/CRIC66cc328540dd4c8dc72382cb7d35501e_500X300_0_0_0.jpg"
+                         src="" alt=""/>
+                </cite>
+            </div>
+            <ul class="ul_img clearfix" id="Trigges_img">
+                <li>
+                    <img src="http://get.file3.dc.cric.com/CRIC6cab9b06b4fa9e039034611642279d07_97X70_0_0_0.jpg">
+                </li>
+                <li item="CRICc7e180867b2c6d5ea8deae2e92df772c"><img
+                        src="http://get.file4.dc.cric.com/CRICc7e180867b2c6d5ea8deae2e92df772c_97X70_0_0_0.jpg" alt=""/>
+                </li>
+                <li item="CRICcb5902575697f42d38447ce18638fc5d"><img
+                        src="http://get.file7.dc.cric.com/CRICcb5902575697f42d38447ce18638fc5d_97X70_0_0_0.jpg" alt=""/>
+                </li>
+                <li item="CRIC1823e56c4d8188a15ed4ef7f28fbaf7e"><img
+                        src="http://get.file14.dc.cric.com/CRIC1823e56c4d8188a15ed4ef7f28fbaf7e_97X70_0_0_0.jpg"
+                        alt=""/></li>
+                <li item="CRIC66cc328540dd4c8dc72382cb7d35501e"><img
+                        src="http://get.file2.dc.cric.com/CRIC66cc328540dd4c8dc72382cb7d35501e_97X70_0_0_0.jpg" alt=""/>
+                </li>
+
+            </ul>
+            <div id="mask"></div>
+        </div>
+        <script type="text/javascript">
+            var UnitPicture = function () {
+                $('#Sidetab').switchable({
+                    triggers: $('#Trigges_img').find('li'),
+                    effect: 'fade',
+                    speed: 15,
+                    autoplay: true,
+                    onSwitch: function (event, currentIndex) {
+                        var api = this,
+                            cfg = api.config;
+                        var item = $('#Trigges_img').find('li')[currentIndex].getAttribute("item");
+                        var img = $("#Sidetab img[item=" + item + "]");
+                        if (!img.attr("src")) {
+                            img.attr("src", img.attr("srcurl"));
+                            img.removeAttr("srcurl");
+                        }
+                        new $.switchable.Anim(
+                            $('#mask'),
+                            {left: 0 + 101 * currentIndex},
+                            cfg.duration,
+                            cfg.easing
+                        ).run();
+                    }
+                });
+
+            };
+            var up = new UnitPicture();
+        </script>
+        <div class="new_r_c_t_right">
+            <div class="property_t">
+                <cite>
+                    <b>综合评定：</b>
+                    <em class="middle-start">
+                        <?php echo $sStar ?>
+                    </em>
+                    <var><?php echo !empty($aComment) ? $aComment['sRate'] : ''; ?></var>
+                </cite>
+            <span>
+                    <em>户型 4.2</em>
+                                    <em>装修 <?php echo !empty($aComment) ? number_format($aComment['sRateDesign'], 1) : ''; ?></em>
+                                    <em>物业 <?php echo !empty($aComment) ? number_format($aComment['sRateHouse'], 1) : ''; ?></em>
+                                    <em>车位 <?php echo !empty($aComment) ? number_format($aComment['sRatePark'], 1) : ''; ?></em>
+                                    <em>区位 <?php echo !empty($aComment) ? number_format($aComment['sRateLocation'], 1) : ''; ?></em>
+
+                    <em>性价比 <?php echo !empty($aComment) ? number_format($aComment['sCPRatio'], 1) : ''; ?></em>
+            </span>
+            </div>
+            <div class="property_m">
+                <dl>
+                    <dt>地址：</dt>
+                    <dd><?php echo isset($LouInfo['sAddress']) ? $LouInfo['sAddress'] : ''; ?></dd>
+                </dl>
+                <dl>
+                    <dt>区域：</dt>
+                    <dd><?php echo isset($LouInfo['sCircleLocation']) ? $LouInfo['sCircleLocation'] : ''; ?></dd>
+                </dl>
+                <div class="clearfix">
+                    <dl>
+                        <dt>开发商售价：</dt>
+                        <dd>
+                            <b class="cor_r"><?php echo isset($LouInfo['sPrice']) ? $LouInfo['sPrice'] : ''; ?></b><?php echo isset($LouInfo['sPriceUnit']) ? $LouInfo['sPriceUnit'] : ''; ?>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>指导价：</dt>
+                        <dd>
+                            <b><?php echo isset($LouInfo['suggestPrice']) ? $LouInfo['suggestPrice'] : ''; ?></b><?php echo isset($LouInfo['suggestPriceUnit']) ? $LouInfo['suggestPriceUnit'] : ''; ?>
+                        </dd>
+                    </dl>
+                    <span><s></s><a href="/shanghai/minhang/huacao/412541_pricetable?f=d"
+                                    target="_blank">价格走势</a></span>
+                </div>
+            </div>
+            <div class="property_f">
+                <ul>
+                    <li>
+                        <b>开盘日期：</b>
+                        <span><?php echo isset($LouDetail['sOpenTime']) ? $LouDetail['sOpenTime'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>交房日期：</b>
+                        <span><?php echo isset($LouDetail['sDeliverTime']) ? $LouDetail['sDeliverTime'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>规划户数：</b>
+                        <span><?php echo isset($LouDetail['iPlanCount']) ? $LouDetail['iPlanCount'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>建筑面积：</b>
+                        <span><?php echo isset($LouDetail['sAcreage']) ? $LouDetail['sAcreage'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>物业类型：</b>
+                        <span><?php echo isset($LouDetail['sEstateType']) ? $LouDetail['sEstateType'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>建筑形态：</b>
+                    <span>
+<?php echo isset($LouDetail['sBuildType']) ? $LouDetail['sBuildType'] : ''; ?>
+                    </span>
+                    </li>
+                    <li>
+                        <b>装修情况：</b>
+                        <span><?php echo isset($LouDetail['sFitmentDesign']) ? $LouDetail['sFitmentDesign'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>装修标准：</b>
+                        <span><?php echo isset($LouDetail['iFitmentPrice']) ? $LouDetail['iFitmentPrice'] : ''; ?>
+                            元/㎡</span>
+                    </li>
+                    <li>
+                        <b>绿化率：</b>
+                        <span><?php echo isset($LouDetail['sGreenRate']) ? $LouDetail['sGreenRate'] : ''; ?>.00%</span>
+                    </li>
+                    <li>
+                        <b>容积率：</b>
+                        <span><?php echo isset($LouDetail['iPlotRatio']) ? $LouDetail['iPlotRatio'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>车位数：</b>
+                        <span><?php echo isset($LouDetail['iParkCount']) ? $LouDetail['iParkCount'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>车位配比：</b>
+                        <span>1:<?php echo isset($LouDetail['sParking']) ? $LouDetail['sParking'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>物业公司：</b>
+                        <span><?php echo isset($LouDetail['sManageCorp']) ? $LouDetail['sManageCorp'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>物业费用：</b>
+                        <span><?php echo isset($LouDetail['sManageFee']) ? $LouDetail['sManageFee'] : ''; ?>元/㎡/月</span>
+                    </li>
+                    <li>
+                        <b>开发商：</b>
+                        <span><?php echo isset($LouDetail['sName']) ? $LouDetail['sName'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>售楼处：</b>
+                        <span><?php echo isset($LouDetail['sSaleAddress']) ? $LouDetail['sSaleAddress'] : ''; ?></span>
+                    </li>
+                    <li>
+                        <b>售楼电话：</b>
+                        <span><?php echo isset($LouDetail['59552200']) ? $LouDetail['59552200'] : ''; ?></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="new_row_cont">
+        <div class="n_cont_warp mb30" id="roomTypeArea">
+            <div class="n_cont_warp_m">
+                <div class="clearfix type_area_menu">
+                    <h2>
+                        <b>
+                            <s></s>房型面积
+                        </b>
+                    </h2>
+
+                    <div id="other_type_hidden" class="clearfix ctw_fvb" style="display: none">
+                        查看当前楼盘其他户型:
+                        <?php
+                        if (!empty($aHxImage)) {
+                            foreach ($aHxImage as $key => $value) {
+                                ?>
+                                <span onclick="XfDetail.changeRoomType('二房','C')"><s></s><?php echo $value['typeName'].' '.$value['typeCode'].' '. $value['area'];  ?></span>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                    <ul id="detail_type_menu">
+                        <li id="hx_all">
+                            <a href="javascript:void(0)" class="cur">全部<?php echo '(' . count($aHxImage) . ')' ?></a>
+                            <em>|</em>
+                        </li>
+                        <?php
+                        if (!empty($aHxData)) {
+                            foreach ($aHxData as $key => $value) {
+                                ?>
+                                <li id="hx_<?php echo $key; ?>">
+                                    <a href="javascript:void(0)"><?php echo $key . '(' . count($value) . ')' ?></a>
+                                    <em>|</em>
+                                </li>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <div class="type_area">
+                    <div class="type_area_list" id="room_type_scroll">
+                        <?php if (!empty($aHxData)) {
+                            foreach ($aHxData as $bigkey => $bigvalue) {
+                                ?>
+                                <ul class="clearfix" id="image_hx_<?php echo $bigkey; ?>" style="display: none">
+                                    <?php
+                                    if (!empty($bigvalue)) {
+                                        foreach ($bigvalue as $key => $value) {
+                                            ?>
+                                            <li>
+                                                <img src='<?php echo $value['sImageUrl'] ?>' alt=''>
+                                                <em><?php echo $value['typeName'] . ' ' . $value['area'] ?>㎡</em>
+
+                                                <div class="rt_info" style="display: none">
+                                                    <span class="type_code"><?php echo $value['typeCode'] ?></span>
+                                                    <span class="type_name"><?php echo $value['typeName'] ?></span>
+                                                    <span class="type_area"><?php echo $value['area'] ?>㎡</span>
+                                                    <span class="type_img_url"><?php echo $value['sImageUrl'] ?></span>
+                                                    <dl class="type_youshi">
+                                                        <?php if (isset($value['advantage'])) {
+                                                            foreach ($value['advantage'] as $k => $v) {
+                                                                ?>
+                                                                <dd><?php echo $k + 1; ?>、<?php echo $v; ?></dd>
+                                                            <?php
+                                                            }
+                                                        } ?>
+                                                    </dl>
+                                                    <dl class="type_lieshi">
+                                                        <?php if (isset($value['disadvantage'])) {
+                                                            foreach ($value['disadvantage'] as $k => $v) {
+                                                                ?>
+                                                                <dd><?php echo $k + 1; ?>、<?php echo $v; ?></dd>
+                                                            <?php
+                                                            }
+                                                        } ?>
+                                                    </dl>
+                                                </div>
+                                            </li>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            <?php
+                            }
+                        } ?>
+                        <ul class="clearfix" id="image_hx_all">
+                            <?php
+                            if (!empty($aHxImage)) {
+                                foreach ($aHxImage as $key => $value) {
+                                    ?>
+                                    <li>
+                                        <img src='<?php echo $value['sImageUrl'] ?>' alt=''>
+                                        <em><?php echo $value['typeName'] . ' ' . $value['area'] ?>㎡</em>
+
+                                        <div class="rt_info" style="display: none">
+                                            <span class="type_code"><?php echo $value['typeCode'] ?></span>
+                                            <span class="type_name"><?php echo $value['typeName'] ?></span>
+                                            <span class="type_area"><?php echo $value['area'] ?>㎡</span>
+                                            <span class="type_img_url"><?php echo $value['sImageUrl'] ?></span>
+                                            <dl class="type_youshi">
+                                                <?php if (isset($value['advantage'])) {
+                                                    foreach ($value['advantage'] as $k => $v) {
+                                                        ?>
+                                                        <dd><?php echo $k + 1; ?>、<?php echo $v; ?></dd>
+                                                    <?php
+                                                    }
+                                                } ?>
+                                            </dl>
+                                            <dl class="type_lieshi">
+                                                <?php if (isset($value['disadvantage'])) {
+                                                    foreach ($value['disadvantage'] as $k => $v) {
+                                                        ?>
+                                                        <dd><?php echo $k + 1; ?>、<?php echo $v; ?></dd>
+                                                    <?php
+                                                    }
+                                                } ?>
+                                            </dl>
+                                        </div>
+                                    </li>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="new_row_cont">
+
+        <div class="n_cont_warp mb30">
+            <div class="n_cont_warp_m">
+                <h2>
+                    <b>
+                        <s></s>周边配套
+                    </b>
+                </h2>
+
+                <div class="per_support clearfix">
+                    <div class="per_sup_map" id="surr_fa_map">
+                    </div>
+                    <div class="per_sup_info" id="surrou_type_menu">
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" keywords="公交车站,地铁站" id="station">
+                                    <s class="s_jt"></s>
+                                    <em>交通</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="幼儿园,小学,中学,大学" id="edu">
+                                    <s class="s_jy"></s>
+                                    <em>教育</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="银行,购物,邮局" id="life">
+                                    <s class="s_sh"></s>
+                                    <em>生活</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="医院,健身" id="health">
+                                    <s class="s_jk"></s>
+                                    <em>健康</em>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" keywords="中餐,川菜" id="food">
+                                    <s class="s_cy"></s>
+                                    <em>餐饮</em>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="sup_info_list" id="surr_info_list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                SFMap.init("121.31685344", "31.21310403", "恒基旭辉中心");
+            });
+        </script>
+    </section>
+    <section class="new_row_cont">
+        <div class="n_cont_warp mb30">
+            <div class="n_cont_warp_m">
+                <div class="clearfix type_area_menu">
+                    <h2>
+                        <b>
+                            <s></s>楼盘相册
+                        </b>
+                    </h2>
+
+                    <ul id="detail_pic_menu">
+                        <li>
+                            <a href="javascript:void(0)" type="all" class="cur" count="16">全部</a>
+                            <em>|</em>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" type="sjt" count="4">实景图 (4)</a>
+                            <em>|</em>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" type="zpt" count="2">总平图 (2)</a>
+                            <em>|</em>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" type="xgt" count="3">效果图 (3)</a>
+                            <em>|</em>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" type="ybft" count="7">楼盘周边图 (7)</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="type_area">
+                    <div class="type_area_list" id="detail_picture_scroll">
+                        <ul class="clearfix">
+
+                            <li style="display: block" class="sjt"
+                                onclick="XfDetail.showPictureDetail(0,'售楼处实景图',this,0)">
+                                <img srcurl=''
+                                     src='http://get.file2.dc.cric.com/CRIC66cc328540dd4c8dc72382cb7d35501e_160X160_0_0_0.jpg'
+                                     alt='' mark='售楼处实景图'
+                                     bigurl='http://get.file2.dc.cric.com/CRIC66cc328540dd4c8dc72382cb7d35501e_639X480_0_0_0.jpg'>
+                                <em>售楼处实景图</em>
+                            </li>
+                            <li style="display: block" class="ybft" onclick="XfDetail.showPictureDetail(1,'其它',this,0)">
+                                <img srcurl=''
+                                     src='http://get.file8.dc.cric.com/CRICb8f618544b5278cf7049cd1ce5b1817d_160X160_0_0_0.jpg'
+                                     alt='' mark='其它'
+                                     bigurl='http://get.file8.dc.cric.com/CRICb8f618544b5278cf7049cd1ce5b1817d_639X480_0_0_0.jpg'>
+                                <em>其它</em>
+                            </li>
+                            <li style="display: block" class="ybft" onclick="XfDetail.showPictureDetail(2,'其它',this,1)">
+                                <img srcurl=''
+                                     src='http://get.file9.dc.cric.com/CRIC9d285becbf9aefa18e3d9489605f1e0b_160X160_0_0_0.jpg'
+                                     alt='' mark='其它'
+                                     bigurl='http://get.file9.dc.cric.com/CRIC9d285becbf9aefa18e3d9489605f1e0b_639X480_0_0_0.jpg'>
+                                <em>其它</em>
+                            </li>
+                            <li style="display: block" class="xgt"
+                                onclick="XfDetail.showPictureDetail(3,'VI形象',this,0)">
+                                <img srcurl=''
+                                     src='http://get.file4.dc.cric.com/CRICc7e180867b2c6d5ea8deae2e92df772c_160X160_0_0_0.jpg'
+                                     alt='' mark='VI形象'
+                                     bigurl='http://get.file4.dc.cric.com/CRICc7e180867b2c6d5ea8deae2e92df772c_639X480_0_0_0.jpg'>
+                                <em>VI形象</em>
+                            </li>
+                            <li style="display: block" class="xgt"
+                                onclick="XfDetail.showPictureDetail(4,'项目效果图',this,1)">
+                                <img srcurl=''
+                                     src='http://get.file7.dc.cric.com/CRICcb5902575697f42d38447ce18638fc5d_160X160_0_0_0.jpg'
+                                     alt='' mark='项目效果图'
+                                     bigurl='http://get.file7.dc.cric.com/CRICcb5902575697f42d38447ce18638fc5d_639X480_0_0_0.jpg'>
+                                <em>项目效果图</em>
+                            </li>
+                            <li style="display: block" class="sjt"
+                                onclick="XfDetail.showPictureDetail(5,'售楼处实景图',this,1)">
+                                <img
+                                    srcurl='http://get.file10.dc.cric.com/CRIC2752239390833e603355b6a15cb2ad07_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='售楼处实景图'
+                                    bigurl='http://get.file10.dc.cric.com/CRIC2752239390833e603355b6a15cb2ad07_639X480_0_0_0.jpg'>
+                                <em>售楼处实景图</em>
+                            </li>
+                            <li style="display: block" class="ybft"
+                                onclick="XfDetail.showPictureDetail(6,'道路实景图',this,2)">
+                                <img
+                                    srcurl='http://get.file13.dc.cric.com/CRIC40a75cb90de1bacd157bba2d5a16c364_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='道路实景图'
+                                    bigurl='http://get.file13.dc.cric.com/CRIC40a75cb90de1bacd157bba2d5a16c364_639X480_0_0_0.jpg'>
+                                <em>道路实景图</em>
+                            </li>
+                            <li style="display: block" class="ybft" onclick="XfDetail.showPictureDetail(7,'其它',this,3)">
+                                <img
+                                    srcurl='http://get.file3.dc.cric.com/CRIC6cab9b06b4fa9e039034611642279d07_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='其它'
+                                    bigurl='http://get.file3.dc.cric.com/CRIC6cab9b06b4fa9e039034611642279d07_639X480_0_0_0.jpg'>
+                                <em>其它</em>
+                            </li>
+                            <li style="display: block" class="zpt"
+                                onclick="XfDetail.showPictureDetail(8,'总平面图',this,0)">
+                                <img
+                                    srcurl='http://get.file13.dc.cric.com/CRIC54d5fb77918de2974c122882feedf098_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='总平面图'
+                                    bigurl='http://get.file13.dc.cric.com/CRIC54d5fb77918de2974c122882feedf098_639X480_0_0_0.jpg'>
+                                <em>总平面图</em>
+                            </li>
+                            <li style="display: block" class="sjt"
+                                onclick="XfDetail.showPictureDetail(9,'小区实景图',this,2)">
+                                <img
+                                    srcurl='http://get.file9.dc.cric.com/CRIC471c15bf1125d4b5713e999225e88121_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='小区实景图'
+                                    bigurl='http://get.file9.dc.cric.com/CRIC471c15bf1125d4b5713e999225e88121_639X480_0_0_0.jpg'>
+                                <em>小区实景图</em>
+                            </li>
+                            <li style="display: block" class="ybft"
+                                onclick="XfDetail.showPictureDetail(10,'道路实景图',this,4)">
+                                <img
+                                    srcurl='http://get.file7.dc.cric.com/CRICb8fe5e4e5067cc34e35a50471ea1fd41_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='道路实景图'
+                                    bigurl='http://get.file7.dc.cric.com/CRICb8fe5e4e5067cc34e35a50471ea1fd41_639X480_0_0_0.jpg'>
+                                <em>道路实景图</em>
+                            </li>
+                            <li style="display: block" class="ybft"
+                                onclick="XfDetail.showPictureDetail(11,'项目周边',this,5)">
+                                <img
+                                    srcurl='http://get.file17.dc.cric.com/CRIC40c1e7f4060759f442c030be44374ee0_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='项目周边'
+                                    bigurl='http://get.file17.dc.cric.com/CRIC40c1e7f4060759f442c030be44374ee0_639X480_0_0_0.jpg'>
+                                <em>项目周边</em>
+                            </li>
+                            <li style="display: block" class="xgt"
+                                onclick="XfDetail.showPictureDetail(12,'项目效果图',this,2)">
+                                <img
+                                    srcurl='http://get.file14.dc.cric.com/CRIC1823e56c4d8188a15ed4ef7f28fbaf7e_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='项目效果图'
+                                    bigurl='http://get.file14.dc.cric.com/CRIC1823e56c4d8188a15ed4ef7f28fbaf7e_639X480_0_0_0.jpg'>
+                                <em>项目效果图</em>
+                            </li>
+                            <li style="display: block" class="ybft"
+                                onclick="XfDetail.showPictureDetail(13,'其它',this,6)">
+                                <img
+                                    srcurl='http://get.file11.dc.cric.com/CRICb3fdfb7649e85add77738e99fd9102d9_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='其它'
+                                    bigurl='http://get.file11.dc.cric.com/CRICb3fdfb7649e85add77738e99fd9102d9_639X480_0_0_0.jpg'>
+                                <em>其它</em>
+                            </li>
+                            <li style="display: block" class="sjt"
+                                onclick="XfDetail.showPictureDetail(14,'小区实景图',this,3)">
+                                <img
+                                    srcurl='http://get.file9.dc.cric.com/CRIC83853215a674bbc36ee9de34c8695049_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='小区实景图'
+                                    bigurl='http://get.file9.dc.cric.com/CRIC83853215a674bbc36ee9de34c8695049_639X480_0_0_0.jpg'>
+                                <em>小区实景图</em>
+                            </li>
+                            <li style="display: block" class="zpt"
+                                onclick="XfDetail.showPictureDetail(15,'位置图',this,1)">
+                                <img
+                                    srcurl='http://get.file2.dc.cric.com/CRIC475dc97cbb4104b41c3e64aacca456fb_160X160_0_0_0.jpg'
+                                    src='' alt='' mark='位置图'
+                                    bigurl='http://get.file2.dc.cric.com/CRIC475dc97cbb4104b41c3e64aacca456fb_639X480_0_0_0.jpg'>
+                                <em>位置图</em>
+                            </li>
+                        </ul>
+                    </div>
+                    <span>
+                        <em class="s_prev_pic"><s></s></em>
+                        <em class="s_next_pic"><s></s></em>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="trybox" style="display:none;" id="room_type_dialog">
+        <div class="ml-overlay"></div>
+        <div class="ml-box kb_nb_01">
+            <div class="ml-tit kb_tit">
+                <a href="javascript:void(0);" onclick="$('#room_type_dialog').hide()" class="close"><i></i></a>
+
+                <h2 class="rt_title"></h2>
+            </div>
+            <div class="kb_ctw clearfix">
+                <div class="ctw_left">
+                    <img class="rt_img_url" src="" alt="">
+                </div>
+                <div class="ctw_right">
+                    <div class="ctw_r_fran">
+                        <div class="rt_typecode"></div>
+                        <div class="rt_typename"></div>
+                        <div class="rt_typearea"></div>
+                    </div>
+                    <div class="ctw_r_fp">
+                        <span>优势</span>
+                        <dl class="rt_youshi"></dl>
+                    </div>
+                    <div class="ctw_r_fp">
+                        <span class="r_fp_c1">不足</span>
+                        <dl class="rt_lieshi"></dl>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix ctw_fvb" id="other_type"></div>
+        </div>
+    </div>
+    <div class="pro_album_list" id="Proalbumbox">
+        <h3>
+            <b class="picName"></b>
+            <a href="javascript:closeBg('Proalbumbox')">x</a>
+        </h3>
+
+        <div class="prc_box" id="Prcboxside">
+
+        </div>
+        <div class="pro_album_button">
+            <a class="prev_l" id="album_prev" href="javascript:void(0);" style="z-index:50;"><s></s></a>
+            <a class="next_r" id="album_next" href="javascript:void(0);" style="z-index:50;"><s></s></a>
+        </div>
+        <div class="album_sz"></div>
+    </div>
+    <section class="new_row_cont">
+
+        <!--新百分点代码-->
+        <div class="recomend_house clearfix" style="overflow:hidden;">
+            <h2>您可能感兴趣的楼盘</h2>
+            <ul class="clearfix" id="bfdRecommended"></ul>
+        </div>
+    </section>
+
+</section>
+<script>
+    $('#detail_type_menu li').click(function () {
+        var currID = $(this).attr('id');
+        $(this).children('a').addClass('cur');
+        $(this).siblings().children('a').removeClass('cur');
+        $('#image_' + currID).show();
+        $('#image_' + currID).siblings().hide();
+    })
+    $('#room_type_scroll ul li').click(function () {
+        var title = $(this).find(' .type_name').eq(0).html() + ' ' + $(this).find(' .type_code').eq(0).html() + ' ' + $(this).find(' .type_area').eq(0).html();
+        var imageUrl = $(this).find(' .type_img_url').eq(0).html();
+        var typecode = $(this).find(' .type_code').eq(0).html();
+        var typename = $(this).find(' .type_name').eq(0).html();
+        var typearea = $(this).find(' .type_area').eq(0).html();
+        var youshi = $(this).find(' .type_youshi').eq(0).html();
+        var lieshi = $(this).find(' .type_lieshi').eq(0).html();
+        $('#room_type_dialog').show();
+        $('#room_type_dialog .rt_title').html(title);
+        $('#room_type_dialog .rt_img_url').attr('src', imageUrl);
+        $('#room_type_dialog .rt_typename').html('<span>户型:</span>' + typename);
+        $('#room_type_dialog .rt_typecode').html('<span>房型:</span>' + typecode);
+        $('#room_type_dialog .rt_typearea').html('<span>面积:</span>' + typearea);
+        $('#room_type_dialog .rt_youshi').html(youshi);
+        $('#room_type_dialog .rt_lieshi').html(lieshi);
+        $('#other_type').html($('#other_type_hidden').html());
+    })
+</script>

@@ -1,0 +1,92 @@
+<div class="pheader clearfix"><?php echo isset($aTag['iTagID'])?'编辑':'增加'?>标签</div>
+<div class="pbody clearfix">
+	<form id="myform" class="form-horizontal" role="form" method="post" action="">
+		<input name="iTagID" type="hidden" value="<?php echo isset($iTagArr['iTagID'])?$iTagArr['iTagID']:''?>">
+		<div class="form-group">
+			<label class="col-sm-2 control-label">所属章节：</label>
+			<div class="col-sm-10">
+				<select class="form-control input-validate"  name="iCatID" id="iCatID" validate="!required:true">
+					<option value="">请选择章节</option>
+					<?php
+					if (isset($chapter['parent'])&&!empty($chapter['parent'])) {
+						foreach ($chapter['parent'] as $k => $v) {
+							?>
+							<option
+								value="<?php echo $k?>"  <?php echo isset($iTagArr['iCatID'])&&$iTagArr['iCatID']==$k ? 'selected':'' ?>><?php echo $v?></option>
+						<?php }
+					}
+					?>
+				</select>
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">&nbsp;</label>
+			<div class="col-sm-10">
+				<select class="form-control input-validate"  name="iSubCatID" id="iSubCatID" validate="!required:true">
+					<option value="">请选择子章节</option>
+					<?php
+					if (isset($iTagArr['iSubCatID'])) {
+						foreach($chapter['child'][$iTagArr['iCatID']] as $k=>$v) {
+							?>
+							<option
+								value="<?php echo $k?>"  <?php echo $iTagArr['iSubCatID']==$k ? 'selected':'' ?>><?php echo $v?></option>
+						<?php
+						}
+					}
+					?>
+				</select>
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="sTagName" class="col-sm-2 control-label">优 劣 势：</label>
+			<div class="col-sm-3">
+				<label class="radio-inline">
+					<input type="radio" name="sType"  value="1" <?php echo isset($iTagArr['sType']) && $iTagArr['sType']=='优势' ? 'checked':'' ?> > 优势
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="sType"  value="2" <?php echo isset($iTagArr['sType']) && $iTagArr['sType']=='劣势' ? 'checked':'' ?>> 劣势
+				</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">优势标签：</label>
+			<div class="col-sm-10">
+				<input name="sName" validate="!length:2-100" type="text" value="<?php echo isset($iTagArr['sName'])?$iTagArr['sName']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">使用楼盘：</label>
+			<div class="col-sm-10">
+				<input name="sDesc" validate="!length:2-100" type="text" value="<?php echo isset($iTagArr['sDesc'])?$iTagArr['sDesc']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="btn-toolbar text-center">
+			<button id="save" class="btn btn-primary">保存</button>
+			<button id="cancel"class="btn" onclick="location.href='/evaluation/tag/';return false;">取消</button>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	var chapterChild = '<?php echo isset($childChapterJson)&&!empty($childChapterJson)? $childChapterJson:''?>';
+	$(function() {
+		//提交表单
+		$("#myform").validate({submitHandler: function(form) {
+			if ($("input[name='sType']:checked").length==0) {
+				alert('请选择优劣势');
+				return false;
+			}
+			$.post(form.action, $(form).serialize(), function(ret){
+				alert(ret.data);
+				if (ret.status) {
+					location.href = '/evaluation/tag';
+				}
+			}, 'json');
+			return false;
+		}});
+	})
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>

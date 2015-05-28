@@ -1,0 +1,57 @@
+@charset "utf-8";
+/* CSS Document */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td, header, section, footer { margin:0; padding:0; border:none; list-style:none;}
+body { font:12px/1 tahoma,Arial,"宋体",Helvetica,sans-serif; background:#f1f1f1;}
+fieldset, img { border:0; display:block;}
+ol, ul { list-style:none; }
+h1, h2, h3, h4, h5, h6{ font-size:100%; }
+em { font-style:normal; }
+input, button, select, textarea { outline:none; }/*控制google浏览器取消发光边框*/ 
+textarea { resize:none; }
+a { color:#555; text-decoration:none; }
+
+/* 头部开始 */
+.header_wrap{ width:100%; height:57px; border-bottom:1px solid #eee; background:#E7382A;}
+.header{ width:960px; height:44px; margin:0 auto;}
+.header_l{ float:left;}
+.logo{ float:left; margin-right:40px; width:110px; height:57px; overflow:hidden;}
+.logo a{ display:block; width:110px; height:0; padding-top:45px; background:url(../../img/news/logo.png) no-repeat;margin-top: 12px;}
+.header_l ul{ float:left; height:57px;}
+.header_l ul li{ float:left; height:57px; line-height:57px;}
+.header_l ul li a{ display:block; height:57px; padding:0 24px; font-size:17px; font-family:"微软雅黑","MS Serif", "New York", serif; color:#fff;}
+.header_l ul li a.current{ background:#C91102;}
+.header_l ul li a:hover{ background:#C91102;}
+.header_r{ float:right; margin-top:14px;}
+.seach_text {float: left; width: 226px; height: 32px; border-radius: 5px 0 0 5px; padding: 0 5px; box-sizing: border-box;}
+.seach_btn { width: 38px; height: 32px; background: url(../../img/news/seach_btn.jpg) no-repeat; cursor: pointer; float: left;}
+/* 头部结束 */
+
+/* 内容开始 */
+.error_wrap{ width:100%; margin:20px 0 48px 0;}
+.error{ width:960px; height:470px; background:#fff; margin:0 auto;}
+.error_con{ width:484px; margin:0 auto; overflow:hidden;}
+.error_con dl{ margin-top:43px;}
+.error_con dl dt{ margin-bottom:10px;}
+.error_con dl dd h6,.error_con dl dd p.p_txt{ padding-left:65px; font:bold 14px/31px "宋体"; color:#eb6100;}
+.error_con dl dd p.p_txt{ margin-bottom:28px; color:#555;}
+.error_con dl dd div{ border-top:1px solid #ededed;}
+.error_con dl dd div p{ padding-left:65px; margin-top:25px; line-height:14px; color:#555;}
+.error_con dl dd div p a{ margin:0 8px; color:#0a85d0;}
+/* 内容结束 */
+
+/* footer开始 */
+.footer_wrap{ width:100%; border-top:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5; margin-bottom:15px;}
+.footer{ width:960px; margin:0 auto; overflow:hidden; *zoom:1;}
+.footer_l{ width:430px; height:94px; border-right:1px solid #ededed; float:left; line-height:94px;}
+.footer_l a.footer_logo{ margin-right:45px;}
+.footer_l a{ color:#555; margin-right:25px; float:left;}
+.footer_l .phone s{ display:inline-block; position:relative; width:10px; height:16px; background:url(../../img/news/phone.jpg) no-repeat; top:4px; margin-right:5px;}
+.footer_l a:hover{ text-decoration:underline;}
+.footer_r{ float:left; padding:12px 0 0 35px;}
+.footer_r dl dt img{ width:70px; height:70px; background:#fff; border:1px solid #dfdfdf; display:block;}
+.footer_r dl dt{ float:left; margin-right:10px;}
+.footer_r dl dd{ float:left; width:132px; padding-top:12px;}
+.footer_r dl dd p{ line-height:20px; color:#555;}
+.footer_r dl{ float:left; width:230px;}
+.footer_r dl dt .erwei_code{ width:66px; height:66px; padding:2px;}
+/* footer结束 */

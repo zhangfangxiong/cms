@@ -1,0 +1,53 @@
+<?php
+    if (!empty($lineList)) {
+?>
+<div class="form-group">
+    <label for="" class="col-sm-2 col-sm-offset-1 control-label">途径车辆：</label>
+</div>
+<?php
+    foreach ($lineList as $k => $v) {
+?>
+<input type="hidden"  value="<?php echo $v['iBusID']?>" name="iBusId[#index][]"/>
+ <input type="hidden"  value="<?php echo $v['sBusName']?>" name="iBusLineName[#index][]"/>
+<div class="form-group">
+    <label for="" class="col-sm-2 col-sm-offset-2 control-label"><?php echo $v['sBusName']?>
+    <?php
+        switch ($v['iType']) {
+            case 1:
+                echo '上行';
+                break;
+            case 2:
+                echo '下行';
+                break;
+            case 3:
+                echo '内环';
+                break;
+            case 4:
+                echo '外环';
+                break;
+        }
+    ?>
+    </label>
+    <div class="col-sm-4">
+        <label class="col-sm-6 control-label"> 早高峰人流量：</label>
+        <select class="col-sm-6 form-control selectwid"name="iZaogaofeng[#index][]" >
+            <option value="">请选择人流量</option>
+            <option value="1" <?php echo isset($sInfo[$v['iBusID']]) && ($sInfo[$v['iBusID']]['zaogaofeng']==1) ? 'selected':'' ?>>一般</option>
+            <option value="2" <?php echo isset($sInfo[$v['iBusID']]) && ($sInfo[$v['iBusID']]['zaogaofeng']==2) ? 'selected':'' ?>>拥挤</option>
+            <option value="3" <?php echo isset($sInfo[$v['iBusID']]) && ($sInfo[$v['iBusID']]['zaogaofeng']==3) ? 'selected':'' ?>>非常拥挤</option>
+        </select>
+    </div>
+    <div class="col-sm-4">
+        <label class="col-sm-6 control-label"> 晚高峰人流量：</label>
+        <select class="col-sm-6 form-control selectwid" name="iWangaofeng[#index][]" >
+            <option value="">请选择人流量</option>
+            <option value="1" <?php echo isset($sInfo[$v['iBusID']]) && ($sInfo[$v['iBusID']]['wangaofeng']==1) ? 'selected':'' ?>>一般</option>
+            <option value="2" <?php echo isset($sInfo[$v['iBusID']]) && ($sInfo[$v['iBusID']]['wangaofeng']==2) ? 'selected':'' ?>>拥挤</option>
+            <option value="3" <?php echo isset($sInfo[$v['iBusID']]) && ($sInfo[$v['iBusID']]['wangaofeng']==3) ? 'selected':'' ?>>非常拥挤</option>
+        </select>
+    </div>
+</div>
+<?php
+    }
+    }
+ ?>

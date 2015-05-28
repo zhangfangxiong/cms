@@ -1,0 +1,142 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot?>/css/news/newsindex.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot?>/css/news/newsList.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot?>/css/news/newsArticle.css">
+
+<!--最新资讯内容开始-->
+<div class="news_con">
+    <!--资讯文章左侧内容开始-->
+    <div class="news_con_l">
+        <h6 class="article"><?php echo $detail['sTitle'];?></h6>
+        <div class="article_tags">
+            <span><?php echo date('Y-m-d', $detail['iPublishTime'])?></span>
+            <span><?php echo isset($detail["sMedia"]) && !empty($detail['sMedia']) ? $detail['sMedia'] : '房价点评网';?></span>
+            <span>作者：<?php echo $detail['sAuthor'];?></span>
+            <span>已分享：<?php echo $detail['iShareTimes'];?></span>
+        </div>
+        <div class="article_con">
+            <div class="atricle_con_in">
+                <?php echo $detail['sContent'];?>
+            </div>
+            <div class="article_share">
+
+                <?php if(!empty($tags)) {?>
+                <div class="article_share_l">
+                    <?php foreach($tags as $tagId => $tagName) { ?>
+                    <span><a href="<?php echo $nListUrl. $tagId; ?>" target="_blank"><?php echo $tagName; ?></a></span>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+                <div class="article_share_r">
+                    <p>分享到：</p>
+                    <?php $title = addslashes($detail['sShortTitle']);$id = $detail['iNewsID'];?>
+                    <span><a href="javascript:void(0)" onclick='openShare(window.ShareUrl.sina,this, "<?php echo $title;?>", "<?php echo $id;?>");'></a></span>
+                    <span><a href="javascript:void(0)" onclick='openShare(window.ShareUrl.qq,this, "<?php echo $title;?>", "<?php echo $id;?>");' class="share02"></a></span>
+                    <span><a href="javascript:void(0)" onclick='jiathis_sendto("weixin");return false;' class="share03"></a></span>
+                    <span><a href="javascript:void(0)" onclick='openShare(window.ShareUrl.qzone,this,"<?php echo $title;?>", "<?php echo $id;?>");' class="share04"></a></span>
+                    <span><a href="javascript:void(0)" onclick='openShare(window.ShareUrl.c_qq,this,"<?php echo $title;?>", "<?php echo $id;?>");' class="share05"></a></span>
+                    <span><a href="javascript:void(0)" onclick='openShare(window.ShareUrl.renren,this,"<?php echo $title;?>", "<?php echo $id;?>");' class="share06"></a></span>
+                    <span>
+                    	<a href="javascript:void(0)" class="share07"></a>
+                        <s><img alt="" src="http://<?=Yaf_G::getConf('fangjiadp', 'domain')?>/qrcode?text=http://<?=Yaf_G::getConf('news', 'domain')?>/<?=$sCurrCityCode?>/news/detail/<?=$id?>?width=90&height=90&w=90"></s>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <?php if(!empty($related)): ?>
+        <div class="relate_article">
+            <h6>相关新闻</h6>
+            <ul>
+                <?php foreach($related as $news) { ?>
+                    <li><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" target="_blank"><?php echo $news['sShortTitle'];?></a> <span><?php echo $news['iPublishTime']?></span></li>
+                <?php }?>
+            </ul>
+        </div>
+        <?php endif?>
+    </div>
+    <!--资讯文章左侧内容结束-->
+    <!--资讯文章右侧内容开始-->
+    <div class="news_con_r">
+        <div class="tady_hot">
+            <h6 class="tady_hot_title">
+                <span></span>
+                新闻推荐
+            </h6>
+            <ul>
+                <?php if(!empty($topShare)): ?>
+                    <?php foreach($topShare as $news) { ?>
+                        <li><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" target="_blank"><?php echo $news['sShortTitle'];?></a></li>
+                    <?php }?>
+                <?php endif?>
+            </ul>
+
+        </div>
+        <?php if(!empty($buildings)) { ?>
+
+        <div class="evaluate_floor">
+            <h6 class="evaluate_floor_title">
+                <span></span>
+                分析师评楼
+            </h6>
+            <?php foreach($buildings as $building){ ?>
+            <div class="evaluate_floor_d">
+                <div class="evaluate_floor_img evaluate_floor_img02">
+                    <div class="evaluate_floor_img_in">
+                        <?php if($building['ListType'] == '尽快入手') {?>
+                            <span class="rushou"><?php echo $building['ListType'];?></span>
+                        <?php }?>
+                        <?php if($building['ListType'] == '推荐购买') {?>
+                            <span class="goumai"><?php echo $building['ListType'];?></span>
+                        <?php }?>
+                        <?php if($building['ListType'] == '谨慎购买') {?>
+                            <span class="jingshen"><?php echo $building['ListType'];?></span>
+                        <?php }?>
+                        <?php if($building['ListType'] == '持币观望') {?>
+                            <span class="guanwang"><?php echo $building['ListType'];?></span>
+                        <?php }?>
+
+                        <a href="<?php echo $building['sUrl']; ?>" target="_blank"><img src="<?php if(!empty($building['ZongPingXQ'])){echo Util_Uri::getCricViewURL($building['ZongPingXQ'], 228, 171);}else{ echo $sStaticRoot.'/img/news/not_exists.jpg';} ?>" width="228" height="171" ></a>
+
+                        <?php if(!empty($building['OpinionSummary'])){?>
+                        <div class="shadow">
+                            <div class="shadow_in"></div>
+                            <p>
+                                <?php
+                                    $len = mb_strlen($building['OpinionSummary']);
+                                    if($len > 15) {
+                                        echo mb_substr($building['OpinionSummary'], 0, 15). "...";
+                                    } else {
+                                        echo mb_substr($building['OpinionSummary'], 0, 15);
+                                    }
+                                ?>
+                            </p>
+                        </div>
+                        <?php } ?>
+                    </div>
+                    <div class="floor_name">[<?php echo $building['Region']?>] <a href="<?php echo $building['sUrl']; ?>" target="_blank"><?php echo $building['UnitName']?></a></div>
+                    <dl class="evaluate_floor_price">
+                        <dt>开发商售价</dt>
+                        <dd><span class="detail"><?php echo ($building['Price'] > 0) ? number_format($building['Price']): '待定'; ?></span> 元/㎡</dd>
+                        <dt>指导价</dt>
+                        <dd><span><?php echo number_format($building['CricPrice']);?></span> 元/㎡</dd>
+                    </dl>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+        <?php }?>
+    </div>
+    <!--资讯文章右侧内容结束-->
+
+	<script src="<?php echo $sStaticRoot?>/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('.article_share_r span:last').hover(function(e) {
+                $('.article_share_r span s').toggle();
+            });
+        })
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/share.js"></script>
+    <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+
+

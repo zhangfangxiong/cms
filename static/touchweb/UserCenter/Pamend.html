@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>房价点评</title>
+    <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="../resource/css/usercenter.css">
+    <script src="../lib/jquery/jquery-1.10.2.js"></script>
+    <script src="../lib/js/commonus.js"></script>
+</head>
+<body>
+    <!--修改密码开始-->
+    <div class="viewport">
+        <header class="UserCenter_head">
+            <div class="uc_return">
+                <div class="uc_return_l">
+                    <a href="javascript:history.go(-1)"> </a>
+                </div>
+                <div class="uc_return_c">修改密码</div>
+            </div>
+        </header>
+        <section class="logging change_passwd">
+        	<div class="pl12 tip">请输入138****6666收到的验证码</div>
+            <ul>
+                <li class="bgf p12 outborder mb10">
+                    <input type="password" class="register_pass" placeholder="请输入验证码"/>
+                    <span class="verification_code p5 border" id="state_verification"><cite id="but_time"></cite><p>获取验证码</p></span>
+                </li>
+                <li class="bgf p12 outborder">
+                    <input type="password" placeholder="重复新密码"  id="too_new_password"/>
+                    <s class="warn" id="new_pass_verification" style="display:none;"></s>
+                </li>
+            </ul>
+            <div class="btn_wrap" id="affirm_update">
+                <span class="btn">确认修改</span>
+            </div>
+        </section>
+        <section class="change_passwd_suc" style="display:none;" id="change_passwd_suc">密码修改成功！</section>
+    </div>
+    <!--修改密码结束-->
+    <script type="text/javascript">
+        var city = getQueryString("cityName");
+        $(function () {
+            $("#affirm_update").on("click", function () {
+                var opass = $("#old_password").val();
+                var npass = $("#new_password").val();
+                var tpass = $("#too_new_password").val();
+                $("#affirm_update span").addClass("current");
+
+                if (npass == tpass && npass != "" && tpass != "" && npass.length >= 6 && npass.length <= 12) {
+                    amendPassword(npass);
+                } else if (opass == "") {
+                    $("#old_pass_verification").show();
+                    $("#new_pass_verification").hide();
+                    $("#new_pass_verification0").hide();
+                } else if (opass != "" && npass != tpass) {
+                    $("#too_new_password").val("");
+                    $("#new_pass_verification").show();
+                } else {
+                    $("#new_password").val("");
+                    $("#new_pass_verification0").show();
+                    $("#too_new_password").val("");
+                    $("#new_pass_verification").show();
+                }
+            });
+
+        });
+
+        function amendPassword(pass) {
+            var parameterStr = {};
+            var userName = getCookie("userName");
+            parameterStr.User = userName;
+            var oldpass = $("#old_password").val();
+            parameterStr.Pass1 = oldpass;
+            parameterStr.Pass2 = pass;
+            DataHelper.GetJson("updateuser", parameterStr, function (result) {
+                var isbool = result.dataCode;
+                if (parseInt(isbool) == 1) {
+                    $("#old_pass_verification").hide();
+                    $("#new_pass_verification").hide();
+                    $("#new_pass_verification0").hide();
+                    $("#change_passwd_suc").show();
+                    setTimeout(function () {
+                        $("#change_passwd_suc").hide(200);
+                        location.href = "more.html?cityName=" + city;
+                    }, 2000)    
+                } else if(parseInt(isbool)==3){
+                    $("#old_password").val("");
+                    $("#old_pass_verification").show();
+
+                } else {
+                    $("#too_new_password").val("");
+                    $("#new_pass_verification").show();
+                }
+            });
+        }
+
+        function getCookie(objName) {//获取指定名称的cookie的值
+            var arrStr = document.cookie.split(";");
+            for (var i = 0; i < arrStr.length; i++) {
+                var temp = arrStr[i].split("=");
+                if (temp[0] == objName)
+                    return unescape(temp[1]);
+            }
+        }
+
+    </script>
+</body>
+</html>

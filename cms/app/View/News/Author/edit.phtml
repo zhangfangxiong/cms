@@ -1,0 +1,96 @@
+<div class="pheader clearfix"><?php echo isset($aAuthor['iAuthorID'])?'编辑':'添加'?>作者</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <input name="iAuthorID" type="hidden" value="<?php echo isset($aAuthor['iAuthorID']) ? $aAuthor['iAuthorID'] : 0?>">
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 作者：</label>
+			<div class="col-sm-10">
+				<input name="sAuthorName" validate="!length:1-10" type="text" value="<?php echo isset($aAuthor['sAuthorName'])?$aAuthor['sAuthorName']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 地区：</label>
+			<div class="col-sm-10">
+				<input name="sCity" id="sCity" type="text" validate="!function:regionCheck" placeholder="请输入地区，并选择所匹配地区" value="<?php echo isset($aAuthor['sCityName'])?$aAuthor['sCityName']:''?>" class="form-control input-validate">
+				<input name="iCityID" id="iCityID" type="hidden" value="<?php echo isset($aAuthor['iCityID'])?$aAuthor['iCityID']:''?>" class="form-control input-validate">
+				<input name="sSelectCityName" id="sSelectCityName" type="hidden" value="<?php echo isset($aAuthor['sCityName'])?$aAuthor['sCityName']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 状态：</label>
+			<div validate="!radio:iStatus">
+				<div class="col-sm-5">
+					<label class="radio-inline">
+						<input type="radio" name="iStatus" value="1" <?php if (!isset($aAuthor['iStatus']) || (isset($aAuthor['iStatus']) && 1 == $aAuthor['iStatus'])){echo 'checked="checked"';}?>>有效
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="iStatus" value="0" <?php if (isset($aAuthor['iStatus']) && 0 == $aAuthor['iStatus']){echo 'checked="checked"';}?>>无效
+					</label>
+				</div>
+			</div>
+			<span class="validate_checktip"></span>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">职位：</label>
+			<div class="col-sm-10">
+				<input name="sPosition" type="text" validate="*length:0-10" value="<?php echo isset($aAuthor['sPosition']) ? $aAuthor['sPosition'] : ''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">头像：</label>
+			<div class="col-sm-10">
+				<input type="hidden" id="sHead" name="sHead" value="<?php echo isset($aAuthor['sHead']) ? $aAuthor['sHead'] : ''?>">
+				<img id="sImageShow" width="120" height="120" src="<?php echo isset($aAuthor['sHead']) ? Util_Uri::getDFSViewURL($aAuthor['sHead']) : ''?>">
+				<input type="button" value="选择" class="plupload" data-target="#sHead" data-img="#sImageShow">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">签名：</label>
+			<div class="col-sm-10">
+				<textarea rows="3" validate="*length:0-255" class="form-control input-validate"  name="sSignature"><?php echo isset($aAuthor['sSignature'])?$aAuthor['sSignature']:''?></textarea>
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="btn-toolbar text-center">
+			<button id="save" class="btn btn-primary">保存</button>
+			<button id="cancel" class="btn" onclick="location.href='<?=$sListUrl?>';return false;">取消</button>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+global.sUploadUrl = '<?php echo Yaf_G::getConf('bannerupload', 'url')?>';
+global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/upload.js"></script>
+<script type="text/javascript">
+function regionCheck(value, args) {
+	var iCityID = $('#iCityID').val();
+	var sSelectCityName = $('#sSelectCityName').val();
+	var sCity = $('#sCity').val();
+	if ($('#iCityID').val() > 0 && sSelectCityName == sCity) {
+		return true;
+	}
+	return false;
+}
+
+$(function() {
+	//提交表单
+	$("#myform").validate({submitHandler: function(form) {
+	    $.post(form.action, $(form).serialize(), function(ret){
+	        alert(ret.data);
+	        if (ret.status) {
+	            location.href = '<?=$sListUrl?>';
+	        }
+	    }, 'json');
+	    return false;
+	}});
+});
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/city.js"></script>

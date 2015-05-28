@@ -1,0 +1,105 @@
+﻿<section class="loginMinbox">
+	<div class="clearfix">
+		<div class="login_leftmenu">
+			<h2>
+				<s></s><b>个人设置</b>
+			</h2>
+			<dl>
+				<dt>
+					<?php if (!empty($userInfo['HeadImg'])) { ?>
+						<img src="<?php echo Model_Util::getFormatImag($userInfo['HeadImg']) ?>" />
+					<?php } else { ?>
+						<img src="<?php echo $sStaticRoot?>/web/images/person_img.png" />
+					<?php } ?>
+				</dt>
+				<dd>
+					<a href=""><?php echo $userInfo['UserName'] ?></a> <span>普通用户</span>
+				</dd>
+			</dl>
+			<ul>
+				<li class="<?php if(isset($userInfo['userinfo'])) {echo $userInfo['userinfo']; }?>">
+					<a href="/user/index/userinfo"><s class="s_perinfo"></s>个人资料 </a>
+				</li>
+				<li class="<?php if(isset($userInfo['editavatar'])) {echo $userInfo['editavatar']; }?>">
+					<a href="/user/index/editavatar"><s class="s_editavatar"></s>编辑头像</a>
+				</li>
+				<?php if(empty($userInfo['Phone'])){ ?>
+				<li class="<?php if(isset($userInfo['bangding'])) {echo $userInfo['bangding']; }?>"><a href="/user/index/bindingphone"><s
+							class="s_binphone"></s>绑定手机</a></li>
+				<?php } ?>
+				<li class="<?php if(isset($userInfo['changepassword'])) {echo $userInfo['changepassword']; }?>">
+					<a href="/user/index/changepassword"><s class="s_changepassword"></s>修改密码 </a>
+				</li>
+
+			</ul>
+		</div>
+		<div class="login_rightinfo">
+			<h2>
+				绑定手机
+			</h2>
+			<div class="info_mation_box">
+				<dl class="dl_person_info">
+					<dt>手机号：</dt>
+					<dd class="">
+						<cite>
+							<input id="account" name="account" type="text" maxlength="20" onkeyup="clearNoNumNew(this)"
+								onblur="clearNoNumNew(this)" />
+						</cite><span></span>
+					</dd>
+				</dl>
+				<dl class="dl_person_info">
+					<dt>验证码：</dt>
+					<dd class="verification_code">
+						<cite style="display: inline-block">
+							<input id="VCode" name="VCode" type="text" maxlength="10" />
+						</cite><a id="getVCode" href="javascript:sendSMS(5)">获取验证码</a><span></span>
+					</dd>
+				</dl>
+				<dl class="dl_person_info">
+					<dt>&nbsp;</dt>
+					<dd>
+						<div class="loginBtn">
+							<input type="button" id="subsave" onclick="bindingPhone()" value="完成绑定" />
+						</div>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function () {
+			$("#account").focus(function () {
+				$("#account").parent().next().html("");
+				$("#account").parent().parent().removeClass("dd_error");
+			});
+			$("#account").blur(function () {
+				checkAccount(false, $(this), 2);
+			});
+			$("#VCode").focus(function () {
+				$("#getVCode").next("span").html("");
+				$("#getVCode").parent().removeClass("dd_error");
+			});
+			$("#VCode").blur(function () {
+				checkVCode(false, $(this), $("#account"), 5);
+			});
+		});
+
+		function bindingPhone() {
+			var account = $("#account");
+			var checkCodeResult = checkVCode(false, $("#VCode"), account, 5);
+			if (!checkCodeResult) {
+				return;
+			}
+			var code = $("#VCode").val();
+			$.post("/user/index/bangdingphone", { tel: account.val(),code:code}, function (result) {
+				if (result.data.msg == 'ok') {
+					alert('绑定成功');
+					window.location = "/user/index/userinfo";
+				}else{
+					alert(result.data.msg);
+				}
+			},'json');
+
+		}
+	</script>
+</section>

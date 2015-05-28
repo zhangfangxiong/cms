@@ -1,0 +1,36 @@
+﻿body{background:#bf9d5a url(../images/zt_0810/bg.jpg) repeat-y center;}
+.top_bg{ background:url(../images/zt_0810/top_bg.jpg) no-repeat center 0; margin:auto; padding-top:276px;}
+.zw{ width:960px; z-index:1; background:#FFF; margin:auto; color:#555555; position:relative;}
+.hd_bg{ background:#e3e3e3; width:454px; height:250px; margin:0 15px; padding:11px 14px;float:left}
+.news{ float:left; width:424px; font-family:"微软雅黑"; font:14px; line-height:22px;}
+h3{ font-size:20px; font-family:"微软雅黑"; font-weights:normal; margin:10px 0; padding-bottom:10px; border-bottom:1px solid #cccccc}
+.news_text a{color:#c51b1e;text-decoration:none; font-size:16px; line-height:26px}
+.news_text a:hover{color:#e8443a; text-decoration:underline}
+.news_text{ margin-bottom:10px}
+.week_title{width:960px; background:url(../images/zt_0810/title.jpg) no-repeat;float:left; height:57px; margin-top:20px;}
+.week{ width:510px; margin:11px 0 0 184px; float:left;}
+.week span.on{background:url(../images/zt_0810/xz_on.png) no-repeat; }
+.week span{width:92px; height:50px; float:left; text-align:center; padding-top:20px;background:url(../images/zt_0810/xz_off.png) no-repeat; margin-right:6px;font-size:18px; color:#4a3300; }
+.tel{ width:150px; margin:18px 0 0 105px; float:left; font-size:20px; font-family:Arial; color:#FFF; }
+.week_biao_bg{ background:url(../images/zt_0810/week_biao_bg.jpg) no-repeat; width:921px; height:315px;margin:11px 20px 0 19px;  position:relative;}
+.week_biao_bg ul{ margin:0 0 0 32px; padding:0; list-style:none; width:136px; font-size:15px; color:#0058a3}
+.week_biao_bg li{ margin-bottom:30px; line-height:25px}
+.week_biaoxz_bg{ background:url(../images/zt_0810/week_biaoxz_bg.jpg) repeat-y; height:95px; margin-left:197px; top:3px; position:relative}
+.font012{ font-size:12px; color:#854d00;}
+.lp_jg{float:left; margin-left:12px; margin:18px 10px 0 16px; width:114px;text-align:center}
+.biaoge{ width:700px; height:197px; margin-left:13px; position:relative; top:11px; float:left;font-size:12px}
+.huadiao{background:url(../images/zt_0810/huadiao.png) no-repeat; width:48px; height:15px; z-index:2; position:absolute; margin:-12px 0 0 22px}
+#Footer{padding-top:20px;}
+.biaoge table{border:1px solid #dcdcdc; background-color:#fff;}
+.biaoge table td{vertical-align:middle; border-bottom:1px dashed #dedede;}
+.biaoge table td.bg_gay{background-color:#f1f1f1;}
+.biaoge table td.bg_red{font-size: 18px; font-family: '微软雅黑'; color: #fff; border-left:1px solid #dedede; background-color:#ee6962;}
+
+.hd_bg_left{position:relative;width:370px;height:249px;overflow:hidden;float:left; background-color:#fff; margin-right:1px;}
+.hd_bg_left img{display:block;width:370px;height:249px;}
+.hd_bg_left li{position:absolute;}
+.hd_bg_left em{display:block;position:absolute;bottom:0;width:100%;height:30px;background:rgba(0, 0, 0, .7);color:#fff;font-size:16px;line-height:30px;text-indent:1em;}
+.hd_bg_right{float:right;}
+.hd_bg_right li{margin-bottom:1px;}
+.hd_bg_right img {display:block; width:83px; height:49px; cursor:pointer;}
+#mask {display:block;position:absolute;top:11px; right:14px;width:79px;height:45px;border:2px solid #ee2708;}

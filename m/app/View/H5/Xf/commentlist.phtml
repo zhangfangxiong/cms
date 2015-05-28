@@ -1,0 +1,145 @@
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">
+    <input id="pagenumlength" type="hidden" value="1" />
+
+    <!--网友评论开始-->
+    <div class="viewport">
+        <!--头部开始-->
+         <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="uc_return_l goback"></a>
+                <div class="inner_title">网友点评（<?php echo $aComments['iTotalNum'];?>条）</div>
+            </div>
+        </header>
+        <!--头部开始-->
+		<!--评论列表开始-->
+        <section class="bgf">
+            <div class="comments_wrap">
+            	<ul class="pl12">
+                    <?php
+                        if(0 < $aComments['iTotalNum']) {
+                            foreach ($aComments['list'] as $key => $value) {
+                                echo '  <li>
+                                            <div class="clearfix pr12 comments_t">
+                                                <span class="comments_t_l">'.$value['sName'].'</span>
+                                                <span class="comments_t_r">'.$value['sTime'].'</span>
+                                            </div>
+                                            <div class="comments_b pr12">'.$value['sContent'].'</div>
+                                        </li>';
+                            }
+                        }
+                    ?>                	
+                </ul>
+            </div>
+            <div style="position:fixed; bottom:0; left:0; z-index:999;" class="border_top write bgf">
+                <input id="text" type="text" placeholder="我也来说两句，限50字"/>
+                <span id="submit" class="comments_btn">提交</span>
+            </div>
+        </section>
+        <!--评论列表结束-->
+        <section class="tip_dialog" id="tip_dialog"></section>
+    </div>
+    
+    <style>
+        .comments_wrap li:last-child {
+            margin-bottom: 60px;
+        }
+    </style>
+
+    <!--网友评论结束-->
+    <script src="<?php echo $sStaticRoot ?>/touchweb/lib/jquery/jquery.min.js"></script>  
+    <script type="text/javascript">
+        hasRun = 0;
+        pageIndex = 1;
+
+        $(function(){
+            var hasSubmit = 0;
+        
+            $(window).scroll(initScroll);
+            
+            $('#submit').click(function(){                
+                var request_url = "/Ajax/Xf/addComment";
+                var userid = <?php echo $userId?>;
+                var id = <?php echo $buildingID?>;
+                var content = $('#text').val();
+                if(!hasSubmit) {
+                    $.ajax({
+                        url: request_url,
+                        type: "POST",
+                        data: {
+                            uid : userid,
+                            id: id,
+                            content: content
+                        },
+                        timeout: 60000,
+                        dataType: "json",
+                        async: true,
+                        success: function (result) {
+                            if (result.status) {
+                                    hasSubmit = 1;
+                                    $('#tip_dialog').html('评论成功').show();
+                                    setTimeout(function () {
+                                        $("#tip_dialog").hide(200);
+                                        location.href = window.location.href;
+                                    }, 2000)
+                            } else {
+                                alert(result.data);
+                            }
+                        },
+                        error: function (result) {
+                            alert("请求错误");
+                        }
+                    });
+                }            
+            });
+
+        });
+        
+        function loadData() {
+            hasRun = 1;
+            $.ajax({
+                type: "get",
+                url: "/Ajax/Xf/commentList",
+                data: {
+                    id: <?php echo $buildingID?>,
+                    page: pageIndex
+                },
+                dataType: "json",
+                success: function (data) {  
+                    hasRun = 0;                     
+                    if (data.status) {
+                        var html = "";
+                        if(data.data.list.length > 0) {
+                            for (var i = 0; i < data.data.list.length; i++) {
+                                html += '<li><div class="clearfix pr12 comments_t"><span class="comments_t_l">'+data.data.list[i].sName+'</span><span class="comments_t_r">'+data.data.list[i].sTime+'</span></div><div class="comments_b pr12">'+data.data.list[i].sContent+'</div></li>';
+                            }
+                            $(".pl12").append(html);
+                        }else {
+                            $("#pagenumlength").val("0");
+                        }                        
+                    } else {
+                        $("#pagenumlength").val("0");
+                    }
+                },
+                error: function (result) {
+
+                }
+            });                
+        }
+
+        function initScroll() {
+            var pageH = $(document).height()
+            var scrollT = $(window).scrollTop(); //滚动条top
+            var aa = pageH - $(window).height() - scrollT;
+            var regionId = $("#hiddenRegion").val();
+            var priceId = $("#hiddenPrice").val();
+            if (aa < 1) {
+                if($("#pagenumlength").val()=="1"){
+                    if(!hasRun) {
+                        pageIndex++;
+                        loadData();
+                    }  
+                }                                  
+            }
+        }
+
+    </script>

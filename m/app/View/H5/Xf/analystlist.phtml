@@ -1,0 +1,36 @@
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">
+    <!--新房分析师点评开始-->
+    <div class="viewport">
+        <!--头部开始-->
+         <header class="tophead">
+            <div class="tophead_inner">
+                <a href="javascript:history.back()" class="uc_return_l goback"></a>
+                <div class="inner_title">分析师点评</div>
+            </div>
+        </header>
+        <!--头部开始-->
+		<!--新房分析师点评列表开始-->
+        <?php
+            if(isset($aAnalyst['list']) && $aAnalyst['list']) {
+                foreach ($aAnalyst['list'] as $key => $value) {
+                    echo '  <section class="main_section anay_ev">
+                            <div class="zh_eval clearfix">
+                                <div class="leftanay_info">
+                                    <div class="anay_headimg_newhouse"><img src="'.$value['sAvatarImgUrl'].'"></div>
+                                    <div class="n_anay_name">'.$value['sName'].'</div>
+                                    <div class="n_anay">'.$value['sTitle'].'</div>
+                                </div>
+                                <div class="rightcom_info">
+                                    '.$value['sText'].'
+                                </div>
+                            </div>
+                        </section>
+                        <section class="fenge"></section>';
+                }                
+            }
+        ?>
+            
+             
+        <!--新房分析师点评列表结束-->
+    </div>
+    <!--新房分析师点评结束-->

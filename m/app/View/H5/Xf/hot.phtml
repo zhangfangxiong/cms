@@ -1,0 +1,233 @@
+<!--新房列表开始-->
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/swiper.min.css">
+<div class="viewport">
+    <!--头部开始-->
+    <header class="UserCenter_head outborder">
+        <div class="uc_return">
+            <div class="uc_return_l">
+                <a href="/h5/index"></a>
+            </div>
+            <div class="uc_return_c">热销楼盘</div>
+        </div>
+    </header>                                                                                                    
+    <!--头部开始-->   
+    <!-- Swiper开始 -->
+    <section class="newHosue_swiper bgf border_bottom">
+        <div class="swiper-container pr12"  id="newhouseswip">
+            <div class="swiper-wrapper">
+                <?php foreach ($features as $item) { ?>
+                    <?php
+                    if (isset($item) && isset($item["sName"])) {
+                        $sClassName = $item["sCode"] == $where["featureID"] ? "current" : "";
+                        ?>
+                        <div featureid="<?php echo $item["sCode"] ?>" class="swiper-slide <?php echo $sClassName ?>"><?php echo $item["sName"] ?></div>
+                    <?php } ?>
+<?php } ?>
+            </div>
+        </div>
+    </section>
+    <!-- Swiper结束 -->
+<?php if (!empty($list["data"]["list"])) { ?>
+        <!--新房列表项开始-->
+        <section class="newHosue_list bgf border_bottom hotHouse_list" id="mainsection">
+            <?php foreach ($list["data"]["list"] as $item) { ?>
+        <?php if (isset($item) && isset($item["sName"])) { ?>
+                    <a href="/h5/xf/xfdetail?id=<?php echo $item["iBuildingID"] ?>" class="item pl12">
+                        <div class="cnt p12 border_bottom">
+                            <div class="pic mr12">
+                                <canvas data-src="<?php echo $item["sImgUrl"] ?>"></canvas>
+                                <s class="<?php echo $aEva[$item["iFlagType"]]["class"] ?>"></s>
+                            </div>
+                            <div class="wrap">
+                                <div class="house_name">
+                                    <span class="name"><?php echo $item["sName"] ?></span>
+                                    <?php
+                                    if (!empty($item["sRate"])) {
+                                        echo '<span class="grade ml5 top'.$item["sRate"].'"></span>';
+                                    }
+                                    ?>                                       
+                                </div>
+                                <div class="house_txt"><?php echo $item["sRegion"] ?></div>
+                                <div class="house_txt house_txt1">
+                                    <?php foreach (explode(";", $item["sAdvantages"]) as $sAdv) { ?>
+                                        <?php if (!empty($sAdv)) { ?>
+                                            <span class="mr5"><?php echo $sAdv ?></span>
+                                        <?php } ?>
+            <?php } ?>
+                                </div>
+                                <div class="house_txt house_txt2">
+                                    <span class="key_txt"><?php echo $item["sPrice"] ?></span>
+            <?php echo $item["sUnit"] ?>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <?php } ?>
+    <?php } ?>
+            <div class="loaddiv"></div>
+        </section>
+        <!--新房列表项结束-->
+<?php } else { ?>
+        <!--无搜索内容开始-->
+        <section class="search_result index_search_result" style="display: block">
+            <div class="search_result_tip">
+                <div class="tip1">没找到您要的结果</div>                
+            </div>
+        </section>
+        <!--无搜索内容结束-->
+<?php } ?>
+    <!--返回顶部开始-->
+    <div class="return_top" id="backtop">
+        <div class="return_top_bg"></div>
+    </div>
+    <!--返回顶部结束-->
+</div>
+<!--新房列表结束-->
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script type="text/javascript">
+    requirejs.config({
+        baseUrl: '<?php echo $sStaticRoot ?>/touchweb/lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'webtouchcommon': 'js/webtouchcommon',
+            'swiper': 'plugs/swiper.min'
+        }
+    })
+    require(["jquery", "swiper", "webtouchcommon"],
+            function () {
+                pageIndex = 1;
+                hasRun = 0;
+
+                $(window).scroll(initScroll);
+
+                //窗口滚动处理
+                function initScroll() {
+                    backTop();
+                    var pageH = $(document).height()
+                    var scrollT = $(window).scrollTop(); //滚动条top
+                    var aa = pageH - $(window).height() - scrollT;
+                    if (aa < 1) {
+                        if(!hasRun) {
+                            pageIndex++;
+                            getData();
+                        }                        
+                    }
+                }
+
+                //返回顶部
+                function backTop() {
+                    var screenheight = $(window).height();
+                    if ($(window).scrollTop() > screenheight) {
+                        $('#backtop').fadeIn();
+                    } else {
+                        $('#backtop').fadeOut();
+                    }
+                }
+
+                //加载下一页数据
+                function getData() {
+                    hasRun = 1;
+                    var iFeatureID = $.trim($(".swiper-slide.current").attr("featureid")) || 0;
+                    $.post('xfSearchList',
+                            {
+                                iPage: pageIndex,
+                                iFeatureID: iFeatureID,
+                            }, function (res) {
+                        res = eval("(" + res + ")");
+                        if (res.data.data.list.length > 0) {
+                            hasRun = 0;
+                            var html = "";
+                            for (var i = 0; i < res.data.data.list.length; i++) {
+                                var advHtml = "";
+                                if (res.data.data.list[i].sAdvantages) {
+                                    var advArr = res.data.data.list[i].sAdvantages.split(';');
+                                    for (var k = 0; k < advArr.length; k++) {
+                                        if (advArr[k]) {
+                                            advHtml += "<span class=\"mr5\">" + advArr[k] + "</span>";
+                                        }
+                                    }
+                                }
+
+                                var rate = "";
+                                if (res.data.data.list[i].sRate) {
+                                    rate += "<span class=\"grade ml5\">" + res.data.data.list[i].sRate + "</span>";
+                                }
+
+                                html += "<a href=\"/h5/xf/xfdetail?id=" + res.data.data.list[i].iBuildingID + "\" class=\"item pl12\">" +
+                                        "<div class=\"cnt p12 border_bottom\">" +
+                                        "<div class=\"pic mr12\">" +
+                                        "<canvas data-src=\"" + res.data.data.list[i].sImgUrl + "\"></canvas><s class=\"guanwang\"></s>" +
+                                        "</div>" +
+                                        "<div class=\"wrap\">" +
+                                        "<div class=\"house_name\">" +
+                                        "<span class=\"name\">" + res.data.data.list[i].sName + "</span>" +
+                                        rate +
+                                        "</div>" +
+                                        "<div class=\"house_txt\">" + res.data.data.list[i].sRegion + "</div>" +
+                                        "<div class=\"house_txt house_txt1\">" + advHtml + "</div>" +
+                                        "<div class=\"house_txt house_txt2\">" +
+                                        "<span class=\"key_txt\">" + res.data.data.list[i].sPrice + "</span>" + res.data.data.list[i].sUnit + "" +
+                                        "</div>" +
+                                        "</div>" +
+                                        "</div>" +
+                                        "</a>";
+
+                            }
+                            $("#mainsection").append(html);
+                            //canvas加载
+                            webtouchObj.canvasload();
+                        }else {
+                                
+                        }
+                    });
+                }
+
+                //canvas加载
+                webtouchObj.canvasload();
+
+                //回到顶部
+                $('#backtop').on("click", webtouchObj.backtoTopdh);
+                
+                var dwnum = parseInt($('#newhouseswip').find(".current").index());
+                if (dwnum < 2) {
+                    dwnum = 0
+                }
+
+                //左右切换
+                var swiper = new Swiper('#newhouseswip', {
+                    slidesPerView: 2.5,
+                    paginationClickable: true,
+                    spaceBetween: 12,
+                    initialSlide: dwnum,
+                    freeMode: true
+                });
+                $(".newHosue_nav").on("click", "ul li", webtouchObj.topSelect);
+                $(".choice_wrap").on("click", webtouchObj.cancelSelect);
+                $(".choice_wrap").on("click", "ul li", fliterSelect);
+
+                $(".swiper-slide").on("click", function () {
+                    $.each($(".swiper-slide"), function (i, n) {
+                        $(n).removeClass("current");
+                    });
+                    $(this).addClass("current");
+                    fliterSelect();
+                });
+
+                //过滤回填及ajax执行
+                function fliterSelect() {
+                    $("#mainsection").html('');
+                    var htname = $(this).children().eq(0).html();
+                    var changeid = $(this).parent().data("flag");
+                    $("#" + changeid).children().eq(0).html(htname);
+                    $("#" + changeid).children().eq(1).hide();
+                    $(this).addClass("current").siblings().removeClass("current");
+                    $(this).children().eq(0).addClass("current");
+                    $(this).siblings().each(function () {
+                        $(this).children().eq(0).removeClass("current");
+                    })
+                    var iFeatureID = $.trim($(".swiper-slide.current").attr("featureid")) || "";
+                    window.location = "/h5/xf/hot?iFeatureID=" + iFeatureID;
+                }
+            });
+</script>

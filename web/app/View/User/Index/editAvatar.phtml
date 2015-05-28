@@ -1,0 +1,208 @@
+﻿<link href="<?php echo $sStaticRoot?>/js/web/jcrop/css/jquery.jcrop.css" rel="stylesheet"/>
+<link href="<?php echo $sStaticRoot?>/js/web/jcrop/css/demos.css" rel="stylesheet"/>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/jcrop/jquery.jcrop.js"></script>
+<script type="text/javascript" src="<?php echo $sStaticRoot?>/js/web/jcrop/jquery.form.js"></script>
+<section class="loginMinbox">
+	<div class="clearfix">
+		<div class="login_leftmenu">
+			<h2>
+				<s></s><b>个人设置</b>
+			</h2>
+			<dl>
+				<dt>
+					<?php if (!empty($userInfo['HeadImg'])) { ?>
+						<img src="<?php echo Model_Util::getFormatImag($userInfo['HeadImg'],50,50,'','banner')  ?>"/>
+					<?php } else { ?>
+						<img src="<?php echo $sStaticRoot?>/web/images/person_img.png" />
+					<?php } ?>
+				</dt>
+				<dd>
+					<a href=""><?php echo $userInfo['UserName'] ?></a> <span>普通用户</span>
+				</dd>
+			</dl>
+			<ul>
+				<li class="<?php if(isset($userInfo['userinfo'])) {echo $userInfo['userinfo']; }?>">
+					<a href="/user/index/userinfo"><s class="s_perinfo"></s>个人资料 </a>
+				</li>
+				<li class="<?php if(isset($userInfo['editavatar'])) {echo $userInfo['editavatar']; }?>">
+					<a href="/user/index/editavatar"><s class="s_editavatar"></s>编辑头像</a>
+				</li>
+				<?php if(empty($userInfo['Phone'])){ ?>
+					<li class="<?php if(isset($userInfo['bangding'])) {echo $userInfo['bangding']; }?>"><a href="/user/index/bindingphone"><s
+								class="s_binphone"></s>绑定手机</a></li>
+				<?php } ?>
+				<li class="<?php if(isset($userInfo['changepassword'])) {echo $userInfo['changepassword']; }?>">
+					<a href="/user/index/changepassword"><s class="s_changepassword"></s>修改密码 </a>
+				</li>
+			</ul>
+		</div>
+		<div class="login_rightinfo">
+			<h2>
+				编辑头像
+			</h2>
+			<div class="edit_avatar_box">
+				<div class="edit_avatar_left">
+					<cite id="errorMessage" style="color: #f07151"></cite>
+					<cite id="uploadTip" style="display: none;">上传中,请稍后....</cite>
+					<cite>
+							<input type="file" accept="image/*" name="file" class="put_file plupload" data-img="#cropbox" data-callback="uploadCallback"/>
+						<em>仅支持JPG、JPEG、PNG图片文件，且文件小于1M，宽高不超过630像素，建议使用正方形图片</em> 
+					</cite>
+					<span style="background-color: lightgray;">
+
+							 <div style="width: 432px; height: 332px; overflow: auto">
+								 <img src="" id="cropbox" alt=""/>
+							 </div>
+
+					 </span>
+					<div class="loginBtn">
+						<input type="button" id="btnCut" value="剪切并保存" onclick="CutSava()" />
+					</div>
+					
+				</div>
+				
+				<div class="edit_avatar_right">
+					<a href="">预览效果</a> <span>你上传的图片会自动生成2种尺寸，<br />
+						请注意小尺寸的头像是否清晰</span>
+					<div style="width: 100px; height: 100px; overflow: hidden; border-radius: 50px; background-color:#d3d3d3;">
+						<img src="" id="previewBig" alt=""/>
+					</div>
+					<em style="margin-left:20px;">100*100px</em>
+					<div style="width: 50px; height: 50px; overflow: hidden; border-radius: 25px; background-color:#d3d3d3; margin-left:22px;">
+						<img src="" id="previewSmall" alt=""/>
+					</div>
+					<em style="margin-left:27px;">50*50px</em>
+					<input type="hidden" size="4" id="x" name="x" value="" />
+					<input type="hidden" size="4" id="y" name="y" value="" />
+					<input type="hidden" size="4" id="w" name="w" value="" />
+					<input type="hidden" size="4" id="h" name="h" value="" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var global = {
+			static_url: '<?php echo $sStaticRoot?>',
+			file_url:'http://<?php echo Yaf_G::getConf('file','domain');?>',
+			domain: 'ipo.com'
+		};
+		document.domain = global.domain;
+		global.sUploadUrl = global.file_url + '/file/upload';
+		global.sDfsViewUrl = global.file_url + '/view';
+	</script>
+	<script type="text/javascript">
+//		$(function () {
+//			$("#filePost").submit(function () {
+//				if ($("#file").val().length == 0) {
+//					$("#errorMessage").html("未选择任何文件");
+//					return false;
+//				}
+//				return true;
+//			});
+//			$("#file").change(function () {
+//				if ($("#file").val().length == 0) {
+//					return;
+//				}
+//				$("#imageSubmit").click();
+//				$("#uploadTip").show();
+//			});
+//		});
+
+	var picWith = 0;
+	var picHeight = 0;
+	var api;
+	var sImgKey = '';
+	function showPreview(coords) {
+		$('#x').val(coords.x);
+		$('#y').val(coords.y);
+		$('#x2').val(coords.x2);
+		$('#y2').val(coords.y2);
+		$('#w').val(coords.w);
+		$('#h').val(coords.h);
+		if (parseInt(coords.w) > 0) {
+			var rxBig = 100 / coords.w;
+			var ryBig = 100 / coords.h;
+			var rxSmall = 50 / coords.w;
+			var rySmall = 50 / coords.h;
+
+			jQuery('#previewBig').css({
+				width: Math.round(rxBig * picWith) + 'px',
+				height: Math.round(ryBig * picHeight) + 'px',
+				marginLeft: '-' + Math.round(rxBig * coords.x) + 'px',
+				marginTop: '-' + Math.round(ryBig * coords.y) + 'px'
+			});
+
+			jQuery('#previewSmall').css({
+				width: Math.round(rxSmall * picWith) + 'px',
+				height: Math.round(rySmall * picHeight) + 'px',
+				marginLeft: '-' + Math.round(rxSmall * coords.x) + 'px',
+				marginTop: '-' + Math.round(rySmall * coords.y) + 'px'
+			});
+		}
+	}
+
+	function uploadCallback(img, width, height) {
+		sImgKey = img;
+		var img = getDFSViewURL(img);
+		$("#cropbox").attr('style', 'width:'+width+'px');
+		$("#cropbox").attr('height', 'height:'+height+'px');
+		console.log(width);
+		console.log(height);
+		picWith = width;
+		picHeight = height;
+		$('#previewBig').attr('src',img);
+		$('#previewSmall').attr('src',img);
+		if (typeof api != 'undefined') {
+			api.destroy();
+		}
+		jQuery('#cropbox').Jcrop({
+			onChange: showPreview,
+			onSelect: showPreview,
+			aspectRatio: 1,
+			bgOpacity: 0.5,
+			bgColor: 'white',
+			addClass: 'jcrop-light'
+		}, function () {
+			api = this;
+			api.setSelect([116, 65, 116 + 200, 116 + 200]);
+			api.setOptions({ bgFade: true });
+			api.ui.selection.addClass('jcrop-selection');
+		});
+	}
+
+		function CutSava() {
+			var x = $("#x").val();
+			var y = $("#y").val();
+			var w = $("#w").val();
+			var h = $("#h").val();
+			if (w == 0 || h == 0) {
+				$("#errorMessage").html("请在图片上画出截取区域");
+				return;
+			}
+			var userid = <?php echo isset($userInfo['Id']) ? $userInfo['Id'] : '' ?>;
+			var token = '<?php echo isset($sToken) ? $sToken : '' ?>';
+			$.post(global.file_url + "/file/cutimg", {sKey: sImgKey, x: x, y: y, w: w, h: h }, function (data) {
+				if (data.iError === 0) {
+					$.post("/user/index/editUserAvatar", {img: data.sMsg.sFile,token:token,userid:userid }, function (res) {
+							if(res.data.msg=='ok'){
+								window.location = "/user/index/userinfo";
+							}
+					},'json');
+				}else {
+					alert('保存失败');
+				}
+//				console.log(data);
+//				return false;
+//				if (data.code) {
+//					alert("保存成功");
+//					window.location = "/user/index";
+//				}
+			});
+			return;
+		}
+	</script>
+
+	<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/upload.js"></script>
+</section>

@@ -1,0 +1,165 @@
+<!--整体评价内容开始-->
+<section class="plan_wrap">
+    <section
+        class="analyze_wrap <?php if (empty($aHxfx['data']['sBadTag']) && empty($aHxfx['data']['sGoodTag'])) { ?>analyze_txt_border<?php } ?>">
+        <div class="analyze_txt floor_plan">
+            <h3>
+                <span></span>
+                分析师点评
+            </h3>
+
+            <p><?php echo $aHxfx['data']['sComment'] ?></p>
+        </div>
+    </section>
+    <section class="condition">
+        <?php
+        if (isset($aHxfx['data']['sGoodTag']) && $aHxfx['data']['sGoodTag']) {
+            ?>
+            <section class="advantage">
+                <h3>优势</h3>
+
+                <div class="advantage_con">
+                    <?php
+                    foreach ($aHxfx['data']['sGoodTag'] as $key => $value) {
+                        ?>
+                        <span><?php echo $value; ?></span>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </section>
+        <?php
+        }
+        ?>
+        <?php
+        if (isset($aHxfx['data']['sBadTag']) && $aHxfx['data']['sBadTag']) {
+            ?>
+            <section class="advantage disadvantaged">
+                <h3>劣势</h3>
+
+                <div class="advantage_con">
+                    <?php
+                    foreach ($aHxfx['data']['sBadTag'] as $key => $value) {
+                        ?>
+                        <span><?php echo $value; ?></span>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </section>
+        <?php
+        }
+        ?>
+    </section>
+    <?php if (($aHxfx['data']['sEscrowVehicle'] && $aHxfx['data']['sEscrowVehicleChecked']) || ($aHxfx['data']['sEscrowHousing'] && $aHxfx['data']['sEscrowHousingChecked'])  || ($aHxfx['data']['sEscrowHousing'] && $aHxfx['data']['sEscrowHousingChecked']) || ($aHxfx['data']['sEntranceCard'] && $aHxfx['data']['sEntranceCardChecked'])|| ($aHxfx['data']['sLaundry'] && $aHxfx['data']['sLaundryChecked'] ) || ($aHxfx['data']['sShuttleChilren'] && $aHxfx['data']['sShuttleChilrenChecked'])  || ($aHxfx['data']['sOnsiteRepair'] && $aHxfx['data']['sOnsiteRepairChecked'])  || ($aHxfx['data']['sLandscaping'] && $aHxfx['data']['sLandscapingChecked']) ||($aHxfx['data']['sOtherService'] && $aHxfx['data']['sOtherServiceChecked'])) { ?>
+        <section class=" floor_plan house_analysis">
+            <h3>
+                <span></span>
+                其他服务
+            </h3>
+
+            <div class="floor_plan_pic property_service">
+                <?php if (isset($aHxfx['data']['sEscrowVehicle']) && $aHxfx['data']['sEscrowVehicle'] && $aHxfx['data']['sEscrowVehicleChecked']) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sEscrowVehicleChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sEscrowVehicle'] ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (isset($aHxfx['data']['sEscrowHousing']) && $aHxfx['data']['sEscrowHousing'] && $aHxfx['data']['sEscrowHousingChecked'] ) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sEscrowHousingChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sEscrowHousing'] ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (isset($aHxfx['data']['sHomeCleaning']) && $aHxfx['data']['sHomeCleaning']  && $aHxfx['data']['sHomeCleaningChecked']) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sHomeCleaningChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sHomeCleaning'] ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (isset($aHxfx['data']['sEntranceCard']) && $aHxfx['data']['sEntranceCard'] && $aHxfx['data']['sEntranceCardChecked'] ) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sEntranceCardChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sEntranceCard'] ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (isset($aHxfx['data']['sLaundry']) && $aHxfx['data']['sLaundry'] && $aHxfx['data']['sLaundryChecked'] ) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sLaundryChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sLaundry'] ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (isset($aHxfx['data']['sShuttleChilren']) && $aHxfx['data']['sShuttleChilren'] && $aHxfx['data']['sShuttleChilrenChecked']) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sShuttleChilrenChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sShuttleChilren'] ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (isset($aHxfx['data']['sOnsiteRepair']) && $aHxfx['data']['sOnsiteRepair'] && $aHxfx['data']['sOnsiteRepairChecked']) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sOnsiteRepairChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sOnsiteRepair'] ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (isset($aHxfx['data']['sLandscaping']) && $aHxfx['data']['sLandscaping'] && $aHxfx['data']['sLandscapingChecked']) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sLandscapingChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sLandscaping'] ?></dd>
+                    </dl>
+                <?php } ?>
+              
+                <?php if (isset($aHxfx['data']['sOtherService']) && $aHxfx['data']['sOtherService'] && $aHxfx['data']['sOtherServiceChecked']) { ?>
+                    <dl>
+                        <dt><?php echo $aHxfx['data']['sOtherServiceChecked'] ?></dt>
+                        <dd><?php echo $aHxfx['data']['sOtherService'] ?></dd>
+                    </dl>
+                <?php } ?>
+            </div>
+        </section>
+    <?php } ?>
+    <?php
+    if (isset($aHxfx['data']['fwqtImage']) && !empty($aHxfx['data']['fwqtImage'])) {
+        ?>
+        <section class=" floor_plan">
+            <h3>
+                <span></span>
+                其他图片
+            </h3>
+
+            <div class="floor_plan_pic">
+                <?php
+                foreach ($aHxfx['data']['fwqtImage'] as $key => $value) {
+                    ?>
+                    <div class="floor_plan_pic01">
+                        <canvas data-src="<?php echo $value['sImage']; ?>"></canvas>
+
+                        <p class="pic_name"><?php echo $value['sTitle']; ?></p>
+
+                        <p class="pic_description"><?php echo $value['sDesc']; ?></p>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </section>
+    <?php
+    }
+    ?>
+    <?php
+    if (isset($aHxfx['data']['sOtherComment']) && $aHxfx['data']['sOtherComment']) {
+        ?>
+        <section class="floor_plan plan_description evaluation_description">
+            <h3>
+                <span></span>
+                点评
+            </h3>
+
+            <p><?php echo $aHxfx['data']['sOtherComment'] ?></p>
+        </section>
+    <?php
+    }
+    ?>
+
+
+</section>
+

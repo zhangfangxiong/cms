@@ -1,0 +1,47 @@
+﻿<section class="bg_f8">
+        <article class="minCont clearfix">
+            <section id="breadcrumb_nav">
+                <nav class="breadcrumb_nav row">
+                    <a href="/">房价点评首页</a>
+                    <span>&gt;</span>
+
+                    联系我们
+                </nav>
+            </section>
+            <div class="clearfix mb30">
+                <aside class="help_tab clearfix">
+                    <div class="tab_con clearfix">
+                        <ul class="clearfix">
+                            <li><a href="/help/index/about" title="关于我们">关于我们<s class="ico_sj"></s></a></li>
+                            <li><a href="/help/index/contact" title="联系我们">联系我们<s class="ico_sj"></s></a></li>
+                            <li class="bb0"><a href="/help/index/declare" title="网络服务协议">网络服务协议<s class="ico_sj"></s></a></li>
+                        </ul>
+                    </div>
+                </aside>
+                <script>
+                    $(document).ready(function () {
+                        $(".help_tab ul li a").each(function () {
+                            if (this.href.toLowerCase() == window.location.toString().toLowerCase()) {
+                                $(this).addClass("current");
+                            }
+                        });
+                    });
+                </script>
+                <div class="help_bar clearfix">
+                    <div class="help_con clearfix">
+                        <h6>联系我们</h6>
+                        <dl class="contact_con clearfix">
+                            <dt>关于房价点评网的意见与建议，以及相关合作事宜，请通过以下方式与我们联系。</dt>
+                            <dd>
+                                <p><b>上海克而瑞信息技术有限公司</b></p>
+                                <p><s class="c_ico1"></s>邮件：mgservice@cric.com</p>
+                                <p style="line-height:18px;"><s class="c_ico2"></s><span>传真：021-60867300</span></p>
+                                <p style="line-height:18px;"><s class="c_ico3"></s><span style="position:relative; top:-7px;">地址：上海市闸北区广中路788号秋实楼</span></p>
+                                <p style="position:relative; top:-7px;"><s class="c_ico4"></s>客服电话：10101818</p>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </article>
+</section>

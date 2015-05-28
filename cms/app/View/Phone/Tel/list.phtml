@@ -1,0 +1,131 @@
+<div class="pheader clearfix">分类列表</div>
+<div class="pbody clearfix">
+	<form class="form-inline search-form" role="form" method="post" id="myform" action="/phone/tel/list">
+		<div class="row sousuo_now">
+            <div class="form-group .col-xs-2">
+               	真实号码：
+                <input id="tel" type="text" value="<?php echo isset($aWhere['sTel']) ? $aWhere['sTel'] : '';?>" 
+                class="form-control input-sm" autocomplete="off" name="tel">
+            </div>
+            <div class="form-group .col-xs-2">
+                分机号：
+                <input id="ext" type="text" value="<?php echo isset($aWhere['iExt']) ? $aWhere['iExt'] : '';?>" 
+                class="form-control input-sm" autocomplete="off" name="ext">
+            </div>
+            <div class="form-group .col-xs-2">
+                状态：
+                <select id="status" class="form-control input-sm" name="status">
+                    <option value="-1">请选择</option>
+                    <option value="1" <?php echo isset($aWhere['iStatus']) && 1 == $aWhere['iStatus'] ? 'selected' : '' ?> >
+                        有效
+                    </option>
+                    <option value="0" <?php echo isset($aWhere['iStatus']) && 0 == $aWhere['iStatus'] ? 'selected' : '' ?> >
+                        无效
+                    </option>
+                </select>
+            </div>
+            <div class="form-group .col-xs-2">
+                <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+            </div>
+	</form>
+	
+	<hr>
+
+    <div class="btn-toolbar list-toolbar">
+    	 <a href='/phone/tel/add'>
+    		<i class="icon-plus"></i> 
+           新增400电话
+        </a>
+    </div>
+
+    <hr>
+
+    <table class="table table-bordered table-hover">
+    	<thead>
+    		<tr>
+    			<th class="col-sm-1 text-center">id</th>
+    			<th>热线服务ID</th>
+    			<th>热线服务类型</th>
+    			<th>真实号码</th>
+    			<th>分机号</th>
+                <th>状态</th>
+                <th>添加时间</th>
+                <th>更新时间</th>
+    			<th class="text-center">操作</th>
+    		</tr>
+    	</thead>
+
+    	<tbody>
+    	<?php
+    		if($aList['aList']) {
+    			foreach ($aList['aList'] as $key => $value) {
+    				echo '<tr><td class="col-sm-1 text-center">'.$value['iAutoID'].'</td>';
+    				echo '<td>'.$value['sServID'].'</td>';
+    				echo '<td>'.$value['iSevType'].'</td>';
+    				echo '<td>'.$value['sTel'].'</td>';
+    				echo '<td>'.$value['iExt'].'</td>';
+                    echo '<td>'.((1 == $value['iStatus']) ? '有效' : '无效').'</td>';
+                    echo '<td>'.date('Y-m-d H:i:s', $value['iCreateTime']).'</td>';
+                    echo '<td>'.date('Y-m-d H:i:s', $value['iUpdateTime']).'</td>';
+                    if(1 == $value['iStatus']) {
+                        echo '<td>
+                        <a href="/phone/tel/add?id='.$value['iAutoID'].'" >修改</a> 
+                        <a class="unvalid" href="javascript:void(0)" data-id="'.$value['iAutoID'].'">设为无效</a>
+                        <a class="valid" style="display:none" href="javascript:void(0)" data-id="'.$value['iAutoID'].'">设为有效</a>
+                        </td>';
+                    }elseif (0 == $value['iStatus']) {
+                        echo '<td>
+                        <a href="/phone/tel/add?id='.$value['iAutoID'].'" >修改</a> 
+                        <a class="unvalid" style="display:none" href="javascript:void(0)" data-id="'.$value['iAutoID'].'">设为无效</a>
+                        <a class="valid" href="javascript:void(0)" data-id="'.$value['iAutoID'].'">设为有效</a>
+                        </td>';
+                    }
+                    echo '</tr>';
+                    
+    			}
+    		}
+    	?>
+       	</tbody>
+    </table>
+
+    <?php echo $aList['aPager']?>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".valid").click(function(){
+            var obj =$(this);
+            $.ajax({
+                url: '/phone/tel/updStatus',
+                type: 'post',
+                data:{
+                    id : $(this).data('id'),
+                    status : 1,
+                },
+                dataType: 'json',
+                success: function(result){
+                    alert(result.data.sMsg);
+                    obj.hide();
+                    obj.prev().show();     
+                }
+            });
+        })
+
+        $(".unvalid").click(function(){
+            var obj =$(this);
+            $.ajax({
+                url: '/phone/tel/updStatus',
+                type: 'post',
+                data:{
+                    id : $(this).data('id'),
+                    status : 0,
+                },
+                dataType: 'json',
+                success: function(result){
+                    alert(result.data.sMsg); 
+                    obj.hide();
+                    obj.next().show();   
+                }
+            });
+        })
+    })
+</script>

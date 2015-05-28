@@ -1,0 +1,106 @@
+<style>
+    .sousuo_now {
+        margin: 10px 0px 10px 0px;
+    }
+
+    .list-caozuo {
+        margin-bottom: 10px;
+    }
+</style>
+<div class="pheader clearfix">评论列表</div>
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="<?= $sListUrl ?>">
+        <div class="row sousuo_now">
+            <div class="form-group .col-xs-2">
+                审核状态：
+                <select class="form-control input-sm" name="iIsCheck">
+                    <option value="-1">请选择</option>
+                    <?php foreach ($aCheckStatus as $k => $v) { ?>
+                        <option
+                            value="<?php echo $k ?>" <?php echo isset($aParam['iIsCheck']) && $k == $aParam['iIsCheck'] ? 'selected' : '' ?>><?php echo $v ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group .col-xs-2">
+                点评开始时间：
+                <input name="iSTime" autocomplete="off" class="laydatetime form-control" validate="" type="text"
+                       value="<?php echo (isset($aParam['iSTime']) && $aParam['iSTime']) ? date('Y-m-d H:i:s',
+                           $aParam['iSTime']) : '' ?>" class="form-control">
+            </div>
+            <div class="form-group .col-xs-2">
+                点评结束时间：
+                <input name="iETime"  autocomplete="off" class="laydatetime form-control" validate="" type="text"
+                       value="<?php echo (isset($aParam['iETime']) && $aParam['iETime']) ? date('Y-m-d H:i:s',
+                           $aParam['iETime']) : '' ?>" class="form-control">
+            </div>
+        </div>
+        <div class="row sousuo_now">
+            <div class="form-group .col-xs-2">
+                <input type="hidden" id="iLoupanID" name="iLoupanID"
+                       value="<?php echo isset($aParam['iLoupanID']) ? $aParam['iLoupanID'] : '' ?>">
+                楼盘名称：
+                <input type="text" autocomplete="off"
+                       value="<?php echo isset($aParam['sLoupanName']) ? $aParam['sLoupanName'] : '' ?>"
+                       class="form-control input-sm" name="sLoupanName" id="sLoupanName">
+            </div>
+            <div class="form-group .col-xs-2">
+                评论内容：
+                <input type="text" value="<?php echo isset($aParam['sContent']) ? $aParam['sContent'] : '' ?>"
+                       class="form-control input-sm" autocomplete="off" name="sContent" id="sContent">
+            </div>
+            <div class="form-group .col-xs-2">
+                <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+            </div>
+        </div>
+    </form>
+    <hr>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>评论内容</th>
+            <th class="text-center">楼盘名称</th>
+            <th class="text-center">点评时间</th>
+            <th class="text-center">审核状态</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($aList['aList'] as $v) { ?>
+            <tr>
+                <td class="col-sm-1 text-center"><a href="javascript:void(0)" title="<?php echo $v['sContent'] ?>"><?php echo mb_substr($v['sContent'],0,10) ?></a></td>
+                <td class="col-sm-1 text-center"><?php echo $v['sLoupanName'] ?></td>
+                <td class="text-center"><?php echo date('Y-m-d H:i', $v['iCreateTime']) ?></td>
+                <td class="text-center"
+                    id="status_<?php echo $v['iIsCheck'] ?>"><?php if ( $v['iIsCheck'] == 1) {echo '隐藏';} elseif ($v['iIsCheck'] == 2) { echo '显示';}elseif ($v['iIsCheck'] == 0) { echo '待审核';} ?></td>
+                <td class="text-center">
+                    <a href="<?= $sCheckUrl ?>?id=<?php echo $v['iCommentID'] ?>" title="审核"><i
+                            class="icon-play-circle icon-large"></i></a>
+                    <a href="<?= $sEditUrl ?>?id=<?php echo $v['iCommentID'] ?>" title="编辑"><i
+                            class="icon-pencil icon-large"></i></a>
+                    <a class="comment_delete" href="<?= $sDelUrl ?>?id=<?php echo $v['iCommentID'] ?>" role="button"
+                       data-toggle="modal" title="删除"><i class="icon-trash icon-large"></i></a>
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <?php echo $aList['aPager'] ?>
+</div>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<script>
+    $('.comment_delete').click(function () {
+        if (confirm("您确认要删除该资讯吗？")) {
+            $.get(this.href, function (ret) {
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+        }
+        return false;
+    });
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8"
+        src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/unit.js"></script>

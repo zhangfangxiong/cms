@@ -1,0 +1,40 @@
+﻿<?php
+    $newsHtml = Model_Util::getNewsHtml("api/news/firstunitnews?unitID=" . $unit['ID']);
+    if (!empty($newsHtml)) {
+?>
+<!--楼盘动态 start-->
+<div class="clearfix mb30" id="unit_dynamic_info" style="display: none;">
+    <div class="dy_property n_cont_warp">
+        <div class="n_cont_warp_m">
+            <h2>
+                <b>
+                    <s></s>最新资讯
+                </b>
+                <a href="" target="_blank">更多<s></s></a>
+            </h2>
+            <?php
+                echo $newsHtml;
+            ?>
+        </div>
+    </div>
+    <div class="last_news n_cont_warp">
+        <div class="n_cont_warp_m">
+            <h2>
+                <b>
+                    <s></s>楼盘动态
+                </b>
+                <a href="" target="_blank">更多<s></s></a>
+            </h2>
+            <div class="last_news_dt">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    DynamicInfo.init("<?php echo $sCurrCityCode ?>", "", "<?php echo $unit['ID']?>");
+</script>
+<!--楼盘动态 end-->
+<?php
+    }
+?>

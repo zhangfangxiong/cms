@@ -1,0 +1,26 @@
+﻿<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=3741325988" type="text/javascript" charset="utf-8"></script>
+<h3>数据获取中,请稍后.....</h3>
+<script type="text/javascript">
+	WB2.anyWhere(function (W) {
+		var code = getQueryString("code");
+		//数据交互
+		W.parseCMD('/oauth2/access_token?client_id=3741325988&client_secret=7535317305a7865acbf330a9a3d5103e&grant_type=authorization_code&redirect_uri=http://web.ddc.dev.ipo.com/user/index/weiboauthorization/callback&code=' + code, function (oResult, bStatus) {
+			if (bStatus) {
+				var token = oResult.access_token;
+				$.post("/token/save", { token: token, url: "" }, function (url) {
+					window.location = url + "?flag=true";
+				});
+			}
+		}, {
+			method: 'post'
+		});
+	});
+	//获取url参数值
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var u = decodeURI(window.location.search.substr(1));
+		u = u.replace(/\s+/g, "");
+		var r = u.match(reg);
+		if (r != null) return decodeURI(r[2]); return null;
+	}
+</script>

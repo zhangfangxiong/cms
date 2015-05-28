@@ -1,0 +1,97 @@
+<div class="pheader clearfix">banner广告管理</div>
+<div class="pbody clearfix">
+	<form id="myform" class="form-horizontal" role="form" method="post" action="">
+		<div class="form-group .col-xs-2">
+			<label class="col-sm-2 control-label">广告位置：</label>
+			<div class="col-sm-10">
+				<select class="form-control input-validate" name="iCategoryID" id="iCategoryID">
+					<option value="0">请选banner广告位</option>
+					<?php foreach ($aCategory as $k => $v) { ?>
+						<option
+							value="<?php echo $k ?>" <?php echo isset($cat_id) && $k == $cat_id ? 'selected' : '' ?>><?php echo $v['sTitle'] ?></option>
+					<?php } ?>
+				</select>
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 图片：</label>
+			<div class="col-sm-10">
+				<input type="hidden" id="sImage" name="sImage" validate="!required:请上传图片" value="<?php echo isset($aData['sImage'])?$aData['sImage']:''?>">
+				<img id="sImageShow" style="width:120px;height:90px;" src="<?php echo isset($aData['sImage'])?Util_Uri::getDFSViewURL($aData['sImage']):''?>">
+				<input type="button" value="选择" class="plupload" data-target="#sImage" data-img="#sImageShow">
+				<span class="text-muted">请上1100*80的清晰图片，文件大小≤2M支持png、jpg</span>
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">广告链接：</label>
+			<div class="col-sm-10">
+				<input name="sUrl" type="text" placeholder="广告链接" value="<?php echo isset($aData['sUrl'])?$aData['sUrl']:''?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+		<div class="form-group" style="display:none">
+			<label class="col-sm-2 control-label">发布时间：</label>
+			<div class="col-sm-10">
+				<input name="iPublishTime" readonly validate="datetime:true"
+					   class="laydatetime form-control input-validate" validate="" type="text"
+					   value="<?php echo isset($aData['iPublishTime']) ? date('Y-m-d H:i:s',
+						   $aData['iPublishTime']) : date('Y-m-d H:i:s',
+						   time()) ?>" class="form-control input-validate">
+				<span class="validate_checktip"></span>
+			</div>
+		</div>
+
+		<div class="btn-toolbar text-center">
+			<input name="iAutoID" type="hidden" value="<?php echo isset($aData['iAutoID'])?$aData['iAutoID']:''?>">
+			<input type="hidden" name="iOptype" id="iOptype" value="">
+			<!--<button id="preview" onclick="$(this.form).attr('must', 0); $( '#iOptype' ).val('')" class="btn btn-info">预览</button>-->
+			<button id="publish" onclick="$(this.form).attr('must', 1); $( '#iOptype' ).val(1)" class="btn btn-danger">发布</button>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	global.sUploadUrl = '<?php echo Yaf_G::getConf('bannerupload', 'url')?>';
+	global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/upload.js"></script>
+<script type="text/javascript">
+	$(function() {
+
+		$('#sImageShow').click(function(){
+			var sImage = $('#sImage').val();
+			window.open(getDFSViewURL(sImage, 0, 0, '', 'banner'));
+		});
+
+		//提交表单
+		$("#myform").validate({submitHandler: function(form) {
+			form.action = '';
+			if ($("#iCategoryID").val() == 0) {
+				alert("请选择资讯广告位");
+				return false;
+			}
+			$.post(form.action, $(form).serialize(), function(ret){
+				alert(ret.data);
+				if (ret.status) {
+					window.location.reload();
+				}
+			}, 'json');
+			return false;
+		}});
+		$("#iCategoryID").change(function(){
+			var CurrCatID = $(this).val();
+			var LocationUrl;
+			if (CurrCatID>0) {
+				LocationUrl = 'http://<?=(Yaf_G::getConf('cms', 'domain'));?>/home/banner/change/?cat_id='+CurrCatID;
+			} else {
+				LocationUrl = 'http://<?=(Yaf_G::getConf('cms', 'domain'));?>/home/banner.html';
+			}
+			location.href = LocationUrl;
+		})
+	});
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>

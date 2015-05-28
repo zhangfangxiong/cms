@@ -1,0 +1,118 @@
+<div class="pheader clearfix"><?php echo isset($aTopic['iTopicID'])?'编辑':'增加'?>专题</div>
+<div class="pbody clearfix">
+
+    <form id="myform" class="form-horizontal" role="form" method="post" action="/topic/upload" name="uploadForm" target="iframeUpload" enctype="multipart/form-data">
+        <input name="iTopicID" type="hidden" value="<?php echo isset($aTopic['iTopicID'])?$aTopic['iTopicID']:''?>">
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 专题标题：</label>
+			<div class="col-sm-10">
+				<input name="sTitle" id="sTitle" validate="!clength:2-50" type="text" value="<?php echo isset($aTopic['sTitle'])?$aTopic['sTitle']:''?>" class="form-control input-validate">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 默认图片：</label>
+			<div class="col-sm-10">
+				<input type="hidden" id="sImage" name="sImage" value="<?php echo isset($aTopic['sImage'])?$aTopic['sImage']:''?>">
+				<img id="sImageShow" style="width:160px;height:120px;" src="<?php echo isset($aTopic['sImage'])?Util_Uri::getDFSViewURL($aTopic['sImage']):''?>">
+				<input type="button" value="选择" class="plupload" data-target="#sImage" data-img="#sImageShow">
+			</div>
+		</div>
+
+        <div class="form-group">
+            <iframe name="iframeUpload" style="display:none"></iframe>
+            <label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 压缩包：</label>
+            <div class="col-sm-10">
+                <input name="sZip" type="file" class="form-control input-validate" onchange="javascript:document.uploadForm.submit();">
+                <input name="sZipFile" type="hidden" id="sZipFile">
+                <input name="sUrl" id="sUrl" type="hidden">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><strong style="color:red;">*</strong> 城市：</label>
+            <div class="col-sm-10">
+                <label class="radio-inline">
+                    <input type="radio" name="iCityID" value="0" <?php if (isset($aTopic['iCityID']) && 0 == $aTopic['iCityID']){echo 'checked="checked"';}?>>全国
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="iCityID" value="<?=$iCurrCityID?>" <?php if (isset($aTopic['iCityID']) && $iCurrCityID == $aTopic['iCityID']){echo 'checked="checked"';} else if (!isset($aTopic['iCityID'])){echo 'checked="checked"';}?>>当前城市
+                </label>
+            </div>
+        </div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">发布时间：</label>
+			<div class="col-sm-10">
+				<input name="iPublishTime" readonly class="laydatetime form-control input-validate" type="text" value="<?php echo isset($aTopic['iPublishTime'])?date('Y-m-d H:i:s', $aTopic['iPublishTime']):''?>" class="form-control">
+			</div>
+		</div>
+
+    	<div class="btn-toolbar text-center">
+        	<button id="save" class="btn btn-primary">保存</button>
+        	<button id="cancel"class="btn" onclick="location.href='/topic/list.html';return false;">取消</button>
+        </div>
+	</form>
+</div>
+<script type="text/javascript">
+global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/upload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/laydate/laydate.js"></script>
+<script type="text/javascript">
+document.domain='<?=Yaf_G::getConf('cms', 'domain')?>';
+function zipUploadCallBack($oRet)
+{
+    if (true == $oRet.status) {
+        alert('文件上传成功');
+        $('#sZipFile').val($oRet.sZipFile);
+        $('#sUrl').val($oRet.sUrl);
+
+    } else {
+        alert($oRet.message);
+    }
+}
+$(function() {
+
+    $('#save').click(function(){
+
+        var form = $('#myform');
+        var sTitle = $('#sTitle').val();
+        if ( sTitle == "") {
+            alert('请填写专题标题');
+            return false;
+        }
+
+        if ( sTitle.length < 2 || sTitle > 100) {
+            alert('专题标题长度范围为2到100个字！');
+            return false;
+        }
+
+        if ($('#sImage').val() == "") {
+            alert('请选择一张默认图片！');
+            return false;
+        }
+        <?php if(!isset($aTopic['iTopicID'])){ ?>
+        if ($('#sZipFile').val() == "") {
+            alert('请先上传压缩包！');
+            return false;
+        }
+        <?php }?>
+
+        <?php if(!isset($aTopic['iTopicID'])){ ?>
+        var action_url = '/topic/add/';
+        <?php } else {?>
+        var action_url = '/topic/edit/';
+        <?php } ?>
+        $.post(action_url, $(form).serialize(), function(ret){
+            alert(ret.data);
+            if (ret.status) {
+                location.href = '/topic/list.html';
+            }
+        }, 'json');
+        return false;
+    });
+});
+</script>

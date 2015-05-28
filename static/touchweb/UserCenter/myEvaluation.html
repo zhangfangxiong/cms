@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>房价点评</title>
+       <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+       <link rel="stylesheet" type="text/css" href="../resource/css/usercenter.css">
+   </head>
+    <body>
+                <!--我的收藏开始-->
+                <div class="viewport">
+                    <!--头部开始-->
+                    <header class="UserCenter_head outborder">
+                        <div class="uc_return">
+                            <div class="uc_return_l">
+                                <a href="javascript:history.go(-1)"></a>
+                            </div>
+                            <div class="uc_return_c">我收藏的评测</div>
+                            <div class="finish" id="edit"><a href="#">编辑</a></div>
+                        </div>
+                    </header>
+                    <!--头部开始-->
+                    <!--评测收藏列表开始-->
+                    <section class="bgf collect_evaluation_list" id="mainsection">
+                        <a href="javascript:;" class="item pl12 pr12">
+                            <div class="cnt mt12 mb12 border">
+                                <div class="pic">
+                                    <canvas data-src="../resource/images/detail_big_img.jpg"></canvas>
+                                        <div class="pic_txt">
+                                            <div class="pic_name">
+                                                <span>中星新恒苑</span>
+                                                <span>|</span>
+                                                <span>[闸北-彭浦、永和]</span>
+                                            </div>
+                                            <div class="hose_price_wrap">
+                                                <span class="house_price">35,000</span>
+                                                <span>元/平</span>
+                                            </div>
+                                        </div>
+                                        <div class="analyst_wrap">
+                                            <img src="../resource/images/analyst_pic1.png">
+                                        </div>
+                                        <div class="finish_icon finish_icon_gray"></div>
+                                </div>
+                                <div class="wrap pl12">
+                                    <div class="pd_star border_bottom">
+                                        <span class="star">
+                                            <em class="star_icon star1"></em>
+                                            <em class="star_icon star1"></em>
+                                            <em class="star_icon star1"></em>
+                                            <em class="star_icon star2"></em>
+                                            <em class="star_icon star3"></em>
+                                        </span>
+                                        <span class="pd_num">4.14</span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul class="pr12">
+                                            <li class="hx_analyze">户型分析</li>
+                                            <li class="zx_stander">装修标准</li>
+                                            <li class="sq_sever">社区服务</li>
+                                            <li class="wy_sever">物业服务</li>
+                                            <li class="sq_Supporting">生活配套</li>
+                                            <li class="bad_factor">不利因素</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>  
+                        <a href="javascript:;" class="item pl12 pr12">
+                            <div class="cnt mb12 border">
+                                <div class="pic">
+                                   <canvas data-src="../resource/images/detail_big_img.jpg"></canvas>
+                                        <div class="pic_txt">
+                                            <div class="pic_name">
+                                                <span>中星新恒苑</span>
+                                                <span>|</span>
+                                                <span>[闸北-彭浦、永和]</span>
+                                            </div>
+                                            <div class="hose_price_wrap">
+                                                <span class="house_price">35,000</span>
+                                                <span>元/平</span>
+                                            </div>
+                                        </div>
+                                        <div class="analyst_wrap">
+                                            <img src="../resource/images/analyst_pic1.png">
+                                        </div>
+                                        <div class="finish_icon finish_icon_gray"></div>
+                                </div>
+                                <div class="wrap pl12">
+                                    <div class="pd_star border_bottom">
+                                        <span class="star">
+                                            <em class="star_icon star1"></em>
+                                            <em class="star_icon star1"></em>
+                                            <em class="star_icon star1"></em>
+                                            <em class="star_icon star2"></em>
+                                            <em class="star_icon star3"></em>
+                                        </span>
+                                        <span class="pd_num">4.14</span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul class="pr12">
+                                            <li class="hx_analyze">户型分析</li>
+                                            <li class="zx_stander">装修标准</li>
+                                            <li class="sq_sever">社区服务</li>
+                                            <li class="wy_sever">物业服务</li>
+                                            <li class="sq_Supporting">生活配套</li>
+                                            <li class="bad_factor">不利因素</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="del">
+                            <ul class="clearfix">
+                                <li><a href="javascript:;">全部删除</a></li>
+                                <li><a href="javascript:;">删除选中</a></li>
+                            </ul>
+                        </div>      
+                    </section>     
+                    <!--评测收藏列表结束-->
+        			<!--暂无收藏记录开始-->
+                    <div class="newhouse_no_collect">
+                        <div class="no_collect_con">
+                            <img src="../resource/images/no_collect.png" />
+                            <div class="newhouse_no_collect_txt">您暂无收藏评测</div>
+                            <!--暂无收藏记录结束-->
+                        </div>
+                    </div>
+                    <!--暂无收藏记录结束-->
+                 </div>
+                 <!--我的收藏结束-->	
+             <script src="../lib/requirejs/require.js"  data-main="../lib/js/usercenter"></script>     
+         </body>
+    </html>

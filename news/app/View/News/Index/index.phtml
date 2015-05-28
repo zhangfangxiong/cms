@@ -1,0 +1,234 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot?>/css/news/newsindex.css">
+
+<!--banner开始-->
+<?php if(!empty($banners)) {?>
+<div class="banner">
+    <div class="banner_img_show">
+        <ul class="banner_img">
+            <?php foreach($banners as $banner) {?>
+            <li>
+                <a href="<?php if(!empty($banner['aNews'])){echo $nDetailUrl . $banner['aNews']['iNewsID'];}?>" target="_blank"><img src="<?php echo Util_Uri::getDFSViewURL($banner['sImage'], 0, 0, '', 'banner')?>" width="802" height="320">        <span></span></a>
+                <div class="banner_text">
+
+                    <h6 class="banner_text_title">
+                        <a href="<?php if(!empty($banner['aNews'])){echo $nDetailUrl . $banner['aNews']['iNewsID'];}?>" target="_blank"><?php if(!empty($banner['aNews'])){echo $banner['aNews']['sTitle'];}?></a>
+                    </h6>
+
+                    <p class="banner_text_con"><?php if(!empty($banner['aNews'])){echo mb_substr($banner['aNews']['sAbstract'], 0, 100);}?><?php if(!empty($banner['aNews']) && mb_strlen($banner['aNews']['sAbstract']) > 100){ echo '...';}?>   <a href="<?php if(!empty($banner['aNews'])){echo $nDetailUrl . $banner['aNews']['iNewsID'];}?>" class="detail" target="_blank">详细>></a></p>
+
+                    <?php if(!empty($banner['aNews']) && !empty($banner['aNews']['aTag'])){ ?>
+                    <div class="forecast">
+                        <?php $i = 0; ?>
+                        <?php foreach($banner['aNews']['aTag'] as $id => $name) {?>
+                            <?php if($i == 2){ break; }?>
+                            <?php $i++; ?>
+                        <p><a href="<?php echo $nListUrl.$id; ?>" target="_blank"><?php echo $name; ?></a></p>
+                        <?php }?>
+                    </div>
+                    <?php }?>
+                </div>
+            </li>
+            <?php } ?>
+        </ul>
+        <ol>
+            <?php $index = 0; foreach($banners as $banner) { $index ++;?>
+                <?php if($index == 1) :?>
+                    <li class="current"><?php echo $index;?></li>
+                <?php elseif($index == sizeof($banners)) :?>
+                    <li class="no_m_r"><?php echo $index;?></li>
+                <?php else: ?>
+                    <li ><?php echo $index;?></li>
+                <?php endif?>
+
+            <?php } ?>
+        </ol>
+    </div>
+</div>
+<?php } ?>
+<!--banner结束-->
+
+<!--最新资讯内容开始-->
+<div class="news_con">
+    <!--资讯列表左侧内容开始-->
+    <div class="news_con_l">
+        <div class="hot_news">
+            <h6 class="hot_news_title">最新资讯</h6>
+        </div>
+        <ul class="hot_news_list">
+            <?php foreach($newses as $news) {?>
+                <li>
+                    <?php if (!empty($news['sImage'])):?>
+                        <div class="hot_news_list_img">
+                            <img src="<?php echo Util_Uri::getNewsImgUrl($news['sImage'], 180, 130)?>" width="180" height="130">
+                            <div class="hot_news_share share_icon">
+                                <p><a href="<?php echo $nDetailUrl.$news['iNewsID']; ?>" target="_blank"><?php echo $news['iShareTimes']?></a></p>
+                            </div>
+                        </div>
+                        <div class="hot_news_list_r">
+                            <div class="hot_news_list_text">
+                                <h6 class="hot_news_list_r_title"><a href="<?php echo $nDetailUrl.$news['iNewsID']; ?>" target="_blank"><?php echo $news['sTitle']?></a></h6>
+                                <p class="hot_news_list_r_con"><?php echo $news['sAbstract']?>&nbsp;&nbsp;<a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" class="detail" target="_blank">详细>></a></p>
+                            </div>
+                            <div class="hot_news_list_rb">
+                                <div class="hot_news_list_tag">
+                                    <?php if(!empty($news['sTag'])){?>
+                                        <?php foreach($news['sTag'] as $tid=>$name) {?>
+                                            <span><a href="<?php echo $nListUrl. $tid; ?>" target="_blank"><?php echo $name;?></a></span>
+                                        <?php }?>
+                                    <?php }?>
+                                </div>
+                                <div class="hot_news_list_author">
+                                    <span><?php echo $news['sAuthor']. '  '. $news['iPublishTime'];?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else:?>
+                        <div class="hot_news_list_t">
+                            <span class="share_icon"><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" target="_blank"><?php echo $news['iShareTimes']?></a></span>
+                            <h6 class="hot_news_list_r_title"><a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" target="_blank"><?php echo $news['sTitle']?></a></h6>
+                        </div>
+                        <div class="hot_news_list_r no_img ">
+                            <div class="hot_news_list_text">
+                                <p class="hot_news_list_r_con"><?php echo $news['sAbstract']?>&nbsp;&nbsp;<a href="<?php echo $nDetailUrl. $news['iNewsID']; ?>" class="detail" target="_blank">详细>></a></p>
+                            </div>
+                            <div class="hot_news_list_rb">
+                                <div class="hot_news_list_tag">
+                                    <?php if(!empty($news['sTag'])) {?>
+                                        <?php foreach($news['sTag'] as $tid=>$name) {?>
+                                            <span><a href="<?php echo $nListUrl. $tid; ?>" target="_blank"><?php echo $name;?></a></span>
+                                        <?php }?>
+                                    <?php }?>
+                                </div>
+                                <div class="hot_news_list_author">
+                                    <span><?php echo $news['sAuthor']. '  '. $news['iPublishTime'];?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </li>
+            <?php }?>
+        </ul>
+
+        <?php echo $pager ?>
+    </div>
+    <!--资讯列表左侧内容结束-->
+    <!--资讯列表右侧内容开始-->
+    <div class="news_con_r">
+        <?php if(!empty($hotTag)): $index = 0;?>
+        <div class="hot_tags">
+            <h6 class="hot_tags_title">热门标签</h6>
+            <ul>
+                <?php foreach($hotTag as $tid=>$name) {$index ++;?>
+                    <?php if($index%3 == 0):?>
+                        <li class="no_m_r"><a href="<?php echo $nListUrl. $tid; ?>" target="_blank"><?php echo $name;?></a></li>
+                    <?php else:?>
+                        <li><a href="<?php echo $nListUrl.$tid; ?>" target="_blank"><?php echo $name;?></a></li>
+                    <?php endif?>
+                <?php }?>
+            </ul>
+        </div>
+        <?php endif?>
+
+        <?php if(!empty($buildings)) { ?>
+        <div class="evaluate_floor">
+            <h6 class="evaluate_floor_title">
+                <span></span>
+                分析师评楼
+            </h6>
+            <?php foreach($buildings as $building){?>
+            </h6>
+                <div class="evaluate_floor_d">
+                    <div class="evaluate_floor_img">
+                        <div class="evaluate_floor_img_in">
+                            <a href="<?php echo $building['sUrl']; ?>" target="_blank"><img src="<?php if(!empty($building['ZongPingXQ'])){echo Util_Uri::getCricViewURL($building['ZongPingXQ'], 228, 171);}else{ echo $sStaticRoot.'/img/news/not_exists.jpg';} ?>" width="228" ></a>
+                            <?php if($building['ListType'] == '尽快入手') {?>
+                                <span class="rushou"><?php echo $building['ListType'];?></span>
+                            <?php }?>
+                                <?php if($building['ListType'] == '推荐购买') {?>
+                                    <span class="goumai"><?php echo $building['ListType'];?></span>
+                                <?php }?>
+                                <?php if($building['ListType'] == '谨慎购买') {?>
+                                    <span class="jingshen"><?php echo $building['ListType'];?></span>
+                                <?php }?>
+                                <?php if($building['ListType'] == '持币观望') {?>
+                                    <span class="guanwang"><?php echo $building['ListType'];?></span>
+                                <?php }?>
+
+                            <?php if(!empty($building['OpinionSummary'])){?>
+                            <div class="shadow">
+                                <div class="shadow_in"></div>
+                                <p>
+                                    <?php
+                                    $len = mb_strlen($building['OpinionSummary']);
+                                    if($len > 15) {
+                                        echo mb_substr($building['OpinionSummary'], 0, 15). "...";
+                                    } else {
+                                        echo mb_substr($building['OpinionSummary'], 0, 15);
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+                            <?php } ?>
+                        </div>
+                        <div class="floor_name">[<?php echo $building['Region']?>] <a href="<?php echo $building['sUrl']; ?>" target="_blank"><?php echo $building['UnitName']?></a></div>
+                        <dl class="evaluate_floor_price">
+                            <dt>开发商售价</dt>
+                            <dd><span class="detail"><?php echo ($building['Price'] > 0) ? number_format($building['Price']): '待定'; ?></span> 元/㎡</dd>
+                            <dt>指导价</dt>
+                            <dd><span><?php echo number_format($building['CricPrice']);?></span> 元/㎡</dd>
+                        </dl>
+                    </div>
+                </div>
+            <?php }?>
+        </div>
+        <?php }?>
+
+
+        <?php if(!empty($advs)) {?>
+        <div class="weixin_in">
+            <h6>
+                <span></span>
+                订阅关注
+            </h6>
+            <?php if (!empty($advs['sUrl'])):?>
+                <a href="<?php echo $advs['sUrl']?>" target="_blank"><img src="<?php echo Util_Uri::getDFSViewURL($advs['sImage'], 0, 0, '', 'banner')?>" width="226"></a>
+            <?php else:?>
+                <img src="<?php echo Util_Uri::getDFSViewURL($advs['sImage'], 0, 0, '', 'banner')?>" width="226">
+            <?php endif;?>
+        </div>
+        <?php } ?>
+    </div>
+    <!--资讯列表右侧内容结束-->
+</div>
+<script src="<?php echo $sStaticRoot?>/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/share.js"></script>
+<script type="text/javascript">
+    $(function() {
+		//banner轮播
+		var nowing = 0;
+		var timer = null;
+		var num = $('.banner_img_show ul li').length - 1;
+		timer = setInterval(fn,5000);
+		$('.banner').mouseenter(function(e) {
+            clearInterval(timer);
+            timer = null;
+        }).mouseout(function(e) {
+			clearInterval(timer)
+			timer=setInterval(fn,5000)
+    	});
+		function fn(){
+			if(nowing<num){
+				nowing = nowing + 1;
+			}else{
+				nowing = 0;
+			}
+			$('.banner_img_show ul').stop().animate({left:-nowing*1098},500);
+			$('.banner_img_show ol li').eq(nowing).addClass('current').siblings().removeClass('current');
+		}
+		$('.banner ol li').click(function(e) {
+			nowing = $(this).index();
+            $('.banner_img_show ul').stop().animate({left:-nowing*1098},500);
+			$('.banner_img_show ol li').eq(nowing).addClass('current').siblings().removeClass('current');
+        });
+    });
+</script>

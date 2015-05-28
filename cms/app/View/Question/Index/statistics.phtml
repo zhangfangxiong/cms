@@ -1,0 +1,107 @@
+<div class="pheader clearfix">问答列表</div>
+
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/question/index/statistics">
+        <div class="row sousuo_now">
+            <div class="form-group .col-xs-2">
+                城市：
+                <select class="form-control input-sm" name="city">
+                    <option value="0" <?php if($seCity == 0){?> selected = "selected"<?php }?> >全部</option>
+                    <option value="其他" <?php if($seCity == '其他'){?> selected = "selected"<?php }?> >其他</option>
+                    <option value="未分配城市" <?php if($seCity == '未分配城市'){?> selected = "selected"<?php }?> >未分配城市</option>
+                    <?php foreach ($citys as $c) { ?>
+                        <?php if($seCity == $c) {?>
+                            <option value="<?php echo $c; ?>" selected="selected"><?php echo $c; ?></option>
+                        <?php }else{?>
+                            <option value="<?php echo $c; ?>"><?php echo $c; ?></option>
+                        <?php }?>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="form-group .col-xs-2">
+                推送时间：
+                <input name="sPushTime" autocomplete="off" class="laydate form-control" validate="" type="text"
+                       value="<?php echo (isset($start)) ? date('Y-m-d',$start) : '' ?>" onclick="laydate({format: 'YYYY-MM-DD'});">
+            </div>
+            <div class="form-group .col-xs-2">
+                至
+                <input name="ePushTime"  autocomplete="off" class="laydate form-control" validate="" type="text"
+                       value="<?php echo (isset($end)) ? date('Y-m-d', $end) : '' ?>" onclick="laydate({format: 'YYYY-MM-DD'});">
+            </div>
+
+            <div class="form-group .col-xs-2">
+                <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+            </div>
+        </div>
+
+    </form>
+    <hr>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">城市</th>
+            <th class="text-center">问题量</th>
+            <th class="text-center">回答量</th>
+            <th class="text-center">回答率</th>
+            <th class="text-center">隐藏量</th>
+            <th class="text-center">隐藏率</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th class="text-center">全国</th>
+                <th class="text-center"><?php echo $total;?></th>
+                <th class="text-center"><?php echo $totalAnswer;?></th>
+                <th class="text-center"><?php echo $answerRate;?></th>
+                <th class="text-center"><?php echo $totalHide;?></th>
+                <th class="text-center"><?php echo $hideRate;?></th>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <span>分析列表</span>
+        <button id="export" class="btn btn-primary">
+            <i class="icon-plus"></i> 导出
+        </button>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">城市</th>
+            <th class="text-center">问题量</th>
+            <th class="text-center">回答量</th>
+            <th class="text-center">回答率</th>
+            <th class="text-center">隐藏量</th>
+            <th class="text-center">隐藏率</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if(isset($single) && $single){?>
+            <tr>
+                <th class="text-center"><?php echo $city;?></th>
+                <th class="text-center"><?php echo $ctotal;?></th>
+                <th class="text-center"><?php echo $ctotalAnswer;?></th>
+                <th class="text-center"><?php echo $canswerRate;?></th>
+                <th class="text-center"><?php echo $ctotalHide;?></th>
+                <th class="text-center"><?php echo $chideRate;?></th>
+            </tr>
+        <?php }else { ?>
+            <?php foreach ($aList as $key => $value) { ?>
+                <tr>
+                    <th class="text-center"><?php echo $key;?></th>
+                    <th class="text-center"><?php echo $value['total'];?></th>
+                    <th class="text-center"><?php echo $value['answer'];?></th>
+                    <th class="text-center"><?php echo $value['answerRate'];?></th>
+                    <th class="text-center"><?php echo $value['hide'];?></th>
+                    <th class="text-center"><?php echo $value['hideRate'];?></th>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+        </tbody>
+    </table>
+    <?php echo empty($aPager) ? '' : $aPager; ?>
+</div>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>

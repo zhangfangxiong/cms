@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <title><?php echo isset($aMeta['title']) ? $aMeta['title'] : '房价点评网' ?></title>
+    <meta content="<?php echo isset($aMeta['keywords']) ? $aMeta['keywords'] : '房价点评网' ?>" name="keywords" />
+    <meta content="<?php echo isset($aMeta['description']) ? $aMeta['description'] : '房价点评网' ?>" itemprop="description" name="description" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/basic.css">
+    <script src="<?php echo $sStaticRoot ?>/touchweb/lib/jquery/jquery.min.js"></script>
+    <?php if ($sCurrClass == 'Controller_H5_Ucenter' || $sCurrClass == "Controller_H5_Search") {//个人中心,搜索首页需要加载的css，js文件
+        ?>
+    <?php } ?>
+</head>
+
+<body>
+
+<?php include $_script; ?>
+<!--底部开始-->
+<?php
+if (!$noFooter && isset($hasRoot) && $hasRoot) {
+    ?>
+    <footer class="foot_wrap">
+        <div class="foot">
+            <div class="device border_bottom">
+                <a href="<?php echo $aEntrenceInfo['index']['url']; ?>" class="pr5">电脑版</a>
+                <a href="javascript:void(0)" class="pr5 pl5">客户端</a>
+                <a href="<?php echo $aEntrenceInfo['aboutUs']['url']; ?>" class="pr5 pl5">关于我们</a>
+                <a href="<?php echo $aEntrenceInfo['service']['url']; ?>" class="pl5">网络服务协议</a>
+            </div>
+            <div class="tel border_bottom">
+                <?php
+                if ((isset($aAnalyst) && $aAnalyst) || $aAnalyst = Util_Cookie::get('analyst'.$aCurrentCity['iCodeID'])) {
+                    $aAnalystInfo = explode(',',$aAnalyst['sTel']);
+                }
+                ?>
+                <span>免费咨询热线：400-810-6999<?php echo isset($aAnalystInfo) ? '转'.$aAnalystInfo[1] : '' ;?></span>
+            </div>
+            <div class="copyRight">Copyright© 2014-2015 房价点评</div>
+        </div>
+    </footer>
+<?php
+}
+?>
+<script>
+    var isApp = <?php echo $isApp; ?>;
+    if (isApp) {
+        $(".uc_return_l").hide();
+        $(".is_app_no").hide();
+    }
+</script>
+<!--底部结束-->
+<div style="display: none">
+    <script type="text/javascript"
+            src="http://<?php echo Yaf_G::getConf('fangjiadp', 'domain') ?>/Scripts/ga.js"></script>
+</div>
+</body>
+</html>

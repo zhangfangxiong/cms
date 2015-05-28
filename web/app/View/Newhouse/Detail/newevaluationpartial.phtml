@@ -1,0 +1,702 @@
+﻿<div class="clearfix  n_cont_warp mb30">
+    <div class="n_cont_warp_m">
+        <dl class="lppc_dl clearfix">
+            <dt>楼盘评测</dt>
+            <dd>
+                <cite>
+
+                            <span class="middle-start">
+                                            <?php
+                                                echo Model_Util::getStar($unit['TotalScore']);
+                                            ?>
+                            </span>
+                    <em><s><?php echo $unit['TotalScore']?></s>分</em>
+                </cite>
+                <div class="pf_con">
+                    <ul class="clearfix">
+                        <?php
+                            if (!empty($unit['RoomTypeScore'])) {
+                        ?>
+                                <li><s></s>户型 <?php echo sprintf("%01.1f",$unit['RoomTypeScore'])?></li>
+                        <?php
+                            }
+                        ?>
+                        <?php
+                        if (!empty($unit['DesignScore'])) {
+                        ?>
+                                <li><s></s>装修 <?php echo sprintf("%01.1f",$unit['DesignScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['HouseManageScore'])) {
+                        ?>
+                            <li><s></s>物业 <?php echo sprintf("%01.1f",$unit['HouseManageScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['ParkScore'])) {
+                        ?>
+                                <li><s></s>车位 <?php echo sprintf("%01.1f",$unit['ParkScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['LocationScore'])) {
+                        ?>
+                             <li><s></s>区位 <?php echo sprintf("%01.1f",$unit['LocationScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($unit['CPRatioScore'])) {
+                            ?>
+                            <li><s></s>性价比 <?php echo sprintf("%01.1f",$unit['CPRatioScore'])?></li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <a href="/shanghai/shanghaizhoubian/kunshan/280202_evaluation" class="a_more" target="_blank" title="完整评测">完整评测<s></s></a>
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="all_factors clearfix mb10">
+
+    <div class="factor_wrap clearfix">
+        <div class="factors_box clearfix">
+            <?php
+                $evalPicTypeCnt = 0;
+                $hxData = &$unitEvaluation['chapterData'][1]['data'];
+                $mainRoomType = Model_UnitEvaluation::getMainRoomType($hxData); // 主力户型
+
+                $hxData = &$unitEvaluation['chapterData'][2]['data'];
+                $hxComment = Model_UnitEvaluation::getAnalystsComment($hxData); // 分析师评论
+                $hxImages = Model_UnitEvaluation::getHxfxImages($hxData);  // 户型图
+
+
+
+
+            ?>
+            <h6 class="factor_title"><s class="hxfx_s"></s>户型分析
+                <a href="/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=1" class="more_factor" title="阅读本章" target="_blank"><s></s>阅读本章</a>
+
+            </h6>
+            <dl class="factor_con clearfix">
+                <dt>
+                    <cite class="cite_txt1">主力户型：<?php echo $mainRoomType;?></cite>
+                    <cite class="cite_txt2" title="<?php echo $hxComment['analystsComment']?>"><?php echo $hxComment['simpleAnalystsComment']?></cite>
+                </dt>
+                <dd>
+
+                        <?php
+                            if (!empty($hxImages['hx'])) {
+                         ?>
+                             <div class="img_list" id="hxtImg" onclick="">
+                                <?php
+                                $hxImagesCount = sizeof($hxImages['hx']);
+                                foreach($hxImages['hx'] as $item) {
+                        ?>
+                        <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="户型图(<?php echo $hxImagesCount?>张)">户型图(<?php echo $hxImagesCount?>张)</span><s class="tm_bg"></s></a>
+                        <?php
+                                }
+                                $evalPicTypeCnt++;
+                                ?>
+                            </div>
+                        <?php
+                            }
+                        ?>
+                        <?php
+                        if (!empty($hxImages['sp'])) {
+                            ?>
+                            <div class="img_list" id="sptImg" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=1');">
+                            <?php
+                            $hxImagesCount = sizeof($hxImages['sp']);
+                            foreach($hxImages['sp'] as $item) {
+                                ?>
+                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="户型图(<?php echo $hxImagesCount?>张)">户型图(<?php echo $hxImagesCount?>张)</span><s class="tm_bg"></s></a>
+                            <?php
+                            }
+                            $evalPicTypeCnt++;
+                            ?>
+                            </div>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if ($evalPicTypeCnt< 2 ) {
+                            $cricImages = Model_UnitPictures::getTypeImages($cricUnitPictures['sjt'],'样板房图');
+                            if (!empty($cricImages)) {
+                                ?>
+                                    <div class="img_list" id="zxybftImg" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=1');">
+                                <?php
+                                $cricImagesCount = sizeof($cricImages);
+                                foreach($cricImages as $item) {
+                                    ?>
+                                    <a href="<?php echo $item['sImage'] ?>" class="fancybox-buttons" data-fancybox-group="button"><img alt="" src="<?php echo $item['sImage'] ?>"><span title="样板房图(<?php echo $cricImagesCount?>)张">样板房图(<?php echo $cricImagesCount?>)张</span><s class="tm_bg"></s></a>
+                                <?php
+                                }
+                                 $evalPicTypeCnt++;
+                                ?>
+                                    </div>
+                               <?php
+                            }
+                        }
+                        ?>
+
+                    <?php
+                        if ($evalPicTypeCnt < 2 ) {
+                    ?>
+                            <div class="img_list noimg">
+                                <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/spt_default.jpg" alt="" /><span title="户型图">户型图</span><s class="tm_bg"></s></a>
+                            </div>
+                    <?php
+                            $evalPicTypeCnt++;
+                        }
+                    ?>
+                    <?php
+                    if ($evalPicTypeCnt < 2 ) {
+                    ?>
+                    <div class="img_list noimg">
+                        <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/spt_default.jpg" alt="" /><span title="实拍图">实拍图</span><s class="tm_bg"></s></a>
+                    </div>
+                   <?php
+                        $evalPicTypeCnt++;
+                    }
+                    ?>
+                </dd>
+            </dl>
+        </div>
+        <div class="factors_box clearfix">
+
+            <h6 class="factor_title"><s class="zxbz_s"></s>装修标准
+                <a href="/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=2" class="more_factor" title="阅读本章" target="_blank"><s></s>阅读本章</a>
+
+            </h6>
+            <dl class="factor_con clearfix">
+                <?php
+                     $evalPicTypeCnt = 0;
+                     // 装修标准
+                     $zxbzData = &$unitEvaluation['chapterData'][3]['data'];
+                     $iIsBlank = $zxbzData["iIsBlank"];
+                     // 装修分析
+                     $zxfxData = &$unitEvaluation['chapterData'][4]['data'];
+                     $zxComment = Model_UnitEvaluation::getAnalystsComment($zxfxData);
+                     $zxImages = Model_UnitEvaluation::getZxbzImages($zxbzData); // 品牌配置的相关图片
+                ?>
+                  <?php
+                        if (empty($zxbzData) && $iIsBlank == '1') {
+                            ?>
+                            <dt>
+                                <cite class="cite_txt1"><span>装修标准：毛坯交付</span></cite>
+                                <cite class="cite_txt2">本案为毛坯交付，无装修标准的相关评测信息</cite>
+                            </dt>
+                            <dd>
+                                <div class="img_list noimg">
+                                    <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/mpjf_default1.jpg" alt="" /><span title="毛坯交付">毛坯交付</span><s class="tm_bg"></s></a>
+                                </div>
+                                <div class="img_list noimg">
+                                    <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/mpjf_default2.jpg" alt="" /><span title="毛坯交付">毛坯交付</span><s class="tm_bg"></s></a>
+                                </div>
+                            </dd>
+                 <?php
+                        } else {
+
+                  ?>
+                                <dt>
+                                    <cite class="cite_txt1"><span title="装修报价：700元/㎡">装修报价：<?php echo $zxfxData['iPrice']?>元/㎡</span>装修性价比：<?php echo $zxfxData['iCostRate']?></cite>
+                                    <cite class="cite_txt2" title="<?php  echo $zxComment['analystsComment']?>"><?php  echo $zxComment['simpleAnalystsComment']?>.</cite>
+                                </dt>
+                                <dd>
+
+                                        <?php
+                                            if (!empty($zxImages['cf'])) {
+                                         ?>
+                                            <div class="img_list" id="cfpzImg" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=2');">
+                                            <?php
+                                            $cfImagesCount = sizeof($zxImages['cf']);
+                                            foreach($zxImages['cf'] as $item) {
+                                                ?>
+                                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="厨房配置(<?php echo $cfImagesCount?>张)">厨房配置(<?php echo $cfImagesCount?>张)</span><s class="tm_bg"></s></a>
+                                            <?php
+                                            }
+                                            $evalPicTypeCnt++;
+                                            ?>
+                                            </div>
+                                            <?php
+                                            }
+                                        ?>
+                                        <?php
+                                            if (!empty($zxImages['wy'])) {
+                                            ?>
+                                                <div class="img_list" id="wyImg" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=2');">
+                                            <?php
+                                            $wyImagesCount = sizeof($zxImages['wy']);
+                                            foreach($zxImages['wy'] as $item) {
+                                                ?>
+                                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="浴室配置(<?php echo $wyImagesCount?>张)">浴室配置(<?php echo $wyImagesCount?>张)</span><s class="tm_bg"></s></a>
+                                            <?php
+                                            }
+                                            $evalPicTypeCnt++;
+                                            ?>
+                                                </div>
+                                            <?php
+                                            }
+                                        ?>
+                                        <?php
+                                        if ($evalPicTypeCnt< 2 ) {
+                                            $cricImages = Model_UnitPictures::getTypeImages($cricUnitPictures['sjt'],'样板房图');
+                                            if (!empty($cricImages)) {
+                                                ?>
+                                             <div class="img_list" id="zxybft2Img" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=1');">
+                                                <?php
+                                                $cricImagesCount = sizeof($cricImages);
+                                                foreach($cricImages as $item) {
+                                                    ?>
+                                                    <a href="<?php echo $item['sImage'] ?>" class="fancybox-buttons" data-fancybox-group="button"><img alt="" src="<?php echo $item['sImage'] ?>"><span title="样板房图(<?php echo $cricImagesCount?>)张">样板房图(<?php echo $cricImagesCount?>)张</span><s class="tm_bg"></s></a>
+                                                <?php
+                                                }
+                                                $evalPicTypeCnt++;
+                                                ?>
+                                             </div>
+                                            <?php
+                                            }
+                                        }
+                                        ?>
+                                    <?php
+                                        if ($evalPicTypeCnt < 2) {
+                                    ?>
+                                    <div class="img_list noimg">
+                                        <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/cfpz_default.jpg" alt="" /><span title="厨房配置">厨房配置</span><s class="tm_bg"></s></a>
+                                    </div>
+                                    <?php
+                                            $evalPicTypeCnt++;
+                                    }
+                                    ?>
+                                    <?php
+                                    if ($evalPicTypeCnt < 2) {
+                                        ?>
+                                        <div class="img_list noimg">
+                                            <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/cfpz_default.jpg" alt="" /><span title="厨房配置">厨房配置</span><s class="tm_bg"></s></a>
+                                        </div>
+                                        <?php
+                                        $evalPicTypeCnt++;
+                                    }
+                                    ?>
+                                </dd>
+                        <?php
+                        }
+                  ?>
+            </dl>
+        </div>
+        <div class="factors_box clearfix">
+            <?php
+                $evalPicTypeCnt = 0;
+                $ztghData =  &$unitEvaluation['chapterData'][5]['data']; // 整体规划
+                $sqjgData =  &$unitEvaluation['chapterData'][6]['data']; // 社区景观
+                $cwqgData =  &$unitEvaluation['chapterData'][10]['data']; // 车位情况
+                $wyfyData =  &$unitEvaluation['chapterData'][11]['data']; // 物业费用
+                $sqComment = Model_UnitEvaluation::getAnalystsComment($sqjgData);
+                $sqjgImages = Model_UnitEvaluation::getSqjgImages($sqjgData); //社区景观 图片
+                $ztghImages = Model_UnitEvaluation::getSqghImages($ztghData); // 整体规划 图片
+            ?>
+            <h6 class="factor_title"><s class="sqpz_s"></s>社区品质
+                <a href="/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=3" class="more_factor" title="阅读本章" target="_blank"><s></s>阅读本章</a>
+
+            </h6>
+            <dl class="factor_con clearfix">
+                <dt>
+                    <cite class="cite_txt1"><span>车位比<?php echo $cwqgData['iRate']?></span>物业费:
+                        <?php
+                            if ($wyfyData['sPriceConfirm'] == '物业费未确定') {
+                                echo '<em>未确定</em>';
+                            } else {
+                                echo $wyfyData['sPrice'].'元／月㎡';
+                            }
+                        ?>
+
+                    </cite>
+                    <cite class="cite_txt2" title="<?php echo $sqComment['analystsComment'] ?>"><?php echo $sqComment['simpleAnalystsComment'] ?>.</cite>
+                </dt>
+                <dd>
+
+                        <?php
+                        if (!empty($ztghImages)) {
+                            ?>
+                                <div class="img_list" id="ztghImg" onclick="">
+                            <?php
+                            $ztghImagesCount = sizeof($ztghImages);
+                            foreach($ztghImages as $item) {
+                                ?>
+                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="整体规划(<?php echo $ztghImagesCount?>张)">整体规划(<?php echo $ztghImagesCount?>张)</span><s class="tm_bg"></s></a>
+                            <?php
+                            }
+                            $evalPicTypeCnt++;
+                            ?>
+                                </div>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (!empty($sqjgImages)) {
+                            ?>
+                             <div class="img_list" id="sqjgImg" onclick="">
+                            <?php
+                            $sqjgImagesCount = sizeof($sqjgImages);
+                            foreach($sqjgImages as $item) {
+                                ?>
+                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="社区景观(<?php echo $ztghImagesCount?>张)">社区景观(<?php echo $ztghImagesCount?>张)</span><s class="tm_bg"></s></a>
+                            <?php
+                            }
+                            $evalPicTypeCnt++;
+                            ?>
+                             </div>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if ($evalPicTypeCnt< 2 ) {
+                            $cricImages = Model_UnitPictures::getTypeImages($cricUnitPictures['sjt'],'小区实景图');
+                            if (!empty($cricImages)) {
+                                ?>
+                                <div class="img_list" id="sjtImg" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=1');">
+                                <?php
+                                $cricImagesCount = sizeof($cricImages);
+                                foreach($cricImages as $item) {
+                                    ?>
+                                    <a href="<?php echo $item['sImage'] ?>" class="fancybox-buttons" data-fancybox-group="button"><img alt="" src="<?php echo $item['sImage'] ?>"><span title="实景图(<?php echo $cricImagesCount?>)张">实景图(<?php echo $cricImagesCount?>)张</span><s class="tm_bg"></s></a>
+                                <?php
+                                }
+                                $evalPicTypeCnt++;
+                                ?>
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    <?php
+                        if ($evalPicTypeCnt < 2) {
+                            ?>
+                            <div class="img_list noimg">
+                                <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img
+                                        src="<?php echo $sStaticRoot ?>/web/images/zwt_img/ztgh_default.jpg"
+                                        alt=""/><span title="整体规划">整体规划</span><s class="tm_bg"></s></a>
+                            </div>
+                            <?php
+                            $evalPicTypeCnt++;
+                        }
+                    ?>
+                    <?php
+                    if ($evalPicTypeCnt < 2) {
+                        ?>
+                        <div class="img_list noimg">
+                            <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img
+                                    src="<?php echo $sStaticRoot ?>/web/images/zwt_img/ztgh_default.jpg" alt=""/><span
+                                    title="社区景观">社区景观</span><s class="tm_bg"></s></a>
+                        </div>
+                        <?php
+                        $evalPicTypeCnt++;
+                    }
+                    ?>
+                </dd>
+            </dl>
+        </div>
+        <div class="factors_box clearfix">
+            <?php
+                $evalPicTypeCnt = 0;
+                $eduData = &$unitEvaluation['chapterData'][17]['data']; // 教育资源
+                $medicalData =  &$unitEvaluation['chapterData'][18]['data']; // 医疗资源
+                $sqData =  &$unitEvaluation['chapterData'][19]['data']; // 周边商圈
+                $eduInfo = Model_UnitEvaluation::getEducateInfo($eduData);
+                $medicalName = Model_UnitEvaluation::getMedicalInfo($medicalData);
+                $businessInfo = Model_UnitEvaluation::getBusinessInfo($sqData);
+            ?>
+            <h6 class="factor_title"><s class="shpt_s"></s>生活配套
+                <a href="/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=6" class="more_factor" title="阅读本章" target="_blank"><s></s>阅读本章</a>
+
+            </h6>
+            <dl class="factor_con clearfix">
+                <dt>
+                    <cite class="cite_txt3" title="教育资源：<?php echo $eduInfo['shoolName'] ?>">教育资源：<?php echo $eduInfo['shoolName'] ?></cite>
+                    <cite class="cite_txt3" title="医疗资源：<?php echo $medicalName ?>">医疗资源：<?php echo $medicalName ?></cite>
+                    <cite class="cite_txt3" title="周边商圈：<?php echo $businessInfo['imgTitle'] ?>">周边商圈：<?php echo $businessInfo['imgTitle'] ?></cite>
+                </dt>
+                <dd>
+                    <?php
+                    if (!empty($businessInfo['zbsqImages'])) {
+                        ?>
+                        <div class="img_list" id="zbsqImg" onclick="">
+                            <?php
+                            $imagesCount = sizeof($businessInfo['zbsqImages']);
+                            foreach($businessInfo['zbsqImages'] as $item) {
+                                ?>
+                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="周边商圈(<?php echo $imagesCount?>张)">周边商圈(<?php echo $imagesCount?>张)</span><s class="tm_bg"></s></a>
+                            <?php
+                            }
+                            $evalPicTypeCnt++;
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+
+                    <?php
+                    if (!empty($eduInfo['jyzyImages'])) {
+                        ?>
+                        <div class="img_list" id="jyzyImg" onclick="">
+                            <?php
+                            $imagesCount = sizeof($eduInfo['jyzyImages']);
+                            foreach($eduInfo['jyzyImages'] as $item) {
+                                ?>
+                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="教育资源(<?php echo $imagesCount?>张)">教育资源(<?php echo $imagesCount?>张)</span><s class="tm_bg"></s></a>
+                            <?php
+                            }
+                            $evalPicTypeCnt++;
+                            ?>
+                        </div>
+                    <?php
+                    }
+                    ?>
+
+                    <?php
+                    if ($evalPicTypeCnt< 2 ) {
+                        $cricImages = Model_UnitPictures::getTypeImages($cricUnitPictures['ybft'],'项目周边');
+                        if (!empty($cricImages)) {
+                            ?>
+                            <div class="img_list" id="sjtImg" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=1');">
+                                <?php
+                                $cricImagesCount = sizeof($cricImages);
+                                foreach($cricImages as $item) {
+                                    ?>
+                                    <a href="<?php echo $item['sImage'] ?>" class="fancybox-buttons" data-fancybox-group="button"><img alt="" src="<?php echo $item['sImage'] ?>"><span title="项目周边(<?php echo $cricImagesCount?>)张">项目周边(<?php echo $cricImagesCount?>)张</span><s class="tm_bg"></s></a>
+                                <?php
+                                }
+                                $evalPicTypeCnt++;
+                                ?>
+                            </div>
+                        <?php
+                        }
+                    }
+                    ?>
+
+                   <?php
+                        if ($evalPicTypeCnt < 2) {
+                   ?>
+                    <div class="img_list noimg">
+                        <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/ztgh_default.jpg" alt="" /><span title="社区景观">社区景观</span><s class="tm_bg"></s></a>
+                    </div>
+                   <?php
+                            $evalPicTypeCnt++;
+                        }
+                   ?>
+                    <?php
+                         if ($evalPicTypeCnt < 2) {
+                    ?>
+                    <div class="img_list noimg">
+                        <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/ztgh_default.jpg" alt="" /><span title="社区景观">社区景观</span><s class="tm_bg"></s></a>
+                    <?php
+                        $evalPicTypeCnt++;
+                    }
+                    ?>
+                </dd>
+            </dl>
+        </div>
+        <div class="factors_box clearfix">
+            <?php
+                $evalPicTypeCnt = 0;
+                $metroData = &$unitEvaluation['chapterData'][14]['data']; // 轨交出行
+                $busData =  &$unitEvaluation['chapterData'][15]['data']; // 公交出行
+                $jtInfo = Model_UnitEvaluation::getRailInfo($metroData,$busData);
+            ?>
+
+            <h6 class="factor_title"><s class="jtcx_s"></s>交通出行
+                <a href="/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=5" class="more_factor" title="阅读本章" target="_blank"><s></s>阅读本章</a>
+
+            </h6>
+            <dl class="factor_con clearfix">
+                <dt>
+                    <?php
+                        echo $jtInfo['tLine'];
+                    ?>
+                </dt>
+                <dd>
+                    <?php
+                        if (!empty($jtInfo['metroImages']) || !empty($jtInfo['busImages'])) {
+
+                            if (!empty($jtInfo['metroImages'])) {
+                                ?>
+                                <div class="img_list" id="gjcxImg" onclick="">
+                                    <?php
+                                    $imagesCount = sizeof($jtInfo['metroImages']);
+                                    foreach($jtInfo['metroImages'] as $item) {
+                                        ?>
+                                        <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="轨道交通(<?php echo $imagesCount?>张)">轨道交通(<?php echo $imagesCount?>张)</span><s class="tm_bg"></s></a>
+                                    <?php
+                                    }
+                                    $evalPicTypeCnt++;
+                                    ?>
+                                </div>
+                            <?php
+                            }
+                            if (!empty($jtInfo['busImages'])) {
+                                ?>
+                                <div class="img_list" id="bjcxImg" onclick="">
+                                    <?php
+                                    $imagesCount = sizeof($jtInfo['busImages']);
+                                    foreach($jtInfo['busImages'] as $item) {
+                                        ?>
+                                        <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="公交线路(<?php echo $imagesCount?>张)">公交线路(<?php echo $imagesCount?>张)</span><s class="tm_bg"></s></a>
+                                    <?php
+                                    }
+                                    $evalPicTypeCnt++;
+                                    ?>
+                                </div>
+                            <?php
+                            }
+                        } else {
+                            $evalPicTypeCnt = 0;
+                            $drivingData =  &$unitEvaluation['chapterData'][13]['data']; // 公交出行
+                            ?>
+
+                            <!--无轨交图或公交图时，可取自驾线路图-->
+                            <?php
+                            if (!empty($drivingData['zjxlImage'])) {
+                                ?>
+                                <div class="img_list" id="zjcxImg" onclick="">
+                                    <?php
+                                    $imagesCount = sizeof($drivingData['zjxlImage']);
+                                    foreach($drivingData['zjxlImage'] as $item) {
+                                        ?>
+                                        <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="教育资源(<?php echo $imagesCount?>张)">教育资源(<?php echo $imagesCount?>张)</span><s class="tm_bg"></s></a>
+                                    <?php
+                                    }
+                                    $evalPicTypeCnt++;
+                                    ?>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                        <?php
+                        }
+                    ?>
+                    <?php
+                    if ($evalPicTypeCnt< 2 ) {
+                        $cricImages = Model_UnitPictures::getTypeImages($cricUnitPictures['ybft'],'道路实景图');
+                        if (!empty($cricImages)) {
+                            ?>
+                            <div class="img_list" id="ybftImg" onclick="loadEvaluationPic(this,null,'/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=1');">
+                                <?php
+                                $cricImagesCount = sizeof($cricImages);
+                                foreach($cricImages as $item) {
+                                    ?>
+                                    <a href="<?php echo $item['sImage'] ?>" class="fancybox-buttons" data-fancybox-group="button"><img alt="" src="<?php echo $item['sImage'] ?>"><span title="道路实景(<?php echo $cricImagesCount?>)张">道路实景(<?php echo $cricImagesCount?>)张</span><s class="tm_bg"></s></a>
+                                <?php
+                                }
+                                $evalPicTypeCnt++;
+                                ?>
+                            </div>
+                        <?php
+                        }
+                    }
+                    ?>
+
+                    <?php
+                        if ($evalPicTypeCnt < 2) {
+                    ?>
+                    <div class="img_list noimg">
+                        <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/gdjt_default.jpg" alt="" /><span title="轨道交通">轨道交通</span><s class="tm_bg"></s></a>
+                    </div>
+                    <?php
+                        $evalPicTypeCnt++;
+                     }
+                    ?>
+                    <?php
+                    if ($evalPicTypeCnt < 2) {
+                    ?>
+                    <div class="img_list noimg">
+                        <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/gjxl_default.jpg" alt="" /><span title="公交线路">公交线路</span><s class="tm_bg"></s></a>
+                    </div>
+                   <?php
+                        $evalPicTypeCnt++;
+                    }
+                    ?>
+                </dd>
+            </dl>
+        </div>
+        <div class="factors_box clearfix">
+            <?php
+            $evalPicTypeCnt = 0;
+            $insideData = &$unitEvaluation['chapterData'][21]['data']; // 内部
+            $outsideData =  &$unitEvaluation['chapterData'][22]['data']; // 外部
+            $effectStr = Model_UnitEvaluation::getBadfactorInsideInfo($insideData);
+            $sqwbImages = Model_UnitEvaluation::getBadfactorOutsideInfo($outsideData);
+            ?>
+
+            <h6 class="factor_title"><s class="blys_s"></s>不利因素
+                <a href="/shanghai/shanghaizhoubian/kunshan/280202_evaluation?p=7" class="more_factor" title="阅读本章" target="_blank"><s></s>阅读本章</a>
+
+            </h6>
+            <dl class="factor_con clearfix">
+                <dt>
+                    <?php
+                        echo $effectStr;
+                    ?>
+                </dt>
+                <dd>
+                    <?php
+                    if (!empty($insideData['blfbImage'])) {
+                        ?>
+                        <div class="img_list" id="sqnbImg" onclick="">
+                            <?php
+                            $imagesCount = sizeof($insideData['blfbImage']);
+                            foreach($insideData['blfbImage'] as $item) {
+                                ?>
+                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="社区内部(<?php echo $imagesCount?>张)">社区内部(<?php echo $imagesCount?>张)</span><s class="tm_bg"></s></a>
+                            <?php
+                            }
+                            $evalPicTypeCnt++;
+                            ?>
+                        </div>
+                    <?php
+                    } else {
+                        ?>
+                        <div class="img_list noimg">
+                            <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/sqnb_default.jpg" alt="" /><span title="社区内部">社区内部</span><s class="tm_bg"></s></a>
+                        </div>
+                    <?php
+
+                    }
+                    ?>
+
+                    <?php
+                    if (!empty($sqwbImages)) {
+                        ?>
+                        <div class="img_list" id="sqwbImg" onclick="">
+                            <?php
+                            $imagesCount = sizeof($sqwbImages);
+                            foreach($sqwbImages as $item) {
+                                ?>
+                                <a href="<?php echo $item['sImage']?>" class="fancybox-buttons" data-fancybox-group="button" title="<?php echo $item['sTitle']?>"><img alt="" src="<?php echo $item['sImage']?>"><span title="社区外部(<?php echo $imagesCount?>张)">社区外部(<?php echo $imagesCount?>张)</span><s class="tm_bg"></s></a>
+                            <?php
+                            }
+                            $evalPicTypeCnt++;
+                            ?>
+                        </div>
+                    <?php
+                    } else {
+                        ?>
+                        <div class="img_list noimg">
+                            <a href="javascript:void(0);" class="fancybox-buttons" data-fancybox-group="button"><img src="<?php echo $sStaticRoot ?>/web/images/zwt_img/sqwb_default.jpg" alt="" /><span title="社区外部">社区外部</span><s class="tm_bg"></s></a>
+                        </div>
+                    <?php
+
+                    }
+                    ?>
+                </dd>
+            </dl>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

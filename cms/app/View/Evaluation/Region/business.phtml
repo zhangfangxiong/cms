@@ -1,0 +1,272 @@
+<?php include APP_PATH.'/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform">
+    <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+    <div class="panel mt15">
+                    <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+                            <div class="col-sm-9">
+                                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate" validate="!clength:1-255"><?php echo $qyBusiness['sComment']?></textarea>
+                                <span class="validate_checktip"></span>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">优势：</label>
+                        <div class="col-sm-9">
+                            <?php
+
+                            if (isset($goodTags) && !empty($goodTags)) {
+                                foreach($goodTags as $k => $v) {
+                                    ?>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="sGoodTag[]" <?php echo !empty($qyBusiness['sGoodTag'])&&in_array($k,$qyBusiness['sGoodTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                                    </label>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">劣势：</label>
+                        <div class="col-sm-9">
+                            <?php
+                            foreach($badTags as $k => $v) {
+                                ?>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="sBadTag[]" <?php echo !empty($qyBusiness['sBadTag'])&&in_array($k,$qyBusiness['sBadTag'])?'checked':'' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                                </label>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">周边卖场：</label>
+                         <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="请填写该楼盘周边2公里内超市及卖场名称" name="sStore" value="<?php echo $qyBusiness['sStore'] ?>">
+                         </div>
+                         <div class="col-sm-5">
+                             <input type="button" value="选择周边卖场照片" class="plupload"  data-target="qyConfigImage[<?php echo $imgTypeConfig['zbmc']?>]" data-img="#sImageShow1" data-callback="showImg" data-limit="10"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qyConfigImage[$imgTypeConfig['zbmc']])&&!empty($qyConfigImage[$imgTypeConfig['zbmc']])? '':'none' ?>;">
+                                <div class="row" id="sImageShow1" >
+                                    <?php
+                                    if (isset($qyConfigImage[$imgTypeConfig['zbmc']])&&!empty($qyConfigImage[$imgTypeConfig['zbmc']])) {
+                                        foreach($qyConfigImage[$imgTypeConfig['zbmc']] as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">周边银行：</label>
+                         <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="请填写该楼盘周边2公里内银行及ATM" name="sBank" value="<?php echo $qyBusiness['sBank'] ?>">
+                         </div>
+                         <div class="col-sm-5">
+                             <input type="button" value="选择周边银行照片" class="plupload"  data-target="qyConfigImage[<?php echo $imgTypeConfig['zbyh']?>]" data-img="#sImageShow2" data-callback="showImg" data-limit="10"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qyConfigImage[$imgTypeConfig['zbyh']])&&!empty($qyConfigImage[$imgTypeConfig['zbyh']])? '':'none' ?>;">
+                                <div class="row" id="sImageShow2" >
+                                    <?php
+                                    if (isset($qyConfigImage[$imgTypeConfig['zbyh']])&&!empty($qyConfigImage[$imgTypeConfig['zbyh']])) {
+                                        foreach($qyConfigImage[$imgTypeConfig['zbyh']] as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">周边餐饮：</label>
+                         <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="请填写该楼盘周边2公里内餐饮品牌" name="sRepast" value="<?php echo $qyBusiness['sRepast'] ?>">
+                         </div>
+                         <div class="col-sm-5">
+                             <input type="button" value="选择周边餐饮照片" class="plupload"  data-target="qyConfigImage[<?php echo $imgTypeConfig['zbcy']?>]" data-img="#sImageShow3" data-callback="showImg" data-limit="10"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qyConfigImage[$imgTypeConfig['zbcy']])&&!empty($qyConfigImage[$imgTypeConfig['zbcy']])? '':'none' ?>;">
+                                <div class="row" id="sImageShow3" >
+                                    <?php
+                                    if (isset($qyConfigImage[$imgTypeConfig['zbcy']])&&!empty($qyConfigImage[$imgTypeConfig['zbcy']])) {
+                                        foreach($qyConfigImage[$imgTypeConfig['zbcy']] as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">生活服务：</label>
+                         <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="请填写该楼盘周边2公里内美容美发、干洗、早教、宠物服务等配套设施" name="sLivingService" value="<?php echo $qyBusiness['sLivingService'] ?>">
+                         </div>
+                         <div class="col-sm-5">
+                             <input type="button" value="选择周边生活服务照片" class="plupload"  data-target="qyConfigImage[<?php echo $imgTypeConfig['zbfw']?>]" data-img="#sImageShow4" data-callback="showImg" data-limit="10"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qyConfigImage[$imgTypeConfig['zbfw']])&&!empty($qyConfigImage[$imgTypeConfig['zbfw']])? '':'none' ?>;">
+                                <div class="row" id="sImageShow4" >
+                                    <?php
+                                    if (isset($qyConfigImage[$imgTypeConfig['zbfw']])&&!empty($qyConfigImage[$imgTypeConfig['zbfw']])) {
+                                        foreach($qyConfigImage[$imgTypeConfig['zbfw']] as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">周边菜场：</label>
+                         <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="请填写该楼盘周边1公里内菜场名称" name="sMarket" value="<?php echo $qyBusiness['sMarket'] ?>">
+                         </div>
+                         <div class="col-sm-5">
+                             <input type="button" value="选择周边菜场照片" class="plupload"  data-target="qyConfigImage[<?php echo $imgTypeConfig['zbcc']?>]" data-img="#sImageShow5" data-callback="showImg" data-limit="10"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qyConfigImage[$imgTypeConfig['zbcc']])&&!empty($qyConfigImage[$imgTypeConfig['zbcc']])? '':'none' ?>;">
+                                <div class="row" id="sImageShow5" >
+                                    <?php
+                                    if (isset($qyConfigImage[$imgTypeConfig['zbcc']])&&!empty($qyConfigImage[$imgTypeConfig['zbcc']])) {
+                                        foreach($qyConfigImage[$imgTypeConfig['zbcc']] as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img  src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                          <label for="" class="col-sm-2 control-label">其他点评：</label>
+                            <div class="col-sm-9">
+                                <textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control" placeholder="其他点评"><?php echo $qyBusiness['sOtherComment']?></textarea>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+                        <div class="col-sm-10">
+                            <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload" id="qtimgs"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                                <div class="row" id="sImageQt" >
+                                    <?php
+                                    if (isset($qtImage)&&!empty($qtImage)) {
+                                        foreach($qtImage as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <button id="save" class="btn btn-primary">发布</button>
+                                <button id="sync" class="btn btn-info"  >同步</button>
+                                <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+                            </div>
+                    </div>
+       </div>
+</form>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+<script>
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    if(Switch == 1) {
+        $("textarea[name='sComment']").attr("readonly", 'readonly');
+        $("input[name='sGoodTag[]']").attr("disabled", 'disabled');
+        $("input[name='sBadTag[]']").attr("disabled", 'disabled');
+        $("textarea[name='sOtherComment']").attr("readonly", 'readonly');
+        $("#qtimgs").attr("disabled", 'disabled');
+    }
+    // 同步数据
+    $("#sync").click({c: 'Region', a: 'business', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    $(function() {
+        // 提交整体评价表单
+        $("#myform").validate({submitHandler: function(form) {
+            $.post("/evaluation/Region/saveBusiness", $(form).serialize(), function(ret){
+                alert(ret.data);
+                location.reload();
+            }, 'json');
+            return false;
+        }});
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+    })
+</script>

@@ -1,0 +1,486 @@
+<div class="pheader clearfix">问答列表</div>
+<style>
+    .bbox{
+        float: left;
+        margin-right: 15px;
+    }
+
+    .insert{
+        background-color: #dff0d8;
+    }
+
+    .insert table{
+        width: 100%;
+    }
+
+    .insert table td{
+        border: 1px solid #cccccc;
+    }
+
+    .bbox div{
+        margin-top: 5px;
+    }
+
+    .form-inline .bbox .form-control {
+        width: 140px;
+    }
+
+    #formbtn{
+        margin-top: 40px;
+        margin-left: 100px;
+    }
+</style>
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/question/index/list">
+        <div class="row sousuo_now">
+
+            <div class="bbox">
+                <div class="form-group .col-xs-2">
+                    城市分类：
+                    <select class="form-control input-sm" name="cityType">
+                        <option value="0" <?php if($cityType == 0){?> selected = "selected"<?php }?> >全部</option>
+                        <option value="1" <?php if($cityType == 1){?> selected = "selected"<?php }?> >其他</option>
+                        <option value="2" <?php if($cityType == 2){?> selected = "selected"<?php }?> >点评城市</option>
+                        <option value="3" <?php if($cityType == 3){?> selected = "selected"<?php }?> >附加城市</option>
+                        <option value="4" <?php if($cityType == 4){?> selected = "selected"<?php }?> >未分配城市</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bbox">
+                <div class=".col-xs-2">
+                    点评城市：
+                    <select class="form-control input-sm" name="cityDP">
+                        <option value="0">全部</option>
+                        <?php foreach ($dpCitys as $city) { ?>
+                            <?php if($cityDP == $city) {?>
+                                <option value="<?php echo $city; ?>" selected="selected"><?php echo $city; ?></option>
+                            <?php }else{?>
+                                <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+                            <?php }?>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <div class=".col-xs-2">
+                    附加城市：
+                    <select class="form-control input-sm" name="cityFJ">
+                        <option value="0">全部</option>
+                        <?php foreach ($changeCitys as $city) { ?>
+                            <?php if($cityFJ == $city) {?>
+                                <option value="<?php echo $city; ?>" selected="selected"><?php echo $city; ?></option>
+                            <?php }else{?>
+                                <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+                            <?php }?>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bbox">
+                <div>
+                    <div class="form-group .col-xs-2">
+                        提问时间：
+                        <input name="sCreateTime" class="laydate form-control" validate="" type="text" value="<?php echo !empty($sCreateTime) ? $sCreateTime : '' ?>" class="form-control" onclick="laydate({format: 'YYYY-MM-DD'});">
+                    </div>
+                    <div class="form-group .col-xs-2">
+                        至
+                        <input name="eCreateTime" class="laydate form-control" validate="" type="text"
+                               value="<?php echo !empty($eCreateTime) ? $eCreateTime : '' ?>" class="form-control" onclick="laydate({format: 'YYYY-MM-DD'});">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group .col-xs-2">
+                        推送时间：
+                        <input name="sPushTime" class="laydate form-control" validate="" type="text"
+                               value="<?php echo !empty($sPushTime) ? $sPushTime : '' ?>" class="form-control" onclick="laydate({format: 'YYYY-MM-DD'});">
+                    </div>
+                    <div class="form-group .col-xs-2">
+                        至
+                        <input name="ePushTime"  class="laydate form-control" validate="" type="text"
+                               value="<?php echo !empty($ePushTime) ? $ePushTime : '' ?>" class="form-control" onclick="laydate({format: 'YYYY-MM-DD'});">
+                    </div>
+                </div>
+            </div>
+
+            <div style="clear: both;"></div>
+
+            <div class="bbox">
+                <div class=".col-xs-2">
+                    问题编号：
+                    <input type="text" value="<?php echo isset($aParam['sTitle']) ? $aParam['sTitle'] : '' ?>" class="form-control input-sm" name="questionID">
+                </div>
+
+                <div class=".col-xs-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类型：
+                    <input type="radio" name="type" value="1" <?php if(1 == $type){?>checked="true"<?php }?> /> 提问
+                    <input type="radio" name="type" value="2" <?php if(2 == $type){?>checked="true"<?php }?> /> 追问
+                </div>
+            </div>
+
+            <div class="bbox">
+                <div class=".col-xs-2">
+                    回复状态：
+                    <select class="form-control input-sm" name="answerStatus">
+                        <option value="0" <?php if($answerStatus == 0){?> selected = "selected"<?php }?> >全部</option>
+                        <option value="2" <?php if($answerStatus == 2){?> selected = "selected"<?php }?> >已回复</option>
+                        <option value="1" <?php if($answerStatus == 1){?> selected = "selected"<?php }?> >未回复</option>
+                    </select>
+                </div>
+                <div class=".col-xs-2">
+                    问题状态：
+                    <select class="form-control input-sm" name="showStatus">
+                        <option value="0" <?php if($showStatus == 0){?> selected = "selected"<?php }?> >全部</option>
+                        <option value="1" <?php if($showStatus == 1){?> selected = "selected"<?php }?> >隐藏</option>
+                        <option value="2" <?php if($showStatus == 2){?> selected = "selected"<?php }?> >显示</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bbox">
+                <div class=".col-xs-2">
+                    问题标题：
+                    <input type="text" value="<?php echo isset($aParam['sTitle']) ? $aParam['sTitle'] : '' ?>" class="form-control input-sm" name="title" >
+                </div>
+
+                <div class=".col-xs-2">
+                    问题内容：
+                    <input type="text" value="<?php echo isset($aParam['sTitle']) ? $aParam['sTitle'] : '' ?>" class="form-control input-sm" name="key" >
+                </div>
+            </div>
+
+
+            <div class="form-group .col-xs-2">
+                <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+            </div>
+        </div>
+
+    </form>
+    <hr>
+
+    <div>
+        <button id="change-city" class="btn btn-primary" onclick="batchChangeCity();">
+            <i class="icon-plus"></i> 批量改城市
+        </button>
+        <button id="export" class="btn btn-primary" onclick="exportList();">
+            <i class="icon-plus"></i> 导出
+        </button>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th class="text-center">
+                <input type="checkbox" id="all_check" value="" autocomplete="off">
+            </th>
+            <th class="col-sm-1 text-center">问题编号</th>
+            <th>用户名</th>
+            <th class="text-center">城市</th>
+            <th class="text-center">问题标题</th>
+            <th class="text-center">问题内容</th>
+            <th class="text-center">回答时间</th>
+            <th class="text-center">提问日期</th>
+            <th class="text-center">推送日期</th>
+            <th class="text-center">回复状态</th>
+            <th class="text-center">状态</th>
+            <th style="width: 100px;" class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($questions['aList'] as $q) { ?>
+            <tr>
+                <td>
+                    <i class="mopenbtn icon-plus-sign" value="<?php echo $q['sQuestionId'];?>"></i>
+                </td>
+                <td>
+                <input type="checkbox" value="<?php echo $q['iAutoID'];?>" class="text-center question_check" autocomplete="off">
+                </td>
+                <td><?php echo $q['sQuestionId'];?></td>
+                <td><?php echo $q['sUname'];?></td>
+                <td><?php echo $q['sChangedCity'];?></td>
+                <td><?php echo $q['sTitle'];?></td>
+                <td><?php echo $q['sContent'];?></td>
+                <td><?php echo empty($q['iAnswerTime'])? '' : date('Y-m-d H:i:s', $q['iAnswerTime']);?></td>
+                <td><?php echo date('Y-m-d H:i:s', $q['iCreateTime']);?></td>
+                <td><?php echo date('Y-m-d H:i:s', $q['iPushTime']);?></td>
+                <td><?php echo empty($q['iIsAnswer']) ? '未回答' : '已回答';?></td>
+                <td><?php echo empty($q['iShowStatus']) ? '隐藏' : '显示';?></td>
+                <td>
+                    <?php $title = $q['sTitle'];$content = $q['sContent'];?>
+                    <a href="/question/index/detail/questionID/<?php echo $q['sQuestionId'];?>">详情</a>
+                    <?php if (empty($q['iIsAnswer'])){ ?>
+                    &nbsp;|&nbsp;<a href="javascript:answer('<?php echo $q['sQuestionId'];?>', '<?php echo htmlspecialchars($title) ?>', '<?php echo htmlspecialchars($content) ?>')">回答</a>
+                    &nbsp;|&nbsp; <a href="javascript:changeCity('<?php echo $q['iAutoID'];?>')">改城市</a>
+                    <?php } ?>
+                    <?php if($q['iShowStatus']){?>
+                    &nbsp;|&nbsp;<a href="javascript:hide('<?php echo $q['iAutoID'];?>')">隐藏</a>
+                    <?php }else{?>
+                    &nbsp;|&nbsp;<a href="javascript:show('<?php echo $q['iAutoID'];?>')">显示</a>
+                    <?php }?>
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+    <?php echo $questions['aPager'] ?>
+</div>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+
+<div class="modal fade" id="answerFormBox" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="metroModalLabel">回答</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="answerForm" action="/question/api/reply">
+                    <input type="hidden" name="app_uname" value="<?php echo $userName;?>" autocomplete="off">
+                    <input type="hidden" name="app_uid" value="<?php echo $userID;?>" autocomplete="off">
+                    <input type="hidden" name="question_id" value="" id="questionID" autocomplete="off">
+                    <input type="hidden" name="key" value="<?php echo $key;?>" autocomplete="off">
+                    <input type="hidden" name="token" value="<?php echo $token;?>" autocomplete="off">
+                    <p id="title"></p>
+                    <p id="qcontent"></p>
+                    <textarea name="content" autocomplete="off" cols="135" rows="6">
+
+                    </textarea>
+                    <div>
+                        <button type="cancle" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"  id="cityFormBox" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="metroModalLabel">修改城市</h4>
+            </div>
+            <div class="modal-body" style="height: 120px;">
+                <form class="form-horizontal" id="cityForm" action="/question/index/changecity">
+                    <input type="hidden" name="cQuestionID" value="" id="cQuestionID" autocomplete="off">
+                    <input type="hidden" name="batch" value="0" id="batch" autocomplete="off">
+                    <input id="changedCity" style="width: 300px; margin-bottom: 20px;" class="form-control input-sm" name="changedCity" placeholder="请输入城市，根据提示选择" />
+                    <div style="float:right; margin-right: 35px;">
+                        <button type="submit" class="btn btn-primary">保存</button>
+                        <button type="cancle" style="margin-left: 10px;"  class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function answer(questionID, title, content){
+        $('#questionID').val(questionID);
+        $('#title').text(title);
+        $('#qcontent').text(content);
+
+        $('#answerFormBox').modal().css({
+            "margin-top": function () {return ($(window).height() / 2 - 200);}
+        }).modal('show');
+
+        $("#answerForm").validate({submitHandler: function(form) {
+            $.post(form.action, $(form).serialize(), function(ret){
+                if (ret.status) {
+                    alert('回答成功!');
+                    $('#answerFormBox').modal('hide');
+                   // location.reload();
+                    $("#myform").submit();
+                }else {
+                    if(ret.data){
+                        if(ret.data.code == 1){
+                            alert('网络连接异常，请稍后再试！')
+                        }else {
+                            alert(ret.data.msg);
+                        }
+                    }else {
+                        alert(ret.errmsg);
+                    }
+
+                    $('#answerFormBox').modal('hide');
+                }
+            }, 'json');
+            return false;
+        }});
+    }
+
+    var cityList = <?php echo json_encode($dpCitys); ?>;
+    $("#changedCity").autocomplete({
+        source:cityList
+    });
+
+    function changeCity(questionID){
+        $('#cQuestionID').val(questionID);
+
+        $('#cityFormBox').modal().css({
+            "margin-top": function () {return ($(window).height() / 2 - 200);}
+        }).modal('show');
+
+        $("#cityForm").validate({submitHandler: function(form) {
+            var isIn = false;
+            var changeCityName = $("#changedCity").val();
+            for(var i=0; i < cityList.length; i++) {
+                if (cityList[i] == changeCityName) {
+                    isIn = true;
+                    break;
+                }
+            }
+            if (!isIn) {
+                alert('你输入的城市不存在，请输入根据提示选择。');
+                return false;
+            }
+            $.post(form.action, $(form).serialize(), function(ret){
+                if (ret.status) {
+                    alert( '修改成功!');
+                    $('#cityFormBox').modal('hide');
+                   // location.reload()
+                    $("#myform").submit();
+                }
+            }, 'json');
+            return false;
+        }});
+    }
+
+    function hide(questionID){
+        var hide = window.confirm("您确定要隐藏该问题吗?");
+        if(hide) {
+            var action = '/question/index/hideShow';
+            var data = {'questionID':questionID, 'showStatus': 0};
+            $.post(action, data, function(ret){
+                if (ret.status) {
+                    alert( '修改成功!');
+                   // location.reload();
+                    $("#myform").submit();
+                }
+            }, 'json');
+        }
+    }
+
+    function show(questionID){
+        var hide = window.confirm("您确定要显示该问题吗?");
+        if(hide) {
+            var action = '/question/index/hideShow';
+            var data = {'questionID':questionID, 'showStatus': 1};
+            $.post(action, data, function(ret){
+                if (ret.status) {
+                    alert( '修改成功!');
+                    //location.reload();
+                    $("#myform").submit();
+                }
+            }, 'json');
+        }
+    }
+
+    function batchChangeCity(){
+        var questionIDs = '';
+        var checked = $(".question_check:checked");
+        if(checked.length == 0){
+            alert('请选择要变更的内容！');
+            return false;
+        }else{
+            checked.each(function(){
+                questionIDs += $(this).val() + ',';
+            });
+            questionIDs = questionIDs.substring(0,questionIDs.length-1)
+
+            $('#cQuestionID').val(questionIDs);
+            $('#batch').val(1);
+
+            $('#cityFormBox').modal().css({
+                "margin-top": function () {return ($(window).height() / 2 - 200);}
+            }).modal('show');
+
+            $("#cityForm").validate({submitHandler: function(form) {
+                var isIn = false;
+                var changeCityName = $("#changedCity").val();
+                for(var i=0; i < cityList.length; i++) {
+                    if (cityList[i] == changeCityName) {
+                        isIn = true;
+                        break;
+                    }
+                }
+                if (!isIn) {
+                    alert('你输入的城市不存在，请输入根据提示选择。');
+                    return false;
+                }
+     
+                $.post(form.action, $(form).serialize(), function(ret){
+                    if (ret.status) {
+                        alert( '修改成功!');
+                        $('#cityFormBox').modal('hide');
+                        $("#myform").submit();
+                    }
+                }, 'json');
+                return false;
+            }});
+        }
+    }
+
+    function exportList(){
+        var path = '/question/index/export';
+        var lastPath = '/question/index/list';
+        $('#myform').attr("action", path).submit();
+        $('#myform').attr("action", lastPath);
+    }
+
+    $(document).ready(function(){
+//        $('.latdate').click(function(){
+//
+//            laydate({
+////                elem: '.laydate',
+//                istime: true,
+//                format: 'YYYY-MM-DD' // 分隔符可以任意定义，该例子表示只显示年月
+//            });
+//        });
+
+        $('.insert').hover(function(){
+            $(this).attr('background-color', 'dff0d8')
+        }, function(){
+            $(this).attr('background-color', 'dff0d8')
+        });
+
+        $('.mopenbtn').click(function(){
+            if($(this).hasClass('icon-plus-sign')) {
+                $(this).removeClass('icon-plus-sign').addClass('icon-minus-sign');
+
+                var action = '/question/index/getReply';
+                questionID = $(this).attr('value');
+                var data = {'questionID':questionID};
+                var target = $(this);
+                $.post(action, data, function(ret){
+                    var html = "<tr class='insert'><td colspan='13'><table><tr><td>用户名</td><td>内容</td><td>时间</td><td>类型</td><td>ReplyID</td></tr>";
+                    if (ret.status) {
+                        var data = ret.data.data;
+
+                        for(i = 0; i < data.length; i ++) {
+                            html += '<tr>' +
+                            '<td>' + data[i].uname + '</td>' +
+                            '<td>' + data[i].content + '</td>' +
+                            '<td>' + data[i].time + '</td>' +
+                            '<td>' + data[i].type + '</td>' +
+                            '<td>' + data[i].replyID + '</td></tr>';
+                        }
+                    }else {
+                        html += "<tr><td colspan='5'>还没有数据！</td></tr>";
+                    }
+                    html += "</table></td></tr>";
+                    target.parents('tr').after(html);
+                }, 'json');
+            }else {
+                $(this).removeClass('icon-minus-sign').addClass('icon-plus-sign');
+                $(this).parents('tr').next('tr').remove();
+            }
+        });
+    });
+</script>

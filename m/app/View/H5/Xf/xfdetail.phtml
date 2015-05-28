@@ -1,0 +1,701 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/swiper.min.css">
+<header class="tophead">
+    <div class="tophead_inner">
+        <a href="javascript:history.go(-1)" class="uc_return_l goback"></a>
+        <div class="inner_title"><?php echo $aDetail['sBuildName']; ?></div>
+        <a id="collect" href="javascript:void(0)" class="collectit collectit_gray">
+            <i class="fa fa-star-o col_notselect"></i>
+            <i class="fa fa fa-star col_select "></i>
+        </a>
+    </div>
+
+</header>
+<section  id="mainsection">
+    <section class="main_section">
+        <input id="iBuildingID" type="hidden" value="<?php echo $aDetail['iBuildingID'] ?>"/>
+        <div class="topphotos">
+            <a href="xfImage?id=<?php echo $aDetail['iBuildingID'] ?>">
+                <canvas data-src="<?php echo $aDetail['sHeadImgUrl']; ?>"></canvas>
+                <div class="imgnumbers">共<?php echo $aDetail['sImgNum']; ?>张</div>
+            </a>
+        </div>
+        <div class="house_price clearfix">
+            <div class="inner_house_price  border_bottom">
+                <div class="left_houseprice fl">
+                    <div class="zj_price"><span class="zj_name">住宅售价：</span><span class="format_price red_import"><?php echo $aDetail['sPrice']; ?></span><?php echo $aDetail['sPriceUnit']; ?></div>
+                    <div class="zd_price"><span class="zd_name">指导价格：</span><span class="format_price pricesize"><?php echo $aDetail['suggestPrice']; ?></span><?php echo $aDetail['suggestPriceUnit']; ?></div>
+                </div>
+                <div class="right_tips fl <?php if (!empty($aDetail['tagList'])) { ?>swiper-container<?php } ?>" id="pcSlide">
+                    <div class="<?php if (!empty($aDetail['tagList'])) { ?>swiper-wrapper<?php } ?>">
+                        <?php
+                        if (!empty($aDetail['tagList'])) {
+                            echo '<div class="not_collect swiper-slide" >';
+                            echo '<a href="#" class="gaishan_pc">' . $aDetail['tagList'][0]['sTagName'] . '</a>';
+                            if (isset($aDetail['tagList'][1]['sTagName'])) {
+                                echo '<a href="#" class="year_top3">' . $aDetail['tagList'][1]['sTagName'] . '</a>';
+                            }
+                            echo '</div>';
+                        }
+                        ?>
+
+                        <a  class="allready_collect <?php if (!empty($aDetail['tagList'])) { ?>swiper-slide<?php } ?>"></a>
+                    </div>
+                </div>
+            </div>
+            <a class="loupan_address" href="slide?city=<?php echo $city ?>&&long=<?php echo $aDetail['sLon'] ?>&&lat=<?php echo $aDetail['sLat'] ?>&&name=<?php echo $aDetail['sBuildName'] ?>">
+                <div class="lp_address_name">楼盘地址：</div>
+                <div class="lp_address_info"><?php echo $aDetail['sAddress']; ?></div>
+            </a>
+        </div>
+    </section>
+
+    <section class="main_section mt12">
+        <?php
+        switch (@$aDetail['comment']['sFlagText']) {
+            case '推荐购买':
+                $class = 'buy_buy';
+                break;
+            case '尽快入手':
+                $class = 'buy_rs';
+                break;
+            case '谨慎购买':
+                $class = 'buy_js';
+                break;
+            case '持币观望':
+                $class = 'buy_cb';
+                break;
+            default:
+                $class = 'buy_cb';
+                break;
+        }
+        ?>
+        <div class="buystatus <?php echo $class; ?>"></div><!-- 尽快入手buy_rs   推荐购买buy_buy  谨慎购买buy_js   -->
+        <div class="commontoptitle"><div class="border_bottom">楼盘评测</div></div>
+        <div class="zh_score">
+            <div class="pb12 <?php if (!empty($aDetail['comment']['sCompletePageUrl'])) { ?> border_bottom<?php } ?>">
+                <div class="anay_com_list_title">
+                    <span class="title_name">综合评分</span>
+                    <span class="title_star title_star<?php echo ceil(2 * $aDetail['comment']['sRate'] + 1); ?>">
+                    </span>
+                    <span class="title_star_score"><?php echo $aDetail['comment']['sRate']; ?></span>
+                </div>
+                <?php if (!empty($aDetail['advantages']) && !empty($aDetail['disAdvantages'])) { ?>
+                    <div class="hid mt5">
+                        <div class="good_factors">
+                            <?php
+                            foreach ($aDetail['advantages'] as $key => $value) {
+                                echo $value . ' ';
+                            }
+                            ?>
+                        </div>
+                        <div class="bad_factors ml10">
+                            <?php
+                            foreach ($aDetail['disAdvantages'] as $key => $value) {
+                                echo $value . ' ';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                <?php } ?>
+
+            </div>
+        </div>
+        <?php if (!empty($aDetail['comment']['sCompletePageUrl'])) { ?>
+            <div class="zh_eval border_bottom">
+                <div class="evaluation_title">
+                    <ul>
+                        <?php
+                        foreach ($aDetail['comment']['chapter'] as $key => $value) {
+                            if ($value['iEnable'] == 0) {
+                                $class = $aEva[$value['sChapterCode']]['pre'] . 'noData';
+                                $href = '';
+                            } else {
+                                $class = $aEva[$value['sChapterCode']]['class'];
+                                $href = 'href="' . $value['sPageUrl'] . '"';
+                            }
+
+                            echo '<li class="' . $class . '">
+                                    <a ' . $href . '>' . $aEva[$value['sChapterCode']]['name'] . '</a>
+                                </li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="pl12">
+                <a class="loupan_address seepc" href="<?php echo $aDetail['comment']['sCompletePageUrl'] ?>">
+                    查看完整评测
+                </a>
+            </div>
+        <?php } ?>
+    </section>
+
+    <?php if (0 < $aDetail['loanInfo']['sTotalPrice']) { ?>
+        <section class="main_section mt12">
+            <div class="commontoptitle"><div class="border_bottom" id="onelineSelectfang">在线选房</div></div>
+            <?php if ($aDetail['houseType']) { ?>
+                <div class="pl12">
+                    <div class="border_bottom clearfix pb5">
+                        <div class="one_select_line clearfix">
+                            <div class="line_leftname">请选择户型面积：</div>
+                            <a class="line_rightselect" href="housetypeselect?id=<?php echo $aDetail['iBuildingID'] ?>">
+                                <?php
+                                if (!empty($aType['area'])) {
+                                    echo $aType['type'] . ' ' . $aType['area'];
+                                } else {
+                                    echo '请选择户型';
+                                }
+                                ?>
+                                <span class="select_more"></span></a>
+                        </div>
+                        <div class="onlyleft" id="onlyleft"></div>
+                    </div>
+                </div>
+
+                <div class="pl12 mt5">
+                    <div class="border_bottom clearfix">
+                        <div class="one_select_line clearfix pb12">
+                            <div class="line_leftname">选择单元楼栋：</div>
+                            <div class="newhouse_select clearfix fr">
+                                <a class="line_downselect" data-classes="loudongselect"  id="loudongselect" href="javascript:void(0)"><span>楼号</span><span class="jt"></span></a>
+                                <a class="line_downselect" data-classes="hshiselect"  id="hshiselect" href="javascript:void(0)"><span>室号</span><span class="jt"></span></a>
+                            </div>
+                            <div class="fr red mt10" id="nodata_show" style="display:none;font-weight:normal;">没有可选的楼号和室号</div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="main_piechart">
+                <div class="one_select_line clearfix pb12">
+                    <div class="line_leftname fl">指导总价：<span class="all_price">
+                            <b id="zdzj"><?php echo $aDetail['loanInfo']['sTotalPrice']; ?></b>
+                            <?php echo $aDetail['loanInfo']['sTotalPriceUnit']; ?></span></div>
+                    <a href="dreamer?id=<?php echo $aDetail['iBuildingID'] ?>
+                       &&houseName=<?php echo addslashes($aDetail['sBuildName']) ?>" class="iwlowprice fr">我要拿底价</a>
+                </div>
+                <div class="trianglebg">
+                    <div class="topnamedes pt10"><?php echo $aDetail['loanInfo']['sLoanInfo']; ?></div>
+                    <div class="main_piechart_inner">
+                        <div id="pieContent" class="piecontent">
+                        </div>
+                        <div class="piezhshi">
+                            <div class="piezhshili shoufu mt15">首期付款：<span id="sqfk"><?php echo $aDetail['loanInfo']['sFirstPay']; ?></span></div>
+                            <div class="piezhshili zhifu">支付利息：<span id="zflx"><?php echo $aDetail['loanInfo']['sInterest']; ?></span></div>
+                            <div class="piezhshili daikuan">贷款总额：<span id="dkze"><?php echo $aDetail['loanInfo']['sTotalLoan']; ?></span>
+                            </div>
+                            <div class="piezhshili yuejun">月均还款：
+                                <span class="redhk" id="yjhk"><?php echo $aDetail['loanInfo']['sMonthPay']; ?></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <?php } ?>
+
+    <section class="main_section mt12">
+        <iframe frameBorder=0 scrolling=no width="100%" height="252"
+                src="/h5/chart/index?buildingID=<?php echo $aDetail['iBuildingID']; ?>"></iframe>
+    </section>
+
+    <?php if ($aDetail['analyst']) { ?>
+        <section class="main_section mt12">
+            <div class="commontoptitle"><div class="border_bottom">分析师点评</div></div>
+            <div class="zh_eval border_bottom clearfix">
+                <div class="leftanay_info">
+                    <div class="anay_headimg_newhouse"><img src="<?php echo $aDetail['analyst']['sAvatarImgUrl']; ?>"></div>
+                    <div class="n_anay_name"><?php echo $aDetail['analyst']['sName']; ?></div>
+                    <div class="n_anay"><?php echo $aDetail['analyst']['sTitle']; ?></div>
+                </div>
+                <div class="rightcom_info">
+                    <?php echo $aDetail['analyst']['sText']; ?>
+                </div>
+            </div>
+            <div class="pl12">
+                <a href="analystList?id=<?php echo $aDetail['iBuildingID']; ?>" class="loupan_address seepc" href="#">
+                    查看全部分析师点评
+                </a>
+            </div>
+            </div>
+        </section>
+    <?php }
+    ?>
+
+    <section class="main_section mt12">
+        <div class="commontoptitle"><div class="border_bottom">详细信息</div></div>
+        <div class="loupan_info">
+            <?php
+            $i = 0;
+            echo ("" !== $aDetail['detailInfo']['sOpenTime']) ? '<p>开盘时间：' . $aDetail['detailInfo']['sOpenTime'] . '</p>' : '';
+            $i++;
+            echo ("" !== $aDetail['detailInfo']['sDeliverTime']) ? '<p>交房时间：' . $aDetail['detailInfo']['sDeliverTime'] . '</p>' : '';
+            $i++;
+            echo ("" !== $aDetail['detailInfo']['sFitmentDesign']) ? '<p>规划户数：' . $aDetail['detailInfo']['sFitmentDesign'] . '</p>' : '';
+            $i++;
+            echo ("" !== $aDetail['detailInfo']['iFitmentPrice']) ? '<p>建筑面积：' . $aDetail['detailInfo']['iFitmentPrice'] . '</p>' : '';
+            $i++;
+            if (0 < $i) {
+                echo '<div class="hide-content" id="hide-content">';
+            }
+            echo ("" !== $aDetail['detailInfo']['sEstateType']) ? '<p>物业类型：' . $aDetail['detailInfo']['sEstateType'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sBuildType']) ? '<p>建筑形态：' . $aDetail['detailInfo']['sBuildType'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sFitmentDesign']) ? '<p>装修情况：' . $aDetail['detailInfo']['sFitmentDesign'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['iFitmentPrice']) ? '<p>装修标准：' . $aDetail['detailInfo']['iFitmentPrice'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sGreenRate']) ? '<p>绿化率：' . $aDetail['detailInfo']['sGreenRate'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['iPlotRatio']) ? '<p>容积率：' . $aDetail['detailInfo']['iPlotRatio'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['iParkCount']) ? '<p>车位数：' . $aDetail['detailInfo']['iParkCount'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sParking']) ? '<p>车位比：' . $aDetail['detailInfo']['sParking'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sManageCorp']) ? '<p>物业公司：' . $aDetail['detailInfo']['sManageCorp'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sManageFee']) ? '<p>物业费：' . $aDetail['detailInfo']['sManageFee'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sName']) ? '<p>楼盘开发：' . $aDetail['detailInfo']['sName'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sSaleAddress']) ? '<p>售楼处地址：' . $aDetail['detailInfo']['sSaleAddress'] . '</p>' : '';
+            echo ("" !== $aDetail['detailInfo']['sSalePhone']) ? '<p>售楼处电话：' . $aDetail['detailInfo']['sSalePhone'] . '</p>' : '';
+            if (0 < $i) {
+                echo '</div>';
+            }
+            ?>
+        </div>
+        <a  href="javascript:void(0);" id="updownshow" class="infodown"></a>
+    </section>
+
+    <?php if ($aDetail['houseType']) { ?>
+        <section class="main_section mt12">
+            <div class="commontoptitle"><div class="border_bottom">户型 <span class="f10">（<?php echo $aDetail['houseType']['sTotalNum']; ?>）</span></div></div>
+            <div class="zh_eval border_bottom clearfix">
+                <div class="left_hx_img">
+                    <canvas data-src="<?php echo $aDetail['houseType']['list'][0]['sImgUrl']; ?>"></canvas>
+                </div>
+                <div class="right_hx_info">
+                    <p>户型：<?php echo $aDetail['houseType']['list'][0]['sName']; ?></p>
+                    <p>房型：<?php echo $aDetail['houseType']['list'][0]['sTypeName']; ?></p>
+                    <p>面积：<?php echo $aDetail['houseType']['list'][0]['sArea']; ?></p>
+                    <p>价格：<?php echo @$aDetail['houseType']['list'][0]['sPrice']; ?></p>
+                </div>
+            </div>
+            <div class="pl12">
+                <a class="loupan_address seepc" href="houseType?id=<?php echo $aDetail['iBuildingID']; ?>" >
+                    查看全部<?php echo $aDetail['houseType']['sTotalNum']; ?>户型
+                </a>
+            </div>
+        </section>
+    <?php } ?>
+
+    <section class="main_section mt12">
+        <div class="commontoptitle"><div class="border_bottom">周边配套 </div></div>
+        <div class="swiper-container Regionulcontain">
+            <div class="swiper-wrapper p12" id="Regionul">
+                <div class="swiper-slide regionli_jt">
+                    <a class="block h135"  href="slide?type=jt&&city=<?php echo $city ?>&&long=<?php echo $aDetail['sLon'] ?>&&lat=<?php echo $aDetail['sLat'] ?>&&name=<?php echo $aDetail['sBuildName'] ?>">
+                        <p class="r_name mt10">交通</p>
+                        <p class="r_des">1公里以内的公交设施</p>
+                    </a>
+                </div>
+                <div class="swiper-slide regionli_jy">
+                    <a class="block h135"  href="slide?type=jy&&city=<?php echo $city ?>&&long=<?php echo $aDetail['sLon'] ?>&&lat=<?php echo $aDetail['sLat'] ?>&&name=<?php echo $aDetail['sBuildName'] ?>">
+                        <p class="r_name mt10">教育</p>
+                        <p class="r_des">1公里以内的学校</p>
+                    </a>
+                </div>
+                <div class="swiper-slide regionli_cy">
+                    <a class="block h135"  href="slide?type=cy&&city=<?php echo $city ?>&&long=<?php echo $aDetail['sLon'] ?>&&lat=<?php echo $aDetail['sLat'] ?>&&name=<?php echo $aDetail['sBuildName'] ?>">
+                        <p class="r_name mt10">餐饮</p>
+                        <p class="r_des">1公里以内的餐饮配套</p>
+                    </a>
+                </div>
+                <div class="swiper-slide regionli_sh">
+                    <a class="block h135"  href="slide?type=sh&&city=<?php echo $city ?>&&long=<?php echo $aDetail['sLon'] ?>&&lat=<?php echo $aDetail['sLat'] ?>&&name=<?php echo $aDetail['sBuildName'] ?>">
+                        <p class="r_name mt10">生活</p>
+                        <p class="r_des">1公里以内的生活配套</p>
+                    </a>
+                </div>
+                <div class="swiper-slide regionli_jk">
+                    <a class="block h135"  href="slide?type=jk&&city=<?php echo $city ?>&&long=<?php echo $aDetail['sLon'] ?>&&lat=<?php echo $aDetail['sLat'] ?>&&name=<?php echo $aDetail['sBuildName'] ?>">
+                        <p class="r_name mt10">健康</p>
+                        <p class="r_des">1公里以内的医疗配套</p>
+                    </a>
+                </div>
+                <div class="swiper-slide"></div>
+            </div>
+            </a>
+        </div>
+    </section>
+
+    <?php if (isset($aDetail['shoppingGuide']['total']) && 0 < isset($aDetail['shoppingGuide']['total'])) { ?>
+        <section class="main_section mt12">
+            <div class="commontoptitle"><div class="border_bottom">楼盘导购 <span class="f10">
+                        （<?php echo $aDetail['shoppingGuide']['total'] ?>条）</span></div></div>
+            <div class="house_price clearfix">
+                <a class="inner_house_price loupan_address border_bottom block hid clearfix"  style="height:auto;"
+                   href="<?php echo $aDetail['shoppingGuide']['sJumpUrl']; ?>">
+                    <p class="title_name_dg"><?php echo $aDetail['shoppingGuide']['sTitle']; ?></p>
+                    <p class="content_dg"><?php echo mb_substr($aDetail['shoppingGuide']['sText'], 0, 36) . '...'; ?></p>
+                </a>
+                <?php
+                if (0 < @$aDetail['shoppingGuide']['total']) {
+                    ?>
+                    <a class="loupan_address" href="/h5/guide/index?iBuildingID=<?php echo $aDetail['iBuildingID'] ?>&sUnitName=<?php echo $aDetail['sBuildName'] ?>">
+                        <div class="lpdg">查看全部楼盘导购</div>
+                    </a>
+                    <?php
+                }
+                ?>
+            </div>
+        </section>
+    <?php } ?>
+
+
+    <section class="main_section mt12 <?php if (1 == $noFooter) { ?>mb60 bdnone<?php } ?>">
+        <div class="commontoptitle loupan_address">
+            <div class="border_bottom">网友点评
+                <?php if (isset($aDetail['userRemark']['sTotal']) && 0 < $aDetail['userRemark']['sTotal']) { ?>
+                    <span class="fr  mr20">
+                        <a href="commentList?id=<?php echo $aDetail['iBuildingID']; ?>"><?php echo $aDetail['userRemark']['sTotal'] ?></a>
+                    </span>
+                <?php } ?>
+            </div>
+        </div>
+
+        <?php if (isset($aDetail['userRemark']['sText']) && ($aDetail['userRemark']['sText'])) { ?>
+            <div class="netcomment">
+                <p><?php echo $aDetail['userRemark']['sText'] ?></p>
+            </div>
+        <?php } ?>
+        <?php if (empty($aDetail['userRemark']['sTotal'])) { ?>
+            <p style="color:#999;line-height: 25px;text-indent: 15px;padding-top:5px;font-size: 12px;">该楼盘尚无点评...</p>
+        <?php } ?>
+        <a class="iwantsay" href="commentList?id=<?php echo $aDetail['iBuildingID']; ?>">
+            我也来说两句，限50字
+        </a>
+    </section>
+
+</section>
+
+<div class="footfixed">
+    <a href="tel:<?php echo $aTel['sTelHref']; ?>"><?php echo $aTel['sTelphone']; ?></a>
+</div>
+
+<div class="return_top" id="backtop" style="bottom:60px;">
+    <div class="return_top_bg"></div>
+</div>
+
+<div id="BgDiv" class="black_bg" style="display:none ;"></div>
+<section class="choice_wrap2">
+    <ul class="bgf choice_item loudongselect" id="LouhaoSelect" data-flag="loudongselect">
+    </ul>
+    <ul class="bgf choice_item hshiselect" data-flag="hshiselect" id="righthshiselect">
+    </ul>
+</section>
+<section class="tip_dialog" id="tip_dialog"></section>
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script type="text/javascript">
+    var localPath = "<?php echo $sStaticRoot ?>/touchweb/";
+    requirejs.config({
+        baseUrl: localPath + 'lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'highcharts': 'plugs/highcharts',
+            'chartfn': 'plugs/highcharts.ext',
+            'swiper': 'plugs/swiper.min',
+            'webtouchcommon': 'js/webtouchcommon'
+        },
+        shim: {
+            'swiper': {
+                deps: ['jquery']
+            },
+            'highcharts': {
+                deps: ['jquery']
+            },
+            'chartfn': {
+                deps: ['jquery']
+            }
+        }
+    });
+
+    requirejs(['highcharts', 'chartfn', 'swiper', 'webtouchcommon'], function (doc) {
+
+        //自定义公共对象newhouseObj
+        var newhouseObj = {
+            showornot: 0,
+            updownShow: function () {
+                if ($("#hide-content").is(":hidden")) {
+                    $("#hide-content").slideDown(100);
+                    $(this).addClass("infoup");
+                } else {
+                    $("#hide-content").slideUp(100);
+                    $(this).removeClass("infoup");
+                }
+            },
+            houseSelect: function () {
+                var classes = $(this).data("classes");
+                $("." + classes).slideDown(100);
+                $("#BgDiv").slideDown(100);
+                $(this).siblings().each(function () {
+                    $("." + $(this).data("classes")).slideUp(100);
+                    newhouseObj.showornot = 0;
+                });
+                setTimeout(newhouseObj.yanchizx(), 105);
+
+            },
+            yanchizx: function () {
+                $(".choice_wrap2 ul").each(function () {
+                    if ($(this).is(":visible")) {
+                        newhouseObj.showornot = 1
+                    }
+                })
+                if (newhouseObj.showornot) {
+                    $('body').css("overflow", "hidden");
+                    $("#BgDiv").slideDown(100);
+                } else {
+                    $('body').css("overflow", "scroll");
+                    $("#BgDiv").slideUp(100);
+                }
+            },
+            cancelSelect: function () {
+                $(".choice_wrap2 ul").each(function () {
+                    if ($(this).is(":visible")) {
+                        $(this).hide()
+                    }
+                })
+                $('body').css("overflow", "scroll");
+                $("#BgDiv").slideUp(100);
+            },
+            selectHt: function () {
+                var htname = $(this).html();
+                var changeid = $(this).parent().data("flag");
+                $("#" + changeid).children().eq(0).html(htname);
+                $(this).parent().hide();
+                $("#BgDiv").hide();
+                $('body').css("overflow", "scroll");
+                //下面执行ajax过滤
+                newhouseObj.loanAjax($('#iBuildingID').val(), $(this).data('codeid'));
+            },
+            LouhaoSelect: function () {
+                var htname = $(this).html();
+                var changeid = $(this).parent().data("flag");
+                $("#" + changeid).children().eq(0).html(htname);
+                $(this).parent().hide();
+                $("#BgDiv").hide();
+                $('body').css("overflow", "scroll");
+                var rightselectContent = $(this).next().html();
+                $("#righthshiselect").html(rightselectContent);
+                var rightnr = $(this).next().children().eq(0).html();
+                $("#hshiselect").children().eq(0).html(rightnr);
+                newhouseObj.loanAjax($('#iBuildingID').val(), $(this).next().children().eq(0).data('codeid'));
+            },
+            loanAjax: function (id, roomid) {
+                $.ajax({
+                    url: '/ajax/xf/loanInfo',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: id,
+                        roomId: roomid
+                    },
+                    success: function (data) {
+                        $("#zdzj").html(data.data.sTotalPrice);
+                        $("#sqfk").html(data.data.sFirstPay);
+                        $("#zflx").html(data.data.sInterest);
+                        $("#dkze").html(data.data.sTotalLoan);
+                        $("#yjhk").html(data.data.sMonthPay);
+                        var monthPay = parseInt(data.data.sMonthPay) / 10000;
+                        var pieData = [
+                            {y: data.data.iFirstPay, name: "首期付款", color: "#7dc52c"},
+                            {y: data.data.iInterest, name: "支付利息", color: "#1899dc"},
+                            {y: data.data.iTotalLoan, name: "贷款总额", color: "#e8382b"},
+                            {y: monthPay, name: "月均还款", color: "#cccccc"}
+                        ];
+                        DrawLoanPieCircle("pieContent", pieData);
+                    },
+                    error: function (data) {
+
+                    }
+                })
+            },
+            collectClick: function () {
+                var request_url = "/h5/ucenter/addLou"; //此处填写请求地
+                var targetId = <?php echo $aDetail['iBuildingID'] ?>;
+                var login_url = "<?php echo $sTouchwebRoot ?>/h5/Ucenter/pLogin";
+                var return_url = window.location.href;
+                var url_encode = encodeURI(return_url);
+                try {
+                    $.ajax({
+                        url: request_url,
+                        type: "POST",
+                        data: {
+                            targetID: targetId,
+                        },
+                        timeout: 60000,
+                        dataType: "json",
+                        async: true,
+                        success: function (result) {
+                            if (result.status) {
+                                //alert('已收藏');
+                                //location.href = window.location.href;
+                                //return false;
+                                $('#tip_dialog').html('已收藏').show();
+                                setTimeout(function () {
+                                    $("#tip_dialog").hide(200);
+                                    location.href = window.location.href;
+                                    return false;
+                                }, 2000)
+                            } else {
+                                //alert(result.data);
+                                $('#tip_dialog').html(result.data).show();
+                                setTimeout(function () {
+                                    $("#tip_dialog").hide(200);
+                                    if ('请先登陆' == result.data) {
+                                        location.href = login_url + '?location=' + url_encode;
+                                    }
+                                }, 2000)
+                            }
+                        },
+                        error: function (result) {
+                            alert("请求错误");
+                        }
+                    });
+                } catch (e) {
+                    Dialog.alert("请求失败，请稍后再试");
+                }
+            }
+        }
+
+        //document.ready 函数
+        $(initNewhouse);
+        function initNewhouse() {
+            webtouchObj.canvasload();
+            $("footer.foot_wrap").addClass("mb60");
+            //swipe滑动
+            var swiper = new Swiper('.Regionulcontain', {
+                slidesPerView: 2.5,
+                freeMode: true,
+                spaceBetween: 5,
+                freeModeMomentum: false
+            });
+            //swipe滑动理想家
+            var swipertop = new Swiper('#pcSlide', {
+                autoplay: 2000,
+                loop: true
+            });
+
+            //获取pie数据
+            var pieData = [{y: 54, name: "首期付款", color: "#7dc52c"}, {y: 5, name: "支付利息", color: "#1899dc"}, {y: 154, name: "贷款总额", color: "#e8382b"}, {y: 54, name: "月均还款", color: "#cccccc"}];
+            DrawLoanPieCircle("pieContent", pieData);
+            var monthInitPay = parseInt('<?php echo $aDetail['loanInfo']['sMonthPay']; ?>') / 10000;
+            var pieData = [
+                {y: <?php echo $aDetail['loanInfo']['iFirstPay']; ?>, name: "首期付款", color: "#7dc52c"},
+                {y: <?php echo $aDetail['loanInfo']['iInterest']; ?>, name: "支付利息", color: "#1899dc"},
+                {y: <?php echo $aDetail['loanInfo']['iTotalLoan']; ?>, name: "贷款总额", color: "#e8382b"},
+                {y: monthInitPay, name: "月均还款", color: "#cccccc"}
+            ];
+            DrawLoanPieCircle("pieContent", pieData);
+
+            //显示全部点击
+            $("#updownshow").on("click", newhouseObj.updownShow);
+
+            //回到顶部
+            $(window).scroll(webtouchObj.backtoTop);
+            $('#backtop').on("click", webtouchObj.backtoTopdh);
+            $(".newhouse_select").on("click", "a", newhouseObj.houseSelect);
+            $(".newhouse_select").hide();
+            $("#BgDiv").on("click", newhouseObj.cancelSelect);
+            $("#righthshiselect").on("click", "li", newhouseObj.selectHt);
+            $("#LouhaoSelect").on("click", "li", newhouseObj.LouhaoSelect);
+            $('#collect').click(newhouseObj.collectClick);
+            $('#BgDiv').bind("touchmove", function (e) {
+                e.preventDefault();
+            });
+            $(".choice_wrap2").bind("touchstart", function (events) {
+				startX = events.originalEvent.changedTouches[0].pageX,
+                startY = events.originalEvent.changedTouches[0].pageY;
+            });
+            $(".choice_wrap2 ul").bind("touchmove", function (e) {
+                var ulheight = $(this).height();
+                var scrollTop = $(this).scrollTop();
+                var scrollheight = $(this)[0].scrollHeight;
+                if (ulheight + scrollTop + 20 >= scrollheight) {
+                    $(".choice_wrap2").bind("touchmove", function (event) {
+                        moveEndY = event.originalEvent.changedTouches[0].pageY,
+						moveEndX = event.originalEvent.changedTouches[0].pageX,
+						theX = moveEndX - startX,
+                                theY = moveEndY - startY;
+                        if ( Math.abs(theY) > Math.abs(theX) && theY > 0) {
+                            $(".choice_wrap2").unbind("touchmove");
+                        }
+                        if ( Math.abs(theY) > Math.abs(theX) && theY < 0) {
+                            event.preventDefault();
+                        }
+                    })
+                }
+                if (scrollTop < 20) {
+                    $(".choice_wrap2").bind("touchmove", function (event) {
+                        moveEndY = event.originalEvent.changedTouches[0].pageY,
+						moveEndX = event.originalEvent.changedTouches[0].pageX,
+						theX = moveEndX - startX,
+                                theY = moveEndY - startY;
+                        if ( Math.abs(theY) > Math.abs(theX) && theY > 0) {
+                            event.preventDefault();
+                        }
+                        if (Math.abs(theY) > Math.abs(theX) && theY < 0) {
+                            $(".choice_wrap2").unbind("touchmove");
+                        }
+                    })
+                }
+            });
+
+
+            //三级选择
+<?php
+if (!empty($aType['area'])) {
+    ?>
+                var id = <?php echo $aDetail['iBuildingID']; ?>;
+                var code = "<?php echo $aType['typecode']; ?>";
+                $.ajax({
+                    url: '/ajax/xf/unitInfo',
+                    type: "post",
+                    data: {
+                        id: id,
+                        code: code
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status && data.data.buildUnit) {
+                            $(".newhouse_select").show();
+                            $("#nodata_show").hide();
+                            $("#onlyleft").html('仅剩' + data.data.sHouseLeft + '套');
+                            var html = "";
+                            for (var i = 0; i < data.data.buildUnit.length; i++) {
+                                var hidehtml = "";
+                                for (var j = 0; j < data.data.buildUnit[i].room.length; j++) {
+                                    hidehtml += ' <li data-codeid=' + data.data.buildUnit[i].room[j].iCodeID + '>' + data.data.buildUnit[i].room[j].sName + '</li>';
+                                }
+                                html += '<li>' + data.data.buildUnit[i].sName + '</li><span style="display:none;">' + hidehtml + '</span>';
+                            }
+
+                            $("#LouhaoSelect").html(html);
+                            $("#loudongselect").children().eq(0).html(data.data.buildUnit[0].sName);
+                            $("#hshiselect").children().eq(0).html(data.data.buildUnit[0].room[0].sName);
+                            var inthtml = "";
+                            for (var k = 0; k < data.data.buildUnit[0].room.length; k++) {
+                                inthtml += '<li data-codeid="' + data.data.buildUnit[0].room[k].iCodeID + '">' + data.data.buildUnit[0].room[k].sName + '</li>';
+                            }
+                            $("#righthshiselect").html(inthtml);
+                            newhouseObj.loanAjax(id, data.data.buildUnit[0].room[0].iCodeID);
+                        } else {
+                            $("#nodata_show").show();
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+
+                })
+
+    <?php
+}
+?>
+
+        }
+
+    });
+
+</script>

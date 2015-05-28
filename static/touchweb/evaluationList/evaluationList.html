@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>房价点评</title>
+       <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+       <link rel="stylesheet" type="text/css" href="../resource/css/usercenter.css">
+   </head>
+    <body>
+                <!--评测列表开始-->
+                <div class="viewport">
+                    <!--头部开始-->
+                    <header class="UserCenter_head outborder">
+                        <div class="uc_return">
+                            <div class="uc_return_l">
+                                <a href="javascript:history.go(-1)"></a>
+                            </div>
+                            <div class="uc_return_c">评测</div>
+                        </div>
+                    </header>
+                    <!--头部开始-->
+                    <!--评测tab栏开始-->
+                    <nav class="evaluation_tab border_bottom">
+                    	<ul class="pt12 pb12">
+                        	<li data-classes="region" id="region"><a href="#">区域</a><s class="down"></s></li>
+                            <li data-classes="price" id="price"><a href="#">价格</a><s class="down"></s></li>
+                        </ul>
+                    
+                    </nav>
+                    <!--评测tab栏结束-->
+                    <!--选项切换开始-->
+                    <section class="choice_wrap">
+                    	<ul class="bgf choice_item region" data-flag="region">
+                        	<li class="current"><a href="#" class="current">全部</a></li>
+                            <li><a href="#">宝山</a></li>
+                            <li><a href="#">长宁</a></li>
+                            <li><a href="#">崇明</a></li>
+                            <li><a href="#">奉贤</a></li>
+                            <li><a href="#">黄埔</a></li>
+                        </ul>
+                        <ul class="bgf choice_item price" data-flag="price">
+                        	<li><a href="#">全部</a></li>
+                            <li><a href="#">2万以下</a></li>
+                            <li><a href="#">2万-3万</a></li>
+                            <li><a href="#">3万-5万</a></li>
+                            <li><a href="#">5万以上</a></li>
+                            <li><a href="#">待定</a></li>
+                        </ul>
+                    </section>
+                    <!--选项切换结束-->
+                    <!--评测收藏列表开始-->
+                    <section class="bgf collect_evaluation_list" id="mainsection">
+                        <div class="item pl12 pr12">
+                            <div class="cnt mt12 mb12 border">
+                                <div class="pic">
+                                    <canvas data-src="../resource/images/detail_big_img.jpg"></canvas>
+                                        <div class="pic_txt">
+                                            <div class="pic_name">
+                                                <span>中星新恒苑</span>
+                                                <span>|</span>
+                                                <span>[闸北-彭浦、永和]</span>
+                                            </div>
+                                            <div class="hose_price_wrap">
+                                                <span class="house_price">35,000</span>
+                                                <span>元/平</span>
+                                            </div>
+                                        </div>
+                                        <div class="analyst_wrap">
+                                            <canvas data-src="../resource/images/analyst_pic1.png"></canvas>
+                                        </div>
+                                </div>
+                                <div class="wrap pl12">
+                                    <div class="pd_star border_bottom">
+                                        <span class="star"></span><!--star是默认类的必须加，之后只需增加star1-star11这些类即可-->
+                                        <span class="pd_num">4.14</span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul class="pr12">
+                                            <li class="hx_analyze"><a href="#">户型分析</a></li>
+                                            <li class="zx_stander"><a href="#">装修标准</a></li>
+                                            <li class="sq_sever"><a href="#">社区服务</a></li>
+                                            <li class="wy_sever"><a href="#">物业服务</a></li>
+                                            <li class="sq_Supporting"><a href="#">生活配套</a></li>
+                                            <li class="bad_factor"><a href="#">不利因素</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="item pl12 pr12">
+                            <div class="cnt mb12 border">
+                                <div class="pic">
+                                   <canvas data-src="../resource/images/detail_big_img.jpg"></canvas>
+                                        <div class="pic_txt">
+                                            <div class="pic_name">
+                                                <span>中星新恒苑</span>
+                                                <span>|</span>
+                                                <span>[闸北-彭浦、永和]</span>
+                                            </div>
+                                            <div class="hose_price_wrap">
+                                                <span class="house_price">35,000</span>
+                                                <span>元/平</span>
+                                            </div>
+                                        </div>
+                                        <div class="analyst_wrap">
+                                            <canvas data-src="../resource/images/analyst_pic1.png"></canvas>
+                                        </div>
+                                </div>
+                                <div class="wrap pl12">
+                                    <div class="pd_star border_bottom">
+                                        <span class="star"></span>
+                                        <span class="pd_num">4.14</span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul class="pr12">
+                                            <li class="hx_analyze">户型分析</li>
+                                            <li class="zx_stander">装修标准</li>
+                                            <li class="sq_sever">社区服务</li>
+                                            <li class="wy_sever">物业服务</li>
+                                            <li class="sq_Supporting">生活配套</li>
+                                            <li class="bad_factor">不利因素</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item pl12 pr12">
+                            <div class="cnt mb12 border">
+                                <div class="pic">
+                                   <canvas data-src="../resource/images/detail_big_img.jpg"></canvas>
+                                        <div class="pic_txt">
+                                            <div class="pic_name">
+                                                <span>中星新恒苑</span>
+                                                <span>|</span>
+                                                <span>[闸北-彭浦、永和]</span>
+                                            </div>
+                                            <div class="hose_price_wrap">
+                                                <span class="house_price">35,000</span>
+                                                <span>元/平</span>
+                                            </div>
+                                        </div>
+                                        <div class="analyst_wrap">
+                                            <canvas data-src="../resource/images/analyst_pic1.png"></canvas>
+                                        </div>
+                                </div>
+                                <div class="wrap pl12">
+                                    <div class="pd_star border_bottom">
+                                        <span class="star"></span>
+                                        <span class="pd_num">4.14</span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul class="pr12">
+                                            <li class="hx_analyze">户型分析</li>
+                                            <li class="zx_stander">装修标准</li>
+                                            <li class="sq_sever">社区服务</li>
+                                            <li class="wy_sever">物业服务</li>
+                                            <li class="sq_Supporting">生活配套</li>
+                                            <li class="bad_factor">不利因素</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item pl12 pr12">
+                            <div class="cnt mb12 border">
+                                <div class="pic">
+                                   <canvas data-src="../resource/images/detail_big_img.jpg"></canvas>
+                                        <div class="pic_txt">
+                                            <div class="pic_name">
+                                                <span>中星新恒苑</span>
+                                                <span>|</span>
+                                                <span>[闸北-彭浦、永和]</span>
+                                            </div>
+                                            <div class="hose_price_wrap">
+                                                <span class="house_price">35,000</span>
+                                                <span>元/平</span>
+                                            </div>
+                                        </div>
+                                        <div class="analyst_wrap">
+                                            <canvas data-src="../resource/images/analyst_pic1.png"></canvas>
+                                        </div>
+                                </div>
+                                <div class="wrap pl12">
+                                    <div class="pd_star border_bottom">
+                                        <span class="star"></span>
+                                        <span class="pd_num">4.14</span>
+                                    </div>
+                                    <div class="evaluation_title">
+                                        <ul class="pr12">
+                                            <li class="hx_analyze">户型分析</li>
+                                            <li class="zx_stander">装修标准</li>
+                                            <li class="sq_sever">社区服务</li>
+                                            <li class="wy_sever">物业服务</li>
+                                            <li class="sq_Supporting">生活配套</li>
+                                            <li class="bad_factor">不利因素</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </section>     
+                    <!--评测收藏列表结束-->
+                    <!--返回顶部开始-->
+                    <div class="return_top" id="backtop">
+                            <div class="return_top_bg"></div>
+                            <div class="return_top_txt">返回顶部</div>
+                        </div>    
+                    <!--返回顶部结束-->      
+                 </div>
+                 <!--评测列表结束-->
+             <script src="../lib/requirejs/require.js"></script>
+			 <script> 
+                require(["../lib/jquery/jquery.min", "../lib/js/webtouchcommon"], function() { 
+                    //canvas加载
+                   webtouchObj.canvasload();
+                 //回到顶部
+                $(window).scroll(webtouchObj.backtoTop);
+                $('#backtop').on("click",webtouchObj.backtoTopdh);
+				
+                    $(".evaluation_tab").on("click","ul li",webtouchObj.topSelect);
+                    $(".choice_wrap").on("click",webtouchObj.cancelSelect);
+                    $(".choice_wrap").on("click","ul li",fliterSelect);
+                    
+                    //过滤回填及ajax执行
+                    function fliterSelect(){
+                        var htname=$(this).children().eq(0).html();
+                        var changeid=$(this).parent().data("flag");
+                        $("#"+changeid).children().eq(0).html(htname);
+                        $("#"+changeid).children().eq(1).hide();
+                        $(this).addClass("current").siblings().removeClass("current");
+                        $(this).children().eq(0).addClass("current");
+                        $(this).siblings().each(function(){
+                             $(this).children().eq(0).removeClass("current");
+                        })
+                        //下面执行ajax过滤
+                    }
+                    
+                  }); 
+             </script>   
+         </body>
+    </html>

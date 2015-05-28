@@ -1,0 +1,730 @@
+<?php include APP_PATH.'/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="" class="form-horizontal" id="myform">
+    <input type="hidden" name="iEvaluationID" value="<?php echo $iEvaluationInfo['iEvaluationID'] ?>"/>
+    <div class="panel mt15">
+                    <div class="form-group">
+                        <label for="" class="col-sm-3 control-label tc">
+                                <div class="checkbox">
+                                    <label>
+                                      <input type="checkbox" id="iIsConfig" value="1" name="iIsConfig" <?php echo $sqConfig['iIsConfig']==1 ?'checked':'' ?>> 该小区无配套设施
+                                    </label>
+                             </div>
+                        </label>
+                         <div class="col-sm-9"></div>
+                    </div>
+                    <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+                            <div class="col-sm-10">
+                                <textarea name="sComment" rows="3" id="sComment" class="form-control input-validate" validate="!clength:1-255"><?php echo $sqConfig['sComment']?></textarea>
+                                <span class="validate_checktip"></span>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">配套设施：</label>
+                         <div class="col-sm-1">
+                             <div class="mt5 w80">儿童活动场</div>
+                         </div>
+                         <div class="col-sm-8">
+                                <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对规划图进行描述" class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['etgh']?>]" data-img="#sImageShow1" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['etgh']])&&!empty($sqConfigImage[$imgTypeConfig['etgh']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow1" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['etgh']])&&!empty($sqConfigImage[$imgTypeConfig['etgh']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['etgh']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                 <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                 <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12 duiq"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['etgh']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['etgh']?>][]" placeholder="请针对规划图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['etgh']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-8">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对实景图进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['etsj']?>]" data-img="#sImageShow2" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['etsj']])&&!empty($sqConfigImage[$imgTypeConfig['etsj']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow2" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['etsj']])&&!empty($sqConfigImage[$imgTypeConfig['etsj']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['etsj']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                 <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12 duiq"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['etsj']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12 duiq"> <textarea class="form-control" maxlength="300" rows="2" name="sqConfigImageDesc[<?php echo $imgTypeConfig['etsj']?>][]" placeholder="请针对实景图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['etsj']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-2 col-sm-1">
+                             <div class="mt5 w80">老年活动区</div>
+                         </div>
+                         <div class="col-sm-8">
+                              <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述" class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['lngh']?>]" data-img="#sImageShow3" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['lngh']])&&!empty($sqConfigImage[$imgTypeConfig['lngh']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow3" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['lngh']])&&!empty($sqConfigImage[$imgTypeConfig['lngh']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['lngh']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" maxlength="50" class="form-control" name="sqConfigImageTitle[<?php echo $imgTypeConfig['lngh']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" maxlength="300" rows="2" name="sqConfigImageDesc[<?php echo $imgTypeConfig['lngh']?>][]" placeholder="请对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['lngh']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-8">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['lnsj']?>]" data-img="#sImageShow4" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div> 
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['lnsj']])&&!empty($sqConfigImage[$imgTypeConfig['lnsj']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow4" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['lnsj']])&&!empty($sqConfigImage[$imgTypeConfig['lnsj']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['lnsj']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" maxlength="50" class="form-control" name="sqConfigImageTitle[<?php echo $imgTypeConfig['lnsj']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" maxlength="300" rows="2" name="sqConfigImageDesc[<?php echo $imgTypeConfig['lnsj']?>][]" placeholder="请对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['lnsj']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-2 col-sm-1">
+                             <div class="mt5">篮球场</div>
+                         </div>
+                         <div class="col-sm-8">
+                             <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['lqgh']?>]" data-img="#sImageShow5" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['lqgh']])&&!empty($sqConfigImage[$imgTypeConfig['lqgh']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow5" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['lqgh']])&&!empty($sqConfigImage[$imgTypeConfig['lqgh']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['lqgh']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                 <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" maxlength="50" class="form-control" name="sqConfigImageTitle[<?php echo $imgTypeConfig['lqgh']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" maxlength="300" rows="2" name="sqConfigImageDesc[<?php echo $imgTypeConfig['lqgh']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['lqgh']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-8">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述" class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['lqsj']?>]" data-img="#sImageShow6" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['lqsj']])&&!empty($sqConfigImage[$imgTypeConfig['lqsj']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow6" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['lqsj']])&&!empty($sqConfigImage[$imgTypeConfig['lqsj']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['lqsj']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" maxlength="50" class="form-control" name="sqConfigImageTitle[<?php echo $imgTypeConfig['lqsj']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" maxlength="300" rows="2" name="sqConfigImageDesc[<?php echo $imgTypeConfig['lqsj']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['lqsj']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-2 col-sm-1">
+                             <div class="mt5">网球场</div>
+                         </div>
+                         <div class="col-sm-8">
+                             <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述" class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['wqgh']?>]" data-img="#sImageShow7" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['wqgh']])&&!empty($sqConfigImage[$imgTypeConfig['wqgh']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow7" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['wqgh']])&&!empty($sqConfigImage[$imgTypeConfig['wqgh']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['wqgh']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" maxlength="50" class="form-control" name="sqConfigImageTitle[<?php echo $imgTypeConfig['wqgh']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" maxlength="300" rows="2" name="sqConfigImageDesc[<?php echo $imgTypeConfig['wqgh']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['wqgh']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-8">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述" class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['wqsj']?>]" data-img="#sImageShow8" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['wqsj']])&&!empty($sqConfigImage[$imgTypeConfig['wqsj']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow8" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['wqsj']])&&!empty($sqConfigImage[$imgTypeConfig['wqsj']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['wqsj']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" maxlength="50" class="form-control" name="sqConfigImageTitle[<?php echo $imgTypeConfig['wqsj']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" maxlength="300" rows="2" name="sqConfigImageDesc[<?php echo $imgTypeConfig['wqsj']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['wqsj']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-2 col-sm-1">
+                             <div class="mt5">室外游泳池</div>
+                         </div>
+                         <div class="col-sm-8">
+                             <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述" class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['swyg']?>]" data-img="#sImageShow9" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['swyg']])&&!empty($sqConfigImage[$imgTypeConfig['swyg']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow9" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['swyg']])&&!empty($sqConfigImage[$imgTypeConfig['swyg']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['swyg']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['swyg']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['swyg']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['swyg']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-8">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述" class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['swys']?>]" data-img="#sImageShow10" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['swys']])&&!empty($sqConfigImage[$imgTypeConfig['swys']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow10" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['swys']])&&!empty($sqConfigImage[$imgTypeConfig['swys']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['swys']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['swys']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['swys']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['swys']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-2 col-sm-1">
+                            <div class="mt5">会所</div>
+                         </div>
+                         <div class="col-sm-2">
+                                 <div class="checkbox">
+                                   <label>
+                                     <input type="checkbox" name="iSnyycChecked" id="iSnyycChecked" value="1" <?php echo $sqConfig['iSnyycChecked']==1?'checked':'' ?>> 室内游泳池
+                                   </label>
+                                </div>
+                         </div>
+                         <div class="col-sm-6">
+                             <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['slyg']?>]" data-img="#sImageShow11" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['slyg']])&&!empty($sqConfigImage[$imgTypeConfig['slyg']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow11" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['slyg']])&&!empty($sqConfigImage[$imgTypeConfig['slyg']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['slyg']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['slyg']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['slyg']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['slyg']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                         <div class="col-sm-offset-5 col-sm-6">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['slys']?>]" data-img="#sImageShow12" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['slys']])&&!empty($sqConfigImage[$imgTypeConfig['slys']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow12" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['slys']])&&!empty($sqConfigImage[$imgTypeConfig['slys']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['slys']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['slys']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['slys']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['slys']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-2">
+                                 <div class="checkbox">
+                                   <label>
+                                     <input type="checkbox" name="iSnjsfChecked" id="iSnjsfChecked" value="1" <?php echo $sqConfig['iSnjsfChecked']==1?'checked':'' ?>> 健身房
+                                   </label>
+                                </div>
+                         </div>
+                         <div class="col-sm-6">
+                             <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['jsgh']?>]" data-img="#sImageShow13" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['jsgh']])&&!empty($sqConfigImage[$imgTypeConfig['jsgh']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow13" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['jsgh']])&&!empty($sqConfigImage[$imgTypeConfig['jsgh']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['jsgh']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['jsgh']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['jsgh']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['jsgh']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                         <div class="col-sm-offset-5 col-sm-6">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['jssj']?>]" data-img="#sImageShow14" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['jssj']])&&!empty($sqConfigImage[$imgTypeConfig['jssj']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow14" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['jssj']])&&!empty($sqConfigImage[$imgTypeConfig['jssj']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['jssj']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['jssj']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['jssj']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['jssj']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-2">
+                                 <div class="checkbox">
+                                   <label>
+                                     <input type="checkbox"  name="iSnqpfChecked" id="iSnqpfChecked" value="1" <?php echo $sqConfig['iSnqpfChecked']==1?'checked':'' ?>> 棋牌房
+                                   </label>
+                                </div>
+                         </div>
+                         <div class="col-sm-6">
+                             <input type="button" value="上传规划图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['qpgh']?>]" data-img="#sImageShow15" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['qpgh']])&&!empty($sqConfigImage[$imgTypeConfig['qpgh']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow15" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['qpgh']])&&!empty($sqConfigImage[$imgTypeConfig['qpgh']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['qpgh']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['qpgh']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['qpgh']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['qpgh']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                         <div class="col-sm-offset-5 col-sm-6">
+                             <input type="button" value="上传实景图" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['qpsj']?>]" data-img="#sImageShow16" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-sm-offset-3 col-sm-2">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['qpsj']])&&!empty($sqConfigImage[$imgTypeConfig['qpsj']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow16" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['qpsj']])&&!empty($sqConfigImage[$imgTypeConfig['qpsj']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['qpsj']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['qpsj']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['qpsj']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['qpsj']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-offset-3 col-sm-2">
+                                 <div class="checkbox">
+                                   <label>
+                                     <input type="checkbox"  name="iSnqtChecked" id="iSnqtChecked" value="1" <?php echo $sqConfig['iSnqtChecked']==1?'checked':'' ?>> 其他
+                                   </label>
+                                </div>
+                         </div>
+                         <div class="col-sm-6">
+                             <input type="button" value="上传照片" data-placeholder-name="图片名称" data-placeholder-dec="请针对其进行描述"  class="plupload"  data-target="sqConfigImage[<?php echo $imgTypeConfig['hsqt']?>]" data-img="#sImageShow17" data-callback="showImg" data-limit="10" data-dec="1"/>
+                         </div>
+                    </div>
+                    <div class="form-group mtf">
+                        <div class="col-md-offset-2 col-md-9">
+                             <div class="eHxImgDiv" style="display: <?php echo isset($sqConfigImage[$imgTypeConfig['hsqt']])&&!empty($sqConfigImage[$imgTypeConfig['hsqt']])? '':'none' ?>;">
+                                 <div class="row" id="sImageShow17" >
+                                     <?php
+                                     if (isset($sqConfigImage[$imgTypeConfig['hsqt']])&&!empty($sqConfigImage[$imgTypeConfig['hsqt']])) {
+                                         foreach($sqConfigImage[$imgTypeConfig['hsqt']] as $item) {
+                                             ?>
+                                             <div class="image_list">
+                                                 <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                 <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <input type="text" class="form-control" maxlength="50" name="sqConfigImageTitle[<?php echo $imgTypeConfig['hsqt']?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                 </div>
+                                                 <div class="top-group">
+                                                     <div class="col-sm-12"> <textarea class="form-control" rows="2" maxlength="300" name="sqConfigImageDesc[<?php echo $imgTypeConfig['hsqt']?>][]" placeholder="请针对其进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                 </div>
+                                                 <input type="hidden" name="sqConfigUpImageId[<?php echo $imgTypeConfig['hsqt']?>][]" value="<?php echo $item['iAutoID']?>" />
+                                             </div>
+                                         <?php
+                                         }
+                                     }
+                                     ?>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                          <label for="" class="col-sm-2 control-label">其他点评：</label>
+                            <div class="col-sm-9">
+                                <textarea name="sOtherComment" rows="3" id="sOtherComment" class="form-control"><?php echo $sqConfig['sOtherComment']?></textarea>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+                        <div class="col-sm-10">
+                            <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                            <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                                <div class="row" id="sImageQt" >
+                                    <?php
+                                    if (isset($qtImage)&&!empty($qtImage)) {
+                                        foreach($qtImage as $item) {
+                                            ?>
+                                            <div class="image_list">
+                                                <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                                <?php if($evaluationSwitch == 0){ ?>
+                                                <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                <?php } ?>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                                </div>
+                                                <div class="top-group">
+                                                    <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                                </div>
+                                                <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <button id="save" class="btn btn-primary">发布</button>
+                                <button id="sync" class="btn btn-info"  >同步</button>
+                                <button type="button" class="btn btn-default" onclick="location.href='/evaluation/draft/';return false;" data-dismiss="modal">取消</button>
+                            </div>
+                    </div>
+       </div>
+</form>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+<script>
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    evaluationSwitch(Switch);
+    // 同步数据
+    $("#sync").click({c: 'Sqpz', a: 'config', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+    $(function() {
+        index = 1;
+       theformUrl="/evaluation/Sqpz/saveConfig";
+     //  thepostUrl="/evaluation/Zxstandard/checkBlank";
+        if ($("#iIsConfig").is(':checked')==true) {
+            $.data($('#myform')[0],'validator', '');
+            $("#sComment").attr('validate',$("#sComment").attr('validate').replace('!',''));
+            initForm(theformUrl);
+        } else {
+            initForm(theformUrl);
+        }
+
+        // 选择配套设施
+         $("#iIsConfig").on("click",checkitChecked)
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+     // 移除边框
+    $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+     //鼠标移上显示大图
+    $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+     $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    })
+</script>

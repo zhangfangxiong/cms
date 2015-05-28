@@ -1,0 +1,121 @@
+<div class="pheader clearfix">轨交方向管理 <a class="btn btn-primary col-lg-offset-2" id="btnDirectionAdd"><i class="icon-plus"></i> 添加方向</a></div>
+<div class="pbody clearfix">
+    <h3>轨交名称：<?=isset($aMetro) && isset($aMetro['sMetroName']) ? $aMetro['sMetroName'] : ''?></h3>
+    <br/>
+    <h5>方向：</h5>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">方向</th>
+            <th class="text-center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if(!empty($aDirection)):?>
+            <?php foreach($aDirection as $direction):?>
+                <tr id="directionInfo<?=$direction['iAutoID']?>">
+                    <td class="col-sm-1 text-center"><?=$direction['sDirection']?></td>
+                    <td class="col-sm-1 text-center">
+                        <a href="javascript:directionEdit(<?=$direction['iAutoID']?>);">编辑</a>
+                        <a href="/evaluation/metro/directiondel?id=<?=$direction['iAutoID']?>);" class="directionDelete">删除</a>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        <?php endif;?>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="directionForm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="directionModalLabel">添加线路方向</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="directionOperationForm">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+
+        $('.directionDelete').click(function() {
+            var title = $(this).prop('title');
+            if (confirm("您确认要将该方向" + title + "吗？")) {
+                $.get(this.href, function(ret){
+                    alert(ret.data);
+                    if (ret.status) {
+                        location.reload();
+                    }
+                }, 'json');
+            }
+            return false;
+        });
+
+
+        $('#btnDirectionAdd').click(function () {
+            var modalForm = '<div class="form-group"> <label for="inputEmail3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;方向名称：</label> <div class="col-sm-10"> ' +
+                '<input type="text" validate="!length:1-10" value="" id="sDirection" name="sDirection" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>' +
+                '<input type="hidden" value="<?=$aMetro['iMetroID']?>" name="iMetroID">';
+
+            modalForm += '<div class="form-group"> <div class="col-sm-offset-2 col-sm-10"> <button type="submit" class="btn btn-primary">保存</button> ' +
+            '</div> </div>';
+            $('#directionModalLabel').text('添加线路方向');
+
+            $('#directionOperationForm').html(modalForm);
+            $('#directionOperationForm').prop('action', '/evaluation/metro/directionadd/');
+
+            $('#directionForm').modal().css({
+                "margin-top": function () {return ($(window).height() / 2 - 200);}
+            }).modal('show');
+
+            $("#directionOperationForm").validate({submitHandler: function(form) {
+                $.post(form.action, $(form).serialize(), function(ret){
+                    alert(ret.data);
+                    if (ret.status) {
+                        location.reload();
+                    }
+                }, 'json');
+                return false;
+            }});
+
+        });
+    });
+
+
+    function directionEdit(iDirectionID) {
+        var tdList = $('#directionInfo'+iDirectionID).find("td");
+        var modalForm = '<div class="form-group"> <label for="inputEmail3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;方向名称：</label> <div class="col-sm-10"> ' +
+            '<input type="text" validate="!length:1-10" id="sDirection" name="sDirection" value="' + $(tdList[0]).text() + '" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>' +
+            '<input type="hidden" value="' + iDirectionID + '" name="iDirectionID">';
+        modalForm += '<div class="form-group"> <div class="col-sm-offset-2 col-sm-10"> <button type="submit" class="btn btn-primary">保存</button> ' +
+        '</div> </div>';
+        $('#directionModalLabel').text('编辑线路方向');
+        $('#directionOperationForm').prop('action', '/evaluation/metro/directionedit/');
+        $('#directionOperationForm').html(modalForm);
+
+        $('#directionForm').modal().css({
+            "margin-top": function () {return ($(window).height() / 2 - 200);}
+        }).modal('show');
+
+        $("#directionOperationForm").validate({submitHandler: function(form) {
+            $.post(form.action, $(form).serialize(), function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+            return false;
+        }});
+
+
+    }
+
+</script>
+

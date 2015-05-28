@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>房价点评</title>
+    <link rel="stylesheet" type="text/css" href="../resource/css/basic.css">
+    <link rel="stylesheet" type="text/css" href="../resource/css/usercenter.css">
+    <script src="../lib/jquery/jquery-1.10.2.js"></script>
+    <script src="../lib/js/commonus.js"></script>
+</head>
+<body>
+    <!--个人中心开始登录-->
+    <div class="viewport">
+        <header class="UserCenter_head">
+            <div class="uc_return">
+                <div class="uc_return_l">
+                    <a href="javascript:history.go(-1)"></a>
+                </div>
+                <div class="uc_return_c">登录</div>
+                <div class="register"><a href="PRegister.html">注册</a></div>
+            </div>
+        </header>
+        <section class="logging">
+            <ul class="bgf pl12 outborder">
+                <li class="pt12 pb12 border_bottom">
+                    <s></s>
+                    <input type="text" placeholder="请输入您的手机号" id="login_userName" />
+                    <s class="warn" id="pass1_error" style="display:none;"></s>
+                </li>
+                <li class="pt12 pb12">
+                    <s class="uc_logging_password"></s>
+                    <input type="password" placeholder="请输入您的密码" id="login_Password" />
+                    <s class="warn" id="pass_error" style="display:none;"></s>
+                </li>
+            </ul>
+            <div class="find_paw"><a id="wjmm_url">忘记密码？</a></div>
+            <div class="btn_wrap" id="login_user">
+                <span class="btn">登 录</span>
+            </div>
+            <div class="quick_register">
+                <div id="kxzc_url"><a>快速注册></a></div>
+            </div>
+        </section>
+    </div>
+    <!--个人中心结束登录-->
+    <script type="text/javascript">
+        var city = getQueryString("cityName");
+        $(function () {
+            $("#login_user").on("click", function () {
+                var user = $("#login_userName").val();
+                var pass = $("#login_Password").val();
+                if (user != "") {
+                loginUser(user, pass);
+                }else{
+                    $("#pass1_error").show();
+                    $("#pass_error").show();
+                }
+
+                $("#login_user span").addClass("current");
+                
+            });
+            $("#login_userName").on("blur", function () {
+
+                var regExp = /^1[3|4|5|7|8]\d{9}$/;
+                var userName = $("#login_userName").val();
+                if (regExp.test(userName)) {
+                    $("#pass1_error").hide();
+                } else {
+                    $("#pass1_error").show();
+                }                
+            })
+
+            $("#kxzc_url").click(function () {
+                location.href = "PRegister.html?cityName=" + city;
+            });
+            $("#wjmm_url").click(function () {
+                location.href = "PForgetPassword.html?cityName=" + city;
+            });
+        });
+
+        function loginUser(user, pass) {
+            var parameterStr = {};
+            parameterStr.User = user;
+            parameterStr.Pass = pass;
+            DataHelper.GetJson("LoginVerification", parameterStr, function (result) {
+                var isbool = result.dataCode;
+                if (parseInt(isbool) ==1) {
+                    addCookie("userName", user);
+                    location.href = "more.html?cityName=" + city;
+                } else if (parseInt(isbool) ==2) {
+                    $("#login_Password").val("");
+                    $("#pass1_error").show();
+                } else {
+                    $("#login_Password").val("");
+                    $("#pass_error").show();
+                }
+            });
+        }
+
+        function addCookie(objName, objValue) {//添加cookie
+            var str = objName + "=" + escape(objValue);
+            document.cookie = str;
+        }
+
+
+    </script>
+</body>
+</html>

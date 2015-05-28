@@ -1,0 +1,116 @@
+<div class="pheader clearfix">资讯列表</div>
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform">
+        <div class="form-group">
+                                    分类:
+            <select class="form-control input-sm" name="iCategoryID">
+                <option value="0">请选择</option>
+                <?php foreach ($aCategory as $k => $v){?>
+                <option value="<?php echo $k?>" <?php echo isset($aParam['iCategoryID'])&&$k==$aParam['iCategoryID']?'selected':''?>><?php echo $v?></option>
+                <?php }?>
+            </select>
+        </div>
+        <div class="form-group">
+                                    状态:
+            <select class="form-control input-sm" name="iPublishStatus">
+                <option value="-1">请选择</option>
+                <option value="1" <?php echo isset($aParam['iPublishStatus'])&&1==$aParam['iPublishStatus']?'selected':''?>>已发布</option>
+                <option value="0" <?php echo isset($aParam['iPublishStatus'])&&0==$aParam['iPublishStatus']?'selected':''?>>未发布</option>
+            </select>
+        </div>
+        <div class="form-group">
+                                    标题：
+            <input type="text" value="<?php echo isset($aParam['sTitle'])?$aParam['sTitle']:''?>" class="form-control input-sm" name="sTitle">
+        </div>
+        <div class="form-group">
+                                    作者：
+            <input type="text" value="<?php echo isset($aParam['sAuthor'])?$aParam['sAuthor']:''?>" class="form-control input-sm" name="sAuthor">
+        </div>
+        <input type="hidden" id="fOrder" name="sOrder" value="<?php echo isset($aParam['sOrder'])?$aParam['sOrder']:''?>">
+        <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+    </form>
+    <hr>
+    <div class="btn-toolbar list-toolbar">
+    	<button class="btn btn-primary" id="news_add">
+    		<i class="icon-plus"></i> 增加资讯
+    	</button>
+    	<div style="float:right">
+    	    <label> 排序方式：</label>
+    	    <select class="input-sm" id="sOrder">
+    	        <option value="iNewsID ASC">按创建时间正序</option>
+    	        <option value="iNewsID DESC" <?php echo isset($aParam['sOrder'])&&'iNewsID DESC'==$aParam['sOrder']?'selected':''?>>按创建时间倒序</option>
+    	        <option value="iUpdateTime ASC" <?php echo isset($aParam['sOrder'])&&'iUpdateTime ASC'==$aParam['sOrder']?'selected':''?>>按发布时间正序</option>
+    	        <option value="iUpdateTime DESC" <?php echo isset($aParam['sOrder'])&&'iUpdateTime DESC'==$aParam['sOrder']?'selected':''?>>按发布时间倒序</option>
+            </select>
+    	</div>
+    </div>
+    <table class="table table-bordered table-hover">
+    	<thead>
+    		<tr>
+    			<th class="col-sm-1 text-center">#</th>
+    			<th>标题</th>
+    			<th>分类</th>
+    			<th>作者</th>
+    			<th>发布状态</th>
+    			<th>创建时间</th>
+    			<th class="text-center">操作</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+        <?php foreach ($aList['aList'] as $v) {?>
+            <tr>
+    			<td class="col-sm-1 text-center"><?php echo $v['iNewsID']?></td>
+    			<td><a href="<?php echo @$v['sUrl']?>"><?php echo $v['sTitle']?></a></td>
+    			<td><?php echo @$aCategory[$v['iCategoryID']]?></td>
+    			<td><?php echo $v['sAuthor']?></td>
+    			<td><?php echo $v['iPublishStatus']?'已发布':'未发布'?></td>
+    			<td><?php echo date('Y-m-d H:i:s', $v['iCreateTime'])?></td>
+    			<td class="text-center">
+    			    <a class="news_publish" href="/news/publish?id=<?php echo $v['iNewsID']?>" data-type="<?php echo $v['iPublishStatus']?>" title="<?php echo $v['iPublishStatus']?'下架':'上架'?>"><i class="icon-<?php echo $v['iPublishStatus']?'off':'ok-sign'?> icon-large"></i></a>
+    			    <a href="/news/edit?id=<?php echo $v['iNewsID']?>" title="编辑"><i class="icon-pencil icon-large"></i></a>
+    			    <a class="news_delete" href="/news/del?id=<?php echo $v['iNewsID']?>" role="button" data-toggle="modal" title="删除"><i class="icon-trash icon-large"></i></a>
+    			</td>
+    		</tr>
+        <?php }?>
+    	</tbody>
+    </table>
+    <?php echo $aList['aPager']?>
+</div>
+<script>
+$('#formbtn').click(function(){
+	$('#fOrder').val($('#sOrder').val());
+});
+$('#sOrder').change(function(){
+	$('#fOrder').val($('#sOrder').val());
+	$('#myform').submit();
+});
+
+$('.news_delete').click(function() {
+	if (confirm("您确认要删除该资讯吗？")) {
+		$.get(this.href, function(ret){
+			alert(ret.data);
+		    if (ret.status) {
+			    location.reload();
+		    }
+		}, 'json');
+	}
+	return false;
+});
+
+$('.news_publish').click(function() {
+	var type = $(this).data('type')==1 ? '下架' : '上架'; 
+	if (confirm("您确认要"+type+"该资讯吗？")) {
+		$.get(this.href, function(ret){
+			alert(ret.data);
+		    if (ret.status) {
+			    location.reload();
+		    }
+		}, 'json');
+	}
+	return false;
+});
+
+$('#news_add').click(function(){
+	location.href = '/news/add';
+});
+</script>

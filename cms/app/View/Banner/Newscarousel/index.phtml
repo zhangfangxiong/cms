@@ -1,0 +1,103 @@
+<div class="pheader clearfix">首页轮播</div>
+<div class="pbody clearfix">
+	<form class="form-inline search-form" role="form" method="post" id="myform">
+		<div class="form-group col-md-offset-1">
+			状态:
+			<select class="form-control input-sm" name="iStatus">
+				<option value="-1">全部</option>
+				<?php foreach($aPublishStatus as $key => $value):?>
+					<option value="<?=$key?>"><?=$value?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div class="form-group col-md-offset-4"><a class="btn btn-primary" id="carousel_add"><i class="icon-plus"></i> 添加首页轮播广告</a></div>
+	</form>
+
+    <table class="table table-bordered table-hover">
+    	<thead>
+    		<tr>
+				<th class="text-center">ID</th>
+    			<th class="text-center">类型</th>
+    			<th class="text-center">状态</th>
+    			<th class="text-center">创建时间</th>
+				<th class="text-center">创建人</th>
+				<th class="text-center">修改时间</th>
+				<th class="text-center">修改人</th>
+    			<th class="text-center">操作</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+        <?php foreach ($aList as $v) {?>
+            <tr>
+    			<td class="text-center"><?=$v['iAutoID']?></td>
+    			<td class="text-center"><img src="<?=Util_Uri::getDFSViewURL($v['sImage'],120, 90)?>" /></td>
+    			<td class="text-center"><?=$aPublishStatus[$v['iPublishStatus']]?></td>
+				<td class="text-center"><?=date('Y-m-d H:i:s', $v['iCreateTime'])?></td>
+				<td class="text-center"><?=$v['sPublishUserName']?></td>
+				<td class="text-center"><?=date('Y-m-d H:i:s', $v['iUpdateTime'])?></td>
+				<td class="text-center"><?=$v['sModifyUserName']?></td>
+    			<td class="text-center">
+					<a href="<?=$sEditUrl?>?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="编辑">
+						编辑&nbsp;&nbsp;
+					</a>
+                    <?php if ($v['iPublishStatus'] == 1) {?>
+					<a class="carousel_off" href="<?=$sOfflineUrl?>?id=<?php echo $v['iAutoID']?>" role="button" data-toggle="modal" title="下架">
+						下架
+					</a>
+                    <?php }?>
+    			</td>
+    		</tr>
+        <?php }?>
+    	</tbody>
+    </table>
+</div>
+<script>
+$('.carousel_off').click(function() {
+	if (confirm("您确认要下架该条轮播吗？")) {
+		$.get(this.href, function(ret){
+			alert(ret.data);
+		    if (ret.status) {
+			    location.reload();
+		    }
+		}, 'json');
+	}
+	return false;
+});
+
+$('#carousel_add').click(function(){
+	location.href = '<?=$sAddUrl?>';
+});
+
+
+var menu_moving = false;
+function menu_move(ele, direct) {
+	if (menu_moving == true) {
+		return false;
+	}
+	menu_moving = true;
+	$.get($(ele).attr('href'), function(ret){
+		menu_moving = false;
+		if (ret.status == false) {
+			alert(ret.data);
+			return false;
+		}
+		if (ret.data > 0) {
+			var currtr = $(ele).parent().parent();
+			if (direct == 0) {
+				var swaptr = currtr.prev();
+				if (swaptr.length == 0) {
+					return false;
+				}
+				swaptr.before(currtr);
+			} else {
+				var swaptr = currtr.next();
+				if (swaptr.length == 0) {
+					return false;
+				}
+				swaptr.after(currtr);
+			}
+		}
+	});
+	return false;
+}
+</script>

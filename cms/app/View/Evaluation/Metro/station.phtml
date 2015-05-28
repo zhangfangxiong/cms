@@ -1,0 +1,188 @@
+<div class="pheader clearfix">轨交站点管理 <a class="btn btn-primary col-lg-offset-2" id="btnStationAdd"><i class="icon-plus"></i> 添加站点</a></div>
+<div class="pbody clearfix">
+    <h3>轨交名称：<?=isset($aMetro) && isset($aMetro['sMetroName']) ? $aMetro['sMetroName'] : ''?></h3>
+    <br/>
+    <h5>站点：(上下拖动行进行站点排序)</h5>
+    <form method="post" id="sortForm" action="/evaluation/metro/stationsort/">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="text-center" rowspan="2" colspan="1">站点</th>
+                <?php if(!empty($aDirection)):?>
+                    <?php foreach($aDirection as $direction):?>
+                        <th class="text-center" rowspan="1" colspan="2">往<?=$direction['sDirection']?></th>
+                    <?php endforeach;?>
+                <?php endif;?>
+                <th class="text-center" rowspan="2" colspan="1">站点</th>
+            </tr>
+            <tr>
+                <?php if(!empty($aDirection)):?>
+                    <?php foreach($aDirection as $direction):?>
+                        <th class="text-center">首班车</th>
+                        <th class="text-center">末班车</th>
+                    <?php endforeach;?>
+                <?php endif;?>
+            </tr>
+            </thead>
+            <tbody id="sortable">
+            <?php if(!empty($aStationList)):?>
+                <?php foreach($aStationList as $aStation):?>
+                <tr id="stationInfo<?=$aStation['iAutoID']?>">
+                    <td class="col-sm-1 text-center"><?=$aStation['sStation']?></td>
+                    <?php foreach($aDirection as $direction):?>
+                        <?php if(isset($aStation['aRuntime'][$direction['iAutoID']])): ?>
+                            <td class="col-sm-1 text-center"><?=$aStation['aRuntime'][$direction['iAutoID']]['sFRunTime']?></td>
+                            <td class="col-sm-1 text-center"><?=$aStation['aRuntime'][$direction['iAutoID']]['sLRunTime']?></td>
+                        <?php else:?>
+                            <td class="col-sm-1 text-center">-</td>
+                            <td class="col-sm-1 text-center">-</td>
+                        <?php endif;?>
+                    <?php endforeach;?>
+                    <td class="col-sm-1 text-center">
+                        <a href="javascript:stationEdit(<?=$aStation['iAutoID']?>);">编辑</a>
+                        <a href="/evaluation/metro/stationdel?iStationID=<?=$aStation['iAutoID']?>);" class="stationDelete">删除</a>
+                        <input type="hidden" name="iStationID[]" value="<?=$aStation['iAutoID']?>">
+                    </td>
+                </tr>
+                <?php endforeach;?>
+            <?php endif;?>
+            </tbody>
+        </table>
+        <div class="btn-toolbar text-center">
+            <button id="save" class="btn btn-primary">保存</button>
+            <button id="cancel" class="btn" onclick="location.href='/evaluation/metro/';return false;">取消</button>
+        </div>
+        <br/>
+        <br/>
+    </form>
+</div>
+
+
+<div class="modal fade" id="stationForm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="stationModalLabel">添加站点</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="stationOperationForm">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script>
+
+
+
+    var directionList = <?=json_encode($aDirection);?>;
+    $(function() {
+        $("#sortForm").validate({submitHandler: function(form) {
+            $.post(form.action, $(form).serialize(), function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+            return false;
+        }});
+
+        $('.stationDelete').click(function() {
+            if (confirm("站点删除后将无法恢复，是否确认要删除？")) {
+                $.get(this.href, function(ret){
+                    alert(ret.data);
+                    if (ret.status) {
+                        location.reload();
+                    }
+                }, 'json');
+            }
+            return false;
+        });
+
+        $( "#sortable" ).sortable();
+        $( "#sortable" ).disableSelection();
+
+        $('#btnStationAdd').click(function () {
+            var modalForm = '<div class="form-group"> <label for="inputEmail3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;站点名称：</label> <div class="col-sm-10"> ' +
+                '<input type="text" validate="!length:1-10" value="" id="sStation" name="sStation" class="form-control input-validate"><span class="validate_checktip"></span></div> </div>' +
+                '<input type="hidden" value="" name="iStationID">' +
+                '<input type="hidden" value="<?=$aMetro['iMetroID']?>" name="iMetroID">';
+
+            for (var i = 0; i < directionList.length; i++) {
+                modalForm += '<span class="help-block">往【' + directionList[i].sDirection + '】方向</span>';
+
+                var tmpIndex = i * 2 + 1;
+                modalForm += '<div class="form-group"> <label for="inputPassword3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;首班车时间：</label> <div class="col-sm-10"> ' +
+                '<input type="text" validate="!length:1-10" id="sFRunTime' + directionList[i].iAutoID + '" name="sFRunTime' + directionList[i].iAutoID + '" value="" class="form-control input-validate"><span class="validate_checktip"></span></div> </div>';
+
+                var tmpIndex = i * 2 + 2;
+                modalForm += '<div class="form-group"> <label for="inputPassword3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;末班车时间：</label> <div class="col-sm-10"> ' +
+                '<input type="text" validate="!length:1-10" id="sLRunTime' + directionList[i].iAutoID + '" name="sLRunTime' + directionList[i].iAutoID + '" value="" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>';
+            }
+            modalForm += '<div class="form-group"> <div class="col-sm-offset-2 col-sm-10"> <button type="submit" class="btn btn-primary">保存</button> ' +
+            '</div> </div>';
+            $('#stationModalLabel').text('添加站点');
+
+            $('#stationOperationForm').html(modalForm);
+            $('#stationOperationForm').prop('action', '/evaluation/metro/stationadd/');
+
+            $('#stationForm').modal().css({
+                "margin-top": function () {return ($(window).height() / 2 - 300);}
+            }).modal('show');
+
+            $("#stationOperationForm").validate({submitHandler: function(form) {
+                $.post(form.action, $(form).serialize(), function(ret){
+                    alert(ret.data);
+                    if (ret.status) {
+                        location.reload();
+                    }
+                }, 'json');
+                return false;
+            }});
+        });
+    });
+
+    function stationEdit(iStationID) {
+        var tdList = $('#stationInfo'+iStationID).find("td");
+        var modalForm = '<div class="form-group"> <label for="inputEmail3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;站点名称：</label> <div class="col-sm-10"> ' +
+            '<input type="text" validate="!length:1-10" name="sStation" id="sStation" value="' + $(tdList[0]).text() + '" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>' +
+            '<input type="hidden" value="' + iStationID + '" name="iStationID">' +
+            '<input type="hidden" value="<?=$aMetro['iMetroID']?>" name="iMetroID">';
+
+        for (var i = 0; i < directionList.length; i++) {
+            modalForm += '<span class="help-block">往【' + directionList[i].sDirection + '】方向</span>';
+
+            var tmpIndex = i * 2 + 1;
+            modalForm += '<div class="form-group"> <label for="inputPassword3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;首班车时间：</label> <div class="col-sm-10"> ' +
+            '<input type="text" validate="!length:1-10" id="sFRunTime' + directionList[i].iAutoID + '" name="sFRunTime' + directionList[i].iAutoID + '" value="' + $(tdList[tmpIndex]).text() + '" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>';
+
+            var tmpIndex = i * 2 + 2;
+            modalForm += '<div class="form-group"> <label for="inputPassword3" class="col-sm-2 control-label"><span style="color:red;">*</span>&nbsp;末班车时间：</label> <div class="col-sm-10"> ' +
+            '<input type="text" validate="!length:1-10" id="sLRunTime' + directionList[i].iAutoID + '" name="sLRunTime' + directionList[i].iAutoID + '" value="' + $(tdList[tmpIndex]).text() + '" class="form-control input-validate"><span class="validate_checktip"></span> </div> </div>';
+        }
+        modalForm += '<div class="form-group"> <div class="col-sm-offset-2 col-sm-10"> <button type="submit" class="btn btn-primary">保存</button> ' +
+        '</div> </div>';
+        $('#stationModalLabel').text('编辑站点');
+        $('#stationOperationForm').prop('action', '/evaluation/metro/stationedit/');
+        $('#stationOperationForm').html(modalForm);
+
+        $('#stationForm').modal().css({
+            "margin-top": function () {return ($(window).height() / 2 - 300);}
+        }).modal('show');
+
+        $("#stationOperationForm").validate({submitHandler: function(form) {
+            $.post(form.action, $(form).serialize(), function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+            return false;
+        }});
+
+
+    }
+</script>

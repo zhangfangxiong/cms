@@ -1,0 +1,488 @@
+<?php include APP_PATH . '/View/Evaluation/Hxanalyse/eHeader.phtml'; ?>
+<form action="/evaluation/traffic/saverail/" class="form-horizontal" role="form" method="post" id="myform">
+    <div class="panel mt15">
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">*分析师点评：</label>
+            <div class="col-sm-9">
+                <textarea class="form-control input-validate" validate="!length:1-255" rows="3" name="sComment"><?= isset($aMetro['sComment']) ? $aMetro['sComment'] : '' ?></textarea>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <input type="hidden" name="iEvaluationID" value="<?= $iEvaluationInfo['iEvaluationID'] ?>"/>
+        <input type="hidden" name="iAutoID" value="<?= isset($aMetro['iAutoID']) ? $aMetro['iAutoID'] : 0 ?>"/>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">优势：</label>
+            <div class="col-sm-9">
+                <?php
+                if (isset($goodTags) && !empty($goodTags)) {
+                    foreach ($goodTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sGoodTag[]" <?php echo!empty($aMetro['sGoodTag']) && in_array($k, $aMetro['sGoodTag']) ? 'checked' : '' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">劣势：</label>
+            <div class="col-sm-9">
+                <?php
+                if (isset($badTags) && !empty($badTags)) {
+                    foreach ($badTags as $k => $v) {
+                        ?>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="sBadTag[]" <?php echo!empty($aMetro['sBadTag']) && in_array($k, $aMetro['sBadTag']) ? 'checked' : '' ?> value="<?php echo $k ?>"> <?php echo $v ?>
+                        </label>
+        <?php
+    }
+}
+?>
+            </div>
+        </div>
+        <div class="metro_group">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">*轨交线路：</label>
+                <div class="col-sm-2">
+                    <div class="checkbox">
+                        <label>
+                            <input name="iHasMetro" value="0"  id="side_zs" type="checkbox" <?= (isset($aMetro['iHasMetro']) && 0 == $aMetro['iHasMetro']) ? 'checked="checked"' : '' ?>> 附近无轨交
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div id="metroListGroup">
+            <?php if (!empty($aMetro['aMetroInfo'])): ?>
+                    <?php $index = 0; ?>
+                    <?php foreach ($aMetro['aMetroInfo'] as $metro):
+                        ?>
+                        <div class="one_list bg_gray">
+                            <input type="hidden" name="metroInfoID[<?= $index; ?>]" value="<?= $metro['iAutoID'] ?>" />
+                            <input type="hidden" name="index" value="<?= $index; ?>" />
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-2 control-label">请选择轨交站点： </div>
+                                <div class="col-sm-3">
+                                    <select class="form-control col-sm-1 input-validate metroLine" name="iMetroID[<?= $index; ?>]" validate="!required:选择线路">
+                                        <option value="">请选择轨交线路</option>
+                                        <?php foreach ($aMetroLine as $metroLine): ?>
+                                            <option value="<?= $metroLine['iMetroID'] ?>" <?php if ($metroLine['iMetroID'] == $metro['iMetroID']) {
+                                        echo 'selected="selected"';
+                                        } ?>><?= $metroLine['sMetroName'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <span class="validate_checktip"></span>
+                                </div>
+                                <label for="" class="col-sm-1 control-label pr0">临近站点：</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control col-sm-1 input-validate metroStation" name="iStationID[<?= $index; ?>]"  validate="!required:选择站点">
+                                        <option value="">请选择临近站点</option>
+                                        <?php if ($metro['aStationList']): ?>
+                                            <?php foreach ($metro['aStationList'] as $aStation): ?>
+                                                <option value="<?= $aStation['iAutoID'] ?>" <?php if ($aStation['iAutoID'] == $metro['iStationID']) {
+                                    echo 'selected="selected"';
+                                } ?>><?= $aStation['sStation'] ?></option>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
+                                    </select>
+                                    <span class="validate_checktip"></span>
+                                </div>
+                                <div class="col-sm-1 tlr" style="display: <?php echo $index == 0 ? 'none' : '' ?>"><a href="javascript:void(0);" title="删除"
+                                                                                                               class="deleteMetro glyphicon glyphicon-remove fr"></a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-2 control-label">步行距离：</div>
+                                <div class="col-sm-5">
+                                    <input type="text" value="<?= $metro['iDistance'] ?>" name="iDistance[<?= $index; ?>]" validate="!digit:请输入步行距离" class="form-control input-validate">&nbsp;<span style="line-height: 34px;">米</span>
+                                </div>
+                                <span class="validate_checktip"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-2 control-label">早高峰人流：</div>
+                                <div validate="!radio:iMorningPeak[<?= $index; ?>]">
+                                    <div class="col-sm-1">
+                                        <div class="radio">
+                                            <label>
+                                                <input name="iMorningPeak[<?= $index; ?>]" type="radio" value="0" <?= $metro['iMorningPeak'] == 0 ? 'checked="checked"' : '' ?>> 普通
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <div class="radio">
+                                            <label>
+                                                <input name="iMorningPeak[<?= $index; ?>]" type="radio" value="1" <?= $metro['iMorningPeak'] == 1 ? 'checked="checked"' : '' ?>> 拥挤
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="radio">
+                                            <label>
+                                                <input name="iMorningPeak[<?= $index; ?>]" type="radio" value="2" <?= $metro['iMorningPeak'] == 2 ? 'checked="checked"' : '' ?>> 非常拥挤
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="validate_checktip"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-2 control-label">晚高峰人流：</div>
+                                <div validate="!radio:iEveningPeak[<?= $index; ?>]">
+                                    <div class="col-sm-1">
+                                        <div class="radio">
+                                            <label>
+                                                <input name="iEveningPeak[<?= $index; ?>]" type="radio" value="0" <?= $metro['iEveningPeak'] == 0 ? 'checked="checked"' : '' ?>> 普通
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <div class="radio">
+                                            <label>
+                                                <input name="iEveningPeak[<?= $index; ?>]" type="radio" value="1" <?= $metro['iEveningPeak'] == 1 ? 'checked="checked"' : '' ?>> 拥挤
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="radio">
+                                            <label>
+                                                <input name="iEveningPeak[<?= $index; ?>]" type="radio" value="2" <?= $metro['iEveningPeak'] == 2 ? 'checked="checked"' : '' ?>> 非常拥挤
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="validate_checktip"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="sTagName" class="col-sm-2 col-sm-offset-1  control-label">站点实拍图：</label>
+                                <div class="col-sm-9 mt5" id="qu_pingmian">
+                                    <input type="button" value="添加站点实拍图" data-placeholder-name="图片名称" data-placeholder-dec="请针对实拍图进行描述"  class="plupload"  data-target="railImage[<?= $index; ?>]" data-img="#sImageShow" data-callback="showImg"  data-callback="clearUploadtips" data-limit="10" data-dec="1"/>
+                                    <span class="validate_checktip"></span>
+                                    <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                                    <div class="eHxImgDiv" style="display: <?php echo isset($metro['images'][$metro['iAutoID']][514]) && !empty($metro['images'][$metro['iAutoID']][514]) ? '' : 'none' ?>;">
+                                        <div class="row" id="sImageShow" >
+                                            <?php
+                                            if (isset($metro['images'][$metro['iAutoID']][514]) && !empty($metro['images'][$metro['iAutoID']][514])) {
+                                                foreach ($metro['images'][$metro['iAutoID']][514] as $item) {
+                                                    ?>
+                                                    <div class="image_list">
+                                                        <img class="datahovers" src="<?php echo Model_EvaluationImage::getImageUrl($item['iCricId'], $item['sImage']) ?>" data-content-id="<?php echo $item['iAutoID'] ?>">
+                                                        <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                                        <div class="top-group">
+                                                            <div class="col-sm-12 duiq"> <input type="text" class="form-control" maxlength="50" name="railImageTitle[<?= $index; ?>][]" placeholder="图片名称"  value="<?php echo $item['sTitle'] ?>"> </div>
+                                                        </div>
+                                                        <div class="top-group">
+                                                            <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="railImageDesc[<?= $index; ?>][]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc'] ?></textarea> </div>
+                                                        </div>
+                                                        <input type="hidden" name="railUpImageId[<?= $index; ?>][]" value="<?php echo $item['iAutoID'] ?>" />
+                                                    </div>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php $index++; ?>
+    <?php endforeach; ?>
+<?php endif; ?>
+            </div>
+        </div>
+        <div class="form-group" id="metroAddBtn" style="display:<?= (isset($aMetro['iHasMetro']) && 0 == $aMetro['iHasMetro']) ? 'none' : 'block' ?>">
+            <label for="" class="col-sm-2 control-label"><a href="javascript:void(0);" id="BtnMetroAdd"><span class="glyphicon glyphicon-plus"></span>添加轨交线路</a></label>
+            <div class="col-sm-9"> </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">其他点评：</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" rows="3" name="sOtherComment" placeholder="总结点评"><?= isset($aMetro['sOtherComment']) ? $aMetro['sOtherComment'] : '' ?></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 control-label">其他图片：</label>
+            <div class="col-sm-10">
+                <input type="button" value="其他图片" data-placeholder-name="图片名称" data-placeholder-dec="请针对此图片进行描述"   class="plupload" id="qtimgs"  data-target="qtImage" data-img="#sImageQt" data-callback="showImg" data-limit="10" data-dec="1"/>
+                <div class="eHxImgDiv" style="display: <?php echo isset($qtImage)&&!empty($qtImage)? '':'none'?>;">
+                    <div class="row" id="sImageQt" >
+                        <?php
+                        if (isset($qtImage)&&!empty($qtImage)) {
+                            foreach($qtImage as $item) {
+                                ?>
+                                <div class="image_list">
+                                    <img class="datahovers" src="<?php  echo Model_EvaluationImage::getImageUrl($item['iCricId'],$item['sImage'])?>" data-content-id="<?php echo $item['iAutoID']?>">
+                                    <?php if($evaluationSwitch == 0) { ?>
+                                    <a href="javascript:void(0);" title="删除" class="action  icon-trash" ></a>
+                                    <?php } ?>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <input type="text" maxlength="50" class="form-control" name="qtImageTitle[]" placeholder="图片名称"  value="<?php echo $item['sTitle']?>"> </div>
+                                    </div>
+                                    <div class="top-group">
+                                        <div class="col-sm-12 duiq"> <textarea class="form-control" rows="2" maxlength="300" name="qtImageDesc[]" placeholder="请针对此小区平面图进行描述"><?php echo $item['sDesc']?></textarea> </div>
+                                    </div>
+                                    <input type="hidden" name="qtUpImageId[]" value="<?php echo $item['iAutoID']?>" />
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <input type="submit" class="btn btn-primary" value="发布" />
+                <button id="sync" class="btn btn-info"  >同步</button>
+                <button id="cancel"class="btn" onclick="location.href = '/evaluation/draft/';
+                        return false;">取消</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<div id="metro_group_template" style="display: none;">
+    <div class="one_list bg_gray">
+        <input type="hidden" name="metroInfoID[#index]" value="0" />
+        <input type="hidden" name="index" value="#index" />
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-2 control-label"> 请选择轨交站点：</div>
+            <div class="col-sm-3">
+                <select class="form-control col-sm-1 input-validate metroLine" name="iMetroID[#index]" validate="!required:选择线路">
+                    <option value="">请选择轨交线路</option>
+                    <?php foreach ($aMetroLine as $metroLine): ?>
+                        <option value="<?= $metroLine['iMetroID'] ?>"><?= $metroLine['sMetroName'] ?></option>
+                   <?php endforeach; ?>
+                </select>
+                <span class="validate_checktip"></span>
+            </div>
+            <label for="" class="col-sm-1 control-label pr0">临近站点：</label>
+            <div class="col-sm-3">
+                <select class="form-control col-sm-1 input-validate metroStation" name="iStationID[#index]" validate="!required:选择站点">
+                    <option value="">请选择临近站点</option>
+                </select>
+                <span class="validate_checktip"></span>
+            </div>
+            <div class="col-sm-2 tlr"><a href="javascript:void(0);" style="display:#display" title="删除" class="deleteMetro glyphicon glyphicon-remove fr"></a>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-2 control-label">步行距离：</div>
+            <div class="col-sm-5">
+                <input type="text" validate="!digit:请输入步行距离" class="form-control input-validate" name="iDistance[#index]">&nbsp;<span style="line-height: 34px;">米</span>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-2 control-label">早高峰人流： </div>
+            <div validate="!radio:iMorningPeak[#index]">
+                <div class="col-sm-1">
+                    <div class="radio">
+                        <label>
+                            <input name="iMorningPeak[#index]" value="0" type="radio"> 普通
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="radio">
+                        <label>
+                            <input name="iMorningPeak[#index]" value="1" type="radio"> 拥挤
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="radio">
+                        <label>
+                            <input name="iMorningPeak[#index]" value="2" type="radio"> 非常拥挤
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <span class="validate_checktip"></span>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-2 control-label"> 晚高峰人流： </div>
+            <div validate="!radio:iEveningPeak[#index]">
+                <div class="col-sm-1">
+                    <div class="radio">
+                        <label>
+                            <input name="iEveningPeak[#index]" value="0" type="radio"> 普通
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="radio">
+                        <label>
+                            <input name="iEveningPeak[#index]" value="1" type="radio"> 拥挤
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="radio">
+                        <label>
+                            <input name="iEveningPeak[#index]" value="2" type="radio"> 非常拥挤
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <span class="validate_checktip"></span>
+        </div>
+        <div class="form-group">
+            <label for="sTagName" class="col-sm-2 col-sm-offset-1  control-label">站点实拍图：</label>
+            <div class="col-sm-9 mt5" id="qu_pingmian">
+                <input type="button" value="添加站点实拍图" data-placeholder-name="图片名称" data-placeholder-dec="请针对实拍图进行描述"  class="yyupload"  data-target="railImage[#index]" data-img="#sImageShow" data-callback="showImg"  data-callback="clearUploadtips" data-limit="10" data-dec="1"/>
+                <span class="validate_checktip"></span>
+                <span class="help-inline addPicTip">单张图片不能大于2M，支持png、jpg，最多可上传10张。</span>
+                <div class="eHxImgDiv" style="display: <?php echo isset($sqPmImage) && !empty($sqPmImage) ? '' : 'none' ?>;">
+                    <div class="row" id="sImageShow" >
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/evaluation.js"></script>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('upload', 'url')?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url')?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot?>/js/batchUpload.js"></script>
+<script type="text/javascript" charset="utf-8">
+    //编辑开关
+    var Switch = <?php echo $evaluationSwitch ?>;
+    if(Switch == 1) {
+        $("textarea[name='sComment']").attr("readonly", 'readonly');
+        $("input[name='sGoodTag[]']").attr("disabled", 'disabled');
+        $("input[name='sBadTag[]']").attr("disabled", 'disabled');
+        $("textarea[name='sOtherComment']").attr("readonly", 'readonly');
+        $("#qtimgs").attr("disabled", 'disabled');
+    }
+    // 同步数据
+    $("#sync").click({c: 'Traffic', a: 'rail', unitid: '<?php echo $iEvaluationInfo['iUnitID'] ?>'}, syncCricin)
+
+    var iCityId = "<?php echo $iCityId; ?>";
+    function initFormMetro() {
+        $('#myform').unbind('submit');
+        $.data($('#myform')[0], 'validator', '');
+        $("#myform").validate({submitHandler: function (form) {
+                var flag=0;
+                if (!imageNamenotBlank()) {
+                    flag = 1;
+                }
+                if (flag) {
+                    return false;
+                }
+                $.post(form.action, $(form).serialize(), function (ret) {
+                    alert(ret.data);
+                    if (ret.status) {
+                        location.reload();
+                    }
+
+                }, 'json');
+                return false;
+            }});
+        return false;
+    }
+
+    function addOneList() {
+        var index = $('#metroListGroup').find('.one_list').last().find("input[name=index]").val();
+        if (typeof (index) == 'undefined') {
+            index = 0;
+        } else {
+            index = parseInt(index) + 1;
+        }
+        console.log(index);
+        var temp = $('#metro_group_template').html().
+                replace(/sImageShow/g, 'sImageShow' + index).
+                replace(/#index/g, index).
+                replace(/validate_wrong/g, '').
+                replace(/validate_right/g, '');
+        if (index > 0) {
+            temp = temp.replace('#display', 'block');
+        } else {
+            temp = temp.replace('#display', 'none');
+        }
+        $('#metroListGroup').append(temp);
+        $("#metroListGroup").find(".one_list:last").find(".eHxImgDiv").children().children().remove();
+       $("#metroListGroup").find(".one_list:last").find(".eHxImgDiv").hide();
+       $("#metroListGroup").find(".one_list:last").find(".eHxImgDiv").next().remove();
+       $("#metroListGroup").find(".one_list:last").find(".eHxImgDiv").find("input[type='hidden']").remove();
+        var ccuploader = initUpload($("#metroListGroup").find(".one_list:last").find(".yyupload")[0]);
+        ccuploader.init();
+        initFormMetro();
+    }
+
+    //删除
+    function deleteMetro() {
+        if ($(this).parents("#metroListGroup").children().length > 1) {
+            $(this).parents(".one_list").remove();
+        } else {
+            $(this).parents(".one_list").remove();
+            addOneList()
+        }
+    }
+
+    function NextHide() {
+        var iHasMetro = $("#side_zs").prop('checked');
+        $(this).parents('.metro_group').find("#metroListGroup").html('');
+        if (iHasMetro == true) {
+            $('#metroAddBtn').hide();
+        } else if (iHasMetro == false) {
+            addOneList()
+            $('#metroAddBtn').show();
+        }
+        initFormMetro();
+    }
+
+    function loadMetroStation() {
+        var selector = $(this);
+        var metroID = selector.val();
+        var stationObj = selector.parents('.one_list').find('.metroStation');
+        $.get('/ajax/index/metrostation/?iMetroID=' + metroID, function (ret) {
+            if (ret.status == true) {
+                var tmpValue = selector.val();
+                var option = '<option value="">请选择临近站点</option>';
+                for (i = 0; i < ret.data.length; i++) {
+                    if (tmpValue == ret.data[0].iAutoID) {
+                        option += '<option value="' + ret.data[i].iAutoID + '" selected="selected">' + ret.data[i].sStation + '</option>';
+                    } else {
+                        option += '<option value="' + ret.data[i].iAutoID + '">' + ret.data[i].sStation + '</option>';
+                    }
+
+                }
+
+                stationObj.html(option);
+            }
+        }, 'json');
+    }
+
+    $(function () {
+<?php if (empty($aMetro['aMetroInfo'])) { ?>
+    <?php if (isset($aMetro['iHasMetro']) && 0 == $aMetro['iHasMetro']) { ?>
+    <?php } else { ?>
+                addOneList();
+    <?php } ?>
+<?php } ?>
+
+        initFormMetro();
+        $('#BtnMetroAdd').click(function () {
+            addOneList();
+        });
+
+        $("#metroListGroup").on("click", ".deleteMetro", deleteMetro);
+        $("#side_zs").on("click", NextHide);
+        $("#metroListGroup").on("change", ".metroLine", loadMetroStation);
+        // 删除图片
+        $(".eHxImgDiv").on('click','.action',deleteUploadimg);
+        // 移除边框
+        $("#myform").on('blur', '.eHxImgDiv input', borderdisplay);
+        //鼠标移上显示大图
+        $("#myform").on("mouseover mouseout","img.datahovers",hoverImgFn)
+        $("#myform").on("mouseover mouseout",".showBigimg",bigimghover)
+    });
+</script>

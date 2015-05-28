@@ -1,0 +1,197 @@
+
+        <!--车位情况开始-->
+        <section class="viewport">
+            <!--车位情况内容开始-->
+            <section class="plan_wrap sqcw">
+                <section class="analyze_wrap have_bottom_border">
+                    <div class="analyze_txt floor_plan">
+                    	<h3>
+                        	<span></span>
+                            分析师点评
+                        </h3>
+                        <p><?php echo $aHxfx['data']['sComment'] ?></p>
+                    </div>
+                </section>
+                <section class=" floor_plan brand_configuration">
+                    <h3>
+                        <span></span>
+                        车位详情
+                    </h3>
+                    <div class="Kitchen_system parking_detail">
+                        <div>
+                            <ul>
+                                <li>车位数量</li>
+                                <li>共<?php echo $aHxfx['data']['iTotalNum'] ?>个；固定车位<?php echo $aHxfx['data']['iFixedNum'].'个' ?>；
+临时车位<?php echo $aHxfx['data']['iTempNum'].'个' ?></li>
+                            </ul>
+                        </div>
+                        <?php
+                        if (isset($aHxfx['data']['iSellPrice']) && $aHxfx['data']['iSellPrice']) {
+                            ?>
+                        <div>
+                            <ul>
+                                <li>车位售价</li>
+                                <li><?php echo $aHxfx['data']['iSellPrice'] == '-'  ? '-' : $aHxfx['data']['iSellPrice'].'万元' ?></li>
+                            </ul>
+                        </div>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (isset($aHxfx['data']['iSellPrice']) && $aHxfx['data']['iRentPrice']) {
+                            ?>
+                        <div>
+                            <ul>
+                                <li>车位租金</li>
+                                <li><?php echo $aHxfx['data']['iRentPrice'] == '-'  ? '-' : $aHxfx['data']['iRentPrice'].'元' ?></li>
+                            </ul>
+                        </div>
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if (isset($aHxfx['data']['iSellPrice']) && $aHxfx['data']['iTempPrice']) {
+                            ?>
+                        <div>
+                            <ul>
+                                <li>临时停车费</li>
+                                <li><?php echo $aHxfx['data']['iTempPrice'] == '-'  ? '-' : $aHxfx['data']['iTempPrice'].'元/天' ?></li>
+                            </ul>
+                        </div>
+                        <?php
+                        }
+                        ?>
+                        <div>
+                            <ul>
+                                <li>车位分布</li>
+                                <li>地上<?php echo $aHxfx['data']['iUndergroundNum'].'个' ?>；地下<?php echo $aHxfx['data']['iOvergroundNum'].'个' ?></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <?php
+                if (isset($aHxfx['data']['cwpmImage']) && $aHxfx['data']['cwpmImage']) {
+                ?>
+                <section class=" floor_plan">
+                    <h3>
+                        <span></span>
+                        地下车位平面图
+                    </h3>
+                    <div class="floor_plan_pic">
+                        <?php
+                        foreach ($aHxfx['data']['cwpmImage'] as $key => $value)
+                        {
+                            ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                            <div class="floor_plan_pic01">
+                                <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                <span class="pic_tip"></span>
+                                <p class="pic_name"><?php echo $value['sTitle'] ?></p>
+                                <p class="pic_description"><?php echo $value['sDesc'] ?></p>
+                            </div>
+                            </a>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </section>
+                <?php
+                }
+                ?>
+                <?php
+                if (isset($aHxfx['data']['cwsjImage']) && $aHxfx['data']['cwsjImage']) {
+                ?>
+                <section class=" floor_plan">
+                    <h3>
+                        <span></span>
+                        地下车位平面图
+                    </h3>
+                    <div class="floor_plan_pic">
+                        <?php
+                        foreach ($aHxfx['data']['cwsjImage'] as $key => $value)
+                        {
+                            ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                            <div class="floor_plan_pic01">
+                                <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                <span class="pic_tip"></span>
+                                <p class="pic_name"><?php echo $value['sTitle'] ?></p>
+                                <p class="pic_description"><?php echo $value['sDesc'] ?></p>
+                            </div>
+                            </a>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </section>
+                <?php
+                }
+                ?>
+                <section class=" floor_plan">
+                    <h3>
+                        <span></span>
+                        行车路线及出入口分布
+                    </h3>
+                    <div class="floor_plan_pic">
+                    <?php
+                    foreach ($aHxfx['data']['xclxImage'] as $key => $value)
+                    {
+                        ?>
+                        <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                        <div class="floor_plan_pic01">
+                            <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                            <span class="pic_tip"></span>
+                            <p class="pic_name"><?php echo $value['sTitle'] ?></p>
+                            <p class="pic_description"><?php echo $value['sDesc'] ?></p>
+                        </div>
+                            </a>
+                    <?php
+                    }
+                    ?>
+                    </div>
+                </section>
+                <?php if (isset( $aHxfx['data']['cwqtImage'] ) && !empty($aHxfx['data']['cwqtImage'])) {
+                    ?>
+                    <section class=" floor_plan">
+                        <h3>
+                            <span></span>
+                            其他图片
+                        </h3>
+                        <div class="floor_plan_pic">
+                            <?php
+                            foreach ($aHxfx['data']['cwqtImage'] as $key => $value)
+                            {
+                                ?>
+                            <a href="<?php echo $aEntrenceInfo['bigPic']['url']; ?>?eID=<?php echo $value['iEvaluationID']?>&iImageId=<?php echo $value['iAutoID'] ?>">
+                                <div class="floor_plan_pic01">
+                                    <canvas data-src="<?php echo $value['sImage'] ?>"></canvas>
+                                    <span class="pic_tip"></span>
+                                    <p class="pic_name"><?php echo $value['sTitle'] ?></p>
+                                    <p class="pic_description"><?php echo $value['sDesc'] ?></p>
+                                </div>
+                                </a>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </section>
+                <?php
+                }
+                ?>
+                <?php
+                if (isset($aHxfx['data']['sOtherComment']) && $aHxfx['data']['sOtherComment']) {
+                    ?>
+                    <section class="floor_plan plan_description evaluation_description">
+                        <h3>
+                            <span></span>
+                            点评
+                        </h3>
+                        <p><?php echo $aHxfx['data']['sOtherComment'] ?></p>
+                    </section>
+                <?php
+                }
+                ?>
+            </section>
+            <!--车位情况内容结束-->
+        </section>
+        <!--车位情况结束-->

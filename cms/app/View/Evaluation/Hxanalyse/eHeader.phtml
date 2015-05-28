@@ -1,0 +1,119 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/css/evaluation.css">
+<div class="pheader clearfix row">
+    <div class="col-sm-12">
+        <h4 style="float: left;"><strong>当前楼盘：<?php echo isset($iEvaluationInfo['sUnitName']) ? $iEvaluationInfo['sUnitName'] : '' ?></strong></h4>
+        <h4 style="float: left;margin-left: 30px;"><strong>分析师：<?php echo isset($analyst) ? $analyst : '' ?></strong>  <a href=""data-toggle="modal"  data-target="#fxsModal">修改分析师</a></h4>
+        <button type="button"style="margin-left: 30px;" class="btn btn-default" id="publishEvaluation" data-toggle="modal" data-target="#publish_Evaluations">检测评测报告</button>
+    </div>
+
+
+</div>
+<div class="pbody clearfix row">
+    <ul class="nav nav-pills" id="pcNav">
+        <?php
+        if (isset($pChapter) && !empty($pChapter)) {
+            foreach ($pChapter as $k => $v) {
+                $url = '';
+                if (isset($controllerArr[$k])) {
+                    $url = '/evaluation/' . $controllerArr[$k] . '/?eID=' . $iEvaluationInfo['iEvaluationID'];
+                }
+                ?>
+                <li role="presentation">
+                    <h4>
+                        <a href="<?php echo $url ?>" <?php if ($k == $currChapter) { ?>class='curr' <?php } ?>><?php echo $v ?> </a>
+                        <?php if (isset($pChapterlength) && $pChapterlength != $k) { ?>
+                            <span style="color:#999;">&nbsp;&nbsp;&nbsp;&#9670</span>
+                        <?php } ?>
+                    </h4>
+                </li>
+                <?php
+            }
+        }
+        ?>
+    </ul>
+</div>
+    <div style="padding-top:10px;">
+        <ul class="nav nav-tabs" id="pcTab">
+            <?php
+            if (isset($cChapter) && !empty($cChapter)) {
+                foreach ($cChapter as $k => $v) {
+                    $url = '/evaluation/' . $controllerArr[$currChapter] . '/' . $actionArr[$currChapter][$k] . '/?eID=' . $iEvaluationInfo['iEvaluationID'] . '&cID=' . $k;
+                    ?>
+                    <li role="presentation" <?php if ($k == $currChildChapter) { ?>class='active' <?php } ?>><a href="<?php echo $url ?>"><?php echo $v ?></a></li>
+                        <?php
+                    }
+                }
+                ?>
+        </ul>
+    </div>
+<!-- 修改分析师 -->
+<div class="modal" id="fxsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel"></h3>
+            </div>
+            <div class="modal-body">
+                <form id="fxsform" class="form-horizontal" role="form" method="post" action="">
+                    <div class="form-group">
+                        <label for="sTagName" class="col-sm-2 control-label">分析师：</label>
+                        <div class="col-sm-10" >
+                            <select class="form-control input-validate"  name="sAnalystsID" id="sAnalystsID" validate="!required:请选择分析师">
+                                <option value="">请选择分析师</option>
+                                <?php
+                                if (isset($analystList) && !empty($analystList)) {
+                                    foreach ($analystList as $k => $v) {
+                                        ?>
+                                        <option value="<?php echo $v['ID'] ?>" <?php echo $iEvaluationInfo['iAnalysisID'] == $v['ID'] ? 'selected' : '' ?> ><?php echo $v['AnalystsName'] ?></option>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <span class="validate_checktip"></span>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar text-center">
+                        <button id="save" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 发布评测报告 -->
+<div class="modal fade" id="publish_Evaluations"   tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:800px;">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+
+<!-- 修改分析师 -->
+<script type="text/javascript">
+    $(function () {
+        var eId = "<?php echo $iEvaluationInfo['iEvaluationID'] ?>";
+        // 修改分析师
+        $("#fxsform").validate({submitHandler: function (form) {
+                $.post("/evaluation/Draft/editAnalyst", {iAnalysisID: $("select[name='sAnalystsID']").val(), eID: eId}, function (ret) {
+                    location.reload();
+                }, 'json');
+                return false;
+            }})
+        // 查看评测报告完成情况
+        $("#publishEvaluation").click(function () {
+          $.get("/evaluation/Draft/progress", {eID: eId}, function (ret) {
+                $("#publish_Evaluations .modal-content").html(ret.data);
+           })
+        })
+        $("#publish_Evaluations .modal-content").on("click","#confirmPublish",function(){
+            $.get("/evaluation/Draft/publish", {eID: eId}, function (ret) {
+                alert(ret.data);
+            })
+        })
+
+    })
+</script>

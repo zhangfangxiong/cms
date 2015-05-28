@@ -1,0 +1,62 @@
+<section class="wrap_con clearfix">
+<section class="bg_f8">
+	<article class="minCont">
+		<div class="breadcrumb_nav">
+			<a href="/">房价点评首页</a>
+			<span>></span>
+			<a href="/<?php echo $sCurrCityCode?>">杭州</a>
+			<span>></span>
+			<?php echo strtoupper($currentLetter);?>
+		</div>
+		<div class="letter_box">
+			<div class="letter_list">
+				<dl>
+					<dt>按字母搜索
+					</dt>
+					<dd>
+						<?php foreach ($aCityLetter as $key => $value) {
+						?>
+						<a href="/<?php echo $sCurrCityCode?>/<?php echo $value['FirstLetter']?>" 
+							class="<?php if($value['FirstLetter'] == $currentLetter) {?>current<?php }?>" 
+							title="<?php echo strtoupper($value['FirstLetter'])?>">
+							<?php echo strtoupper($value['FirstLetter'])?>
+						</a>
+						<?php
+						}?>
+					</dd>
+				</dl>
+				<?php if($aList) {
+					for($i=1; $i<=$page; $i++){
+						$style = (1 == $i) ? 'block' : 'none'; 
+						echo '<ul class="li_unit" page="'.$i.'" style="display:'.$style.';">';
+
+						$k = 1;
+						foreach ($aList as $key => $value) {
+							if($k > 100)	continue;
+							echo '	<li>
+								        <s class="tr_icon"></s>
+								        <a href="" title="'.$value['UnitName'].'" target="_blank" onclick="">'.$value['UnitName'].'</a>
+							        </li>';
+							unset($aList[$key]);
+							$k++;
+						}
+						echo '</ul>';
+					}
+				?>
+				<?php }?>
+
+				<div class="letter_page">
+				</div>
+				<script type="text/javascript">
+					page = <?php echo $page;?>;
+					$(document).ready(function () {	
+						pager(".letter_page", function(i){
+							$(".letter_list .li_unit").hide();
+							$(".letter_list .li_unit[page="+i+"]").show();
+						}, 1, page);
+					});
+				</script>
+			</div>
+		</div>
+	</article>
+</section>

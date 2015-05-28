@@ -1,0 +1,110 @@
+<div class="pheader clearfix">医疗信息列表</div>
+<div class="pbody clearfix">
+    <form class="form-inline search-form" role="form" method="post" id="myform" action="/evaluation/medical">
+        <div class="form-group">
+            区域:
+            <select class="form-control input-sm" name="iRegionID">
+                <option value="-1">请选择</option>
+                <?php foreach($aRegion as $key => $value):?>
+                    <option value="<?=$value['ID'];?>" <?php if(isset($aParam['iRegionID']) && $aParam['iRegionID'] == $value['ID']){?>selected="selected"<?php }?>><?=$value['RegionName']?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <div class="form-group">
+            等级:
+            <select class="form-control input-sm" name="iLevel">
+                <option value="-1">请选择</option>
+                <?php foreach($aLevel as $key => $value):?>
+                <option value="<?=$key;?>" <?php if(isset($aParam['iLevel']) && $aParam['iLevel'] == $key){?>selected="selected"<?php }?>><?=$value?></option>
+                <?php endforeach;?>
+            </select>
+        </div>
+        <input type="hidden" id="fOrder" name="sOrder" value="<?php echo isset($aParam['sOrder'])?$aParam['sOrder']:''?>">
+        <div class="form-group">
+            医院名称：
+            <input type="text" value="<?php echo isset($aParam['sName'])?$aParam['sName']:''?>" class="form-control input-sm" name="sName">
+        </div>
+        <input type="submit" id="formbtn" class="btn btn-default btn-sm" value="搜索">
+    </form>
+    <hr>
+    <div class="btn-toolbar list-toolbar">
+        <a class="btn btn-primary" id="hospital_add"><i class="icon-plus"></i> 增加医院</a>
+        <div style="float:right">
+            <label> 排序方式：</label>
+            <select class="input-sm" id="sOrder">
+                <option value="iHospitalID ASC">按创建时间正序</option>
+                <option value="iHospitalID DESC" <?php echo isset($aParam['sOrder'])&&'iHospitalID DESC'==$aParam['sOrder']?'selected':''?>>按创建时间倒序</option>
+                <option value="iRegionID ASC" <?php echo isset($aParam['sOrder'])&&'iRegionID ASC'==$aParam['sOrder']?'selected':''?>>按区域正序</option>
+                <option value="iRegionID DESC" <?php echo isset($aParam['sOrder'])&&'iRegionID DESC'==$aParam['sOrder']?'selected':''?>>按区域倒序</option>
+                <option value="iLevel ASC" <?php echo isset($aParam['sOrder'])&&'iLevel ASC'==$aParam['sOrder']?'selected':''?>>按等级正序</option>
+                <option value="iLevel DESC" <?php echo isset($aParam['sOrder'])&&'iLevel DESC'==$aParam['sOrder']?'selected':''?>>按等级倒序</option>
+            </select>
+        </div>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th class="col-sm-1 text-center">序号</th>
+            <th>医院名称</th>
+            <th class="text-center">等级</th>
+            <th class="text-center">医院类型</th>
+            <th class="text-center">性质</th>
+            <th class="text-center">定点医保</th>
+            <th class="text-center">区域</th>
+            <th>地址</th>
+            <th>联系电话</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if($aList['aList']):?>
+            <?php foreach ($aList['aList'] as $v) {?>
+                <tr>
+                    <td class="col-sm-1 text-center"><?=$v['iHospitalID']?></td>
+                    <td class="col-sm-1"><?=$v['sName']?></td>
+                    <td class="col-sm-1 text-center"><?=$aLevel[$v['iLevel']]?></td>
+                    <td class="col-sm-1 text-center"><?php if(isset($aType[$v['iType']])){ echo $aType[$v['iType']];}?></td>
+                    <td class="col-sm-1 text-center"><?php if(isset($aProperty[$v['iProperty']])){ echo  $aProperty[$v['iProperty']];}?></td>
+                    <td class="col-sm-1 text-center"><?php if(isset($aIsMedicalPoint[$v['iMedicalPoint']])) { echo $aIsMedicalPoint[$v['iMedicalPoint']];}?></td>
+                    <td class="col-sm-1 text-center"><?php if(isset($aRegion[$v['iRegionID']])){echo $aRegion[$v['iRegionID']]['RegionName'];} else {echo '暂无';}?></td>
+                    <td class="col-sm-2"><?=$v['sAddress']?></td>
+                    <td class="col-sm-2"><?=$v['sContact']?></td>
+                    <td class="col-sm-1 text-center">
+                        <a href="/evaluation/medical/edit?id=<?php echo $v['iHospitalID']?>" title="编辑"><i class="icon-pencil icon-large"></i></a>
+                        <a class="hospital_delete" href="/evaluation/medical/del?id=<?php echo $v['iHospitalID']?>" role="button" data-toggle="modal" title="删除"><i class="icon-trash icon-large"></i></a>
+                    </td>
+                </tr>
+            <?php }?>
+        <?php else:?>
+            <tr><td colspan="10" align="center">该条件下暂未找到数据</td></tr>
+        <?php endif;?>
+        </tbody>
+    </table>
+    <?php echo $aList['aPager']?>
+</div>
+<script>
+    $('#formbtn').click(function(){
+        $('#fOrder').val($('#sOrder').val());
+    });
+
+    $('#sOrder').change(function(){
+        $('#fOrder').val($('#sOrder').val());
+        $('#myform').submit();
+    });
+
+    $('.hospital_delete').click(function() {
+        if (confirm("您确认要删除该医院吗？")) {
+            $.get(this.href, function(ret){
+                alert(ret.data);
+                if (ret.status) {
+                    location.reload();
+                }
+            }, 'json');
+        }
+        return false;
+    });
+
+    $('#hospital_add').click(function(){
+        location.href = '/evaluation/medical/add';
+    });
+</script>

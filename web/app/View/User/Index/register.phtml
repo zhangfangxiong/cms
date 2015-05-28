@@ -1,0 +1,116 @@
+﻿<section class="loginMinbox">
+	<div class="login_box clearfix">
+		<div class="login_box_left">
+			<h2>
+				注册用户</h2>
+			<form id="formRegister">
+			<dl class="login_dl">
+				<dt><b>手机号码：</b> </dt>
+				<dd>
+					<cite>
+						<input id="account" name="account" type="text" maxlength="20" onkeyup="clearNoNumNew(this)"
+							onblur="clearNoNumNew(this)" />
+					</cite><span style="color: #f07151;"></span>
+				</dd>
+			</dl>
+			<dl class="login_dl">
+				<dt><b>设置密码：</b> </dt>
+				<dd>
+					<cite>
+						<input id="pwd" name="pwd" type="password" />
+					</cite><span></span>
+				</dd>
+			</dl>
+			</form>
+			<dl class="login_dl">
+				<dt><b>确认密码：</b> </dt>
+				<dd>
+					<cite>
+						<input id="confirmPwd" name="confirmPwd" type="password" />
+					</cite><span></span>
+				</dd>
+			</dl>
+			<dl class="login_dl">
+				<dt><b>验证码：</b> </dt>
+				<dd class="verification_code">
+					<cite>
+						<input id="VCode" name="VCode" type="text" />
+					</cite><a id="getVCode" href="javascript:sendSMS(0)">获取验证码</a> <span style="color: #f07151;">
+					</span>
+				</dd>
+			</dl>
+			<p>
+				<cite>
+					<input type="checkbox" id="ck_agreement" checked="checked"/>
+					<em>
+						<label for="ck_agreement">
+							我已接受</label>
+					</em></cite><a href="/help/index/useragreement" style="float: left;" target="_blank">《房价点评网用户协议》</a>
+			</p>
+			<div class="loginBtn">
+				<input type="button"  value="提交注册"  id="registerButton"/>
+			</div>
+		</div>
+		<div class="login_box_right">
+			<p style="border: none; margin-top:170px;">
+				<b>已是房价点评网用户！</b> <a href="/user/index/login">立即登录</a>
+			</p>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+	$(function () {
+		$("#account").focus(function () {
+			$("#account").parent().next("span").html("");
+			$("#account").parent().parent().removeClass("dd_error");
+		});
+		$("#account").blur(function () {
+			checkAccount(false, $(this), 0);
+		});
+		$("#pwd").focus(function () {
+			$("#pwd").parent().next("span").html("");
+			$("#pwd").parent().parent().removeClass("dd_error");
+		});
+		$("#pwd").blur(function () {
+			checkPwd(false, $(this));
+		});
+
+		$("#confirmPwd").focus(function () {
+			$("#confirmPwd").parent().next("span").html("");
+			$("#confirmPwd").parent().parent().removeClass("dd_error");
+		});
+		$("#confirmPwd").blur(function () {
+			checkConfirmPwd(false, $("#pwd"), $(this));
+		});
+
+		$("#VCode").focus(function () {
+			$("#getVCode").next("span").html("");
+			$("#getVCode").parent().removeClass("dd_error");
+		});
+		$("#VCode").blur(function () {
+			checkVCode(false, $(this), $("#account"), 0);
+		});
+		//注册
+		$("#registerButton").click(function(){
+			var checkPwdResult = checkConfirmPwd(false, $("#pwd"), $("#confirmPwd"));
+			var checkCodeResult = checkVCode(false, $("#VCode"), $("#account"), 0);
+			if (!(checkPwdResult && checkCodeResult)) {
+				return;
+			}
+			var mobile = $("#account").val();
+			var pwd = $("#confirmPwd").val();
+			var code = $("#VCode").val();
+
+			$.post("/user/index/registerUser",{mobile:mobile,pwd:pwd,code:code,userID:''}, function (result) {
+				if (result.data.iSuccess == 1) {
+					alert(result.data.msg);
+					window.location = "/user/index/userInfo";
+				} else {
+					alert(result.data.msg);
+				}
+			},'json');
+		})
+
+	});
+
+</script>

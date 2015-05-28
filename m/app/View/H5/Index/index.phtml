@@ -1,0 +1,248 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/usercenter.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/swiper.min.css">
+<!--首页开始-->
+<div class="viewport" id="mainsection">
+    <!--头部开始-->
+    <header class="UserCenter_head index_head">
+        <div class="index_head_con pl12 pr12 clearfix">
+            <div class="index_head_l">
+                <h1 class="logo"><a href="javascript:void(0)" title="房价点评">房价点评</a></h1>
+
+                <div class="city_wrap">
+                    <a href="city"><?php echo $aCurrCity['sName'] ?></a>
+                </div>
+            </div>
+            <div class="index_head_r">
+                <a href="<?php echo $aEntrenceInfo['ucenter']['url']; ?>"><span class="user_head"></span></a>
+                <a href="<?php echo $aEntrenceInfo['homeSearch']['url']; ?>"><span class="search"></span></a>
+            </div>
+        </div>
+    </header>
+    <!--头部开始-->
+    <!--banner开始-->
+    <section class="banner_wrap">
+        <div class="banner">
+            <a href="<?php echo $aEntrenceInfo['mapsearch']['url']; ?>">
+                <canvas
+                    data-src="<?php echo $sStaticRoot ?>/touchweb/resource/images/city/<?php echo $aCurrCity['sPinyin'] . '.png' ?>"></canvas>
+            </a>
+
+            <div class="banner_txt p12">
+                <div class="banner_txt_l">
+                    <div>周边均价</div>
+                    <div><span><?php echo $aData['data']['sAvePrice'] ?></span> 元/平米</div>
+                </div>
+                <div class="banner_txt_r">
+                    <div>本月新开<?php if ($aData['data']['sBuildNum'] > 0){?><span><?php echo $aData['data']['sBuildNum'] ?></span>个<?php }?>楼盘</div>
+                    <div class="swiper-container index_house_name" id="index_house_name">
+                        <div class="swiper-wrapper">
+                            <?php
+                            if (!empty($aData['data']['sBuildName'])) {
+                                foreach ($aData['data']['sBuildName'] as $key => $value) {
+                                    ?>
+                                    <div class="swiper-slide house_name_con"><?php echo $value ?></div>
+                                <?php
+                                }
+                            } else {
+                                echo '<div class="swiper-slide house_name_con">暂无</div>';
+
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="index_nav bgf mb10">
+            <ul class="clearfix">
+                <?php
+                if (!empty($aMouduleEntrenceInfo)) {
+                    foreach ($aMouduleEntrenceInfo as $key => $value) {
+                        ?>
+                        <li>
+                            <a href="<?php echo $value['url'] ?>">
+                                <s class="<?php echo $value['css'] ?>"></s>
+                                <span><?php echo $value['desc'] ?></span>
+                            </a>
+                        </li>
+                    <?php
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+    </section>
+    <!--banner结束-->
+    <!--专属分析师开始-->
+    <section class="zs_analysis bgf outborder mb10">
+        <h5 class="pl12 pr12 border_bottom">免费的贴身购房顾问</h5>
+
+        <div class="pl12 pr12">
+            <a href="<?php echo $sTouchwebRoot; ?>/h5/analyst/detail?id=<?php echo $aAnalyst['iAnalystID'] ?>" class="clearfix block">
+            <div class="zs_analysis_t border_bottom">
+                    <div class="zs_analysis_l">
+                        <img src="<?php echo $aAnalyst['sImgUrl'] ?>">
+                    </div>
+                <div class="zs_analysis_r">
+                    <div class="zs_analysis_r_t">
+                        <span class="zs_analysis_name"><?php echo $aAnalyst['sName'] ?></span>
+                        <span class="lev"><?php echo $aAnalyst['sLevel'] ?></span>
+                        <span class="shuxian">|</span>
+                        <span class="zan_con"><em id="zan_num"><?php echo $aAnalyst['iFans'] ?></em>个赞</span>
+                    </div>
+                    <div class="zs_analysis_r_b">Hi，我是您的贴身专属分析师</div>
+                </div>
+            </div>
+          </a>
+        </div>
+        <div class="contact_way">
+            <ul class="clearfix">
+                <li><a href="tel:<?php echo $aAnalyst['sTel'] ?>" class="phone_zx">电话咨询</a></li>
+                <li><a href="<?php echo $aEntrenceInfo['consultOnline']['url'] . '?id=' . $aAnalyst['iAnalystID']; ?>"
+                       class="qq_zx">在线咨询</a></li>
+                <li><a href="javascript:void(0)" id="zan" class="give_z">给我个赞</a></li>
+            </ul>
+        </div>
+    </section>
+    <!--专属分析师结束-->
+    <!--热门楼盘开始-->
+    <section class="bgf collect_evaluation_list index_evaluation">
+        <h5 class="pl12 border_bottom">热门楼盘评测</h5>
+        <?php
+        if (isset($aData['data']['hotCommentList']) && !empty($aData['data']['hotCommentList'])) {
+            foreach ($aData['data']['hotCommentList'] as $key => $value) {
+                ?>
+                <a href="/h5/xf/xfdetail?id=<?php echo $value['iCommonID'] ?>" class="item pl12 pr12">
+                    <div class="cnt mt12 mb12 border">
+                        <div class="pic">
+                        	<div class="pic_height">
+                            	<canvas data-src="<?php echo $value['sBuildImgUrl'] ?>"></canvas>
+                            </div>    
+                            <div class="pic_txt">
+                                <div class="pic_name">
+                                    <span><?php echo $value['sBuildName'] ?></span>
+                                    <span>|</span>
+                                    <span>[<?php echo $value['sRegion'] ?>]</span>
+                                </div>
+                                <div class="hose_price_wrap">
+                                    <span class="house_price"><?php echo $value['sPrice'] ?></span>
+                                    <span><?php echo $value['sUnit'] ?></span>
+                                </div>
+                            </div>
+                            <div class="analyst_wrap">
+                                <img src="<?php echo $value['sAvatarImgUrl'] ?>">
+                            </div>
+                        </div>
+                        <div class="wrap pl12">
+                            <div class="pd_star">
+                                <span class="star star<?php echo $value['iCssNum']; ?>">
+                                    <em></em>
+                                </span>
+                                <span class="pd_num"><?php echo $value['sRateNum'] ?></span>
+                            </div>
+                            <div class="evaluation_title">
+                                <p class="evaluation_dec"><?php echo isset($value['sCommentText']) ? $value['sCommentText'] : '' ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            <?php
+            }
+        }
+        ?>
+    </section>
+    <!--热门楼盘评测结束-->
+    <section class="skim_more bgf border_bottom">
+        <a href="<?php echo $aEntrenceInfo['evaluation']['url']; ?>">查看全部评测</a>
+    </section>
+    <!--下载开始-->
+    <?php
+    if (!isset($_COOKIE['close'])) {
+        ?>
+        <section class="download clearfix">
+            <div class="download_l">
+                <span class="fjdp_icon"></span>
+                <span class="close"></span>
+
+                <div class="fjdp_icon_r">
+                    <p class="download_txt1">房价点评网 APP</p>
+
+                    <p>为您提供最专业的购房指导</p>
+                </div>
+            </div>
+            <div class="download_r">
+                <a class="download_con">下载</a>
+            </div>
+        </section>
+    <?php
+    }
+    ?>
+
+    <!--下载结束-->
+    <section class="tip_dialog tisheight" id="tip_dialog"></section>
+</div>
+<!--首页结束-->
+<script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"></script>
+<script>
+    var touchPath = '<?php echo $sStaticRoot ?>/touchweb/';
+    requirejs.config({
+        baseUrl: touchPath + 'lib',
+        paths: {
+            'jquery': 'jquery/jquery.min',
+            'swiper': 'plugs/swiper.min',
+            'webtouchcommon': 'js/webtouchcommon'
+        }
+    });
+    require(["jquery", "swiper", "webtouchcommon"], function () {
+        //canvas加载
+        if (webtouchObj.getCookie('close') == null) {
+            $('.foot_wrap').addClass('foot_margin_bottom');
+        }
+
+        webtouchObj.canvasload();
+        webtouchObj.getLocation();//获取地理位置坐标，写入cookie
+        var swiper = new Swiper('#index_house_name', {
+            slidesPerView: 1,
+            centeredSlides: true,
+            autoplay: 3000,
+            loop: true,
+            autoplayDisableOnInteraction: false
+        });
+        var url = '<?php echo $sTouchwebRoot ?>/h5/index/zan';
+        var analystID = '<?php echo $aAnalyst['iAnalystID'] ?>';
+        var userID = '<?php echo isset($aUserInfo) ? $aUserInfo['data']['iUserID'] : '' ?>';
+
+        //点击关闭下方的下载条
+        $(".close").on("click", colse);
+        function colse() {
+            $('.download').hide();
+            $('.foot_wrap').removeClass('foot_margin_bottom');
+            webtouchObj.setCookie('close', 1, 30);
+        }
+
+        $("#zan").click(function () {
+            if (webtouchObj.getCookie('hasZan') == null) {
+                $.get(url + "?analystID=" + analystID + "&userID=" + userID, function (ret) {
+                    ret = eval('(' + ret + ')');
+                    if (ret.status) {
+                        $('#zan_num').html(parseInt($('#zan_num').html()) + 1);
+                        webtouchObj.setCookie('hasZan', 1, 1);
+                    }
+                    return false;
+                });
+            } else {
+                //  console.log(webtouchObj.getCookie('hasZan'));
+                //alert('你今天已经赞过了');
+                $('#tip_dialog').html('你今天已经赞过了').show();
+                setTimeout(function () {
+                    $("#tip_dialog").hide(200);
+                }, 2000)
+            }
+        })
+
+        //增加cookie
+    });
+
+
+</script>
+

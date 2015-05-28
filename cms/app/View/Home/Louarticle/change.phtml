@@ -1,0 +1,110 @@
+<div class="pheader clearfix">资讯广告管理</div>
+<div class="pbody clearfix">
+    <form id="myform" class="form-horizontal" role="form" method="post" action="">
+        <div class="form-group">
+            <div class="news_wrap" style="margin-left:90px;overflow: hidden;">
+            <?php $aModule =  Sdk_Cms_Banner::getLouNews($sFullPinyin);echo $aModule['data'];?>
+            </div>
+        </div>
+
+        <div class="form-group .col-xs-2">
+            <label class="col-sm-2 control-label">广告位置：</label>
+            <div class="col-sm-10">
+                <select class="form-control input-validate" name="iCategoryID" id="iCategoryID">
+                    <option value="0">请选择资讯广告位</option>
+                    <?php foreach ($aCategory as $k => $v) { ?>
+                        <option
+                            value="<?php echo $k ?>" <?php echo isset($cat_id) && $k == $cat_id ? 'selected' : '' ?>><?php echo $v['sTitle'] ?></option>
+                        <?php } ?>
+                </select>
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">文章ID：</label>
+            <div class="col-sm-10">
+                <input validate="*digits:1-8" placeholder="请输入存在的文章ID" name="iNewsID" type="text" value="<?php echo isset($aData['iNewsID']) ? $aData['iNewsID'] : '' ?>" class="form-control input-validate">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+        <div class="form-group" style="display:none">
+            <label class="col-sm-2 control-label">发布时间：</label>
+            <div class="col-sm-10">
+                <input name="iPublishTime" readonly validate="datetime:true"
+                       class="laydatetime form-control input-validate" validate="" type="text"
+                       value="<?php
+                       echo isset($aData['iPublishTime']) ? date('Y-m-d H:i:s', $aData['iPublishTime']) : date('Y-m-d H:i:s', time())
+                       ?>" class="form-control input-validate">
+                <span class="validate_checktip"></span>
+            </div>
+        </div>
+
+        <div class="btn-toolbar text-center">
+            <input name="iAutoID" type="hidden" value="<?php echo isset($aData['iAutoID']) ? $aData['iAutoID'] : '' ?>">
+            <input type="hidden" name="iOptype" id="iOptype" value="">
+            <!--<button id="preview" onclick="$(this.form).attr('must', 0); $( '#iOptype' ).val('')" class="btn btn-info">预览</button>-->
+            <button id="publish" onclick="$(this.form).attr('must', 1);
+                    $('#iOptype').val(1)" class="btn btn-danger">发布</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    global.sUploadUrl = '<?php echo Yaf_G::getConf('bannerupload', 'url') ?>';
+    global.sDfsViewUrl = '<?php echo Yaf_G::getConf('dfsview', 'url') ?>';
+</script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/js/upload.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //提交表单
+        $("#myform").validate({submitHandler: function (form) {
+                form.action = '';
+                if ($("#iCategoryID").val() == 0) {
+                    alert("请选择banner广告位置");
+                    return false;
+                }
+                $.post(form.action, $(form).serialize(), function (ret) {
+                    alert(ret.data);
+                    if (ret.status) {
+                        window.location.reload();
+                    }
+                }, 'json');
+                return false;
+            }});
+        $("#iCategoryID").change(function () {
+            var CurrCatID = $(this).val();
+            var LocationUrl;
+            if (CurrCatID > 0) {
+                LocationUrl = 'http://<?= (Yaf_G::getConf('cms', 'domain')); ?>/home/louarticle/change/?cat_id=' + CurrCatID;
+            } else {
+                LocationUrl = 'http://<?= (Yaf_G::getConf('cms', 'domain')); ?>/home/louarticle.html';
+            }
+            location.href = LocationUrl;
+        });
+        $("#child3,#child2,#child1").addClass('ad_border1');
+        $(".child_content").css("width","205px");
+        var currCatID = $("#iCategoryID").val();
+        $("#child"+currCatID).removeClass('ad_border1').addClass("ad_border");
+        if ($(".left_shows").html() == '') {
+            $(".left_shows").html('<div class="inner">未添加广告位</div><div class="v">cssHack</div>');
+        }
+        if ($("#child2").html() == '') {
+            $("#child2").html('<div class="inner">未添加广告位</div><div class="v">cssHack</div>');
+        }
+        if ($("#child3").html() == '') {
+            $("#child3").html('<div class="inner">未添加广告位</div><div class="v">cssHack</div>');
+        }
+    });
+</script>
+<link rel="stylesheet" href="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.css" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/jquery-ui/1.11.1/jquery-ui.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $sStaticRoot ?>/laydate/laydate.js"></script>
+<style type="text/css">
+    #child2.ad_border, #child3.ad_border,#child1.ad_border{border: 1px solid #aa1111}
+    #child1.ad_border1, #child2.ad_border1, #child3.ad_border1{border: 1px dashed #dcdcdc}
+
+.ad_border1  .inner,.ad_border1  .v ,.ad_border  .inner,.ad_border  .v  { display: inline-block;zoom: 1;*display: inline; /* 用于触发支持IE67 inline-block */}
+.ad_border1  .inner,.ad_border  .inner  { line-height: 1.8;padding: 0 4px 0 5px;vertical-align: middle; text-align: center; width: 350px;color:#ccc;}
+#child2  .v , #child3  .v{ line-height: 136px; text-indent:-9999px;width: 1px; }
+#child1  .v{ line-height: 280px; text-indent:-9999px;width: 1px; }
+</style> 

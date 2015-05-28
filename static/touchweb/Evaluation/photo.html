@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+        <title>房价点评网</title>
+        <link rel="stylesheet" type="text/css" href="css/swiper.min.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">	
+    </head>
+
+    <body class="bg">
+        <!--相册开始-->
+        <section class="viewport photo_wrap">
+            <nav class="photo_nav">
+                <div class="photo_return"></div>
+                <div class="num"><span class="pic_nowing">1</span>/<span class="pic_sum"></span></div>
+                <div class="photo_nav_r">
+                    <span class="collect"></span>
+                    <span class="share"></span>
+                </div>
+            </nav>
+            <!-- Swiper -->
+            <div class="swiper-container photo_swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <!-- Required swiper-lazy class and image source specified in data-src attribute -->
+                        <img data-src="image/pic01.png" class="swiper-lazy"/>
+                        <!-- Preloader image -->
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img data-src="image/lxj_bg.png" class="swiper-lazy">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img data-src="image/pic01.png" class="swiper-lazy">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img data-src="image/pic01.png" class="swiper-lazy">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img data-src="image/pic01.png" class="swiper-lazy">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img data-src="image/pic01.png" class="swiper-lazy">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dec">
+                <p class="pic_name">小区景观图</p>
+                <p class="pic_dec">图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述图片描述</p><!--图片描述最多三行，超过的省略号代替-->
+            </div>
+        </section>
+        <!--相册结束-->
+        <script src="../lib/requirejs/require.js"></script>
+        <script>
+            requirejs.config({
+                //baseUrl: localPath + 'lib',
+                baseUrl: '../lib',
+                paths: {
+                    'jquery': 'jquery/jquery.min',
+                    'swiper': 'plugs/swiper.min',
+                    'webtouchcommon': 'js/webtouchcommon'
+                }
+            });
+            require(["jquery", "swiper"], function () {
+                
+                //默认选中图片
+                var initnum = 0;
+                
+
+                var mySwiper = new Swiper('.photo_swiper', {
+                    preloadImages: false,
+                    initialSlide: initnum,
+                    // Enable lazy loading
+                    lazyLoading: true,
+                    runCallbacksOnInit:false,
+                    onSlideChangeEnd: function (swiper) {
+                        //当前图片的张数
+                        var nowing = mySwiper.activeIndex + 1;
+                        $('.pic_nowing').html(nowing);
+                        $('.pic_name').eq(mySwiper.activeIndex).html('小区景观图1');//这里的名称和描述是随着图片变化的
+                        $('.pic_dec').eq(mySwiper.activeIndex).html('小区描述1');
+                    }
+
+                });
+                //图片总数
+                var sum = $('.swiper-wrapper>div').length;
+                $('.pic_sum').html(sum);
+
+            });
+        </script>
+    </body>
+</html>
+

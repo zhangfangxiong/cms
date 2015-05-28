@@ -1,0 +1,29 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $sStaticRoot ?>/touchweb/resource/css/analysis_zs.css">	
+
+<header class="tophead">
+    <div class="tophead_inner">
+        <a href="javascript:history.back()" class="uc_return_l goback"></a>
+        <div class="inner_title">在线咨询</div>
+    </div>
+</header>
+<input id="analystId" type="hidden" value="<?php echo $analystId?>" />
+<section class="comments">
+    <textarea rows="4" cols="50" class="comment_text" id="comments_text" placeholder="买房有疑问，我帮您解答" maxlength="250"></textarea>
+</section>
+<section class="person_name bgf">
+    <input type="text" placeholder="请输入您的姓名，方便称呼您" class="person_name_input" id="person_names" maxlength="15" />
+</section>
+<section class="person_phone bgf">
+    <input type="tel" placeholder="请输入您的手机号，让我们可以联系到您" class="person_phone_input" id="person_phones" maxlength="15" />
+</section>
+
+<section class="submitbtn">
+    <span class="tj_btn yahei block tc"  id="askonelinebtn">立即提交</span>
+</section>
+<div  id="tipsbox" class="tipsbox">评论已提交！</div>
+
+ <script src="<?php echo $sStaticRoot ?>/touchweb/lib/requirejs/require.js"  data-main="<?php echo $sStaticRoot ?>/touchweb/lib/js/ask">
+</script>  
+<script type="text/javascript">
+    var localPath = "<?php echo $sStaticRoot ?>/touchweb/"; 
+</script>
